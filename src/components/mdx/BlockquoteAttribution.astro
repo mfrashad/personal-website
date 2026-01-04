@@ -1,0 +1,43 @@
+---
+/**
+ * Blockquote Attribution
+ * Add author and source citation to blockquotes
+ * Use inside <blockquote> elements
+ */
+
+interface Props {
+    author: string;
+    source?: string;
+    sourceUrl?: string;
+    className?: string;
+}
+
+const { author, source, sourceUrl, className = '' } = Astro.props;
+---
+
+<footer class={`blockquote-attribution mt-4 text-right text-sm text-neutral-600 ${className}`}>
+    <cite class="not-italic">
+        — {author}
+        {
+            source && (
+                <>
+                    {sourceUrl ? (
+                        <span>
+                            ,{' '}
+                            <a
+                                href={sourceUrl}
+                                class="text-blue hover:text-blue-dark underline"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {source}
+                            </a>
+                        </span>
+                    ) : (
+                        <span>, {source}</span>
+                    )}
+                </>
+            )
+        }
+    </cite>
+</footer>

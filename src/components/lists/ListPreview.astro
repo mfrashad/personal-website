@@ -1,0 +1,82 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface ListItem {
+    name: string;
+    description?: string;
+    url?: string;
+    image?: string;
+    tags?: string[];
+}
+
+interface Props {
+    title: string;
+    items: ListItem[];
+    href: string;
+    icon?: string;
+    comingSoon?: boolean;
+}
+
+const { title, items, href, icon = 'ph:list-bullets', comingSoon = false } = Astro.props;
+
+// Show max 3 items in preview
+const previewItems = items.slice(0, 3);
+---
+
+<div class={`list-preview border border-neutral-200 rounded-lg p-4 bg-white transition-all duration-300 ${comingSoon ? 'opacity-60' : 'hover:shadow-md'}`}>
+    <div class="flex items-center gap-2 mb-3">
+        <Icon name={icon} width={20} height={20} class="text-neutral-600" />
+        <h3 class="font-semibold text-base text-neutral-900">
+            {title}
+        </h3>
+        {comingSoon ? (
+            <span class="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded ml-auto">
+                Coming soon
+            </span>
+        ) : (
+            <span class="text-xs font-mono text-neutral-400 ml-auto">
+                {items.length}
+            </span>
+        )}
+    </div>
+
+    {comingSoon ? (
+        <p class="text-sm text-neutral-500 mb-3">
+            This list is being curated. Check back soon!
+        </p>
+    ) : (
+        <>
+            <ul class="space-y-2 mb-3">
+                {previewItems.map((item) => (
+                    <li class="flex items-start gap-2">
+                        <span class="text-neutral-400 mt-0.5 shrink-0 text-xs">•</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm text-neutral-900 truncate">
+                                {item.name}
+                            </div>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+
+            {items.length > 3 && (
+                <div class="text-xs text-neutral-400 mb-3">
+                    +{items.length - 3} more
+                </div>
+            )}
+
+            <a
+                href={href}
+                class="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors group"
+            >
+                <span>View all</span>
+                <Icon
+                    name="ph:arrow-right"
+                    width={14}
+                    height={14}
+                    class="transition-transform group-hover:translate-x-1"
+                />
+            </a>
+        </>
+    )}
+</div>

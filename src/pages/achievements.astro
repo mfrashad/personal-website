@@ -1,0 +1,29 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import AchievementGrid from '@components/home/AchievementGrid';
+import { achievements, metrics } from '@data/achievements';
+---
+
+<Layout
+    title="Achievements | Rashad"
+    description="My achievements, milestones, and metrics tracking my journey"
+>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Achievements" classes="!px-0">
+                <p>
+                    A collection of Fun AI-generated achievement badges based on milestones and achievements throughout my journey in tech,
+                    academia, and community building. From starting to code at 11 to co-founding
+                    venture-backed startups, here's a visual representation of my progress.
+                </p>
+            </SectionContent>
+
+            <div class="my-12">
+                <AchievementGrid achievements={achievements} metrics={metrics} client:load />
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

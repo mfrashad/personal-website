@@ -1,0 +1,48 @@
+{
+  "topics": [
+    {
+      "name": "journal",
+      "count": 6,
+      "posts": [
+        {
+          "slug": "notice-the-context-dependence-of-your-habit",
+          "title": "Notice the Context-Dependence of Your Habit",
+          "collection": "blog",
+          "date": "2024-01-20"
+        },
+        {
+          "slug": "on-social-needs-and-loneliness",
+          "title": "On Social Needs and Loneliness",
+          "collection": "blog",
+          "date": "2024-01-19"
+        },
+        {
+          "slug": "chaotic-passionate-vs-disciplined",
+          "title": "Chaotic Passionate vs Disciplined",
+          "collection": "blog",
+          "date": "2024-01-17"
+        },
+        {
+          "slug": "heavy-lifts-and-slow-burns",
+          "title": "Heavy Lifts and Slow Burns",
+          "collection": "blog",
+          "date": "2024-01-17"
+        },
+        {
+          "slug": "bucket-list-phase:-practicing-bias-for-action-in-adventures",
+          "title": "Bucket List Phase: Practicing Bias for Action in Adventures",
+          "collection": "blog",
+          "date": "2024-01-15"
+        },
+        {
+          "slug": "my-annual-review-2023:-travel-&-habits",
+          "title": "My Annual Review 2023: Travel & Habits",
+          "collection": "blog",
+          "date": "2024-01-11"
+        }
+      ]
+    }
+  ],
+  "totalPosts": 6,
+  "lastUpdated": "2026-01-04T15:11:33.174Z"
+}

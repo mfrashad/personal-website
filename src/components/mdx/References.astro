@@ -1,0 +1,21 @@
+---
+/**
+ * References
+ * Display footnotes and references section
+ * Use with Footnote component for complete footnote system
+ */
+
+interface Props {
+    title?: string;
+    className?: string;
+}
+
+const { title = 'References', className = '' } = Astro.props;
+---
+
+<section class={`references mt-12 pt-8 border-t-2 border-neutral-200 ${className}`}>
+    <h2 class="text-xl font-bold mb-6 text-neutral-800">{title}</h2>
+    <div class="prose prose-sm text-neutral-700">
+        <slot />
+    </div>
+</section>

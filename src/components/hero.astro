@@ -1,0 +1,50 @@
+---
+import { Icon } from 'astro-icon/components';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Headline from '@components/Headline.astro';
+---
+
+<div class="bg-neutral-100 lg:-mt-28">
+    <Grid
+        classes="pt-32 pb-20 sm:pb-30 sm:pt-[160px] md:pt-[200px] md:pb-[100px] lg:pt-[280px] lg:pb-[200px]"
+    >
+        <GridBox desktopStart={1} desktopEnd={9}>
+            <Headline level={2} classes="pr-2 cursor-default">
+                <div class="group inline-block">
+                    Hey
+                    <Icon
+                        class="inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px]"
+                        name="sticker-smiley-40"
+                    />
+                </div>
+                I'm Rashad, a
+                <div class="group inline-block">
+                    <Icon
+                        class="-mr-1 ml-1 inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-12deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px]"
+                        name="sticker-design-50"
+                    />
+                    Machine Learning Engineer
+                </div>
+                and
+                <div class="group inline-block">
+                    <Icon
+                        class="-pl-2 -mr-1 ml-1 inline -translate-y-[2px] -rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[-24deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-1 md:text-[48px]"
+                        name="sticker-code-50"
+                    />
+                    Full-Stack Developer
+                </div>
+            </Headline>
+        </GridBox>
+        <GridBox desktopStart={6} desktopEnd={12} classes="mt-12">
+            <p class="font-mono text-sm lg:text-base">
+                I specialize in generative AI and computer vision. At 19, I co-authored a research paper with MIT.
+                I'm a certified freediver, PADI rescue diver, and lifelong learner. I graduated as valedictorian
+                with 4 academic awards at age 20, and was recognized as Top 10 Young Talent by MonStar Award.
+            </p>
+            <p class="font-mono text-sm lg:text-base mt-4">
+                Currently working as a freelance ML engineer and researcher, focusing on cutting-edge generative AI projects.
+            </p>
+        </GridBox>
+    </Grid>
+</div>

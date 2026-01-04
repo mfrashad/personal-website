@@ -1,0 +1,113 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+
+const lastUpdated = 'January 2026';
+---
+
+<Layout
+    title="Now | Rashad"
+    description="What I'm doing now - current projects, learning, and focus areas"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <article class="prose prose-lg md:prose-xl mx-auto w-full max-w-[720px]">
+                <h1 class="mb-4">What I'm Doing Now</h1>
+
+                <p class="text-neutral-600 text-base mb-8">
+                    Last updated: <strong>{lastUpdated}</strong>
+                </p>
+
+                <p class="lead">
+                    This is a "now page" inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">nownownow.com</a>.
+                    It's a snapshot of what I'm currently focused on.
+                </p>
+
+                <h2>🚀 Current Projects</h2>
+                <ul>
+                    <li>
+                        <strong>Cleve</strong> - Building AI-powered productivity tools as co-founder & CTO.
+                        We've reached 100K+ users and are focused on scaling impact
+                    </li>
+                    <li>
+                        <strong>Content Creation</strong> - Creating educational content on TikTok about AI, tech careers,
+                        and productivity for my 20K+ followers
+                    </li>
+                    <li>
+                        <strong>Personal Website</strong> - Continuously improving this site with new features,
+                        achievements tracking, and interactive elements
+                    </li>
+                </ul>
+
+                <h2>📚 Learning</h2>
+                <ul>
+                    <li>
+                        <strong>Advanced AI/ML</strong> - Staying on the cutting edge of LLMs, generative AI,
+                        and production ML systems
+                    </li>
+                    <li>
+                        <strong>Entrepreneurship</strong> - Learning to scale a startup, from product development
+                        to team building to fundraising
+                    </li>
+                    <li>
+                        <strong>Public Speaking</strong> - Refining my speaking skills with each talk, aiming
+                        for 100 talks in my career
+                    </li>
+                </ul>
+
+                <h2>📖 Reading</h2>
+                <p>
+                    Check out my <a href="/books">books page</a> for my current reading list
+                    and recent reads tracked via Hardcover.
+                </p>
+
+                <h2>🎯 2026 Goals</h2>
+                <ul>
+                    <li><strong>Get into the US</strong> - Working towards O1 visa/residency</li>
+                    <li><strong>Hit $10K MRR</strong> - Building sustainable revenue streams</li>
+                    <li><strong>Win 2 Grants/Awards/Fellowships</strong> - Seeking recognition and funding opportunities</li>
+                    <li><strong>Daily Blog & Journal</strong> - Building a consistent writing habit</li>
+                    <li><strong>Reach 100K Followers</strong> - Growing my audience and impact</li>
+                    <li><strong>Deliver More Talks</strong> - Continuing my speaking journey towards 100 talks</li>
+                </ul>
+
+                <h2>🏋️ Fitness & Health</h2>
+                <ul>
+                    <li>Maintaining consistent gym routine (calisthenics & weightlifting)</li>
+                    <li>Running regularly - aiming for another 100+ days this year</li>
+                    <li>Current PRs: 150kg Deadlift, 100kg Bench, +40kg Weighted Pull-up</li>
+                    <li>Long-term goal: Complete an Ironman</li>
+                </ul>
+
+                <h2>🌍 Life</h2>
+                <p>
+                    Based in Malaysia. When I'm not coding or creating content, you can find me:
+                </p>
+                <ul>
+                    <li><strong>Diving</strong> - PADI Rescue Diver, always looking for the next dive spot</li>
+                    <li><strong>Trying New Things</strong> - From glassblowing to rock climbing to welding workshops</li>
+                    <li><strong>Watching Movies</strong> - Check out my <a href="/movies">movie watchlist</a></li>
+                    <li><strong>Reading & Writing</strong> - Both <a href="/books">books</a> and <a href="/blog">blog posts</a></li>
+                </ul>
+
+                <h2>🎤 Speaking</h2>
+                <p>
+                    I'm actively looking for speaking opportunities on topics like AI, entrepreneurship,
+                    tech careers, and startups. If you're organizing an event,
+                    <a href="https://twitter.com/rashadventure" target="_blank" rel="noopener noreferrer">reach out on X</a>!
+                </p>
+
+                <hr class="my-12" />
+
+                <p class="text-sm text-neutral-600">
+                    <em>
+                        This page is a living document. I try to update it monthly to reflect
+                        what's currently important to me. If you have your own now page,
+                        <a href="https://twitter.com/rashadventure" target="_blank" rel="noopener noreferrer">send it my way</a> - I'd love to read it!
+                    </em>
+                </p>
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>

@@ -1,0 +1,70 @@
+---
+import type { Achievement } from '@data/achievements';
+
+interface Props {
+    achievement: Achievement;
+}
+
+const { achievement } = Astro.props;
+
+const categoryColors = {
+    academic: 'from-blue-500 to-blue-600',
+    professional: 'from-green-500 to-green-600',
+    technical: 'from-purple-500 to-purple-600',
+    athletic: 'from-red-500 to-red-600',
+    community: 'from-yellow-500 to-yellow-600'
+};
+
+const gradientColor = categoryColors[achievement.category];
+---
+
+<div
+    class={`achievement-badge group relative rounded-xl p-6 transition-all duration-300 hover:scale-105 ${
+        achievement.unlocked
+            ? `bg-gradient-to-br ${gradientColor} text-white shadow-md hover:shadow-lg`
+            : 'bg-neutral-200 text-neutral-400 grayscale opacity-60'
+    }`}
+    title={achievement.description}
+>
+    <div class="flex flex-col items-center text-center gap-3 z-0">
+        <div class={`text-5xl z-0 ${!achievement.unlocked && 'opacity-50'}`}>
+            {achievement.icon}
+        </div>
+        <div>
+            <h3 class="font-semibold text-sm mb-1">
+                {achievement.title}
+            </h3>
+            {achievement.date && achievement.unlocked && (
+                <div class="text-xs opacity-80 font-mono">
+                    {achievement.date}
+                </div>
+            )}
+        </div>
+    </div>
+
+    {/* Tooltip on hover */}
+    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-neutral-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10 shadow-lg">
+        {achievement.description}
+        <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-neutral-900"></div>
+    </div>
+
+    {!achievement.unlocked && (
+        <div class="absolute top-2 right-2 text-xl">
+            🔒
+        </div>
+    )}
+</div>
+
+<style>
+    .achievement-badge {
+        min-height: 150px;
+        min-width: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .grayscale {
+        filter: grayscale(1);
+    }
+</style>

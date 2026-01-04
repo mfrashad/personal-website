@@ -1,0 +1,27 @@
+---
+/**
+ * Callout
+ * Highlighted box to call attention to important information
+ * Similar to Alert but with a softer appearance
+ */
+
+interface Props {
+    emoji?: string;
+    title?: string;
+    className?: string;
+}
+
+const { emoji, title, className = '' } = Astro.props;
+---
+
+<div class={`callout my-6 p-6 bg-neutral-50 border border-neutral-200 rounded-lg ${className}`}>
+    <div class="flex items-start gap-3">
+        {emoji && <span class="text-2xl flex-shrink-0" aria-hidden="true">{emoji}</span>}
+        <div class="flex-1">
+            {title && <h4 class="text-lg font-bold text-neutral-800 mb-2">{title}</h4>}
+            <div class="prose prose-sm text-neutral-700">
+                <slot />
+            </div>
+        </div>
+    </div>
+</div>

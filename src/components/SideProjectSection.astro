@@ -1,0 +1,40 @@
+---
+import { projects } from 'src/content/projects';
+import ProjectItem from './ProjectItem.astro';
+import SectionContent from './SectionContent.astro';
+import NewSliderItem from './newSlider/NewSliderItem.astro';
+import NewSlider from './newSlider/NewSlider.astro';
+---
+
+<div>
+    <SectionContent title="Side Projects">
+        Like most of us – I have lot of ideas and projects that I would like to implement. Many of
+        them get lost in my notes or as random thoughts on my computer. But can you believe it? Some
+        of them actually happen.
+    </SectionContent>
+    <NewSlider>
+        {
+            projects.map((project, index) => (
+                <NewSliderItem
+                    classes="py-3"
+                    largeFraction={3}
+                    mediumFraction={2.5}
+                    smallFraction={1.25}
+                >
+                    <ProjectItem
+                        bgColor={project.bgColor}
+                        href={project.href}
+                        title={project.title}
+                        description={project.description}
+                        labels={project.labels}
+                        year={project.year}
+                        logo={project.logo}
+                        logoWidth={project.logoWidth}
+                        customOpenString={project.customOpenString}
+                        comingSoon={project.comingSoon}
+                    />
+                </NewSliderItem>
+            ))
+        }
+    </NewSlider>
+</div>

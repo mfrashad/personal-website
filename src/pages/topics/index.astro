@@ -1,0 +1,63 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import topicsData from '@data/topics.json';
+
+// Get all topics sorted by post count
+const topics = topicsData.topics;
+---
+
+<Layout
+    title="Topics | Rashad"
+    description="Browse content by topic - explore all tags and categories"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <div class="mx-auto w-full max-w-[960px]">
+                <h1 class="mb-4 text-2xl font-bold md:text-3xl">Topics</h1>
+                <p class="mb-12 text-lg text-neutral-600">
+                    Browse {topicsData.totalPosts} posts across {topics.length} topics
+                </p>
+
+                {
+                    topics.length === 0 ? (
+                        <div class="text-center py-16">
+                            <p class="text-neutral-500 text-lg">No topics yet. Check back soon!</p>
+                        </div>
+                    ) : (
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {topics.map((topic) => (
+                                <a
+                                    href={`/topics/${encodeURIComponent(topic.name)}`}
+                                    class="group p-6 bg-neutral-50 border border-neutral-200 rounded-lg hover:shadow-lg hover:border-blue transition-all"
+                                >
+                                    <div class="flex items-baseline justify-between mb-2">
+                                        <h2 class="text-lg font-bold text-neutral-800 group-hover:text-blue transition-colors">
+                                            #{topic.name}
+                                        </h2>
+                                        <span class="text-2xl font-bold text-neutral-400 group-hover:text-blue transition-colors">
+                                            {topic.count}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-neutral-600">
+                                        {topic.count === 1 ? '1 post' : `${topic.count} posts`}
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                    )
+                }
+
+                <div class="mt-12 p-6 bg-blue-light border-l-4 border-blue rounded-lg">
+                    <h3 class="text-lg font-bold mb-2 text-blue-dark">About Topics</h3>
+                    <p class="text-neutral-700 text-sm">
+                        Topics are generated from tags, categories, and explicit topic declarations
+                        in content frontmatter. They help organize and discover related content
+                        across the digital garden.
+                    </p>
+                </div>
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

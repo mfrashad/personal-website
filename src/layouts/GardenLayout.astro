@@ -1,0 +1,101 @@
+---
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/markdown.css';
+import { SEO } from 'astro-seo';
+import MobileMenu from '@components/MobileMenu.astro';
+import GardenSidebar from '@components/GardenSidebar.astro';
+import type { GardenCategory } from 'src/api/github';
+import DistortFilter from '@components/DistortFilter.astro';
+import HeaderSimple from '@components/HeaderSimple.astro';
+import ContactLinksSection from '@components/ContactLinksSection.astro';
+import GardenBreadcrumb from '@components/GardenBreadcrumb.astro';
+import { navData } from '@components/Header.astro';
+
+interface Props {
+    title: string;
+    categories: GardenCategory[];
+    path?: string;
+    slug?: string;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const resolvedImageWithDomain = new URL('/opengraph/garden.jpg', Astro.site).toString();
+
+const { title, categories, path, slug } = Astro.props;
+const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+---
+
+<!doctype html>
+<html lang="en" class="overscroll-none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="a growing collection of thoughts, ideas, and knowledge" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon-garden.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{adjustedTitle}</title>
+        <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="mfrashad.com"
+        ></script>
+        <SEO
+            title={adjustedTitle}
+            description="Personal website of Rashad - ML engineer, entrepreneur, and speaker"
+            canonical={canonicalURL}
+            openGraph={{
+                basic: {
+                    url: canonicalURL,
+                    type: 'website',
+                    title: title,
+                    image: resolvedImageWithDomain
+                },
+                image: {
+                    alt: 'iamrobin personal website screenshot'
+                }
+            }}
+        />
+    </head>
+    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+        <HeaderSimple hasMobileBottomSlot={!!path || !!slug} isWiderOnDesktop>
+            <nav class="hidden justify-end gap-8 lg:flex" slot="desktop-end">
+                {
+                    navData.map((item) => (
+                        <a
+                            data-navLink
+                            href={item.path}
+                            class="nav-item group relative font-mono text-xs uppercase tracking-widest hover:text-blue"
+                        >
+                            {item.name}
+                            <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                        </a>
+                    ))
+                }
+            </nav>
+            <GardenBreadcrumb path={path} slug={slug} slot="mobile-bottom" />
+        </HeaderSimple>
+        <MobileMenu />
+        <main class="relative">
+            <div class="sticky-sidebar hidden lg:sticky lg:top-[57px] lg:float-left lg:block">
+                <GardenSidebar categories={categories} />
+            </div>
+            <div class="content-container min-h-[70vh] pb-32 lg:min-h-screen">
+                <slot />
+            </div>
+        </main>
+        <ContactLinksSection />
+        <Footer />
+        <DistortFilter />
+        <style>
+            .sticky-sidebar {
+                height: calc(100vh - 57px);
+            }
+            .content-container {
+                max-width: calc(100vw - ((100vw - 1024px) / 2));
+
+                @media (min-width: 1600px) {
+                    margin: 0 auto;
+                    max-width: 1024px;
+                }
+            }
+        </style>
+    </body>
+</html>

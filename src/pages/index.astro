@@ -1,0 +1,444 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import Headline from '@components/Headline.astro';
+import SectionContent from '@components/SectionContent.astro';
+import { Icon } from 'astro-icon/components';
+
+// Existing sections
+import SideProjectSection from '@components/SideProjectSection.astro';
+
+// New components
+import BioSlider from '@components/home/BioSlider';
+import ContributionGraph from '@components/writings/ContributionGraph';
+import MediaMentionList from '@components/MediaMentionList';
+import AchievementGrid from '@components/home/AchievementGrid';
+import ListPreview from '@components/lists/ListPreview.astro';
+import SpeakingSection from '@components/home/SpeakingSection';
+import CompactBlogPostItem from '@components/blog/CompactBlogPostItem.astro';
+import ScatteredPolaroids from '@components/ScatteredPolaroids';
+import ScatteredDecorations from '@components/ScatteredDecorations';
+import StatsGrid from '@components/home/StatsGrid';
+import SoundToggle from '@components/SoundToggle';
+
+// Animation components
+import AnimationProvider from '@components/animations/AnimationProvider';
+import { HeroBackground } from '@components/animations/MorphingBlob';
+import AnimatedDivider from '@components/animations/AnimatedDivider';
+import { DoodleArrow, DoodleSquiggle } from '@components/animations/Doodles';
+
+// Data imports
+import { achievements, metrics } from '@data/achievements';
+import { brandKit } from '@data/brand-kit';
+import { mediaMentions } from '@data/media-mentions';
+import { favoriteProducts } from '@data/lists/favorite-products';
+import { favoriteSoftware } from '@data/lists/favorite-software';
+import { favoritePodcasts } from '@data/lists/favorite-podcasts';
+import { favoriteBlogs } from '@data/lists/favorite-blogs';
+import { favoriteMusic } from '@data/lists/favorite-music';
+import { favoriteGames } from '@data/lists/favorite-games';
+import { favoritePeople } from '@data/lists/favorite-people';
+
+// Content collections
+import { getCollection } from 'astro:content';
+import { getCleveWritings } from '@utils/cleveCache';
+import { slugify } from '@utils/slugify';
+import WritingsUpdater from '@components/writings/WritingsUpdater';
+import { fetchBookmarks } from 'src/api/raindrop';
+import type { Bookmark } from '@components/bookmarks/BookmarkItem.astro';
+import BookmarkItem from '@components/bookmarks/BookmarkItem.astro';
+
+// Get latest blog posts
+const localPosts = await getCollection('blog');
+const cleveData = await getCleveWritings();
+const cleveWritings = cleveData.writings || [];
+const cleveAsPosts = cleveWritings.slice(0, 3).map((writing: any) => ({
+    data: {
+        title: writing.title,
+        date: new Date(writing.created_at),
+        category: writing.category || 'articles',
+        description: writing.content_markdown.substring(0, 150).replace(/[#*\n]/g, ' ').trim() + '...',
+    },
+    slug: slugify(writing.title),
+}));
+const allPosts = [...localPosts, ...cleveAsPosts].sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const latestPosts = allPosts.slice(0, 6);
+
+// Get speaking engagements
+import { getLatestSpeaking } from '@data/speaking';
+const latestSpeaking = getLatestSpeaking(6);
+
+// Get bookmarks
+const allBookmarks: Bookmark[] = await fetchBookmarks(0);
+const latestBookmarks = allBookmarks.slice(0, 6);
+
+// Books section component
+import BookSection from '@components/books/BookSection.astro';
+---
+
+<Layout title="Rashad | ML Engineer, Co-founder, Speaker" showLoader={true}>
+    <!-- Global Animation Provider (cursor, particles, easter eggs) -->
+    <AnimationProvider client:load />
+
+    <!-- Sound Toggle Button -->
+    <SoundToggle client:load />
+
+    <!-- Scattered Polaroid Images -->
+    <div class="polaroid-container pointer-events-none" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
+        <div class="pointer-events-auto">
+            <ScatteredPolaroids client:load />
+            <ScatteredDecorations client:load />
+        </div>
+    </div>
+
+    <!-- Hero Section with Bio Slider and Timeline (Compact) -->
+    <div class="hero-section relative lg:-mt-28 overflow-hidden bg-white">
+        <!-- Animated morphing blob background -->
+        <!-- <HeroBackground client:load /> -->
+
+        <!-- Subtle doodle decorations -->
+        <div class="absolute top-32 right-8 md:right-16 lg:right-24 hidden sm:block">
+            <DoodleSquiggle className="opacity-20" color="#64748b" client:visible />
+        </div>
+        <div class="absolute bottom-24 left-8 md:left-16 hidden sm:block">
+            <DoodleArrow className="opacity-15 rotate-[-20deg]" color="#64748b" client:visible />
+        </div>
+
+        <Grid classes="pt-32 pb-16 sm:pb-20 sm:pt-[160px] md:pt-[180px] md:pb-20 lg:pt-[220px] lg:pb-24 relative">
+            <GridBox desktopStart={3} desktopEnd={11}>
+                <div class="text-center max-w-3xl mx-auto">
+                    <Headline level={2} classes="cursor-default mb-8 relative z-[120]">
+                        <div class="group inline-block relative">
+                            Hello
+                            <Icon
+                                class="inline -translate-y-1 rotate-12 text-[36px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:text-[46px] md:-translate-y-2 md:text-[50px] animate-wave relative z-[1]"
+                                name="sticker-smiley-40"
+                            />
+                        </div>
+                        I'm Rashad,
+                    </Headline>
+
+                    <!-- Social Links -->
+                    <div class="flex justify-center gap-4 mb-8 relative z-[120]">
+                        {brandKit.socialLinks.map((social) => (
+                            <a
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-neutral-600 hover:text-neutral-900 transition-colors"
+                                title={social.platform}
+                            >
+                                {social.platform === 'X (Twitter)' && (
+                                    <Icon name="ph:x-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'Instagram' && (
+                                    <Icon name="ph:instagram-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'TikTok' && (
+                                    <Icon name="ph:tiktok-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'Medium' && (
+                                    <Icon name="ph:medium-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'LinkedIn' && (
+                                    <Icon name="ph:linkedin-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'GitHub' && (
+                                    <Icon name="ph:github-logo" width={24} height={24} />
+                                )}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </GridBox>
+            <GridBox desktopStart={3} desktopEnd={11}>
+                <div class="relative flex justify-center max-w-3xl mx-auto">
+                    <BioSlider bios={brandKit.bios} timeline={brandKit.timeline} client:load />
+                </div>
+            </GridBox>
+        </Grid>
+    </div>
+
+    <div class="flex flex-col gap-16 py-12 lg:gap-24 lg:py-20">
+
+        <!-- Stats Section -->
+        <section>
+            <SectionContent title="Stats & Metrics">
+                A quick snapshot of my journey and impact across different areas.
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <StatsGrid metrics={metrics} client:load />
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Media Mentions Section -->
+        <section>
+            <SectionContent title="Media Mentions">
+                Featured in publications and media outlets for my work in machine learning and software engineering.
+                <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Get press assets →</a>
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <MediaMentionList mentions={mediaMentions} client:load />
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="dots" client:visible />
+
+        <!-- Speaking Section -->
+        <section>
+            <SectionContent title="Speaking">
+                I speak at conferences and meetups about machine learning, AI, and software engineering.
+                <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Speaker kit →</a>
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <SpeakingSection engagements={latestSpeaking} client:load />
+
+                    <!-- View All Button -->
+                    <div class="mt-8 text-center">
+                        <a
+                            href="/speaking"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
+                        >
+                            <span>View all talks</span>
+                            <Icon name="ph:arrow-right" width={16} height={16} />
+                        </a>
+                    </div>
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="gradient" client:visible />
+
+        <!-- Writings Section -->
+        <section>
+            <SectionContent title="Writings">
+                <div class="flex flex-col gap-2">
+                    <p>From quick notes to long-form essays. I write about machine learning, software engineering, and personal growth.</p>
+                    <div class="text-sm text-neutral-500">
+                        <WritingsUpdater
+                            client:load
+                            initialWritings={cleveWritings}
+                        />
+                    </div>
+                </div>
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+
+                    <!-- Contribution Graph -->
+                    <div class="mb-6">
+                        <ContributionGraph
+                            posts={allPosts.map(post => ({
+                                date: post.data.date,
+                                title: post.data.title
+                            }))}
+                            client:load
+                        />
+                    </div>
+
+                    <!-- Posts List (Compact) -->
+                    <div class="compact-writing-list" data-homepage-posts>
+                        {latestPosts.map((post) => <CompactBlogPostItem post={post} />)}
+                    </div>
+
+                    <!-- View All Button -->
+                    <div class="mt-8 text-center">
+                        <a
+                            href="/blog"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
+                        >
+                            <span>View all writings</span>
+                            <Icon name="ph:arrow-right" width={16} height={16} />
+                        </a>
+                    </div>
+
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="gradient" client:visible />
+
+        <!-- Projects Section -->
+        <SideProjectSection />
+
+        <AnimatedDivider variant="dots" client:visible />
+
+        <!-- Achievements Section -->
+        <section>
+            <SectionContent title="Achievements">
+                Fun AI-generated achievement badges based on my milestones, adventures, and goals I'm tracking throughout my life and career.
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <AchievementGrid
+                        achievements={achievements}
+                        showMetrics={false}
+                        client:load
+                    />
+
+                    <!-- View All Button -->
+                    <div class="mt-8 text-center">
+                        <a
+                            href="/achievements"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
+                        >
+                            <span>View all achievements</span>
+                            <Icon name="ph:arrow-right" width={16} height={16} />
+                        </a>
+                    </div>
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Books Section -->
+        <BookSection />
+
+        <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Lists Section -->
+        <section>
+            <SectionContent title="Lists">
+                Curated collections of my favorite products, podcasts, blogs, music, games, and people that I recommend.
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <ListPreview
+                            title="Best Purchases"
+                            items={favoriteProducts}
+                            href="/lists/products"
+                            icon="ph:shopping-bag"
+                        />
+                        <ListPreview
+                            title="Favorite Software"
+                            items={favoriteSoftware}
+                            href="/lists/software"
+                            icon="ph:app-window"
+                        />
+                        <ListPreview
+                            title="Favorite Games"
+                            items={favoriteGames}
+                            href="/lists/games"
+                            icon="ph:game-controller"
+                        />
+                    </div>
+
+                    <!-- View All Button -->
+                    <div class="mt-8 text-center">
+                        <a
+                            href="/lists"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
+                        >
+                            <span>View all lists</span>
+                            <Icon name="ph:arrow-right" width={16} height={16} />
+                        </a>
+                    </div>
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="gradient" client:visible />
+
+        <!-- Bookmarks Section -->
+        <section>
+            <SectionContent title="Bookmarks">
+                Interesting articles, videos, and resources I've saved and found valuable.
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <ul>
+                        {latestBookmarks.map((bookmark) => <BookmarkItem bookmark={bookmark} />)}
+                    </ul>
+
+                    <!-- View All Button -->
+                    <div class="mt-8 text-center">
+                        <a
+                            href="/bookmarks"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
+                        >
+                            <span>View all bookmarks</span>
+                            <Icon name="ph:arrow-right" width={16} height={16} />
+                        </a>
+                    </div>
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="dots" client:visible />
+
+        <!-- Media Kit Section -->
+        <section>
+            <SectionContent title="Media Kit" linkText="View Media Kit" linkUrl="/media" buttonStyle>
+                Speaker photos, bios, logos, and brand assets for event organizers and media coverage.
+            </SectionContent>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    /* Compact styling for writing list on homepage */
+    .compact-writing-list :global(.list-item-image-hover-effect) {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    @media (min-width: 768px) {
+        .compact-writing-list :global(.list-item-image-hover-effect) {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+    }
+
+    /* Wave animation for smiley emoji */
+    @keyframes wave {
+        0%, 100% { transform: rotate(12deg); }
+        25% { transform: rotate(25deg) scale(1.1); }
+        50% { transform: rotate(5deg); }
+        75% { transform: rotate(20deg) scale(1.05); }
+    }
+
+    .animate-wave {
+        animation: wave 2.5s ease-in-out infinite;
+        transform-origin: 70% 70%;
+    }
+
+    /* Smooth section reveal */
+    section {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Hover glow effect for buttons */
+    a[href]:not(.no-glow):hover {
+        text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Smooth scroll for the whole page */
+    :global(html) {
+        scroll-behavior: smooth;
+    }
+</style>
+
+<script src="../scripts/listItemImageHoverEffect.js"></script>

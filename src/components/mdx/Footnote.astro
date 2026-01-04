@@ -1,0 +1,25 @@
+---
+/**
+ * Footnote
+ * Creates superscript reference links for footnotes
+ * Use with References component for full footnote support
+ */
+
+interface Props {
+    id: string;
+    className?: string;
+}
+
+const { id, className = '' } = Astro.props;
+---
+
+<sup class={`footnote-ref ${className}`}>
+    <a
+        href={`#fn-${id}`}
+        id={`fnref-${id}`}
+        class="text-blue hover:text-blue-dark no-underline font-mono text-xs"
+        aria-label={`Footnote ${id}`}
+    >
+        [{id}]
+    </a>
+</sup>

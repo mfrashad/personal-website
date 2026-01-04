@@ -1,0 +1,155 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import { speakingEngagements, getSpeakingByYear } from '@data/speaking';
+
+// Get engagements organized by year
+const engagementsByYear = getSpeakingByYear();
+const years = Object.keys(engagementsByYear)
+    .map(Number)
+    .sort((a, b) => b - a); // Newest first
+
+// Separate into upcoming and past
+const now = new Date();
+const upcomingEngagements = speakingEngagements.filter((eng) => eng.date > now);
+const pastEngagements = speakingEngagements.filter((eng) => eng.date <= now);
+
+// Pre-process past engagements by year for easier rendering
+const pastEngagementsByYear = years
+    .map(year => ({
+        year,
+        engagements: engagementsByYear[year].filter(e => e.date <= now)
+    }))
+    .filter(({ engagements }) => engagements.length > 0);
+---
+
+<Layout
+    title="Speaking | Rashad"
+    description="Conference talks, presentations, and speaking engagements by Muhammad Fathy Rashad"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <div class="mx-auto w-full max-w-[960px]">
+                <h1 class="mb-4 text-2xl font-bold md:text-3xl">Speaking</h1>
+                <p class="mb-8 text-lg text-neutral-600">
+                    Conference talks, panels, workshops, and interviews on AI, entrepreneurship, and technology.
+                </p>
+
+                <!-- Media Kit CTA for Event Organizers -->
+                <div class="mb-12 p-4 bg-neutral-50 border border-neutral-200 rounded-lg">
+                    <p class="text-sm text-neutral-600">
+                        <span class="font-medium text-neutral-800">Event organizers:</span> Need speaker photos, bios, or brand assets?
+                        <a href="/media" class="text-blue-600 hover:text-blue-800 underline underline-offset-2 ml-1">
+                            View media kit →
+                        </a>
+                    </p>
+                </div>
+
+                {
+                    speakingEngagements.length === 0 ? (
+                        <div class="text-center py-16">
+                            <p class="text-neutral-500 text-lg">
+                                No speaking engagements yet. Check back soon!
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            {/* Upcoming Engagements */}
+                            {upcomingEngagements.length > 0 && (
+                                <section class="mb-16">
+                                    <h2 class="text-xl font-bold mb-6 text-neutral-800">Upcoming</h2>
+                                    <div class="space-y-3">
+                                        {upcomingEngagements
+                                            .sort((a, b) => a.date.getTime() - b.date.getTime())
+                                            .map((engagement) => (
+                                                <article class="p-5 bg-blue-50 border-l-4 border-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
+                                                    <div class="flex items-start justify-between gap-4">
+                                                        <div class="flex-1">
+                                                            <div class="flex items-center gap-2 mb-2">
+                                                                <h3 class="text-lg font-bold">
+                                                                    {engagement.title}
+                                                                </h3>
+                                                                <span class="text-xs px-2 py-1 bg-blue-600 text-white rounded-full capitalize">
+                                                                    {engagement.type}
+                                                                </span>
+                                                            </div>
+                                                            <p class="text-neutral-700 text-sm mb-1">
+                                                                {engagement.event} • <span class="text-neutral-600">{engagement.organizer}</span>
+                                                                {engagement.location && <> • 📍 {engagement.location}</>}
+                                                            </p>
+                                                            <p class="text-neutral-500 text-xs mb-2">
+                                                                📅{' '}
+                                                                {engagement.date.toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'long',
+                                                                    day: 'numeric',
+                                                                })}
+                                                            </p>
+                                                            {engagement.audience && (
+                                                                <p class="text-neutral-600 text-xs">
+                                                                    👥 {engagement.audience}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            ))}
+                                    </div>
+                                </section>
+                            )}
+
+                            {/* Past Engagements by Year */}
+                            {pastEngagements.length > 0 && (
+                                <section>
+                                    <h2 class="text-xl font-bold mb-6 text-neutral-800">Past Talks</h2>
+                                    {pastEngagementsByYear.map(({ year, engagements }) => (
+                                        <div class="mb-12">
+                                            <h3 class="text-base font-bold mb-3 text-neutral-700 border-b border-neutral-200 pb-2">
+                                                {year}
+                                            </h3>
+                                            <div class="space-y-2">
+                                                {engagements.map((engagement) => (
+                                                    <article class="border-b border-neutral-100 pb-3 hover:bg-neutral-50 px-2 -mx-2 rounded transition-colors">
+                                                        <div class="flex items-start justify-between gap-4">
+                                                            <div class="flex items-start gap-3 flex-1 min-w-0">
+                                                                <div class="text-xs font-mono text-neutral-500 shrink-0 w-20">
+                                                                    {engagement.date.toLocaleDateString('en-US', {
+                                                                        month: 'short',
+                                                                        day: 'numeric',
+                                                                    })}
+                                                                </div>
+                                                                <div class="flex-1 min-w-0">
+                                                                    <h4 class="text-base font-semibold text-neutral-900 mb-1">
+                                                                        {engagement.title}
+                                                                    </h4>
+                                                                    <p class="text-sm text-neutral-600 mb-1">
+                                                                        {engagement.event}
+                                                                        {engagement.organizer && <span class="text-neutral-500"> • {engagement.organizer}</span>}
+                                                                        {engagement.location && <span class="text-neutral-500"> • {engagement.location}</span>}
+                                                                    </p>
+                                                                    {engagement.audience && (
+                                                                        <p class="text-xs text-neutral-500">
+                                                                            {engagement.audience}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <span class="text-xs px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full capitalize shrink-0">
+                                                                {engagement.type}
+                                                            </span>
+                                                        </div>
+                                                    </article>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </section>
+                            )}
+                        </>
+                    )
+                }
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

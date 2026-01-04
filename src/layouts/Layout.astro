@@ -1,0 +1,66 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import { SEO } from 'astro-seo';
+import MobileMenu from '@components/MobileMenu.astro';
+import DistortFilter from '@components/DistortFilter.astro';
+import PageLoader from '@components/animations/PageLoader';
+
+interface Props {
+    title: string;
+    description?: string;
+    ogimageName?: string;
+    showLoader?: boolean;
+}
+
+const { title, description, ogimageName, showLoader = false } = Astro.props;
+const adjustedTitle = title ? 'Rashad' + ' – ' + title : 'Rashad';
+const adjustedDescription = description ? description : 'Personal website of Muhammad Fathy Rashad - ML engineer, co-founder & CTO at Cleve';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph/opengraph.jpg';
+const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en" class="overscroll-none">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Personal website of Muhammad Fathy Rashad - ML engineer, co-founder & CTO at Cleve" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{adjustedTitle}</title>
+        <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="mfrashad.com"
+        ></script>
+        <SEO
+            title={adjustedTitle}
+            description={adjustedDescription}
+            canonical={canonicalURL}
+            openGraph={{
+                basic: {
+                    url: canonicalURL,
+                    type: 'website',
+                    title: title,
+                    image: resolvedImageWithDomain
+                },
+                image: {
+                    alt: 'Rashad personal website screenshot'
+                }
+            }}
+        />
+    </head>
+    <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+        {showLoader && <PageLoader client:load />}
+        <Header />
+        <MobileMenu />
+        <slot />
+        <Footer />
+        <DistortFilter />
+    </body>
+</html>

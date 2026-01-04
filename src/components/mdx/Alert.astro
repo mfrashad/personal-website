@@ -1,0 +1,67 @@
+---
+/**
+ * Alert Component
+ * Display contextual messages with different severity levels
+ * Types: info (default), warning, success, error
+ */
+
+interface Props {
+    type?: 'info' | 'warning' | 'success' | 'error';
+    title?: string;
+    className?: string;
+}
+
+const { type = 'info', title, className = '' } = Astro.props;
+
+const typeConfig = {
+    info: {
+        icon: 'ℹ️',
+        bgClass: 'bg-blue-light',
+        borderClass: 'border-blue',
+        textClass: 'text-blue-dark',
+        titleClass: 'text-blue-dark'
+    },
+    warning: {
+        icon: '⚠️',
+        bgClass: 'bg-yellow-light',
+        borderClass: 'border-yellow',
+        textClass: 'text-yellow-dark',
+        titleClass: 'text-yellow-dark'
+    },
+    success: {
+        icon: '✅',
+        bgClass: 'bg-green-light',
+        borderClass: 'border-green',
+        textClass: 'text-green-dark',
+        titleClass: 'text-green-dark'
+    },
+    error: {
+        icon: '❌',
+        bgClass: 'bg-red-light',
+        borderClass: 'border-red',
+        textClass: 'text-red-dark',
+        titleClass: 'text-red-dark'
+    }
+};
+
+const config = typeConfig[type];
+---
+
+<div
+    class={`alert my-6 p-5 ${config.bgClass} border-l-4 ${config.borderClass} rounded-lg ${className}`}
+    role="alert"
+>
+    <div class="flex items-start gap-3">
+        <span class="text-2xl flex-shrink-0" aria-hidden="true">{config.icon}</span>
+        <div class="flex-1">
+            {
+                title && (
+                    <h4 class={`text-lg font-bold ${config.titleClass} mb-2`}>{title}</h4>
+                )
+            }
+            <div class={`prose prose-sm ${config.textClass}`}>
+                <slot />
+            </div>
+        </div>
+    </div>
+</div>

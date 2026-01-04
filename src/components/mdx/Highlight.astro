@@ -1,0 +1,25 @@
+---
+/**
+ * Highlight
+ * Emphasize important text with background highlight
+ * Like a yellow highlighter marker
+ */
+
+interface Props {
+    color?: 'yellow' | 'green' | 'blue' | 'red';
+    className?: string;
+}
+
+const { color = 'yellow', className = '' } = Astro.props;
+
+const colorMap = {
+    yellow: 'bg-yellow-light',
+    green: 'bg-green-light',
+    blue: 'bg-blue-light',
+    red: 'bg-red-light'
+};
+---
+
+<mark class={`highlight ${colorMap[color]} px-1 py-0.5 rounded ${className}`}>
+    <slot />
+</mark>

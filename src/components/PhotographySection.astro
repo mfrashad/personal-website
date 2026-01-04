@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+
+import Photo01 from '../assets/landingpage-photos/01.jpg';
+import Photo02 from '../assets/landingpage-photos/02.jpg';
+import Photo03 from '../assets/landingpage-photos/03.jpg';
+import Photo04 from '../assets/landingpage-photos/04.jpg';
+import Photo05 from '../assets/landingpage-photos/05.jpg';
+import Photo06 from '../assets/landingpage-photos/06.jpg';
+import Photo07 from '../assets/landingpage-photos/07.jpg';
+import Photo08 from '../assets/landingpage-photos/08.jpg';
+import Photo09 from '../assets/landingpage-photos/09.jpg';
+import Photo10 from '../assets/landingpage-photos/10.jpg';
+import Photo11 from '../assets/landingpage-photos/11.jpg';
+import Photo12 from '../assets/landingpage-photos/12.jpg';
+import Photo13 from '../assets/landingpage-photos/13.jpg';
+import Photo14 from '../assets/landingpage-photos/14.jpg';
+import Photo15 from '../assets/landingpage-photos/15.jpg';
+import Photo16 from '../assets/landingpage-photos/16.jpg';
+import Photo17 from '../assets/landingpage-photos/17.png';
+
+import Photo365_01 from '../assets/365/photos/2025-01-03_17-48-18.jpg';
+import Photo365_02 from '../assets/365/photos/2025-01-14_18-19-11.jpg';
+import Photo365_03 from '../assets/365/photos/2025-01-07_10-15-55.jpg';
+import Photo365_04 from '../assets/365/photos/2025-01-15_16-32-24.jpg';
+
+import SectionContent from './SectionContent.astro';
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+import NewSliderItem from './newSlider/NewSliderItem.astro';
+import NewSlider from './newSlider/NewSlider.astro';
+
+const photos = [
+    Photo01,
+    Photo02,
+    Photo17,
+    Photo15,
+    Photo03,
+    Photo04,
+    Photo05,
+    Photo06,
+    Photo07,
+    Photo08,
+    Photo09,
+    Photo10,
+    Photo11,
+    Photo12,
+    Photo13,
+    Photo14,
+    Photo16
+];
+---
+
+<div>
+    <SectionContent title="Photography" linkText="more photos" linkUrl="https://robins.photos">
+        I have been enjoying using a camera to capture visually appealing moments for over a decade
+        now.
+    </SectionContent>
+    <NewSlider>
+        {
+            photos.map((photo) => (
+                <>
+                    <NewSliderItem largeFraction={3} mediumFraction={2.5} smallFraction={1.25}>
+                        <Image
+                            src={photo}
+                            alt="test image"
+                            widths={[640]}
+                            sizes={`320px`}
+                            class="bg-neutral-100"
+                        />
+                    </NewSliderItem>
+                </>
+            ))
+        }
+    </NewSlider>
+    <div class="py-16">
+        <Grid classes="md:h-[464px] bg-neutral-100 lg:rounded-xl">
+            <GridBox
+                desktopStart={2}
+                desktopEnd={7}
+                tabletStart={1}
+                tabletEnd={5}
+                classes="overflow-hidden relative h-[480px] md:h-auto"
+            >
+                <Image
+                    id="photo365-02"
+                    src={Photo365_03}
+                    alt="test image"
+                    widths={[320]}
+                    sizes={`160px`}
+                    class="absolute left-[calc(50%-140px)] top-[calc(50%-140px)] w-[10rem] -rotate-6 border-4 border-white bg-neutral-100 shadow-2xl transition-all"
+                />
+                <Image
+                    id="photo365-01"
+                    src={Photo365_01}
+                    alt="test image"
+                    widths={[320]}
+                    sizes={`160px`}
+                    class="absolute left-[calc(50%-80px)] top-[calc(50%-96px)] w-[10rem] border-4 border-white bg-neutral-100 transition-all"
+                />
+                <Image
+                    id="photo365-03"
+                    src={Photo365_02}
+                    alt="test image"
+                    widths={[320]}
+                    sizes={`160px`}
+                    class="absolute left-[calc(50%-20px)] top-[calc(50%-120px)] w-[10rem] rotate-3 border-4 border-white bg-neutral-100 shadow-2xl transition-all"
+                />
+                <Image
+                    id="photo365-04"
+                    src={Photo365_04}
+                    alt="test image"
+                    widths={[320]}
+                    sizes={`160px`}
+                    class="absolute left-[calc(50%-80px)] top-[calc(50%-96px)] w-[10rem] border-4 border-white bg-neutral-100 shadow-2xl transition-all"
+                />
+            </GridBox>
+            <GridBox desktopStart={8} desktopEnd={12} tabletStart={6} tabletEnd={8}>
+                <div
+                    class="flex h-full items-center justify-center pb-20 text-left md:mt-4 md:flex-col md:pb-0"
+                >
+                    <div class="md:-ml-16">
+                        <div>
+                            <p>365 project</p>
+                            <p class="mt-1 text-lg font-bold leading-10">
+                                one photo a day<br />for a whole year
+                            </p>
+                        </div>
+                        <a
+                            id="hoverLink"
+                            class="-ml-2 mt-12 inline-block rotate-6 rounded-full border border-dashed border-lilac-dark bg-lilac px-8 py-3 text-center text-xs font-bold text-lilac-dark shadow-[0_0_0_6px_rgba(198,185,255,1)] transition hover:rotate-3 hover:scale-110"
+                            href="https://robins.photos/365">check out<br />all photos!</a
+                        >
+                    </div>
+                </div>
+            </GridBox>
+        </Grid>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hoverLink = document.getElementById('hoverLink');
+        const image01 = document.getElementById('photo365-01');
+        const image02 = document.getElementById('photo365-02');
+        const image03 = document.getElementById('photo365-03');
+        const image04 = document.getElementById('photo365-04');
+
+        hoverLink?.addEventListener('mouseenter', () => {
+            image04?.classList.add('scale-105', 'translate-y-6', '-rotate-3');
+            image03?.classList.add(
+                'scale-105',
+                '!rotate-[9deg]',
+                '-translate-y-2',
+                'translate-x-9'
+            );
+            image02?.classList.add(
+                'scale-105',
+                '!-rotate-[9deg]',
+                '-translate-y-2',
+                '-translate-x-9'
+            );
+            image01?.classList.add('scale-105', '-translate-y-[5rem]', 'translate-x-4', 'rotate-6');
+        });
+
+        hoverLink?.addEventListener('mouseleave', () => {
+            image04?.classList.remove('scale-105', 'translate-y-6', '-rotate-3');
+            image03?.classList.remove(
+                'scale-105',
+                '!rotate-[9deg]',
+                '-translate-y-2',
+                'translate-x-9'
+            );
+            image02?.classList.remove(
+                'scale-105',
+                '!-rotate-[9deg]',
+                '-translate-y-2',
+                '-translate-x-9'
+            );
+            image01?.classList.remove(
+                'scale-105',
+                '-translate-y-[5rem]',
+                'translate-x-4',
+                'rotate-6'
+            );
+        });
+    });
+</script>

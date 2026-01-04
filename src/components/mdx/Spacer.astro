@@ -1,0 +1,23 @@
+---
+/**
+ * Spacer
+ * Adds vertical spacing between elements
+ * Sizes: sm (1rem), md (2rem), lg (4rem), xl (6rem)
+ */
+
+interface Props {
+    size?: 'sm' | 'md' | 'lg' | 'xl';
+    className?: string;
+}
+
+const { size = 'md', className = '' } = Astro.props;
+
+const sizeMap = {
+    sm: 'h-4',
+    md: 'h-8',
+    lg: 'h-16',
+    xl: 'h-24'
+};
+---
+
+<div class={`spacer ${sizeMap[size]} ${className}`} aria-hidden="true"></div>

@@ -1,0 +1,136 @@
+---
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+import { Icon } from 'astro-icon/components';
+
+interface NavItem {
+    name: string;
+    path: string;
+    external?: boolean;
+}
+
+export const navData: NavItem[] = [
+    {
+        name: 'Blog',
+        path: '/blog'
+    },
+    {
+        name: 'Books',
+        path: '/books'
+    },
+    {
+        name: 'Achievements',
+        path: '/achievements'
+    },
+    {
+        name: 'Speaking',
+        path: '/speaking'
+    },
+    {
+        name: 'Lists',
+        path: '/lists'
+    },
+    {
+        name: 'About',
+        path: '/about'
+    },
+    {
+        name: 'Media',
+        path: '/media'
+    }
+];
+---
+
+<header id="header" class="z-50 h-0 lg:sticky lg:top-0 lg:mt-14 lg:h-auto lg:py-4">
+    <Grid>
+        <GridBox desktopStart={1} desktopEnd={3}>
+            <div class="absolute top-3 sm:top-6 md:top-12 lg:bottom-4 lg:top-auto">
+                <a
+                    href="/"
+                    id="header-logo"
+                    class="flex -rotate-6 font-bold italic tracking-wider text-black-300 transition-all duration-300 ease-out-cubic hover:text-black"
+                >
+                    <span id="header-text" class="text-lg transition-all duration-300 ease-out-cubic">
+                        rashad
+                    </span>
+                </a>
+            </div>
+        </GridBox>
+        <GridBox desktopStart={4} desktopEnd={12} classes="hidden lg:block">
+            <nav class="flex justify-end gap-8">
+                {
+                    navData.map((item) => (
+                        <a
+                            data-navLink
+                            href={item.path}
+                            class="nav-item group relative flex items-center gap-1 font-mono text-xs uppercase tracking-widest hover:text-blue"
+                            target={item.external ? '_blank' : undefined}
+                            rel={item.external ? 'noopener noreferrer' : undefined}
+                        >
+                            {item.name}
+                            {item.external && (
+                                <Icon name="ph:arrow-up-right-bold" width={12} class="inline-block" />
+                            )}
+                            <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                        </a>
+                    ))
+                }
+            </nav>
+        </GridBox>
+    </Grid>
+</header>
+
+<style>
+    .nav-item.active {
+        font-weight: 700;
+    }
+    .nav-item.active span {
+        opacity: 0;
+    }
+</style>
+
+<!-- client-side JS -->
+<script>
+    const navLinks = document.querySelectorAll('[data-navLink]');
+    navLinks.forEach((link) => {
+        const href = link.getAttribute('href');
+
+        // Special case for home page
+        if (href === '/' && window.location.pathname === '/') {
+            link.classList.add('active');
+        }
+        // For other pages, check if the current path starts with the nav item path
+        else if (href !== '/' && href && !href.startsWith('http') && window.location.pathname.startsWith(href)) {
+            link.classList.add('active');
+        }
+    });
+
+    function adjustHeaderClasses() {
+        if (window.innerWidth < 1024) return;
+        const header = document.getElementById('header');
+        const headerLogo = document.getElementById('header-logo');
+        const headerText = document.getElementById('header-text') as HTMLSpanElement;
+
+        const logoClassesExpanded = ['-rotate-6', 'tracking-wider', 'text-black-300'];
+        const logoClassesCollapsed = ['text-sm', 'text-black', 'font-normal'];
+        const textTypeClassesExpanded = ['text-lg'];
+
+        if (window.scrollY < 56) {
+            header?.classList.remove('bg-white', 'border-b', 'border-neutral-200');
+            headerLogo?.classList.add(...logoClassesExpanded);
+            headerText?.classList.add(...textTypeClassesExpanded);
+            headerText?.classList.remove(...logoClassesCollapsed);
+        } else {
+            header?.classList.add('bg-white', 'border-b', 'border-neutral-200');
+            headerLogo?.classList.remove(...logoClassesExpanded);
+            headerText?.classList.add(...logoClassesCollapsed);
+            headerText?.classList.remove(...textTypeClassesExpanded);
+        }
+    }
+
+    // Run the function immediately to set the classes correctly on initial load
+    adjustHeaderClasses();
+
+    // Set up the event listener for the scroll event
+    window.addEventListener('scroll', adjustHeaderClasses);
+</script>

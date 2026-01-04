@@ -1,0 +1,116 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import { brandKit } from '@data/brand-kit';
+---
+
+<Layout
+    title="About | Rashad"
+    description="Machine learning engineer, entrepreneur, speaker, and builder"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <article class="prose prose-lg md:prose-xl mx-auto w-full max-w-[720px]">
+                <h1 class="mb-4">About Me</h1>
+
+                <p class="lead">
+                    Hi! I'm Rashad, a machine learning engineer, entrepreneur, and educator based in Malaysia.
+                </p>
+
+                <h2>👨‍💻 What I Do</h2>
+                <p>
+                    I'm currently the co-founder & CTO at <strong>Cleve</strong>, where we build AI-powered tools
+                    that have reached over 100,000 users globally. My journey in tech started early - I began
+                    hacking at age 11, entered university at 15, and have been building ever since.
+                </p>
+
+                <p>
+                    Beyond building products, I'm passionate about sharing knowledge through <a href="/speaking">public speaking</a>,
+                    having delivered 20+ talks on AI, technology, and career development. I also create content
+                    on <a href="https://tiktok.com/@rashadventure" target="_blank" rel="noopener noreferrer">TikTok</a>
+                    where I've built an audience of 20,000+ followers and generated over 5 million views.
+                </p>
+
+                <p>
+                    I'm particularly interested in:
+                </p>
+                <ul>
+                    <li><strong>Machine Learning & AI</strong> - Building practical AI applications that solve real problems</li>
+                    <li><strong>Entrepreneurship</strong> - Creating products people love and building sustainable businesses</li>
+                    <li><strong>Education & Community</strong> - Sharing knowledge and empowering the next generation of builders</li>
+                    <li><strong>Adventure & Growth</strong> - Constantly trying new things and pushing boundaries</li>
+                </ul>
+
+                <h2>🌱 About This Website</h2>
+                <p>
+                    This is my personal corner of the internet - a space where I share my work, thoughts, and
+                    interests. You'll find a mix of <a href="/blog">blog posts</a>, <a href="/achievements">achievements</a>,
+                    <a href="/speaking">talks</a>, and various <a href="/lists">curated lists</a> of things I recommend.
+                </p>
+
+                <p>
+                    This site is a living document that evolves over time, reflecting my journey and interests.
+                    It's part portfolio, part digital garden, and part personal archive.
+                </p>
+
+                <h2>💬 Get in Touch</h2>
+                <p>
+                    I love connecting with people! You can find me on:
+                </p>
+                <ul>
+                    {brandKit.socialLinks.map(social => (
+                        <li>
+                            <a href={social.url} target="_blank" rel="noopener noreferrer">
+                                {social.platform}
+                            </a> - {social.username}
+                        </li>
+                    ))}
+                </ul>
+
+                <h2>🎯 Philosophy</h2>
+                <p>
+                    I believe in:
+                </p>
+                <ul>
+                    <li><strong>Learning in public</strong> - Sharing the journey, mistakes and all</li>
+                    <li><strong>Building with impact</strong> - Creating things that genuinely help people</li>
+                    <li><strong>Continuous growth</strong> - Always trying new things and pushing boundaries</li>
+                    <li><strong>Community over competition</strong> - Rising by lifting others</li>
+                    <li><strong>Action over perfection</strong> - Ship fast, iterate faster</li>
+                </ul>
+
+                <h2>🏆 Milestones</h2>
+                <p>
+                    Some highlights from my journey:
+                </p>
+                <ul>
+                    <li>Started hacking at age 11</li>
+                    <li>Entered university at 15 (youngest in my cohort)</li>
+                    <li>Published first game at 16</li>
+                    <li>Published research with MIT at 19</li>
+                    <li>Graduated as valedictorian at 20</li>
+                    <li>Founded AI consulting company at 21</li>
+                    <li>Co-founded venture-backed startup at 22</li>
+                    <li>Delivered 20+ talks on AI and technology</li>
+                    <li>Built products serving 100K+ users</li>
+                    <li>Won 5 hackathons, judged 10+ more</li>
+                </ul>
+
+                <p>
+                    Check out my full <a href="/achievements">achievement gallery</a> to see what I've been up to!
+                </p>
+
+                <h2>📚 More About This Site</h2>
+                <p>
+                    Curious about how this website works? Check out the <a href="/colophon">colophon</a> for
+                    technical details, design decisions, and inspiration sources.
+                </p>
+
+                <p>
+                    Want to know what I'm up to right now? Visit my <a href="/now">now page</a>.
+                </p>
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>

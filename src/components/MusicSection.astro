@@ -1,0 +1,100 @@
+---
+import type { LastfmAlbum } from 'src/types/lastfm';
+import { myPlaylists } from 'src/api/spotify';
+import SectionContent from './SectionContent.astro';
+import AlbumSlider from './music/AlbumSlider';
+import PlaylistSlider from './music/PlaylistSlider';
+import InlineLink from './InlineLink.astro';
+
+export interface Playlist {
+    name?: string;
+    url?: string;
+    image?: string;
+    tracks?: number;
+    description?: string;
+}
+
+const count = 12;
+
+let topAlbumsThreeMonth: any[] = [];
+let topAlbumsOverall: any[] = [];
+let playlists: Playlist[] = [];
+
+// Temporarily disabled music APIs
+// try {
+//     // LAST MONTH
+//     const resTopAlbumsThreeMonth = await fetch(
+//         `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${
+//             import.meta.env.LAST_FM_USER_NAME
+//         }&api_key=${import.meta.env.LAST_FM_API_KEY}&limit=${count}&period=1month&format=json`
+//     );
+//     const topAlbumThreeMonthQuery = await resTopAlbumsThreeMonth.json();
+//     topAlbumsThreeMonth = topAlbumThreeMonthQuery?.topalbums?.album.map((album: LastfmAlbum) => ({
+//         title: album?.name,
+//         artist: album?.artist?.name,
+//         cover: album?.image[3]['#text'] || album?.image[2]['#text'],
+//         playCount: album?.playcount,
+//         url: album?.url
+//     })) || [];
+
+//     // OVERALL
+//     const resTopAlbumsOverall = await fetch(
+//         `https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${
+//             import.meta.env.LAST_FM_USER_NAME
+//         }&api_key=${import.meta.env.LAST_FM_API_KEY}&limit=${count}&period=$overall&format=json`
+//     );
+//     const topAlbumOverallQuery = await resTopAlbumsOverall.json();
+
+//     topAlbumsOverall = topAlbumOverallQuery?.topalbums?.album.map((album: LastfmAlbum) => ({
+//         title: album?.name,
+//         artist: album?.artist?.name,
+//         cover: album?.image[3]['#text'] || album.image[2]['#text'],
+//         playCount: album?.playcount,
+//         url: album?.url
+//     })) || [];
+
+//     // SPOTIFY PLAYLISTS
+//     const response = await myPlaylists();
+//     const responseData = await response.json();
+//     const items = responseData?.items || [];
+
+//     const publicPlaylists = items.filter(
+//         (playlist: any) =>
+//             (playlist.public === true && playlist.name === 'The Indie-spensable Playlist') ||
+//             playlist.name === 'Deep-fried focus' ||
+//             playlist.name === "Indietroni-can't-stop-dancing"
+//     );
+
+//     playlists = publicPlaylists?.map((playlist: any) => ({
+//         name: playlist?.name,
+//         url: playlist?.external_urls?.spotify,
+//         image: playlist?.images && playlist?.images[0]?.url,
+//         tracks: playlist?.tracks?.total,
+//         description: playlist?.description
+//     })) || [];
+// } catch (error) {
+//     console.error('Failed to fetch music data:', error);
+// }
+
+const albums = {
+    threeMonth: topAlbumsThreeMonth,
+    overall: topAlbumsOverall
+};
+---
+
+<div>
+    <SectionContent title="Music">
+        Who doesn't like music? I've been tracking my digital listenings on <InlineLink
+            external
+            href="https://www.last.fm/"
+        >
+            Last.fm
+        </InlineLink> since 2013. This section provides an overview of my currently most-played
+        albums and my all-time favorites. Explore my musical tastes and maybe discover some new
+        tunes for yourself!
+    </SectionContent>
+    <div class="flex flex-col gap-20">
+        <AlbumSlider albums={albums} client:load />
+        <PlaylistSlider playlists={playlists} />
+    </div>
+</div>

@@ -1,0 +1,47 @@
+---
+/**
+ * Growth Stage Indicator
+ * Displays the current growth stage of a digital garden note
+ * - 🌱 Seedling: Early, rough ideas
+ * - 🌿 Budding: Developing thoughts
+ * - 🌳 Evergreen: Polished, complete content
+ */
+
+interface Props {
+    stage: 'seedling' | 'budding' | 'evergreen';
+    className?: string;
+}
+
+const { stage, className = '' } = Astro.props;
+
+const stageConfig = {
+    seedling: {
+        emoji: '🌱',
+        label: 'Seedling',
+        description: 'Early, rough ideas',
+        colorClass: 'bg-seedling-light text-seedling-dark border-seedling-border'
+    },
+    budding: {
+        emoji: '🌿',
+        label: 'Budding',
+        description: 'Developing thoughts',
+        colorClass: 'bg-budding-light text-budding-dark border-budding-border'
+    },
+    evergreen: {
+        emoji: '🌳',
+        label: 'Evergreen',
+        description: 'Polished, complete content',
+        colorClass: 'bg-evergreen-light text-evergreen-dark border-evergreen-border'
+    }
+};
+
+const config = stageConfig[stage];
+---
+
+<div
+    class={`growth-indicator ${config.colorClass} border ${className}`}
+    title={config.description}
+>
+    <span class="text-lg" aria-hidden="true">{config.emoji}</span>
+    <span class="font-medium">{config.label}</span>
+</div>

@@ -1,0 +1,17 @@
+---
+/**
+ * Center
+ * Centers content horizontally
+ * Useful for images, quotes, or emphasized text
+ */
+
+interface Props {
+    className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`center flex justify-center my-6 ${className}`}>
+    <slot />
+</div>

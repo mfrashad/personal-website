@@ -1,0 +1,27 @@
+---
+/**
+ * Image Caption
+ * Wrapper for images with captions
+ * Provides consistent styling for figure elements
+ */
+
+interface Props {
+    src: string;
+    alt: string;
+    caption?: string;
+    className?: string;
+}
+
+const { src, alt, caption, className = '' } = Astro.props;
+---
+
+<figure class={`image-caption my-8 ${className}`}>
+    <img src={src} alt={alt} class="w-full rounded-lg shadow-md" />
+    {
+        caption && (
+            <figcaption class="mt-3 text-center text-sm text-neutral-600 italic">
+                {caption}
+            </figcaption>
+        )
+    }
+</figure>

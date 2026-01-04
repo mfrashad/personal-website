@@ -1,0 +1,76 @@
+---
+interface Props {
+    image: string;
+    caption: string;
+    rotation?: number;
+    achieved?: boolean;
+}
+
+const {
+    image,
+    caption,
+    rotation = Math.floor(Math.random() * 8 - 4), // Random rotation between -4 and 4 degrees
+    achieved = true
+} = Astro.props;
+
+const transformStyle = `transform: rotate(${rotation}deg);`;
+---
+
+<div class="polaroid-wrapper inline-block" style={transformStyle}>
+    <div class={`polaroid bg-white p-3 pb-12 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 relative ${!achieved ? 'opacity-60 grayscale' : ''}`}>
+        <div class="polaroid-image aspect-square overflow-hidden bg-neutral-100 relative">
+            <img
+                src={image}
+                alt={caption}
+                class="w-full h-full object-cover"
+                loading="lazy"
+            />
+            {!achieved && (
+                <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                    <span class="text-white font-bold text-xl">🔒 Goal</span>
+                </div>
+            )}
+        </div>
+        <div class="polaroid-caption mt-3 text-center font-script text-neutral-800">
+            {caption}
+        </div>
+        {!achieved && (
+            <div class="absolute bottom-2 right-2 text-xs font-mono text-neutral-500">
+                In Progress
+            </div>
+        )}
+    </div>
+</div>
+
+<style>
+    .polaroid {
+        width: 200px;
+        min-width: 200px;
+        border-radius: 2px;
+    }
+
+    .polaroid-wrapper {
+        transition: transform 0.3s ease-out-cubic;
+    }
+
+    .polaroid-wrapper:hover {
+        z-index: 10;
+    }
+
+    @media (max-width: 640px) {
+        .polaroid {
+            width: 160px;
+            min-width: 160px;
+        }
+    }
+
+    .font-script {
+        font-family: 'LiebeHeide', cursive;
+        font-size: 0.95em;
+        filter: url(#distort);
+    }
+
+    .grayscale {
+        filter: grayscale(1);
+    }
+</style>

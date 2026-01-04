@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "slug": "my-annual-review-2023:-travel-&-habits",
+      "title": "My Annual Review 2023: Travel & Habits",
+      "path": "/blog/2024_01_11-annual-review-2023",
+      "collection": "blog"
+    },
+    {
+      "slug": "bucket-list-phase:-practicing-bias-for-action-in-adventures",
+      "title": "Bucket List Phase: Practicing Bias for Action in Adventures",
+      "path": "/blog/2024_01_15-bucket-list-phase",
+      "collection": "blog"
+    },
+    {
+      "slug": "chaotic-passionate-vs-disciplined",
+      "title": "Chaotic Passionate vs Disciplined",
+      "path": "/blog/2024_01_17-chaotic-passionate-vs-disciplined",
+      "collection": "blog"
+    },
+    {
+      "slug": "heavy-lifts-and-slow-burns",
+      "title": "Heavy Lifts and Slow Burns",
+      "path": "/blog/2024_01_17-heavy-lifts-and-slow-burns",
+      "collection": "blog"
+    },
+    {
+      "slug": "on-social-needs-and-loneliness",
+      "title": "On Social Needs and Loneliness",
+      "path": "/blog/2024_01_19-on-social-needs-and-loneliness",
+      "collection": "blog"
+    },
+    {
+      "slug": "notice-the-context-dependence-of-your-habit",
+      "title": "Notice the Context-Dependence of Your Habit",
+      "path": "/blog/2024_01_20-context-dependence-of-habit",
+      "collection": "blog"
+    }
+  ],
+  "edges": [],
+  "backlinks": {
+    "my-annual-review-2023:-travel-&-habits": [],
+    "bucket-list-phase:-practicing-bias-for-action-in-adventures": [],
+    "chaotic-passionate-vs-disciplined": [],
+    "heavy-lifts-and-slow-burns": [],
+    "on-social-needs-and-loneliness": [],
+    "notice-the-context-dependence-of-your-habit": []
+  }
+}

@@ -1,0 +1,85 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import ListPreview from '@components/lists/ListPreview.astro';
+import { favoriteProducts } from '@data/lists/favorite-products';
+import { favoriteSoftware } from '@data/lists/favorite-software';
+import { favoritePodcasts } from '@data/lists/favorite-podcasts';
+import { favoriteBlogs } from '@data/lists/favorite-blogs';
+import { favoriteGames } from '@data/lists/favorite-games';
+import { favoriteMusic } from '@data/lists/favorite-music';
+import { favoritePeople } from '@data/lists/favorite-people';
+---
+
+<Layout
+    title="Lists | Rashad"
+    description="My favorite products, podcasts, blogs, and more"
+>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Lists" classes="!px-0">
+                <p>
+                    Curated lists of my favorite things - from products I use daily to people who
+                    inspire me. These are recommendations based on personal experience and genuine appreciation.
+                </p>
+            </SectionContent>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
+                <ListPreview
+                    title="Best Purchases"
+                    items={favoriteProducts}
+                    href="/lists/products"
+                    icon="ph:shopping-bag"
+                />
+
+                <ListPreview
+                    title="Favorite Software"
+                    items={favoriteSoftware}
+                    href="/lists/software"
+                    icon="ph:app-window"
+                />
+
+                <ListPreview
+                    title="Favorite Games"
+                    items={favoriteGames}
+                    href="/lists/games"
+                    icon="ph:game-controller"
+                />
+
+                <ListPreview
+                    title="Favorite Podcasts"
+                    items={favoritePodcasts}
+                    href="/lists/podcasts"
+                    icon="ph:microphone"
+                    comingSoon={favoritePodcasts.length === 0}
+                />
+
+                <ListPreview
+                    title="Favorite Blogs"
+                    items={favoriteBlogs}
+                    href="/lists/blogs"
+                    icon="ph:article"
+                    comingSoon={favoriteBlogs.length === 0}
+                />
+
+                <ListPreview
+                    title="Favorite Music"
+                    items={favoriteMusic}
+                    href="/lists/music"
+                    icon="ph:music-notes"
+                    comingSoon={favoriteMusic.length === 0}
+                />
+
+                <ListPreview
+                    title="People Who Inspire Me"
+                    items={favoritePeople}
+                    href="/lists/people"
+                    icon="ph:users"
+                    comingSoon={favoritePeople.length === 0}
+                />
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

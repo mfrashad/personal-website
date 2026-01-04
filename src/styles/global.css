@@ -1,0 +1,218 @@
+@font-face {
+    font-family: 'apercu';
+    src:
+        url('/fonts/apercu-regular-pro.woff2') format('woff2'),
+        url('/fonts/apercu-regular-pro.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: auto;
+}
+
+@font-face {
+    font-family: 'apercu';
+    src:
+        url('/fonts/apercu-bold-pro.woff2') format('woff2'),
+        url('/fonts/apercu-bold-pro.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: auto;
+}
+
+/* fira-mono-regular - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/fira-mono-v14-latin-regular.woff2') format('woff2');
+}
+/* fira-mono-700 - latin */
+@font-face {
+    font-display: swap;
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 700;
+    src: url('/fonts/fira-mono-v14-latin-700.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'LiebeHeide';
+    src: url('/fonts/LiebeHeide-FinelinerBold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* Fraunces Variable Font - Import from fontsource */
+@import '@fontsource-variable/fraunces';
+
+/* Wood pattern background */
+.bg-wood-pattern {
+    background-color: #c19a6b;
+    background-image:
+        /* Dark wood grain lines */
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(101, 67, 33, 0.3) 3px,
+            rgba(101, 67, 33, 0.3) 4px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 8px,
+            rgba(80, 50, 20, 0.4) 8px,
+            rgba(80, 50, 20, 0.4) 10px
+        ),
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 15px,
+            rgba(60, 40, 20, 0.2) 15px,
+            rgba(60, 40, 20, 0.2) 18px
+        ),
+        /* Wood color variations */
+        linear-gradient(
+            90deg,
+            #d4a574 0%,
+            #c19a6b 15%,
+            #b8925f 25%,
+            #c19a6b 40%,
+            #a8814d 55%,
+            #c19a6b 70%,
+            #b8925f 85%,
+            #d4a574 100%
+        ),
+        /* Base wood tone with noise-like pattern */
+        repeating-linear-gradient(
+            90deg,
+            rgba(139, 115, 85, 0.1),
+            rgba(139, 115, 85, 0.1) 1px,
+            rgba(160, 130, 95, 0.1) 1px,
+            rgba(160, 130, 95, 0.1) 2px
+        );
+    background-blend-mode: multiply, multiply, multiply, normal, normal;
+}
+
+html {
+    font-size: 16px;
+}
+
+:root {
+    --active-bg-color: #f1f5f9;
+}
+
+.noteCardEffect {
+    position: relative;
+}
+.noteCardEffect:before,
+.noteCardEffect:after {
+    z-index: -1;
+    position: absolute;
+    content: '';
+    width: 50%;
+    top: 80%;
+    background: tomato;
+    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+}
+.noteCardEffect:before {
+    left: 0.5rem;
+    bottom: 16px;
+    transform: rotate(-3deg);
+}
+.noteCardEffect:after {
+    transform: rotate(3deg);
+    bottom: 16px;
+    right: 0.5em;
+}
+.noteCardEffect.hide-before:before {
+    display: none;
+}
+.noteCardEffect.hide-after:after {
+    display: none;
+}
+
+.texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.5;
+    mix-blend-mode: soft-light;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 369 369' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.corner-shadow-effect {
+    position: relative;
+}
+.corner-shadow-effect:before,
+.corner-shadow-effect:after {
+    z-index: -1;
+    position: absolute;
+    content: '';
+    width: 50%;
+    top: 80%;
+    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+}
+.corner-shadow-effect:before {
+    left: 0.5rem;
+    bottom: 16px;
+    transform: rotate(-3deg);
+}
+.corner-shadow-effect:after {
+    transform: rotate(3deg);
+    bottom: 16px;
+    right: 0.5em;
+}
+.corner-shadow-effect.hide-before:before {
+    display: none;
+}
+.corner-shadow-effect.hide-after:after {
+    display: none;
+}
+
+details > summary::marker,
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Growth stage indicator styles */
+.growth-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.growth-indicator svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Backlinks section styles */
+.backlinks-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px dashed theme('colors.neutral.200');
+}
+
+/* Slide up animation for notifications */
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}

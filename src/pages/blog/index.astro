@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import TagCloud from '@components/TagCloud.astro';
+import YearContainer from '@components/blog/YearContainer.astro';
+import SectionContent from '@components/SectionContent.astro';
+import ContributionGraph from '@components/writings/ContributionGraph';
+import WritingsUpdater from '@components/writings/WritingsUpdater';
+import { getCleveWritings } from '@utils/cleveCache';
+import { slugify } from '@utils/slugify';
+
+// Get all local blog posts
+const localBlogPosts = await getCollection('blog');
+
+// Get Cleve writings from cache
+const cleveData = await getCleveWritings();
+const cleveWritings = cleveData.writings || [];
+
+// Transform Cleve writings to match blog post format
+const cleveAsPosts = cleveWritings.map((writing: any) => ({
+    data: {
+        title: writing.title,
+        date: new Date(writing.created_at),
+        category: writing.category || 'articles',
+        description: writing.content_markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...',
+        source: 'cleve'
+    },
+    slug: slugify(writing.title),
+    body: writing.content_markdown,
+    id: writing.id,
+    collection: 'blog' as const
+}));
+
+// Combine all posts
+const allBlogPosts = [...localBlogPosts, ...cleveAsPosts];
+
+const sortedPosts = allBlogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postsByYear = sortedPosts.reduce(
+    (acc, post) => {
+        const year = post.data.date.getFullYear();
+        if (!acc[year]) {
+            acc[year] = [];
+        }
+        acc[year].push(post);
+        return acc;
+    },
+    {} as Record<number, typeof sortedPosts>
+);
+
+const years = Object.keys(postsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+// Generate tag counts for the tag cloud
+const allCategories = allBlogPosts.flatMap((post) => post.data.category || []);
+const categoryCounts = allCategories.reduce(
+    (acc, tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+
+const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => ({ name, count }));
+---
+
+<Layout title="Blog | Rashad">
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Writings" classes="!px-0">
+                <div class="flex flex-col gap-2">
+                    <p>
+                        All my writings, from quick notes to long-form essays.
+                        This includes both blog posts and dynamic writings from my personal knowledge base.
+                    </p>
+                    <div class="text-sm text-neutral-600 flex flex-wrap items-center gap-x-2">
+                        <span class="font-mono">{localBlogPosts.length} blog posts</span>
+                        {' • '}
+                        <span class="font-mono">{cleveWritings.length} dynamic writings</span>
+                        {' • '}
+                        <span class="font-mono">{allBlogPosts.length} total</span>
+                        <span class="text-neutral-400">•</span>
+                        <WritingsUpdater
+                            client:load
+                            initialWritings={cleveWritings}
+                        />
+                    </div>
+                </div>
+            </SectionContent>
+
+            <!-- Contribution Graph -->
+            <div class="my-8">
+                <ContributionGraph
+                    posts={allBlogPosts.map(post => ({
+                        date: post.data.date,
+                        title: post.data.title
+                    }))}
+                    client:load
+                />
+            </div>
+
+            <TagCloud
+                tags={categoryCloudData}
+                basePath="/blog"
+                filterPath="category"
+                filterLabel="category"
+                total={allBlogPosts.length}
+            />
+
+            <div>
+                {years.map((year) => <YearContainer posts={postsByYear[year]} year={year} />)}
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../scripts/listItemImageHoverEffect.js"></script>

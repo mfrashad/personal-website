@@ -1,0 +1,17 @@
+---
+/**
+ * Two Column Layout
+ * Splits content into two columns on larger screens
+ * Stacks vertically on mobile
+ */
+
+interface Props {
+    className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`two-column grid grid-cols-1 md:grid-cols-2 gap-8 my-8 ${className}`}>
+    <slot />
+</div>

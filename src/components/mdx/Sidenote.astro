@@ -1,0 +1,17 @@
+---
+/**
+ * Sidenote
+ * Small notes or clarifications in the margin (on larger screens)
+ * Inline on mobile
+ */
+
+interface Props {
+    className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<aside class={`sidenote my-4 p-4 bg-neutral-50 border-l-2 border-neutral-300 text-sm text-neutral-600 italic ${className}`}>
+    <slot />
+</aside>

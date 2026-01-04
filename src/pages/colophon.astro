@@ -1,0 +1,150 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+---
+
+<Layout
+    title="Colophon | Rashad"
+    description="How this website was built - technology stack, design choices, and inspiration"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <article class="prose prose-lg md:prose-xl mx-auto w-full max-w-[720px]">
+                <h1 class="mb-4">Colophon</h1>
+
+                <p class="lead">
+                    This page documents the tools, technologies, and design decisions
+                    behind this website. Built with love and a lot of coffee.
+                </p>
+
+                <h2>🛠️ Technology Stack</h2>
+
+                <h3>Framework & Build</h3>
+                <ul>
+                    <li><strong>Astro 5.4</strong> - Static site generator with islands architecture for optimal performance</li>
+                    <li><strong>TypeScript</strong> - Type-safe development for fewer bugs</li>
+                    <li><strong>React</strong> - Interactive components where needed (via Astro islands)</li>
+                    <li><strong>MDX</strong> - Enhanced markdown for blog posts and content</li>
+                    <li><strong>Vercel</strong> - Hosting and deployment with automatic previews</li>
+                </ul>
+
+                <h3>Styling & Design</h3>
+                <ul>
+                    <li><strong>Tailwind CSS</strong> - Utility-first CSS framework for rapid development</li>
+                    <li><strong>Custom Fonts</strong> - Carefully selected typography for readability and character</li>
+                    <li><strong>Responsive Design</strong> - Mobile-first approach with breakpoints for all screen sizes</li>
+                    <li><strong>Dark Mode Support</strong> - (Coming soon)</li>
+                </ul>
+
+                <h3>Interactive Features</h3>
+                <ul>
+                    <li><strong>Draggable Polaroids</strong> - Fun interactive photo elements on the homepage</li>
+                    <li><strong>Sound Effects</strong> - Subtle audio feedback for interactions</li>
+                    <li><strong>Animated Dividers</strong> - Custom animations between sections</li>
+                    <li><strong>Achievement System</strong> - Gamified life tracking with unlockable badges</li>
+                </ul>
+
+                <h3>Data Integrations</h3>
+                <ul>
+                    <li><strong>Letterboxd + TMDB API</strong> - Movie tracking with posters and ratings</li>
+                    <li><strong>Hardcover API</strong> - Book tracking and reading activity</li>
+                    <li><strong>Raindrop.io API</strong> - Bookmark management and organization</li>
+                    <li><strong>Cleve API</strong> - Digital garden notes synced from Obsidian</li>
+                </ul>
+
+                <h2>🎨 Design Philosophy</h2>
+
+                <h3>Interactive & Playful</h3>
+                <p>
+                    This site embraces interactivity and fun. From draggable polaroids to achievement badges,
+                    I wanted to create something that feels alive and personal rather than just another static portfolio.
+                </p>
+
+                <h3>Content-First</h3>
+                <p>
+                    While the design is playful, content always comes first. Clean typography, good spacing,
+                    and clear hierarchy ensure that what I'm sharing is easy to read and understand.
+                </p>
+
+                <h3>Performance Matters</h3>
+                <p>
+                    Using Astro's islands architecture, most of the site is static HTML/CSS with JavaScript
+                    only where needed. This results in fast load times and excellent Core Web Vitals scores.
+                </p>
+
+                <h2>✨ Key Features</h2>
+
+                <h3>Achievement System</h3>
+                <p>
+                    Life is a game! I track my goals, milestones, and adventures as unlockable achievements.
+                    Check out the <a href="/achievements">achievements page</a> to see what I've accomplished
+                    and what I'm working towards.
+                </p>
+
+                <h3>Speaking Tracker</h3>
+                <p>
+                    All my <a href="/speaking">public talks and speaking engagements</a> in one place,
+                    organized by year with details about the event, audience, and topics covered.
+                </p>
+
+                <h3>Curated Lists</h3>
+                <p>
+                    I maintain <a href="/lists">curated lists</a> of my favorite products, podcasts, blogs,
+                    music, games, and people. These are things I genuinely recommend and use.
+                </p>
+
+                <h3>Media Integration</h3>
+                <p>
+                    Books I'm reading from <a href="/books">Hardcover</a>, movies I'm watching from
+                    <a href="/movies">Letterboxd</a>, and articles I'm saving via <a href="/bookmarks">Raindrop</a> -
+                    all automatically synced and displayed.
+                </p>
+
+                <h2>🌟 Inspiration & Credits</h2>
+                <p>
+                    This website is built on top of the excellent codebase from
+                    <a href="https://iamrob.in" target="_blank" rel="noopener noreferrer"><strong>iamrob.in</strong></a> by Robin Spielmann.
+                    I've heavily customized and extended it with my own features, content, and design choices,
+                    but the foundation and many of the interactive elements come from Robin's amazing work.
+                </p>
+
+                <p class="mt-4">
+                    Additional inspiration drawn from:
+                </p>
+                <ul>
+                    <li><a href="https://maggieappleton.com" target="_blank" rel="noopener noreferrer">Maggie Appleton</a> - Digital garden design and playful interactions</li>
+                    <li><a href="https://www.emgoto.com" target="_blank" rel="noopener noreferrer">Emma Goto</a> - Clean blog design and developer experience</li>
+                    <li><a href="https://nownownow.com" target="_blank" rel="noopener noreferrer">Derek Sivers</a> - Now page concept and simplicity</li>
+                    <li><a href="https://brianlovin.com" target="_blank" rel="noopener noreferrer">Brian Lovin</a> - AMA section and bookmarks integration</li>
+                </ul>
+
+                <h2>📂 Source Code</h2>
+                <p>
+                    This website is open source! View the code on
+                    <a href="https://github.com/mfrashad/personal-website" target="_blank" rel="noopener noreferrer">GitHub</a>.
+                    Feel free to fork it, learn from it, or suggest improvements.
+                </p>
+
+                <h2>📬 Feedback</h2>
+                <p>
+                    Notice something broken? Have suggestions? Found a typo?
+                    Reach out on <a href="https://twitter.com/rashadventure" target="_blank" rel="noopener noreferrer">X (Twitter)</a>
+                    or <a href="https://github.com/mfrashad/personal-website/issues" target="_blank" rel="noopener noreferrer">open an issue on GitHub</a>.
+                </p>
+
+                <h2>🙏 Acknowledgments</h2>
+                <p>
+                    Huge thanks to <a href="https://iamrob.in" target="_blank" rel="noopener noreferrer">Robin Spielmann</a>
+                    for creating such a well-structured and feature-rich personal website template.
+                    Building on top of their work saved me countless hours and provided an excellent
+                    foundation to create something uniquely mine.
+                </p>
+                <p class="mt-4">
+                    Special thanks to everyone else who has inspired, supported, and provided feedback on this site.
+                    The web is better when we build in public and share what we learn!
+                </p>
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>

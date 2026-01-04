@@ -1,0 +1,61 @@
+---
+/**
+ * Backlinks Component
+ * Displays pages that link to the current page
+ * Reads from the generated link-graph.json
+ */
+
+import linkGraph from '@data/link-graph.json';
+
+interface Props {
+    currentSlug: string;
+    className?: string;
+}
+
+const { currentSlug, className = '' } = Astro.props;
+
+// Get backlinks for current page
+const backlinks = (linkGraph.backlinks as Record<string, string[]>)[currentSlug] || [];
+
+// Get node details for each backlink
+const backlinkNodes = backlinks
+    .map((slug: string) => linkGraph.nodes.find((node: any) => node.slug === slug))
+    .filter((node): node is any => node !== undefined);
+---
+
+{
+    backlinkNodes.length > 0 && (
+        <section class={`backlinks-section ${className}`}>
+            <h2 class="text-xl font-bold mb-4 text-neutral-800">
+                <span class="mr-2">🔗</span>
+                Backlinks
+                <span class="ml-2 text-sm font-normal text-neutral-500">
+                    ({backlinkNodes.length})
+                </span>
+            </h2>
+            <p class="text-neutral-600 mb-6 text-sm">
+                Pages that link to this note:
+            </p>
+            <ul class="space-y-3">
+                {backlinkNodes.map((node: any) => (
+                    <li>
+                        <a
+                            href={node.path}
+                            class="group flex items-baseline gap-2 text-blue hover:text-blue-dark transition-colors"
+                        >
+                            <span class="text-xs text-neutral-400 group-hover:text-blue-dark">
+                                ←
+                            </span>
+                            <span class="font-medium underline decoration-dotted underline-offset-2">
+                                {node.title}
+                            </span>
+                            <span class="text-xs text-neutral-400">
+                                ({node.collection})
+                            </span>
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </section>
+    )
+}

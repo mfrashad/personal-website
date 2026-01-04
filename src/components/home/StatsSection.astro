@@ -1,0 +1,49 @@
+---
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import StatCard from './StatCard.astro';
+import type { Metric } from '@data/achievements';
+
+interface Props {
+    metrics: Metric[];
+}
+
+const { metrics } = Astro.props;
+
+// Icon mapping for different metrics
+const iconMap: Record<string, { icon: string; color: string }> = {
+    'papers-published': { icon: 'ph:article-fill', color: 'text-purple-600' },
+    'talks-given': { icon: 'ph:microphone-stage-fill', color: 'text-purple-600' },
+    'hackathons-won': { icon: 'ph:trophy-fill', color: 'text-yellow-600' },
+    'hackathons-judged': { icon: 'ph:gavel-fill', color: 'text-orange-600' },
+    'companies-founded': { icon: 'ph:briefcase-fill', color: 'text-blue-600' },
+    'users-impacted': { icon: 'ph:users-fill', color: 'text-green-600' },
+    'social-followers': { icon: 'ph:heart-fill', color: 'text-red-600' },
+    'content-views': { icon: 'ph:eye-fill', color: 'text-indigo-600' },
+};
+---
+
+<section class="py-16">
+    <Grid>
+        <GridBox desktopFull>
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">📊 Stats & Metrics</h2>
+                <p class="text-neutral-600">Some numbers that matter</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {metrics.map((metric) => {
+                    const iconConfig = iconMap[metric.id] || { icon: 'ph:chart-bar-fill', color: 'text-neutral-600' };
+                    return (
+                        <StatCard
+                            icon={iconConfig.icon}
+                            value={metric.value}
+                            label={metric.label}
+                            iconColor={iconConfig.color}
+                        />
+                    );
+                })}
+            </div>
+        </GridBox>
+    </Grid>
+</section>

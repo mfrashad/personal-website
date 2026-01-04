@@ -1,0 +1,161 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/sidenotes.css';
+import '../../styles/blog-styles.css';
+import GridBox from '@components/GridBox.astro';
+import Grid from '@components/Grid.astro';
+import TableOfContents from '@components/TableOfContents.astro';
+import { extractHeadings } from '../../utils/markdown';
+import MastodonStats from '@components/MastodonStats.astro';
+import Backlinks from '@components/Backlinks.astro';
+import GrowthStageIndicator from '@mdx/GrowthStageIndicator.astro';
+import Webmentions from '@components/Webmentions.astro';
+import { getCleveWritings } from '@utils/cleveCache';
+import { slugify, removeFirstH1 } from '@utils/slugify';
+import { marked } from 'marked';
+import { fetchCleveWritings } from '@/api/cleve';
+
+// Disable prerendering to allow dynamic fetching of new posts
+export const prerender = false;
+
+// Get the slug from the URL
+const { slug } = Astro.params;
+
+// Try to find the post from various sources
+let entry: any = null;
+let cleveWriting: any = null;
+let headings: any[] = [];
+let isClevePost = false;
+
+// 1. First check local blog posts
+const blogEntries = await getCollection('blog');
+const localEntry = blogEntries.find(e => e.slug === slug);
+
+if (localEntry) {
+    entry = localEntry;
+    headings = await extractHeadings(entry.body);
+    isClevePost = false;
+} else {
+    // 2. Check cached Cleve writings
+    const cleveData = await getCleveWritings();
+    const cachedWritings = cleveData.writings || [];
+    const cachedWriting = cachedWritings.find((w: any) => slugify(w.title) === slug);
+
+    if (cachedWriting) {
+        cleveWriting = cachedWriting;
+        isClevePost = true;
+    } else {
+        // 3. Fetch fresh from Cleve API (for newly published posts)
+        const freshWritings = await fetchCleveWritings();
+        const freshWriting = freshWritings.find(w => slugify(w.title) === slug);
+
+        if (freshWriting) {
+            cleveWriting = freshWriting;
+            isClevePost = true;
+        } else {
+            // Post not found anywhere
+            return Astro.redirect('/404');
+        }
+    }
+}
+
+// Handle local vs Cleve posts
+let Content: any, title: string, formattedDate: string, description: string, category: string, subtitle: string | undefined, postSlug: string, htmlContent: string;
+
+if (isClevePost) {
+    // Cleve post
+    title = cleveWriting.title;
+    formattedDate = new Date(cleveWriting.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    description = cleveWriting.content_markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...';
+    category = cleveWriting.category || 'articles';
+    postSlug = slugify(cleveWriting.title);
+    // Remove first H1 from markdown to avoid duplicate title
+    const cleanedMarkdown = removeFirstH1(cleveWriting.content_markdown);
+    htmlContent = marked(cleanedMarkdown);
+} else {
+    // Local blog post
+    const rendered = await entry.render();
+    Content = rendered.Content;
+    title = entry.data.title;
+    formattedDate = entry.data.date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    description = entry.data.description;
+    category = entry.data.category;
+    subtitle = entry.data.subtitle;
+    postSlug = entry.slug;
+}
+
+// Full URL for webmentions
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.mfrashad.com';
+const fullUrl = `${siteUrl}/blog/${postSlug}`;
+---
+
+<Layout
+    title={`${title} | Rashad`}
+    description={description}
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <article
+                class="prose prose-lg prose-figcaption:text-xs prose-figcaption:text-neutral-500 prose-figcaption:mb-16 prose-figcaption:-mt-8 mx-auto w-full max-w-[720px] md:prose-xl lg:mx-0"
+            >
+                <a href="/blog" class="mb-8 block text-sm text-blue hover:underline">
+                    ← Back to Blog</a
+                >
+                <h1 class="mb-8 text-lg font-bold sm:text-xl md:text-2xl">
+                    {title}{subtitle ? ' -' : ''}
+                    {
+                        subtitle && (
+                            <span class="hidden sm:inline">
+                                <br />
+                            </span>
+                        )
+                    }
+                    {subtitle && <span>{subtitle}</span>}
+                </h1>
+                <div class="mb-8 flex items-center gap-4 flex-wrap">
+                    <span class="text-neutral-500">{formattedDate}</span>
+                    {
+                        category && (
+                            <a
+                                href={`/blog/category/${category}`}
+                                class="inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                            >
+                                #{category}
+                            </a>
+                        )
+                    }
+                    {!isClevePost && entry?.data.growthStage && <GrowthStageIndicator stage={entry.data.growthStage} />}
+                </div>
+
+                {!isClevePost && <TableOfContents headings={headings} />}
+
+                {isClevePost ? (
+                    <div set:html={htmlContent} />
+                ) : (
+                    <Content />
+                )}
+
+                {!isClevePost && <Backlinks currentSlug={postSlug} />}
+
+                {!isClevePost && entry?.data.enableWebmentions && <Webmentions url={fullUrl} />}
+
+                {!isClevePost && entry?.data.mastodonId && (
+                    <div class="mt-16">
+                        <MastodonStats statusId={entry.data.mastodonId} />
+                    </div>
+                )}
+            </article>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../scripts/sidenotes.js"></script>

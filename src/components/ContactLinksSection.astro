@@ -1,0 +1,140 @@
+---
+import ContactLinkItem from './ContactLinkItem.astro';
+import Grid from './Grid.astro';
+import GridBox from './GridBox.astro';
+import Headline from './Headline.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+    classes?: string;
+}
+
+const { classes } = Astro.props as Props;
+---
+
+<div
+    class:list={[
+        classes,
+        'bg-neutral-100 pb-16 pt-20 text-neutral-800 transition-all duration-300 lg:pb-52 lg:pt-40'
+    ]}
+    id="contact-container"
+>
+    <Grid>
+        <GridBox
+            mobileFull
+            tabletStart={1}
+            tabletEnd={2}
+            desktopStart={1}
+            desktopEnd={3}
+            classes="relative"
+        >
+            <Headline classes="mb-4 sm:mt-2" level={3}>Contact</Headline>
+            <Icon
+                id="icon-for-default"
+                class="icon-for-service absolute -top-10 right-10 text-[64px] transition-transform sm:right-auto sm:top-32"
+                name="sticker-wave-50"
+            />
+            <Icon
+                id="icon-for-email"
+                class="icon-for-service absolute -top-10 right-10 -rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+                name="sticker-mail-50-2"
+            />
+            <Icon
+                id="icon-for-mastodon"
+                class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+                name="sticker-mastodon-50"
+            />
+            <Icon
+                id="icon-for-glass"
+                class="icon-for-service absolute -top-10 right-10 -rotate-[8deg] scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+                name="sticker-glass-50"
+            />
+            <Icon
+                id="icon-for-readcv"
+                class="icon-for-service absolute -top-10 right-10 rotate-12 scale-0 text-[64px] transition-transform sm:right-auto sm:top-32"
+                name="sticker-readcv-50"
+            />
+        </GridBox>
+        <GridBox mobileFull tabletStart={3} tabletEnd={8} desktopStart={4} desktopEnd={12}>
+            <ul>
+                <ContactLinkItem
+                    id="email-contact-item"
+                    hoverBgColor="bg-blue"
+                    hoverBgHexColor="#689BF7"
+                    hoverTextColor="text-blue-dark"
+                    service="Email"
+                    handle="contact@mfrashad.com"
+                    url="mailto:contact@mfrashad.com"
+                />
+                <ContactLinkItem
+                    id="mastodon-contact-item"
+                    hoverBgColor="bg-green"
+                    hoverBgHexColor="#6AD09D"
+                    hoverTextColor="text-green-dark"
+                    service="Mastodon"
+                    handle="@iamrobin@mastodon.social"
+                    url="https://mastodon.social/@iamrobin"
+                />
+                <ContactLinkItem
+                    id="glass-contact-item"
+                    hoverBgColor="bg-yellow"
+                    hoverBgHexColor="#FFC700"
+                    hoverTextColor="text-yellow-dark"
+                    service="Glass"
+                    handle="@iamrobin"
+                    url="https://glass.photo/iamrobin"
+                />
+                <ContactLinkItem
+                    id="readcv-contact-item"
+                    hoverBgColor="bg-lilac"
+                    hoverBgHexColor="#C6B9FF"
+                    hoverTextColor="text-lilac-dark"
+                    service="Readcv"
+                    handle="@iamrobin"
+                    url="https://read.cv/iamrobin"
+                    noBorder
+                />
+            </ul>
+        </GridBox>
+    </Grid>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.innerWidth < 640) return;
+        const contactItems = document.querySelectorAll('.contact-item');
+        const container = document.getElementById('contact-container');
+        const icons = document.querySelectorAll('.icon-for-service');
+
+        contactItems.forEach((item) => {
+            const bgColor = (item as HTMLElement).dataset.bgcolor as string;
+            const bgHexColor = (item as HTMLElement).dataset.hoverbghexcolor as string;
+            const textColor = (item as HTMLElement).dataset.textcolor as string;
+            item.addEventListener('mouseover', () => {
+                const service = item.getAttribute('id')?.split('-')[0];
+                document.documentElement.style.setProperty('--active-bg-color', bgHexColor);
+                icons.forEach((icon) => {
+                    if (icon.id === `icon-for-${service}`) {
+                        icon.classList.remove('scale-0');
+                    } else {
+                        icon.classList.add('scale-0');
+                    }
+                });
+
+                container?.classList.remove('bg-neutral-100', 'text-neutral-800');
+                container?.classList.add(bgColor, textColor);
+            });
+            item.addEventListener('mouseout', () => {
+                icons.forEach((icon) => {
+                    document.documentElement.style.setProperty('--active-bg-color', '#f8fafc');
+                    icon.classList.add('scale-0');
+                    if (icon.id === 'icon-for-default') {
+                        icon.classList.remove('scale-0');
+                    }
+                });
+                container?.classList.remove(bgColor, textColor);
+                container?.classList.add('bg-neutral-100', 'text-neutral-800');
+            });
+        });
+    });
+</script>
