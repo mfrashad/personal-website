@@ -1,4 +1,6 @@
 {
+    "buildCommand": "npm run build",
+    "ignoreCommand": "git diff --quiet HEAD^ HEAD",
     "rewrites": [
         {
             "source": "/iamrobin/js/script.js",
