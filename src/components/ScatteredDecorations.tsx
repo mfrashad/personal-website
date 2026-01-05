@@ -105,6 +105,16 @@ export default function ScatteredDecorations() {
     const [decorationProps, setDecorationProps] = useState<Map<number, { rotation: number; scale: number; zIndex: number }>>(new Map());
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
 
+    // Reference viewport width that positions were designed for
+    const REFERENCE_WIDTH = 1692;
+
+    // Scale X position based on current viewport width
+    const scaleXPosition = (originalX: number) => {
+        if (screenWidth === 0) return originalX;
+        const scale = screenWidth / REFERENCE_WIDTH;
+        return originalX * scale;
+    };
+
     useEffect(() => {
         // Set initial width
         setScreenWidth(window.innerWidth);
@@ -248,12 +258,15 @@ export default function ScatteredDecorations() {
 
                 const props = decorationProps.get(index) || { rotation: 0, scale: 1, zIndex: decoration.zIndex };
 
+                // Scale X position based on viewport width
+                const scaledX = scaleXPosition(decoration.initialX || 100);
+
                 return (
                     <DraggableImage
                         key={index}
                         src={decoration.src}
                         alt={decoration.alt}
-                        initialX={decoration.initialX}
+                        initialX={scaledX}
                         initialY={decoration.initialY}
                         width={decoration.width}
                         rotation={props.rotation}

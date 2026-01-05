@@ -295,10 +295,20 @@ export default function ScatteredPolaroids() {
     // Y position threshold - polaroids below this should be affected by bio slider
     const HERO_THRESHOLD = 700;
 
+    // Reference viewport width that positions were designed for
+    const REFERENCE_WIDTH = 1692;
+
     // Calculate offset based on bio level (baseline is level 1 "Short")
     const calculateOffset = (level: number) => {
         const offsets = [-150, 0, 200, 900]; // TLDR, Short, Medium, Long
         return offsets[level] || 0;
+    };
+
+    // Scale X position based on current viewport width
+    const scaleXPosition = (originalX: number) => {
+        if (screenWidth === 0) return originalX;
+        const scale = screenWidth / REFERENCE_WIDTH;
+        return originalX * scale;
     };
 
     useEffect(() => {
@@ -430,13 +440,16 @@ export default function ScatteredPolaroids() {
                 const shouldOffset = polaroid.initialY > HERO_THRESHOLD;
                 const adjustedY = shouldOffset ? polaroid.initialY + bioOffset : polaroid.initialY;
 
+                // Scale X position based on viewport width
+                const scaledX = scaleXPosition(polaroid.initialX || 100);
+
                 return (
                     <DraggablePolaroid
                         key={index}
                         src={polaroid.src}
                         alt={polaroid.alt}
                         caption={polaroid.caption}
-                        initialX={polaroid.initialX}
+                        initialX={scaledX}
                         initialY={adjustedY}
                         rotation={polaroid.rotation}
                         zIndex={polaroid.zIndex}
