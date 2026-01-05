@@ -28,6 +28,9 @@ import { HeroBackground } from '@components/animations/MorphingBlob';
 import AnimatedDivider from '@components/animations/AnimatedDivider';
 import { DoodleArrow, DoodleSquiggle } from '@components/animations/Doodles';
 
+// Import profile polaroid for mobile
+import profileImg from '@assets/polaroids/profile.JPEG';
+
 // Data imports
 import { achievements, metrics } from '@data/achievements';
 import { brandKit } from '@data/brand-kit';
@@ -120,6 +123,22 @@ import BookSection from '@components/books/BookSection.astro';
                         </div>
                         I'm Rashad,
                     </Headline>
+
+                    <!-- Mobile Polaroid - Only visible on mobile/tablet -->
+                    <div class="flex justify-center mb-6 lg:hidden">
+                        <div class="bg-white p-3 rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                            <div class="bg-neutral-200 rounded overflow-hidden mb-3 w-[160px] h-[160px]">
+                                <img
+                                    src={profileImg.src}
+                                    alt="Profile"
+                                    class="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div class="text-center text-xs font-mono text-neutral-700 px-1">
+                                That's me!
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Social Links -->
                     <div class="flex justify-center gap-4 mb-8 relative z-[120]">
@@ -235,8 +254,8 @@ import BookSection from '@components/books/BookSection.astro';
             <Grid>
                 <GridBox desktopFull>
 
-                    <!-- Contribution Graph -->
-                    <div class="mb-6">
+                    <!-- Contribution Graph (hidden on mobile for compactness) -->
+                    <div class="mb-6 hidden md:block">
                         <ContributionGraph
                             posts={allPosts.map(post => ({
                                 date: post.data.date,

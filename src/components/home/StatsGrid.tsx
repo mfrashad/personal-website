@@ -65,7 +65,7 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
     return (
         <div className="stats-grid">
             {metrics.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                     {metrics.map((metric, index) => {
                         const hasMax = metric.maxValue !== undefined && metric.maxValue !== null;
                         const progress = hasMax ? (metric.value / metric.maxValue!) * 100 : 100;
@@ -95,9 +95,9 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                 }}
                                 onHoverEnd={() => setHoveredCard(null)}
                                 onClick={(e) => handleCardClick(e, metric.id)}
-                                className="border border-neutral-200 rounded-lg p-4 bg-white hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
+                                className="border border-neutral-200 rounded-lg p-3 md:p-4 bg-white hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
                                 style={{
-                                    minHeight: '120px',
+                                    minHeight: '100px',
                                     transformStyle: 'preserve-3d',
                                     perspective: '1000px'
                                 }}
@@ -113,7 +113,7 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                 />
 
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-2 mb-3">
+                                    <div className="flex items-center gap-2 mb-2">
                                         {IconComponent && (
                                             <motion.div
                                                 animate={{
@@ -124,16 +124,16 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                             >
                                                 <IconComponent
                                                     weight="fill"
-                                                    size={20}
+                                                    size={18}
                                                     className={iconConfig.color}
                                                 />
                                             </motion.div>
                                         )}
-                                        <h4 className="font-semibold text-neutral-900 text-sm">
+                                        <h4 className="font-semibold text-neutral-900 text-xs md:text-sm">
                                             {metric.label}
                                         </h4>
                                     </div>
-                                    <div className="text-3xl font-bold text-blue-600 mb-3">
+                                    <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">
                                         <AnimatedCounter value={formatNumber(metric.value)} />
                                         {hasMax && (
                                             <span className="text-sm text-neutral-500 font-normal">
