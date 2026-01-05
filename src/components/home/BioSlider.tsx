@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface TimelineItem {
     text: string;
@@ -98,18 +97,9 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
         <div className="bio-slider-with-timeline w-full mx-auto">
             {/* Bio Text */}
             <div className="bio-content mb-8 relative z-[120] w-full mx-auto">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={level}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="text-neutral-700 leading-relaxed whitespace-pre-line w-full mx-auto"
-                    >
-                        {renderTextWithBold(bios[level])}
-                    </motion.div>
-                </AnimatePresence>
+                <div className="text-neutral-700 leading-relaxed whitespace-pre-line w-full mx-auto">
+                    {renderTextWithBold(bios[level])}
+                </div>
             </div>
 
             {/* Timeline - Currently & Previously */}
@@ -117,61 +107,31 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                 {/* Currently */}
                 <div>
                     <h3 className="text-lg font-bold mb-4 relative z-[120]">currently:</h3>
-                    <AnimatePresence mode="wait">
-                        <motion.ul
-                            key={`currently-${level}`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="space-y-2 font-mono text-sm relative z-[120]"
-                        >
-                            {currentTimeline.currently.map((item, index) => (
-                                <motion.li
-                                    key={index}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.05, duration: 0.2 }}
-                                    className="flex items-center gap-2"
-                                >
-                                    {item.icon && (
-                                        <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
-                                    )}
-                                    <span>{item.text}</span>
-                                </motion.li>
-                            ))}
-                        </motion.ul>
-                    </AnimatePresence>
+                    <ul className="space-y-2 font-mono text-sm relative z-[120]">
+                        {currentTimeline.currently.map((item, index) => (
+                            <li key={index} className="flex items-center gap-2">
+                                {item.icon && (
+                                    <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
+                                )}
+                                <span>{item.text}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 {/* Previously */}
                 <div>
                     <h3 className="text-lg font-bold mb-4 relative z-[120]">previously:</h3>
-                    <AnimatePresence mode="wait">
-                        <motion.ul
-                            key={`previously-${level}`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="space-y-1.5 font-mono text-sm text-neutral-700 relative z-[120]"
-                        >
-                            {currentTimeline.previously.map((item, index) => (
-                                <motion.li
-                                    key={index}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: index * 0.05, duration: 0.2 }}
-                                    className="flex items-center gap-2"
-                                >
-                                    {item.icon && (
-                                        <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
-                                    )}
-                                    <span>{item.text}</span>
-                                </motion.li>
-                            ))}
-                        </motion.ul>
-                    </AnimatePresence>
+                    <ul className="space-y-1.5 font-mono text-sm text-neutral-700 relative z-[120]">
+                        {currentTimeline.previously.map((item, index) => (
+                            <li key={index} className="flex items-center gap-2">
+                                {item.icon && (
+                                    <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
+                                )}
+                                <span>{item.text}</span>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
 
@@ -188,30 +148,19 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                     width: 'min(42rem, calc(100vw - 2rem))'
                 } : {}}
             >
-                <motion.div
-                    className="bg-white rounded-2xl shadow-2xl border border-neutral-200 py-5 px-8 relative z-[200]"
-                    animate={{
-                        scale: isSticky ? 1 : 1,
+                <div
+                    className="bg-white rounded-2xl border border-neutral-200 py-5 px-8 relative z-[200]"
+                    style={{
                         boxShadow: isSticky
                             ? "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
                             : "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
                     }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
                 >
                     <label htmlFor="bio-range" className="block text-sm font-mono text-neutral-600 mb-3">
                         Adjust detail level:{' '}
-                        <AnimatePresence mode="wait">
-                            <motion.span
-                                key={level}
-                                initial={{ opacity: 0, y: -5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 5 }}
-                                transition={{ duration: 0.2 }}
-                                className="font-semibold text-neutral-900 inline-block"
-                            >
-                                {getLevelLabel(level)}
-                            </motion.span>
-                        </AnimatePresence>
+                        <span className="font-semibold text-neutral-900">
+                            {getLevelLabel(level)}
+                        </span>
                     </label>
                     <input
                         id="bio-range"
@@ -225,78 +174,63 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
 
                     {/* Labels */}
                     <div className="flex justify-between mt-3 gap-2">
-                        <motion.button
+                        <button
                             onClick={() => setLevel(0)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            animate={{
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                            style={{
                                 backgroundColor: level === 0 ? '#171717' : '#fafafa',
                                 color: level === 0 ? '#ffffff' : '#525252',
                                 borderColor: level === 0 ? '#171717' : '#d4d4d4'
                             }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                         >
                             Minimal
-                        </motion.button>
-                        <motion.button
+                        </button>
+                        <button
                             onClick={() => setLevel(4)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            animate={{
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                            style={{
                                 backgroundColor: level >= 1 && level <= 4 ? '#171717' : '#fafafa',
                                 color: level >= 1 && level <= 4 ? '#ffffff' : '#525252',
                                 borderColor: level >= 1 && level <= 4 ? '#171717' : '#d4d4d4'
                             }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                         >
                             Brief
-                        </motion.button>
-                        <motion.button
+                        </button>
+                        <button
                             onClick={() => setLevel(9)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            animate={{
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                            style={{
                                 backgroundColor: level >= 5 && level <= 9 ? '#171717' : '#fafafa',
                                 color: level >= 5 && level <= 9 ? '#ffffff' : '#525252',
                                 borderColor: level >= 5 && level <= 9 ? '#171717' : '#d4d4d4'
                             }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                         >
                             Standard
-                        </motion.button>
-                        <motion.button
+                        </button>
+                        <button
                             onClick={() => setLevel(14)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            animate={{
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                            style={{
                                 backgroundColor: level >= 10 && level <= 14 ? '#171717' : '#fafafa',
                                 color: level >= 10 && level <= 14 ? '#ffffff' : '#525252',
                                 borderColor: level >= 10 && level <= 14 ? '#171717' : '#d4d4d4'
                             }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                         >
                             Detailed
-                        </motion.button>
-                        <motion.button
+                        </button>
+                        <button
                             onClick={() => setLevel(19)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            animate={{
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                            style={{
                                 backgroundColor: level >= 15 ? '#171717' : '#fafafa',
                                 color: level >= 15 ? '#ffffff' : '#525252',
                                 borderColor: level >= 15 ? '#171717' : '#d4d4d4'
                             }}
-                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                         >
                             Complete
-                        </motion.button>
+                        </button>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
             {/* Custom Styles for Range Slider */}
