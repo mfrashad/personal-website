@@ -88,38 +88,36 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
     // Create a compact post element for the homepage
     const createCompactPostElement = (post: CleveWriting, isNew: boolean): HTMLElement => {
         const div = document.createElement('div');
-        div.className = 'list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 transition-all duration-500 opacity-0 translate-y-2';
+        div.className = 'list-item-image-hover-effect group relative flex flex-col justify-between gap-3 border-b border-neutral-300 py-3 md:py-4 md:flex-row md:gap-12 transition-all duration-500 opacity-0 translate-y-2';
         div.setAttribute('data-new-post', 'true');
 
         const slug = slugify(post.title);
         const date = new Date(post.created_at);
-        const formattedDate = date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: '2-digit'
-        });
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const formattedDate = `${month}/${day}`;
 
         div.innerHTML = `
-            <div class="flex items-start justify-between gap-10 md:items-center flex-1">
-                <div class="flex items-start gap-4 md:gap-6 flex-1">
-                    <div class="font-mono text-neutral-500 text-sm shrink-0 min-w-[100px]">
+            <div class="flex items-start justify-between gap-6 md:gap-10 md:items-center flex-1">
+                <div class="flex items-start gap-3 md:gap-6 flex-1 min-w-0">
+                    <div class="font-mono text-neutral-500 text-xs md:text-sm shrink-0 min-w-[40px] md:min-w-[100px]">
                         ${formattedDate}
                     </div>
-                    <p class="text-base flex flex-col">
-                        <span class="font-bold flex items-center gap-2">
-                            ${post.title}
-                            ${isNew ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded-full animate-pulse"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19.05,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144Z"/></svg>New</span>' : ''}
+                    <p class="text-sm md:text-base flex flex-col min-w-0 flex-1">
+                        <span class="font-bold truncate flex items-center gap-2">
+                            <span class="truncate">${post.title}</span>
+                            ${isNew ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 rounded-full animate-pulse shrink-0"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256"><path d="M208,144a15.78,15.78,0,0,1-10.42,14.94L146,178l-19.05,51.62a15.92,15.92,0,0,1-29.88,0L78,178l-51.62-19a15.92,15.92,0,0,1,0-29.88L78,110l19-51.62a15.92,15.92,0,0,1,29.88,0L146,110l51.62,19A15.78,15.78,0,0,1,208,144Z"/></svg>New</span>' : ''}
                         </span>
                     </p>
                 </div>
-                <div class="flex items-center gap-3 md:gap-6">
-                    <div class="text-neutral-400">
-                        <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM32,192V64H224V192Z"/></svg>
+                <div class="flex items-center gap-2 md:gap-6">
+                    <div class="text-neutral-400 text-sm md:text-base">
+                        <div class="flex items-center gap-1 md:gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM32,192V64H224V192Z"/></svg>
                             <span class="hidden md:inline">Articles</span>
                         </div>
                     </div>
-                    <div>
+                    <div class="hidden md:block">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg>
                     </div>
                 </div>
