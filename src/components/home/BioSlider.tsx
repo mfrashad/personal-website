@@ -13,18 +13,8 @@ interface TimelineLevel {
 }
 
 interface BioSliderProps {
-    bios: {
-        tldr: string;
-        short: string;
-        medium: string;
-        long: string;
-    };
-    timeline: {
-        tldr: TimelineLevel;
-        short: TimelineLevel;
-        medium: TimelineLevel;
-        long: TimelineLevel;
-    };
+    bios: string[]; // Array of 20 bio variations
+    timeline: TimelineLevel[]; // Array of 20 timeline variations
 }
 
 // Helper to render markdown bold text and links
@@ -55,14 +45,19 @@ function renderTextWithBold(text: string) {
 }
 
 export default function BioSlider({ bios, timeline }: BioSliderProps) {
-    const [level, setLevel] = useState(1); // Start at "Short" instead of "TLDR"
+    const [level, setLevel] = useState(5); // Start at level 5 (nice middle ground)
     const [isSticky, setIsSticky] = useState(true);
 
-    const bioLevels = [bios.tldr, bios.short, bios.medium, bios.long];
-    const timelineLevels = [timeline.tldr, timeline.short, timeline.medium, timeline.long];
-    const labels = ['TLDR', 'Short', 'Medium', 'Long'];
+    const currentTimeline = timeline[level];
 
-    const currentTimeline = timelineLevels[level];
+    // Generate label for current level
+    const getLevelLabel = (level: number) => {
+        if (level === 0) return 'Minimal';
+        if (level <= 4) return 'Brief';
+        if (level <= 9) return 'Standard';
+        if (level <= 14) return 'Detailed';
+        return 'Complete';
+    };
 
     // Dispatch custom event when bio level changes
     useEffect(() => {
@@ -112,7 +107,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="text-neutral-700 leading-relaxed whitespace-pre-line w-full mx-auto"
                     >
-                        {renderTextWithBold(bioLevels[level])}
+                        {renderTextWithBold(bios[level])}
                     </motion.div>
                 </AnimatePresence>
             </div>
@@ -214,7 +209,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                                 transition={{ duration: 0.2 }}
                                 className="font-semibold text-neutral-900 inline-block"
                             >
-                                {labels[level]}
+                                {getLevelLabel(level)}
                             </motion.span>
                         </AnimatePresence>
                     </label>
@@ -222,7 +217,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                         id="bio-range"
                         type="range"
                         min="0"
-                        max="3"
+                        max="19"
                         value={level}
                         onChange={(e) => setLevel(Number(e.target.value))}
                         className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer slider"
@@ -230,23 +225,76 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
 
                     {/* Labels */}
                     <div className="flex justify-between mt-3 gap-2">
-                        {labels.map((label, i) => (
-                            <motion.button
-                                key={i}
-                                onClick={() => setLevel(i)}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                animate={{
-                                    backgroundColor: i === level ? '#171717' : '#fafafa',
-                                    color: i === level ? '#ffffff' : '#525252',
-                                    borderColor: i === level ? '#171717' : '#d4d4d4'
-                                }}
-                                transition={{ duration: 0.2, ease: "easeInOut" }}
-                                className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
-                            >
-                                {label}
-                            </motion.button>
-                        ))}
+                        <motion.button
+                            onClick={() => setLevel(0)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{
+                                backgroundColor: level === 0 ? '#171717' : '#fafafa',
+                                color: level === 0 ? '#ffffff' : '#525252',
+                                borderColor: level === 0 ? '#171717' : '#d4d4d4'
+                            }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                        >
+                            Minimal
+                        </motion.button>
+                        <motion.button
+                            onClick={() => setLevel(4)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{
+                                backgroundColor: level >= 1 && level <= 4 ? '#171717' : '#fafafa',
+                                color: level >= 1 && level <= 4 ? '#ffffff' : '#525252',
+                                borderColor: level >= 1 && level <= 4 ? '#171717' : '#d4d4d4'
+                            }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                        >
+                            Brief
+                        </motion.button>
+                        <motion.button
+                            onClick={() => setLevel(9)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{
+                                backgroundColor: level >= 5 && level <= 9 ? '#171717' : '#fafafa',
+                                color: level >= 5 && level <= 9 ? '#ffffff' : '#525252',
+                                borderColor: level >= 5 && level <= 9 ? '#171717' : '#d4d4d4'
+                            }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                        >
+                            Standard
+                        </motion.button>
+                        <motion.button
+                            onClick={() => setLevel(14)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{
+                                backgroundColor: level >= 10 && level <= 14 ? '#171717' : '#fafafa',
+                                color: level >= 10 && level <= 14 ? '#ffffff' : '#525252',
+                                borderColor: level >= 10 && level <= 14 ? '#171717' : '#d4d4d4'
+                            }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                        >
+                            Detailed
+                        </motion.button>
+                        <motion.button
+                            onClick={() => setLevel(19)}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            animate={{
+                                backgroundColor: level >= 15 ? '#171717' : '#fafafa',
+                                color: level >= 15 ? '#ffffff' : '#525252',
+                                borderColor: level >= 15 ? '#171717' : '#d4d4d4'
+                            }}
+                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                            className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
+                        >
+                            Complete
+                        </motion.button>
                     </div>
                 </motion.div>
             </div>
