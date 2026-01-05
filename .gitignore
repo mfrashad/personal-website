@@ -35,3 +35,4 @@ pnpm-debug.log*
 
 # cached data
 src/data/letterboxd-cache.json
+.vercel

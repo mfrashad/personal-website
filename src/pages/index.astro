@@ -164,20 +164,6 @@ import BookSection from '@components/books/BookSection.astro';
 
     <div class="flex flex-col gap-16 py-12 lg:gap-24 lg:py-20">
 
-        <!-- Stats Section -->
-        <section>
-            <SectionContent title="Stats & Metrics">
-                A quick snapshot of my journey and impact across different areas.
-            </SectionContent>
-            <Grid>
-                <GridBox desktopFull>
-                    <StatsGrid metrics={metrics} client:load />
-                </GridBox>
-            </Grid>
-        </section>
-
-        <AnimatedDivider variant="wave" client:visible />
-
         <!-- Media Mentions Section -->
         <section>
             <SectionContent title="Media Mentions">
@@ -187,6 +173,20 @@ import BookSection from '@components/books/BookSection.astro';
             <Grid>
                 <GridBox desktopFull>
                     <MediaMentionList mentions={mediaMentions} client:load />
+                </GridBox>
+            </Grid>
+        </section>
+
+        <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Stats Section -->
+        <section>
+            <SectionContent title="Stats & Metrics">
+                A quick snapshot of my journey and impact across different areas.
+            </SectionContent>
+            <Grid>
+                <GridBox desktopFull>
+                    <StatsGrid metrics={metrics} client:load />
                 </GridBox>
             </Grid>
         </section>

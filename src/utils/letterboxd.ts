@@ -103,11 +103,32 @@ async function scrapeFilmsList(username: string, maxPages: number = 10): Promise
                 console.error(`Failed to fetch TMDB poster for "${filmName}":`, error);
             }
 
-            // Fallback to Letterboxd poster if TMDB fails
-            if (!posterUrl) {
-                const posterUrlPath = reactComponent.getAttribute('data-poster-url');
-                if (posterUrlPath) {
-                    posterUrl = `https://letterboxd.com${posterUrlPath}`;
+            // Fallback to Letterboxd CDN poster if TMDB fails
+            if (!posterUrl && filmId && filmSlug) {
+                // Convert film ID to path by splitting digits with slashes
+                const idPath = filmId.split('').join('/');
+
+                // Try different slug and size combinations
+                const slugCandidates = [
+                    filmSlug,
+                    filmSlug.replace(/-\d{4}$/, '') // Remove year suffix
+                ];
+                const sizeCandidates = ['0-300-0-450', '0-230-0-345', '0-150-0-225'];
+
+                // Try to find a working poster URL
+                outerLoop: for (const slug of slugCandidates) {
+                    for (const size of sizeCandidates) {
+                        const candidateUrl = `https://a.ltrbxd.com/resized/film-poster/${idPath}/${filmId}-${slug}-${size}-crop.jpg`;
+                        try {
+                            const response = await fetch(candidateUrl, { method: 'HEAD' });
+                            if (response.ok) {
+                                posterUrl = candidateUrl;
+                                break outerLoop;
+                            }
+                        } catch {
+                            continue;
+                        }
+                    }
                 }
             }
 
