@@ -37,7 +37,7 @@ export const personalStats: PersonalStats = {
     hackathonsWon: 5,
     hackathonsJudged: 10,
     socialMedia: {
-        followers: 20000,
+        followers: 16000,
         totalViews: 5000000
     }
 };
