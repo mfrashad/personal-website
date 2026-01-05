@@ -289,8 +289,6 @@ export default function ScatteredPolaroids() {
     const [isDev, setIsDev] = useState(false);
     const [showDevPanel, setShowDevPanel] = useState(false);
     const [enabledPolaroids, setEnabledPolaroids] = useState<Map<number, boolean>>(new Map());
-    // Initialize with level 5's offset (200) to match BioSlider's initial state
-    const [bioOffset, setBioOffset] = useState(200);
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
 
     // Y position threshold - polaroids below this should be affected by bio slider
@@ -298,6 +296,9 @@ export default function ScatteredPolaroids() {
 
     // Reference viewport width that positions were designed for
     const REFERENCE_WIDTH = 1692;
+
+    // BioSlider's default starting level (must match BioSlider.tsx)
+    const DEFAULT_BIO_LEVEL = 5;
 
     // Calculate offset based on bio level (20 levels: 0-19)
     // Map 20 levels to appropriate offsets
@@ -309,17 +310,20 @@ export default function ScatteredPolaroids() {
         // Levels 15-19: Complete (longest)
 
         //if (level === 0) return -150;
-        
+
         if (level <= 5) return -250;
 
         if (level <= 9) return -100;
-        
+
         if (level <= 14) return 200;
-        
+
         if (level <= 17) return 600;
-        
+
         return 900;
     };
+
+    // Initialize bioOffset to match BioSlider's default level
+    const [bioOffset, setBioOffset] = useState(() => calculateOffset(DEFAULT_BIO_LEVEL));
 
     // Scale X position based on current viewport width
     const scaleXPosition = (originalX: number) => {

@@ -60,13 +60,13 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
 
     // Dispatch custom event when bio level changes
     useEffect(() => {
-        // Small delay to ensure other components have mounted and set up listeners
-        const timer = setTimeout(() => {
+        // Use requestAnimationFrame to ensure DOM is ready and listeners are set up
+        const frame = requestAnimationFrame(() => {
             const event = new CustomEvent('bioLevelChange', { detail: { level } });
             window.dispatchEvent(event);
-        }, 0);
+        });
 
-        return () => clearTimeout(timer);
+        return () => cancelAnimationFrame(frame);
     }, [level]);
 
     // Handle sticky behavior - unstick when scrolling past the about section
