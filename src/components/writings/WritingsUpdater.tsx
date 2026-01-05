@@ -73,6 +73,8 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
         const homepageContainer = document.querySelector('[data-homepage-posts]');
         if (!homepageContainer) return;
 
+        const maxPosts = 6; // Maximum number of posts to display
+
         posts.forEach(post => {
             const postElement = createCompactPostElement(post, true);
             // Insert at the beginning (newest first)
@@ -83,6 +85,12 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
                 postElement.classList.remove('opacity-0', 'translate-y-2');
             });
         });
+
+        // Remove oldest posts to maintain max limit
+        const allPosts = homepageContainer.children;
+        while (allPosts.length > maxPosts) {
+            homepageContainer.removeChild(allPosts[allPosts.length - 1]);
+        }
     };
 
     // Create a compact post element for the homepage
