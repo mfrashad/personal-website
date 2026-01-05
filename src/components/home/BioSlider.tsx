@@ -100,9 +100,9 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
     }, [isSticky]);
 
     return (
-        <div className="bio-slider-with-timeline w-full">
+        <div className="bio-slider-with-timeline w-full mx-auto">
             {/* Bio Text */}
-            <div className="bio-content mb-8 relative z-[120] w-full">
+            <div className="bio-content mb-8 relative z-[120] w-full mx-auto">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={level}
@@ -110,7 +110,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="text-neutral-700 leading-relaxed whitespace-pre-line w-full"
+                        className="text-neutral-700 leading-relaxed whitespace-pre-line w-full mx-auto"
                     >
                         {renderTextWithBold(bioLevels[level])}
                     </motion.div>
@@ -118,7 +118,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
             </div>
 
             {/* Timeline - Currently & Previously */}
-            <div className="grid md:grid-cols-2 gap-8 pb-32 w-full">
+            <div className="grid md:grid-cols-2 gap-8 pb-32 w-full mx-auto">
                 {/* Currently */}
                 <div>
                     <h3 className="text-lg font-bold mb-4 relative z-[120]">currently:</h3>
@@ -181,17 +181,17 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
             </div>
 
             {/* Slider Control - Floating rounded bar */}
-            <motion.div
+            <div
                 className={
                     isSticky
-                        ? 'fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-[200]'
+                        ? 'fixed bottom-8 z-[200]'
                         : 'relative w-full max-w-2xl mx-auto'
                 }
-                animate={{
-                    y: isSticky ? 0 : 0,
-                    opacity: isSticky ? 1 : 1
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                style={isSticky ? {
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 'min(42rem, calc(100vw - 2rem))'
+                } : {}}
             >
                 <motion.div
                     className="bg-white rounded-2xl shadow-2xl border border-neutral-200 py-5 px-8 relative z-[200]"
@@ -249,7 +249,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                         ))}
                     </div>
                 </motion.div>
-            </motion.div>
+            </div>
 
             {/* Custom Styles for Range Slider */}
             <style jsx>{`

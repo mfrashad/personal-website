@@ -872,6 +872,80 @@ export const achievements: Achievement[] = [
         "progress": "100/366",
         "date": "2024",
         "unlocked": true
+    },
+
+    // --- 🔒 MORE QUEST LOG (Future Goals) ---
+    {
+        "id": "forbes-30u30",
+        "title": "Forbes 30 Under 30",
+        "description": "Goal: Make the Forbes 30 Under 30 list. Official validation of overachieving.",
+        "icon": "📰",
+        "category": "professional",
+        "tags": ["bucket-list", "recognition", "prestige"],
+        "unlocked": false
+    },
+    {
+        "id": "top-university",
+        "title": "Elite Institution",
+        "description": "Goal: Get into MIT/Stanford/Harvard/Oxbridge. Join the Ivy League brain trust.",
+        "icon": "🎓",
+        "category": "academic",
+        "tags": ["bucket-list", "education", "prestige"],
+        "unlocked": false
+    },
+    {
+        "id": "angel-investor",
+        "title": "Angel Investor",
+        "description": "Goal: Become an Angel Investor. Fund the next generation of crazy ideas.",
+        "icon": "👼",
+        "category": "professional",
+        "tags": ["bucket-list", "wealth", "startup"],
+        "unlocked": false
+    },
+    {
+        "id": "ultra-marathon",
+        "title": "Ultra Marathoner",
+        "description": "Goal: Complete an Ultra Marathon. Because a regular marathon wasn't masochistic enough.",
+        "icon": "🦵",
+        "category": "fitness",
+        "tags": ["bucket-list", "running", "endurance"],
+        "unlocked": false
+    },
+    {
+        "id": "run-100km",
+        "title": "Centurion Runner",
+        "description": "Goal: Run 100km in one go. The ultimate test of 'am I still sane?'",
+        "icon": "🏃",
+        "category": "fitness",
+        "tags": ["bucket-list", "running", "endurance"],
+        "unlocked": false
+    },
+    {
+        "id": "youtuber",
+        "title": "YouTuber",
+        "description": "Goal: Become a YouTuber. Professional internet personality with a Subscribe button.",
+        "icon": "🎥",
+        "category": "community",
+        "tags": ["bucket-list", "content", "video"],
+        "unlocked": false
+    },
+    {
+        "id": "divemaster",
+        "title": "Divemaster",
+        "description": "Goal: Get Divemaster License. Upgrade from 'knows how to dive' to 'professional fish person'.",
+        "icon": "🤿",
+        "category": "adventure",
+        "tags": ["bucket-list", "diving", "certification"],
+        "unlocked": false
+    },
+    {
+        "id": "movie-actor",
+        "title": "Screen Actor",
+        "description": "Goal: Act in a Movie. IMDB credits incoming.",
+        "icon": "🎬",
+        "category": "skill",
+        "tags": ["bucket-list", "acting", "fame"],
+        "unlocked": false
     }
 ];
 
