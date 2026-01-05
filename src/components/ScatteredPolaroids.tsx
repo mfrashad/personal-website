@@ -187,8 +187,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'skydivingImg.src',
         alt: 'Skydiving',
         caption: 'First skydive!',
-        initialX: 334,
-        initialY: 5925,
+        initialX: 478,
+        initialY: 6186,
         rotation: 4,
         zIndex: 113,
         enabled: true
@@ -198,8 +198,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'surfingImg.src',
         alt: 'Surfing',
         caption: 'Learning to surf',
-        initialX: 1226,
-        initialY: 6126,
+        initialX: 1471,
+        initialY: 6006,
         rotation: -6,
         zIndex: 114,
         enabled: true
@@ -209,8 +209,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'snowboardingImg.src',
         alt: 'Snowboarding',
         caption: 'Winter adventures',
-        initialX: 1398,
-        initialY: 6059,
+        initialX: 268,
+        initialY: 6049,
         rotation: 5,
         zIndex: 115,
         enabled: true
@@ -220,8 +220,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'divingImg.src',
         alt: 'Diving',
         caption: 'Underwater exploration',
-        initialX: 157,
-        initialY: 6164,
+        initialX: 1231,
+        initialY: 6059,
         rotation: -4,
         zIndex: 116,
         enabled: true
@@ -231,8 +231,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'camelImg.src',
         alt: 'Camel riding',
         caption: 'Desert adventures',
-        initialX: -39,
-        initialY: 6062,
+        initialX: -2,
+        initialY: 6014,
         rotation: 7,
         zIndex: 117,
         enabled: true
@@ -298,7 +298,7 @@ export default function ScatteredPolaroids() {
     const REFERENCE_WIDTH = 1692;
 
     // BioSlider's default starting level (must match BioSlider.tsx)
-    const DEFAULT_BIO_LEVEL = 5;
+    const DEFAULT_BIO_LEVEL = 8;
 
     // Calculate offset based on bio level (20 levels: 0-19)
     // Map 20 levels to appropriate offsets

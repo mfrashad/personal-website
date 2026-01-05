@@ -44,7 +44,7 @@ function renderTextWithBold(text: string) {
 }
 
 export default function BioSlider({ bios, timeline }: BioSliderProps) {
-    const [level, setLevel] = useState(5); // Start at level 5 (nice middle ground)
+    const [level, setLevel] = useState(8); // Start at level 8 (Standard range)
     const [isSticky, setIsSticky] = useState(true);
 
     const currentTimeline = timeline[level];
