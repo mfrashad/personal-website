@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { soundManager } from '@utils/soundManager';
 
 interface MagneticButtonProps {
     children: React.ReactNode;
@@ -43,7 +42,6 @@ export default function MagneticButton({
 
     const handleMouseEnter = () => {
         setIsHovered(true);
-        soundManager.play('hover');
     };
 
     const handleMouseLeave = () => {
@@ -53,7 +51,6 @@ export default function MagneticButton({
     };
 
     const handleClick = () => {
-        soundManager.play('click');
         onClick?.();
     };
 

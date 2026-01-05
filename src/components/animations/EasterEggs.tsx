@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { soundManager } from '@utils/soundManager';
 
 // Konami Code: ↑ ↑ ↓ ↓ ← → ← → B A
 const KONAMI_CODE = [
@@ -113,7 +112,6 @@ export default function EasterEggs() {
     const triggerEasterEgg = useCallback((type: 'konami' | 'secret' | 'shake') => {
         setEasterEggType(type);
         setShowEasterEgg(true);
-        soundManager.play('success');
 
         // Epic confetti burst
         const duration = 3000;
@@ -146,7 +144,6 @@ export default function EasterEggs() {
 
     const togglePartyMode = useCallback(() => {
         setPartyMode(prev => !prev);
-        soundManager.play('success');
 
         if (!partyMode) {
             // Start party mode

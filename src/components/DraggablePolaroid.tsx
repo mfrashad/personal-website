@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { soundManager } from '@utils/soundManager';
 
 interface DraggablePolaroidProps {
     src: string;
@@ -89,7 +88,6 @@ export default function DraggablePolaroid({
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
         setDragStart({ x: e.clientX, y: e.clientY });
-        soundManager.play('click');
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -137,7 +135,6 @@ export default function DraggablePolaroid({
             onMouseMove={handleMouseMove}
             onHoverStart={() => {
                 setIsHovered(true);
-                soundManager.play('hover');
             }}
             onHoverEnd={() => {
                 setIsHovered(false);

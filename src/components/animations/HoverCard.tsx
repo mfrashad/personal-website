@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { soundManager } from '@utils/soundManager';
 
 interface HoverCardProps {
     children: React.ReactNode;
@@ -15,7 +14,6 @@ export default function HoverCard({ children, className = '' }: HoverCardProps) 
             className={`relative ${className}`}
             onHoverStart={() => {
                 setIsHovered(true);
-                soundManager.play('hover');
             }}
             onHoverEnd={() => setIsHovered(false)}
             whileHover={{

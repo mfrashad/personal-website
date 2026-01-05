@@ -14,7 +14,6 @@ import confetti from 'canvas-confetti';
 
 import type { Metric } from '@data/achievements';
 import AnimatedCounter from '@components/animations/AnimatedCounter';
-import { soundManager } from '@utils/soundManager';
 
 interface StatsGridProps {
     metrics: Metric[];
@@ -47,8 +46,6 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
     const handleCardClick = (e: React.MouseEvent, metricId: string) => {
-        soundManager.play('success');
-
         // Confetti effect
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (rect.left + rect.width / 2) / window.innerWidth;
@@ -65,7 +62,7 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
     return (
         <div className="stats-grid">
             {metrics.length > 0 && (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                <div className="grid grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
                     {metrics.map((metric, index) => {
                         const hasMax = metric.maxValue !== undefined && metric.maxValue !== null;
                         const progress = hasMax ? (metric.value / metric.maxValue!) * 100 : 100;
@@ -91,13 +88,12 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                 }}
                                 onHoverStart={() => {
                                     setHoveredCard(metric.id);
-                                    soundManager.play('hover');
                                 }}
                                 onHoverEnd={() => setHoveredCard(null)}
                                 onClick={(e) => handleCardClick(e, metric.id)}
-                                className="border border-neutral-200 rounded-lg p-3 md:p-4 bg-white hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
+                                className="border border-neutral-200 rounded-lg p-2 md:p-4 bg-white hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
                                 style={{
-                                    minHeight: '100px',
+                                    minHeight: '90px',
                                     transformStyle: 'preserve-3d',
                                     perspective: '1000px'
                                 }}
@@ -113,7 +109,7 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                 />
 
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-2 mb-2">
+                                    <div className="flex items-center gap-1 mb-1">
                                         {IconComponent && (
                                             <motion.div
                                                 animate={{
@@ -124,16 +120,16 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                             >
                                                 <IconComponent
                                                     weight="fill"
-                                                    size={18}
+                                                    size={14}
                                                     className={iconConfig.color}
                                                 />
                                             </motion.div>
                                         )}
-                                        <h4 className="font-semibold text-neutral-900 text-xs md:text-sm">
+                                        <h4 className="font-semibold text-neutral-900 text-[10px] md:text-sm leading-tight">
                                             {metric.label}
                                         </h4>
                                     </div>
-                                    <div className="text-2xl md:text-3xl font-bold text-blue-600 mb-2">
+                                    <div className="text-xl md:text-3xl font-bold text-blue-600 mb-1">
                                         <AnimatedCounter value={formatNumber(metric.value)} />
                                         {hasMax && (
                                             <span className="text-sm text-neutral-500 font-normal">

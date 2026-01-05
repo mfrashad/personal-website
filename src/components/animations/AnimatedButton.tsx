@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { soundManager } from '@utils/soundManager';
 import confetti from 'canvas-confetti';
 
 interface AnimatedButtonProps {
@@ -41,7 +40,6 @@ export default function AnimatedButton({
 
     const handleMouseEnter = () => {
         setIsHovered(true);
-        soundManager.play('hover');
     };
 
     const handleMouseLeave = () => {
@@ -51,8 +49,6 @@ export default function AnimatedButton({
     };
 
     const handleClick = (e: React.MouseEvent) => {
-        soundManager.play('click');
-
         if (confettiOnClick) {
             const rect = (e.target as HTMLElement).getBoundingClientRect();
             confetti({

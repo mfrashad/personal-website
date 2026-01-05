@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { soundManager } from '@utils/soundManager';
 
 interface InteractiveCardProps {
     children: React.ReactNode;
@@ -45,7 +44,6 @@ export default function InteractiveCard({
 
     const handleMouseEnter = () => {
         setIsHovered(true);
-        soundManager.play('hover');
     };
 
     const handleMouseLeave = () => {

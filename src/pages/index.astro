@@ -20,7 +20,6 @@ import CompactBlogPostItem from '@components/blog/CompactBlogPostItem.astro';
 import ScatteredPolaroids from '@components/ScatteredPolaroids';
 import ScatteredDecorations from '@components/ScatteredDecorations';
 import StatsGrid from '@components/home/StatsGrid';
-import SoundToggle from '@components/SoundToggle';
 
 // Animation components
 import AnimationProvider from '@components/animations/AnimationProvider';
@@ -85,9 +84,6 @@ import BookSection from '@components/books/BookSection.astro';
 <Layout title="Rashad | ML Engineer, Co-founder, Speaker" showLoader={true}>
     <!-- Global Animation Provider (cursor, particles, easter eggs) -->
     <AnimationProvider client:load />
-
-    <!-- Sound Toggle Button -->
-    <SoundToggle client:load />
 
     <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
     <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">

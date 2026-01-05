@@ -53,6 +53,16 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
         }
     }, [newWritings, dismissed, onNewWritings]);
 
+    // Auto-close banner after 5 seconds
+    useEffect(() => {
+        if (showBanner) {
+            const timer = setTimeout(() => {
+                setShowBanner(false);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [showBanner]);
+
     const handleDismiss = () => {
         setDismissed(true);
         setShowBanner(false);
