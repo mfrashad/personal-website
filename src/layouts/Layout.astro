@@ -16,10 +16,10 @@ interface Props {
 
 const { title, description, ogimageName, showLoader = false } = Astro.props;
 const adjustedTitle = title ? 'Rashad' + ' – ' + title : 'Rashad';
-const adjustedDescription = description ? description : 'Personal website of Muhammad Fathy Rashad - ML engineer, co-founder & CTO at Cleve';
+const adjustedDescription = description ? description : 'AI engineer, entrepreneur, and speaker. Co-founder & CTO at Cleve, building AI-powered tools for 100K+ users. Delivered 20+ talks on AI, technology, and career development.';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph/opengraph.jpg';
+const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph.png';
 const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
 ---
 
@@ -27,7 +27,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
 <html lang="en" class="overscroll-none overflow-x-hidden">
     <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="Personal website of Muhammad Fathy Rashad - ML engineer, co-founder & CTO at Cleve" />
+        <meta name="description" content={adjustedDescription} />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -36,8 +36,19 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="generator" content={Astro.generator} />
         <title>{adjustedTitle}</title>
+
+        <!-- Analytics -->
         <script src="/iamrobin/js/script.js" data-api="/iamrobin/api/event" data-domain="mfrashad.com"
         ></script>
+
+        <!-- Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128948221-2"></script>
+        <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-128948221-2');
+        </script>
         <SEO
             title={adjustedTitle}
             description={adjustedDescription}
@@ -50,7 +61,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                     image: resolvedImageWithDomain
                 },
                 image: {
-                    alt: 'Rashad personal website screenshot'
+                    alt: 'Rashad - AI engineer, entrepreneur, and speaker'
                 }
             }}
         />

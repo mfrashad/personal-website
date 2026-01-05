@@ -79,9 +79,12 @@ const latestBookmarks = allBookmarks.slice(0, 6);
 
 // Books section component
 import BookSection from '@components/books/BookSection.astro';
+
+// Contact form
+import ContactForm from '@components/ContactForm';
 ---
 
-<Layout title="Rashad | ML Engineer, Co-founder, Speaker" showLoader={true}>
+<Layout title="Rashad | AI Engineer, Entrepreneur, Speaker" showLoader={true}>
     <!-- Global Animation Provider (cursor, particles, easter eggs) -->
     <AnimationProvider client:load />
 
@@ -163,6 +166,9 @@ import BookSection from '@components/books/BookSection.astro';
                                 )}
                                 {social.platform === 'GitHub' && (
                                     <Icon name="ph:github-logo" width={24} height={24} />
+                                )}
+                                {social.platform === 'Email' && (
+                                    <Icon name="ph:envelope" width={24} height={24} />
                                 )}
                             </a>
                         ))}
@@ -398,6 +404,20 @@ import BookSection from '@components/books/BookSection.astro';
             <SectionContent title="Media Kit" linkText="View Media Kit" linkUrl="/media" buttonStyle>
                 Speaker photos, bios, logos, and brand assets for event organizers and media coverage.
             </SectionContent>
+        </section>
+
+        <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Contact Section -->
+        <section>
+            <SectionContent title="Get in Touch">
+                Have a question or want to work together? Feel free to reach out!
+            </SectionContent>
+            <Grid>
+                <GridBox desktopStart={3} desktopEnd={11}>
+                    <ContactForm client:load />
+                </GridBox>
+            </Grid>
         </section>
     </div>
 </Layout>
