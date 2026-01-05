@@ -24,8 +24,15 @@ export interface TimelineItem {
     color?: string;
 }
 
+export interface SpeakerProfile {
+    level: string;
+    label: string;
+    bio: string;
+}
+
 export interface BrandKit {
     bios: string[]; // Array of 20 bio variations, from minimal to comprehensive
+    speakerProfiles: SpeakerProfile[]; // 4 speaker-focused profiles (1 sentence, 2 sentences, paragraph, multi-paragraph)
     timeline: {
         currently: TimelineItem[];
         previously: TimelineItem[];
@@ -98,6 +105,31 @@ export const brandKit: BrandKit = {
         `Rashad is an ${STATS.role}, entrepreneur, and educator who has been building with technology since age 11. He is currently the co-founder & CTO at Cleve, where he leads the development of [AI-powered tools](/projects) that have reached over ${STATS.usersLong} users globally. He's also an AI Resident at 500 Global. [Learn more about him](/about) or check out [what he's up to now](/now).\n\n**Early Beginnings**\nRashad's unconventional path started with hacking at age 11, followed by entering university at 15 - making him one of the youngest students in his cohort. By 16, he had published his first game, and at 17, secured his first tech internship at a startup.\n\n**Academic Excellence**\nAt 18, he founded a tech club to build community and share knowledge. The following year, at 19, he published research on CreativeGAN in collaboration with MIT, presented at ASME IDETC/CIE 2021. He graduated at 20 as valedictorian, earning four academic awards and recognition as the best graduate of his class.\n\n**Entrepreneurship**\nAt 21, Rashad founded an AI consulting company, helping businesses implement AI solutions. A year later, at 22, he co-founded Cleve, a venture-backed startup focused on AI-powered productivity tools. See more of his [projects here](/projects).\n\n**Speaking & Community**\nRashad is passionate about education and community building. He has [delivered ${STATS.talks} talks](/speaking) on AI, technology, career development, and startups at various institutions and events. He regularly [judges hackathons](/achievements) (10+ events) and has [won 5 hackathons](/achievements) himself as a participant.\n\n**Content Creation**\nAs a [content creator on TikTok](https://tiktok.com/@rashadventure), Rashad has built an audience of ${STATS.followersLong} followers and generated over ${STATS.viewsLong} views through educational content on AI, tech careers, and productivity.\n\n**Personal Interests**\nWhen he's not building products or creating content, Rashad enjoys [trying new things](/achievements), [reading](/books), [writing](/blog), and [watching movies](/movies). Check out his [curated lists](/lists) and [bookmarks](/bookmarks) for recommendations on books, movies, tools, and more.\n\n**Impact**\nThrough his companies, talks, and content, Rashad has directly impacted over ${STATS.usersLong} people - whether through products they use, talks they've attended, or content they've consumed. His mission is to democratize access to AI knowledge and empower the next generation of builders.`
     ],
 
+    // Speaker profiles - optimized for event organizers and speaking engagements
+    // These focus on speaking credentials, topics, and what audiences can expect
+    speakerProfiles: [
+        {
+            level: 'one-sentence',
+            label: 'One Sentence',
+            bio: `Rashad is an ${STATS.role}, entrepreneur, and educator who has delivered ${STATS.talks} talks on AI, technology, and entrepreneurship at universities, conferences, and corporate events.`
+        },
+        {
+            level: 'two-sentences',
+            label: 'Two Sentences',
+            bio: `Rashad is an ${STATS.role} and entrepreneur who speaks on AI, technology, startups, and career development. As co-founder & CTO at Cleve, he has built AI-powered products used by over ${STATS.usersLong} people and delivered ${STATS.talks} talks at universities, government institutions, and tech conferences.`
+        },
+        {
+            level: 'paragraph',
+            label: 'Paragraph',
+            bio: `Rashad is an ${STATS.role}, entrepreneur, and educator with a passion for sharing knowledge through public speaking. As co-founder & CTO at Cleve, he leads the development of AI-powered tools used by over ${STATS.usersLong} people globally. His unconventional journey—from hacking at age 11 and entering university at 15, to publishing research with MIT at 19 and graduating as valedictorian at 20—gives him a unique perspective on technology, education, and career development. Rashad has delivered ${STATS.talks} talks at universities, government institutions, and tech conferences on topics including AI, generative AI, entrepreneurship, and career development. He is also an AI Resident at 500 Global and a content creator with ${STATS.followers} followers and ${STATS.views} views, bringing real-world insights from the intersection of building, teaching, and creating.`
+        },
+        {
+            level: 'full',
+            label: 'Full Profile',
+            bio: `Rashad is an ${STATS.role}, entrepreneur, and educator who brings a unique blend of technical expertise, entrepreneurial experience, and engaging storytelling to every talk he delivers.\n\n**Speaking Topics**\nRashad speaks on AI and generative AI, startup entrepreneurship, tech career development, and the future of work. His talks range from technical deep-dives on AI implementation to inspirational keynotes on unconventional career paths. He tailors content for diverse audiences—from university students exploring tech careers to diplomats understanding AI's global impact to entrepreneurs building the next generation of startups.\n\n**Background & Credibility**\nAs co-founder & CTO at Cleve, Rashad leads the development of AI-powered products that have reached over ${STATS.usersLong} users. His journey began early: hacking at 11, entering university at 15, publishing his first game at 16, and joining a startup at 17. At 19, he published research on CreativeGAN with MIT. He graduated as valedictorian at 20, founded an AI consulting company at 21, and co-founded his current venture-backed startup at 22. He is also an AI Resident at 500 Global.\n\n**Speaking Experience**\nWith ${STATS.talks} talks delivered, Rashad has spoken at universities (UM, UTP, Taylor's), government institutions (Foreign Affairs Ministry), tech conferences, and corporate events. He has been featured on national television and regularly judges hackathons, bringing practical insights from both sides of the stage.\n\n**What Audiences Get**\nRashad combines deep technical knowledge with real-world entrepreneurial experience. His talks are actionable, engaging, and grounded in firsthand experience building products, leading teams, and navigating the rapidly evolving AI landscape. Audiences leave with practical frameworks, inspiration, and a clear understanding of how to apply AI and technology in their own contexts.`
+        }
+    ],
+
     timeline: [
         // Level 0-1: Minimal
         { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }], previously: [] },
@@ -116,8 +148,8 @@ export const brandKit: BrandKit = {
         { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'entered uni @ 15', icon: '🎓' }, { text: 'published paper with MIT @ 19', icon: '📄' }, { text: 'founded AI consulting company @ 21', icon: '💼' }] },
 
         // Level 8-9: Expand previously
-        { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'hacking @ 11', icon: '💻' }, { text: 'entered uni @ 15', icon: '🎓' }, { text: 'published paper with MIT @ 19', icon: '📄' }] },
-        { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'hacking @ 11', icon: '💻' }, { text: 'entered uni @ 15', icon: '🎓' }, { text: 'published game @ 16', icon: '🎮' }, { text: 'startup tech intern @ 17', icon: '🚀' }] },
+        { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'entered uni @ 15', icon: '🎓' }, { text: 'published paper with MIT @ 19', icon: '📄' }, { text: 'founded AI consulting company @ 21', icon: '💼' }] },
+        { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'hacking @ 11', icon: '💻' }, { text: 'entered uni @ 15', icon: '🎓' }, { text: 'published paper with MIT @ 19', icon: '📄' }, { text: 'founded AI consulting company @ 21', icon: '💼' }] },
 
         // Level 10-11: More previously items
         { currently: [{ text: 'co-founder & cto at cleve', icon: '💼' }, { text: 'speaker on ai, tech, career', icon: '🎤' }, { text: 'content creator on tiktok', icon: '📹' }], previously: [{ text: 'hacking @ 11', icon: '💻' }, { text: 'entered uni @ 15', icon: '🎓' }, { text: 'published game @ 16', icon: '🎮' }, { text: 'startup tech intern @ 17', icon: '🚀' }, { text: 'published paper with MIT @ 19', icon: '📄' }] },
@@ -189,6 +221,7 @@ export const brandKit: BrandKit = {
         { platform: 'TikTok', url: 'https://tiktok.com/@rashadventure', username: '@rashadventure' },
         { platform: 'Medium', url: 'https://medium.com/@rashadventure', username: '@rashadventure' },
         { platform: 'LinkedIn', url: 'https://linkedin.com/in/mfathyrashad', username: 'mfathyrashad' },
-        { platform: 'GitHub', url: 'https://github.com/mfrashad', username: 'mfrashad' }
+        { platform: 'GitHub', url: 'https://github.com/mfrashad', username: 'mfrashad' },
+        { platform: 'Email', url: 'mailto:m.fathyrashad@gmail.com', username: 'm.fathyrashad@gmail.com' }
     ]
 };

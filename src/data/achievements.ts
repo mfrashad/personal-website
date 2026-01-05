@@ -83,7 +83,7 @@ export const achievements: Achievement[] = [
     },
     {
         id: 'valedictorian-20',
-        title: 'Best Graduate',
+        title: 'Academic Weapon',
         description: 'Graduated as valedictorian at age 20',
         icon: '🏆',
         category: 'academic',
@@ -271,6 +271,15 @@ export const achievements: Achievement[] = [
         "unlocked": true
     },
     {
+        "id": "birthday-baker",
+        "title": "Birthday Baker",
+        "description": "Baked my own birthday cake. Peak independence or peak loneliness? You decide.",
+        "icon": "🎂",
+        "category": "skill",
+        "tags": ["cooking", "baking", "adulting"],
+        "unlocked": true
+    },
+    {
         "id": "fashion-designer",
         "title": "DIY Tailor",
         "description": "Tried making my own clothes & Cosplay. It's wearable... technically.",
@@ -381,6 +390,15 @@ export const achievements: Achievement[] = [
         "icon": "🌋",
         "category": "adventure",
         "tags": ["hiking", "travel"],
+        "unlocked": true
+    },
+    {
+        "id": "indonesia-hiker",
+        "title": "Indonesian Mountain Explorer",
+        "description": "Hiked Bromo & Rinjani. Conquered Indonesia's volcanic peaks.",
+        "icon": "⛰️",
+        "category": "adventure",
+        "tags": ["hiking", "volcano", "travel", "indonesia"],
         "unlocked": true
     },
 
@@ -720,6 +738,33 @@ export const achievements: Achievement[] = [
         "tags": ["finance", "adulting"],
         "unlocked": true
     },
+    {
+        "id": "car-owner",
+        "title": "Car Owner",
+        "description": "Bought a car with my own money. Level up: Independent adult.",
+        "icon": "🚗",
+        "category": "personal",
+        "tags": ["finance", "adulting", "milestone"],
+        "unlocked": true
+    },
+    {
+        "id": "income-10k",
+        "title": "Six-Figure Earner",
+        "description": "Made $10k/month ($120k/year). Officially left the ramen budget tier.",
+        "icon": "💰",
+        "category": "professional",
+        "tags": ["wealth", "income", "milestone"],
+        "unlocked": true
+    },
+    {
+        "id": "multitasker",
+        "title": "Corporate Juggler",
+        "description": "Worked 2-3 remote jobs at once. Peak efficiency or peak chaos? Yes.",
+        "icon": "🤹",
+        "category": "professional",
+        "tags": ["remote", "hustle", "multitasking"],
+        "unlocked": true
+    },
 
     // --- 🧪 EXPERIENCES (The "2025 Side Quests") ---
     {
@@ -877,7 +922,7 @@ export const achievements: Achievement[] = [
     // --- 🔒 MORE QUEST LOG (Future Goals) ---
     {
         "id": "forbes-30u30",
-        "title": "Forbes 30 Under 30",
+        "title": "Forbes 30u30",
         "description": "Goal: Make the Forbes 30 Under 30 list. Official validation of overachieving.",
         "icon": "📰",
         "category": "professional",
@@ -995,7 +1040,7 @@ export const metrics: Metric[] = [
     {
         id: 'social-followers',
         label: 'Social Media Followers',
-        value: 20000,
+        value: 16000,
         unit: 'followers',
         tags: ['content', 'social-media']
     },

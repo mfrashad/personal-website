@@ -27,6 +27,12 @@ const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
     acc[key] = marked.parse(brandKit.bios[index]);
     return acc;
 }, {} as Record<string, string>);
+
+// Convert speaker profiles to HTML
+const speakerProfilesHTML = brandKit.speakerProfiles.map(profile => ({
+    ...profile,
+    bioHTML: marked.parse(profile.bio)
+}));
 ---
 
 <Layout
@@ -42,11 +48,55 @@ const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
                 </p>
             </SectionContent>
 
-            <!-- Bio and Speaker Profile Versions -->
+            <!-- Speaker Profile Versions -->
             <div class="my-12">
-                <h2 class="text-2xl font-bold mb-6">Bio and Speaker Profile Versions</h2>
+                <h2 class="text-2xl font-bold mb-2">Speaker Profile</h2>
+                <p class="text-neutral-600 mb-6">
+                    Optimized for event programs, conference pages, and speaking engagement materials.
+                </p>
 
-                <!-- Tab Selector -->
+                <!-- Speaker Profile Tab Selector -->
+                <div class="flex flex-wrap gap-2 mb-6">
+                    {speakerProfilesHTML.map((profile, index) => (
+                        <button
+                            data-speaker-tab={profile.level}
+                            class={`speaker-tab px-4 py-2 rounded-lg font-medium transition-all ${index === 3 ? 'active' : ''}`}
+                        >
+                            {profile.label}
+                        </button>
+                    ))}
+                </div>
+
+                <!-- Speaker Profile Cards -->
+                <div class="space-y-6">
+                    {speakerProfilesHTML.map((profile) => (
+                        <div data-speaker-content={profile.level} class="speaker-content border border-neutral-200 rounded-lg p-6 bg-white">
+                            <div class="flex items-start justify-between mb-3">
+                                <h3 class="font-semibold text-lg text-neutral-900">
+                                    {profile.label}
+                                </h3>
+                                <button
+                                    onclick={`navigator.clipboard.writeText(\`${profile.bio.replace(/`/g, '\\`').replace(/\n/g, '\\n')}\`); this.querySelector('span').textContent = 'Copied!'; setTimeout(() => this.querySelector('span').textContent = 'Copy', 2000)`}
+                                    class="px-3 py-1 text-sm bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded transition-colors flex items-center gap-1"
+                                >
+                                    <Icon name="ph:copy" width={16} height={16} />
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                            <div class="prose prose-neutral max-w-none text-neutral-700 leading-relaxed" set:html={profile.bioHTML} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <!-- General Bio Versions -->
+            <div class="my-12">
+                <h2 class="text-2xl font-bold mb-2">General Bio</h2>
+                <p class="text-neutral-600 mb-6">
+                    For articles, profiles, and general media coverage.
+                </p>
+
+                <!-- Bio Tab Selector -->
                 <div class="flex flex-wrap gap-2 mb-6">
                     <button data-bio-tab="tldr" class="bio-tab px-4 py-2 rounded-lg font-medium transition-all">
                         TLDR
@@ -99,7 +149,7 @@ const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
                 </div>
             </div>
 
-            <!-- Social Links -->}
+            <!-- Social Links -->
             <div class="my-12">
                 <h2 class="text-2xl font-bold mb-6">Social Media</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -171,64 +221,65 @@ const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
 
 <style>
     /* Tab Styles */
-    .bio-tab {
+    .bio-tab, .speaker-tab {
         background-color: #f5f5f5;
         color: #666;
     }
 
-    .bio-tab:hover {
+    .bio-tab:hover, .speaker-tab:hover {
         background-color: #e5e5e5;
     }
 
-    .bio-tab.active {
+    .bio-tab.active, .speaker-tab.active {
         background-color: #3B82F6;
         color: white;
     }
 
-    /* Bio Content Visibility */
-    .bio-content {
+    /* Content Visibility */
+    .bio-content, .speaker-content {
         display: none;
     }
 
-    .bio-content.active {
+    .bio-content.active, .speaker-content.active {
         display: block;
     }
 
-    /* Bio Markdown Styling */
-    .bio-content .prose {
+    /* Markdown Styling */
+    .bio-content .prose, .speaker-content .prose {
         color: inherit;
     }
 
-    .bio-content .prose p {
+    .bio-content .prose p, .speaker-content .prose p {
         margin-bottom: 1em;
     }
 
-    .bio-content .prose p:last-child {
+    .bio-content .prose p:last-child, .speaker-content .prose p:last-child {
         margin-bottom: 0;
     }
 
-    .bio-content .prose a {
+    .bio-content .prose a, .speaker-content .prose a {
         color: #3B82F6;
         text-decoration: none;
         transition: color 0.2s;
     }
 
-    .bio-content .prose a:hover {
+    .bio-content .prose a:hover, .speaker-content .prose a:hover {
         color: #2563EB;
         text-decoration: underline;
     }
 
-    .bio-content .prose strong {
+    .bio-content .prose strong, .speaker-content .prose strong {
         font-weight: 700;
         color: #171717;
     }
 </style>
 
 <script>
-    // Bio tab switching functionality
+    // Tab switching functionality
     document.addEventListener('DOMContentLoaded', function() {
-        const tabs = document.querySelectorAll('.bio-tab');
-        const contents = document.querySelectorAll('.bio-content');
+        // Bio tab switching
+        const bioTabs = document.querySelectorAll('.bio-tab');
+        const bioContents = document.querySelectorAll('.bio-content');
 
         // Show short bio by default
         const defaultBio = document.querySelector('[data-bio-content="short"]');
@@ -236,21 +287,52 @@ const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
             defaultBio.classList.add('active');
         }
 
-        tabs.forEach(tab => {
+        bioTabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const targetBio = this.getAttribute('data-bio-tab');
 
                 // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
+                bioTabs.forEach(t => t.classList.remove('active'));
 
                 // Add active class to clicked tab
                 this.classList.add('active');
 
                 // Hide all bio contents
-                contents.forEach(content => content.classList.remove('active'));
+                bioContents.forEach(content => content.classList.remove('active'));
 
                 // Show the selected bio content
                 const targetContent = document.querySelector(`[data-bio-content="${targetBio}"]`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+
+        // Speaker profile tab switching
+        const speakerTabs = document.querySelectorAll('.speaker-tab');
+        const speakerContents = document.querySelectorAll('.speaker-content');
+
+        // Show full profile by default (fourth tab, index 3)
+        const defaultSpeaker = document.querySelector('[data-speaker-content="full"]');
+        if (defaultSpeaker) {
+            defaultSpeaker.classList.add('active');
+        }
+
+        speakerTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const targetProfile = this.getAttribute('data-speaker-tab');
+
+                // Remove active class from all speaker tabs
+                speakerTabs.forEach(t => t.classList.remove('active'));
+
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Hide all speaker contents
+                speakerContents.forEach(content => content.classList.remove('active'));
+
+                // Show the selected speaker content
+                const targetContent = document.querySelector(`[data-speaker-content="${targetProfile}"]`);
                 if (targetContent) {
                     targetContent.classList.add('active');
                 }
