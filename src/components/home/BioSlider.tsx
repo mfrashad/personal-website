@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface TimelineItem {
     text: string;
@@ -99,62 +100,123 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
     }, [isSticky]);
 
     return (
-        <div className="bio-slider-with-timeline">
+        <div className="bio-slider-with-timeline w-full">
             {/* Bio Text */}
-            <div className="bio-content mb-8 relative z-[120]">
-                <div
-                    className="text-neutral-700 leading-relaxed transition-opacity duration-300 whitespace-pre-line"
-                    key={level}
-                >
-                    {renderTextWithBold(bioLevels[level])}
-                </div>
+            <div className="bio-content mb-8 relative z-[120] w-full">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={level}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="text-neutral-700 leading-relaxed whitespace-pre-line w-full"
+                    >
+                        {renderTextWithBold(bioLevels[level])}
+                    </motion.div>
+                </AnimatePresence>
             </div>
 
             {/* Timeline - Currently & Previously */}
-            <div className="grid md:grid-cols-2 gap-8 pb-32">
+            <div className="grid md:grid-cols-2 gap-8 pb-32 w-full">
                 {/* Currently */}
                 <div>
                     <h3 className="text-lg font-bold mb-4 relative z-[120]">currently:</h3>
-                    <ul className="space-y-2 font-mono text-sm relative z-[120]">
-                        {currentTimeline.currently.map((item, index) => (
-                            <li key={index} className="flex items-center gap-2">
-                                {item.icon && (
-                                    <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
-                                )}
-                                <span>{item.text}</span>
-                            </li>
-                        ))}
-                    </ul>
+                    <AnimatePresence mode="wait">
+                        <motion.ul
+                            key={`currently-${level}`}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="space-y-2 font-mono text-sm relative z-[120]"
+                        >
+                            {currentTimeline.currently.map((item, index) => (
+                                <motion.li
+                                    key={index}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05, duration: 0.2 }}
+                                    className="flex items-center gap-2"
+                                >
+                                    {item.icon && (
+                                        <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
+                                    )}
+                                    <span>{item.text}</span>
+                                </motion.li>
+                            ))}
+                        </motion.ul>
+                    </AnimatePresence>
                 </div>
 
                 {/* Previously */}
                 <div>
                     <h3 className="text-lg font-bold mb-4 relative z-[120]">previously:</h3>
-                    <ul className="space-y-1.5 font-mono text-sm text-neutral-700 relative z-[120]">
-                        {currentTimeline.previously.map((item, index) => (
-                            <li key={index} className="flex items-center gap-2">
-                                {item.icon && (
-                                    <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
-                                )}
-                                <span>{item.text}</span>
-                            </li>
-                        ))}
-                    </ul>
+                    <AnimatePresence mode="wait">
+                        <motion.ul
+                            key={`previously-${level}`}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="space-y-1.5 font-mono text-sm text-neutral-700 relative z-[120]"
+                        >
+                            {currentTimeline.previously.map((item, index) => (
+                                <motion.li
+                                    key={index}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05, duration: 0.2 }}
+                                    className="flex items-center gap-2"
+                                >
+                                    {item.icon && (
+                                        <span className="text-base leading-none flex-shrink-0">{item.icon}</span>
+                                    )}
+                                    <span>{item.text}</span>
+                                </motion.li>
+                            ))}
+                        </motion.ul>
+                    </AnimatePresence>
                 </div>
             </div>
 
             {/* Slider Control - Floating rounded bar */}
-            <div
+            <motion.div
                 className={
                     isSticky
                         ? 'fixed bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-[200]'
                         : 'relative w-full max-w-2xl mx-auto'
                 }
+                animate={{
+                    y: isSticky ? 0 : 0,
+                    opacity: isSticky ? 1 : 1
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-                <div className="bg-white rounded-2xl shadow-2xl border border-neutral-200 py-5 px-8 relative z-[200]">
+                <motion.div
+                    className="bg-white rounded-2xl shadow-2xl border border-neutral-200 py-5 px-8 relative z-[200]"
+                    animate={{
+                        scale: isSticky ? 1 : 1,
+                        boxShadow: isSticky
+                            ? "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                            : "0 10px 15px -3px rgba(0, 0, 0, 0.1)"
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
                     <label htmlFor="bio-range" className="block text-sm font-mono text-neutral-600 mb-3">
                         Adjust detail level:{' '}
-                        <span className="font-semibold text-neutral-900">{labels[level]}</span>
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={level}
+                                initial={{ opacity: 0, y: -5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 5 }}
+                                transition={{ duration: 0.2 }}
+                                className="font-semibold text-neutral-900 inline-block"
+                            >
+                                {labels[level]}
+                            </motion.span>
+                        </AnimatePresence>
                     </label>
                     <input
                         id="bio-range"
@@ -169,21 +231,25 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                     {/* Labels */}
                     <div className="flex justify-between mt-3 gap-2">
                         {labels.map((label, i) => (
-                            <button
+                            <motion.button
                                 key={i}
                                 onClick={() => setLevel(i)}
-                                className={`text-xs font-mono px-3 py-1.5 rounded-lg transition-colors flex-1 ${
-                                    i === level
-                                        ? 'bg-neutral-900 text-white'
-                                        : 'bg-neutral-50 text-neutral-600 hover:bg-neutral-100 border border-neutral-300'
-                                }`}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                animate={{
+                                    backgroundColor: i === level ? '#171717' : '#fafafa',
+                                    color: i === level ? '#ffffff' : '#525252',
+                                    borderColor: i === level ? '#171717' : '#d4d4d4'
+                                }}
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className="text-xs font-mono px-3 py-1.5 rounded-lg flex-1 border"
                             >
                                 {label}
-                            </button>
+                            </motion.button>
                         ))}
                     </div>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
 
             {/* Custom Styles for Range Slider */}
             <style jsx>{`

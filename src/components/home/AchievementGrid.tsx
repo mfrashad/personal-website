@@ -26,7 +26,6 @@ import {
 } from '@phosphor-icons/react';
 
 import type { Achievement, Metric } from '@data/achievements';
-import { soundManager } from '@utils/soundManager';
 
 interface AchievementGridProps {
     achievements: Achievement[];
@@ -63,8 +62,6 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
 
     const handleAchievementClick = (e: React.MouseEvent, achievement: Achievement) => {
         if (!achievement.unlocked) return;
-
-        soundManager.play('success');
 
         // Confetti effect
         const rect = e.currentTarget.getBoundingClientRect();
@@ -234,7 +231,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                     }}
                     onHoverStart={() => {
                         if (achievement.unlocked) {
-                            soundManager.play('hover');
+                            // Hover effect handled by CSS
                         }
                     }}
                     onClick={(e) => handleAchievementClick(e, achievement)}
