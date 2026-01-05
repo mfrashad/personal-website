@@ -240,9 +240,6 @@ export default function ScatteredDecorations() {
     // Don't render until we have screen width
     if (screenWidth === 0) return null;
 
-    // Hide decorations on mobile/tablet (< 1024px) as they don't work well with fixed positions
-    if (screenWidth < 1024) return null;
-
     return (
         <>
             {decorations.map((decoration, index) => {

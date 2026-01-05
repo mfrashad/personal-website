@@ -86,8 +86,8 @@ import BookSection from '@components/books/BookSection.astro';
     <!-- Sound Toggle Button -->
     <SoundToggle client:load />
 
-    <!-- Scattered Polaroid Images -->
-    <div class="polaroid-container pointer-events-none" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
+    <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
+    <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
         <div class="pointer-events-auto">
             <ScatteredPolaroids client:load />
             <ScatteredDecorations client:load />

@@ -420,9 +420,6 @@ export default function ScatteredPolaroids() {
     // Don't render until we have screen width
     if (screenWidth === 0) return null;
 
-    // Hide polaroids on mobile/tablet (< 1024px) as they don't work well with fixed positions
-    if (screenWidth < 1024) return null;
-
     return (
         <>
             {polaroids.map((polaroid, index) => {
