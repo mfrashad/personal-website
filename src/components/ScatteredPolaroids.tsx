@@ -187,8 +187,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'skydivingImg.src',
         alt: 'Skydiving',
         caption: 'First skydive!',
-        initialX: 513,
-        initialY: 6336,
+        initialX: 334,
+        initialY: 5925,
         rotation: 4,
         zIndex: 113,
         enabled: true
@@ -198,8 +198,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'surfingImg.src',
         alt: 'Surfing',
         caption: 'Learning to surf',
-        initialX: 236,
-        initialY: 6362,
+        initialX: 1226,
+        initialY: 6126,
         rotation: -6,
         zIndex: 114,
         enabled: true
@@ -209,8 +209,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'snowboardingImg.src',
         alt: 'Snowboarding',
         caption: 'Winter adventures',
-        initialX: 1379,
-        initialY: 6228,
+        initialX: 1398,
+        initialY: 6059,
         rotation: 5,
         zIndex: 115,
         enabled: true
@@ -220,8 +220,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'divingImg.src',
         alt: 'Diving',
         caption: 'Underwater exploration',
-        initialX: 1128,
-        initialY: 6299,
+        initialX: 157,
+        initialY: 6164,
         rotation: -4,
         zIndex: 116,
         enabled: true
@@ -231,8 +231,8 @@ const polaroidsConfig: PolaroidData[] = [
         srcVar: 'camelImg.src',
         alt: 'Camel riding',
         caption: 'Desert adventures',
-        initialX: 6,
-        initialY: 6215,
+        initialX: -39,
+        initialY: 6062,
         rotation: 7,
         zIndex: 117,
         enabled: true
@@ -289,7 +289,8 @@ export default function ScatteredPolaroids() {
     const [isDev, setIsDev] = useState(false);
     const [showDevPanel, setShowDevPanel] = useState(false);
     const [enabledPolaroids, setEnabledPolaroids] = useState<Map<number, boolean>>(new Map());
-    const [bioOffset, setBioOffset] = useState(0);
+    // Initialize with level 5's offset (200) to match BioSlider's initial state
+    const [bioOffset, setBioOffset] = useState(200);
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
 
     // Y position threshold - polaroids below this should be affected by bio slider
@@ -298,10 +299,26 @@ export default function ScatteredPolaroids() {
     // Reference viewport width that positions were designed for
     const REFERENCE_WIDTH = 1692;
 
-    // Calculate offset based on bio level (baseline is level 1 "Short")
+    // Calculate offset based on bio level (20 levels: 0-19)
+    // Map 20 levels to appropriate offsets
     const calculateOffset = (level: number) => {
-        const offsets = [-150, 0, 200, 900]; // TLDR, Short, Medium, Long
-        return offsets[level] || 0;
+        // Level 0: Minimal (shortest)
+        // Levels 1-4: Brief
+        // Levels 5-9: Standard
+        // Levels 10-14: Detailed
+        // Levels 15-19: Complete (longest)
+
+        //if (level === 0) return -150;
+        
+        if (level <= 5) return -250;
+
+        if (level <= 9) return -100;
+        
+        if (level <= 14) return 200;
+        
+        if (level <= 17) return 600;
+        
+        return 900;
     };
 
     // Scale X position based on current viewport width

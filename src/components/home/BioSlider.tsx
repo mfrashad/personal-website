@@ -60,8 +60,13 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
 
     // Dispatch custom event when bio level changes
     useEffect(() => {
-        const event = new CustomEvent('bioLevelChange', { detail: { level } });
-        window.dispatchEvent(event);
+        // Small delay to ensure other components have mounted and set up listeners
+        const timer = setTimeout(() => {
+            const event = new CustomEvent('bioLevelChange', { detail: { level } });
+            window.dispatchEvent(event);
+        }, 0);
+
+        return () => clearTimeout(timer);
     }, [level]);
 
     // Handle sticky behavior - unstick when scrolling past the about section
@@ -75,7 +80,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
                 // Use different thresholds for sticking vs unsticking
                 if (isSticky) {
                     // When sticky, need to scroll well past before unsticking
-                    if (rect.bottom < window.innerHeight - 200) {
+                    if (rect.bottom < window.innerHeight - 600) {
                         setIsSticky(false);
                     }
                 } else {

@@ -86,7 +86,7 @@ import BookSection from '@components/books/BookSection.astro';
     <AnimationProvider client:load />
 
     <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
-    <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; overflow: hidden;">
+    <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
         <div class="pointer-events-auto">
             <ScatteredPolaroids client:load />
             <ScatteredDecorations client:load />
