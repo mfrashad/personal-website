@@ -268,10 +268,10 @@ import ContactForm from '@components/ContactForm';
                     <div class="mb-6 hidden md:block">
                         <ContributionGraph
                             posts={allPosts.map(post => ({
-                                date: post.data.date,
+                                date: post.data.date.toISOString ? post.data.date.toISOString() : post.data.date,
                                 title: post.data.title
                             }))}
-                            client:visible
+                            client:load
                         />
                     </div>
 
