@@ -57,7 +57,9 @@ import BookmarkItem from '@components/bookmarks/BookmarkItem.astro';
 const localPosts = await getCollection('blog');
 const cleveData = await getCleveWritings();
 const cleveWritings = cleveData.writings || [];
-const cleveAsPosts = cleveWritings.slice(0, 3).map((writing: any) => ({
+
+// Transform ALL Cleve writings for contribution graph
+const allCleveAsPosts = cleveWritings.map((writing: any) => ({
     data: {
         title: writing.title,
         date: new Date(writing.created_at),
@@ -66,9 +68,13 @@ const cleveAsPosts = cleveWritings.slice(0, 3).map((writing: any) => ({
     },
     slug: slugify(writing.title),
 }));
-const allPosts = [...localPosts, ...cleveAsPosts].sort(
+
+// Combine all posts for contribution graph
+const allPosts = [...localPosts, ...allCleveAsPosts].sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
+
+// Use only latest 6 posts for display
 const latestPosts = allPosts.slice(0, 6);
 
 // Get speaking engagements
