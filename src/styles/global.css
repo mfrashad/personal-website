@@ -217,3 +217,95 @@ details > summary::-webkit-details-marker {
 .animate-slide-up {
     animation: slide-up 0.3s ease-out;
 }
+
+/* Quantum Pulse Loader Styles */
+.generating-loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+.generating-loader-text {
+    display: flex;
+    gap: 0.125rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    perspective: 1000px;
+}
+
+.generating-loader-letter {
+    display: inline-block;
+    animation: generating-loader-letter-anim 2s ease-in-out infinite;
+    opacity: 0;
+}
+
+.generating-loader-letter:nth-child(1) { animation-delay: 0s; }
+.generating-loader-letter:nth-child(2) { animation-delay: 0.1s; }
+.generating-loader-letter:nth-child(3) { animation-delay: 0.2s; }
+.generating-loader-letter:nth-child(4) { animation-delay: 0.3s; }
+.generating-loader-letter:nth-child(5) { animation-delay: 0.4s; }
+.generating-loader-letter:nth-child(6) { animation-delay: 0.5s; }
+.generating-loader-letter:nth-child(7) { animation-delay: 0.6s; }
+.generating-loader-letter:nth-child(8) { animation-delay: 0.7s; }
+.generating-loader-letter:nth-child(9) { animation-delay: 0.8s; }
+.generating-loader-letter:nth-child(10) { animation-delay: 0.9s; }
+
+.generating-loader-bar {
+    position: relative;
+    width: 200px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.generating-loader-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+    animation: generating-loader-bar-anim 2s ease-in-out infinite;
+}
+
+@keyframes generating-loader-letter-anim {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) rotateX(-90deg);
+        text-shadow: 0 0 0px rgba(59, 130, 246, 0);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg);
+        text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg);
+        text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+    }
+    50% {
+        opacity: 0;
+        transform: translateY(-20px) rotateX(90deg);
+        text-shadow: 0 0 0px rgba(59, 130, 246, 0);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes generating-loader-bar-anim {
+    0% {
+        left: -100%;
+    }
+    50% {
+        left: 100%;
+    }
+    100% {
+        left: -100%;
+    }
+}
