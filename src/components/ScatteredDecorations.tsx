@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import DraggableImage from './DraggableImage';
 
-// Import decoration images
-import cdImg from '@assets/decorations/cd.png';
-import chipImg from '@assets/decorations/chip.png';
-import kindleImg from '@assets/decorations/kindle.png';
-import newspaperImg from '@assets/decorations/newspaper.png';
-import openNotebookImg from '@assets/decorations/open-notebook.png';
-import penImg from '@assets/decorations/pen.png';
+// Import decoration images (WebP optimized)
+import cdImg from '@assets/decorations/cd.webp';
+import chipImg from '@assets/decorations/chip.webp';
+import kindleImg from '@assets/decorations/kindle.webp';
+import newspaperImg from '@assets/decorations/newspaper.webp';
+import openNotebookImg from '@assets/decorations/open-notebook.webp';
+import penImg from '@assets/decorations/pen.webp';
 
 interface DecorationData {
     src: string;

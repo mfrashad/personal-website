@@ -17,7 +17,11 @@ export default defineConfig({
     site: 'https://www.mfrashad.com',
     output: 'hybrid',
     adapter: vercel({
-        runtime: 'nodejs20.x'
+        runtime: 'nodejs20.x',
+        isr: {
+            // Cache for 60 seconds, then revalidate in background
+            expiration: 60,
+        }
     }),
     redirects: {
         '/brand': '/media',

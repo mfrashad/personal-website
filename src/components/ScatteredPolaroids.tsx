@@ -1,29 +1,29 @@
 import { useEffect, useState, useRef } from 'react';
 import DraggablePolaroid from './DraggablePolaroid';
 
-// Import polaroid images
-import camelImg from '@assets/polaroids/camel.JPEG';
-import codeImg from '@assets/polaroids/code.JPEG';
-import coding2Img from '@assets/polaroids/coding2.JPEG';
-import coding3Img from '@assets/polaroids/coding3.JPEG';
-import contentImg from '@assets/polaroids/content.JPEG';
-import cookingImg from '@assets/polaroids/cooking.JPEG';
-import divingImg from '@assets/polaroids/diving.JPEG';
-import judgingImg from '@assets/polaroids/judging.JPEG';
-import ontvImg from '@assets/polaroids/ontv.jpeg';
-import polaroidImg from '@assets/polaroids/polaroid.JPEG';
-import profileImg from '@assets/polaroids/profile.JPEG';
-import readingImg from '@assets/polaroids/reading.JPEG';
-import selfieImg from '@assets/polaroids/selfie.JPEG';
-import skydivingImg from '@assets/polaroids/skydiving.JPEG';
-import snowboardingImg from '@assets/polaroids/snowboarding.JPEG';
-import speakingImg from '@assets/polaroids/speaking.JPEG';
-import speaking2Img from '@assets/polaroids/speaking2.JPEG';
-import speaking3Img from '@assets/polaroids/speaking3.JPEG';
-import speaking4Img from '@assets/polaroids/speaking4.JPEG';
-import surfingImg from '@assets/polaroids/surfing.JPEG';
-import talkImg from '@assets/polaroids/talk.JPEG';
-import writingImg from '@assets/polaroids/writing.JPEG';
+// Import polaroid images (WebP optimized)
+import camelImg from '@assets/polaroids/camel.webp';
+import codeImg from '@assets/polaroids/code.webp';
+import coding2Img from '@assets/polaroids/coding2.webp';
+import coding3Img from '@assets/polaroids/coding3.webp';
+import contentImg from '@assets/polaroids/content.webp';
+import cookingImg from '@assets/polaroids/cooking.webp';
+import divingImg from '@assets/polaroids/diving.webp';
+import judgingImg from '@assets/polaroids/judging.webp';
+import ontvImg from '@assets/polaroids/ontv.webp';
+import polaroidImg from '@assets/polaroids/polaroid.webp';
+import profileImg from '@assets/polaroids/profile.webp';
+import readingImg from '@assets/polaroids/reading.webp';
+import selfieImg from '@assets/polaroids/selfie.webp';
+import skydivingImg from '@assets/polaroids/skydiving.webp';
+import snowboardingImg from '@assets/polaroids/snowboarding.webp';
+import speakingImg from '@assets/polaroids/speaking.webp';
+import speaking2Img from '@assets/polaroids/speaking2.webp';
+import speaking3Img from '@assets/polaroids/speaking3.webp';
+import speaking4Img from '@assets/polaroids/speaking4.webp';
+import surfingImg from '@assets/polaroids/surfing.webp';
+import talkImg from '@assets/polaroids/talk.webp';
+import writingImg from '@assets/polaroids/writing.webp';
 
 interface PolaroidData {
     src: string;
