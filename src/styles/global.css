@@ -5,7 +5,7 @@
         url('/fonts/apercu-regular-pro.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-    font-display: auto;
+    font-display: swap;
 }
 
 @font-face {
@@ -15,7 +15,7 @@
         url('/fonts/apercu-bold-pro.woff') format('woff');
     font-weight: bold;
     font-style: normal;
-    font-display: auto;
+    font-display: swap;
 }
 
 /* fira-mono-regular - latin */
@@ -40,6 +40,7 @@
     src: url('/fonts/LiebeHeide-FinelinerBold.otf') format('opentype');
     font-weight: bold;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Fraunces Variable Font - Import from fontsource */

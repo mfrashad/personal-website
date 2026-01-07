@@ -169,6 +169,7 @@ export default function DraggablePolaroid({
                         alt={alt}
                         className="w-full h-full object-cover pointer-events-none"
                         draggable={false}
+                        loading="lazy"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     />

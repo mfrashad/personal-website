@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://www.mfrashad.com',
-    output: 'server',
+    output: 'hybrid',
     adapter: vercel({
         runtime: 'nodejs20.x'
     }),

@@ -1,4 +1,6 @@
 ---
+export const prerender = false; // This page needs SSR for dynamic data
+
 import Layout from '@layouts/Layout.astro';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
@@ -91,8 +93,8 @@ import ContactForm from '@components/ContactForm';
     <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
     <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
         <div class="pointer-events-auto">
-            <ScatteredPolaroids client:load />
-            <ScatteredDecorations client:load />
+            <ScatteredPolaroids client:idle />
+            <ScatteredDecorations client:idle />
         </div>
     </div>
 
@@ -193,7 +195,7 @@ import ContactForm from '@components/ContactForm';
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-                    <MediaMentionList mentions={mediaMentions} client:load />
+                    <MediaMentionList mentions={mediaMentions} client:visible />
                 </GridBox>
             </Grid>
         </section>
@@ -207,7 +209,7 @@ import ContactForm from '@components/ContactForm';
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-                    <StatsGrid metrics={metrics} client:load />
+                    <StatsGrid metrics={metrics} client:visible />
                 </GridBox>
             </Grid>
         </section>
@@ -222,7 +224,7 @@ import ContactForm from '@components/ContactForm';
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-                    <SpeakingSection engagements={latestSpeaking} client:load />
+                    <SpeakingSection engagements={latestSpeaking} client:visible />
 
                     <!-- View All Button -->
                     <div class="mt-8 text-center">
@@ -263,7 +265,7 @@ import ContactForm from '@components/ContactForm';
                                 date: post.data.date,
                                 title: post.data.title
                             }))}
-                            client:load
+                            client:visible
                         />
                     </div>
 
@@ -304,7 +306,7 @@ import ContactForm from '@components/ContactForm';
                     <AchievementGrid
                         achievements={achievements}
                         showMetrics={false}
-                        client:load
+                        client:visible
                     />
 
                     <!-- View All Button -->
@@ -415,7 +417,7 @@ import ContactForm from '@components/ContactForm';
             </SectionContent>
             <Grid>
                 <GridBox desktopStart={3} desktopEnd={11}>
-                    <ContactForm client:load />
+                    <ContactForm client:visible />
                 </GridBox>
             </Grid>
         </section>

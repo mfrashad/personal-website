@@ -1,4 +1,5 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -65,8 +66,47 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                 }
             }}
         />
+        <ViewTransitions />
+        <style is:global>
+            /* Loading bar styles */
+            .loading-bar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+                z-index: 9999;
+                transition: width 0.3s ease-out;
+                opacity: 0;
+            }
+            .loading-bar.active {
+                opacity: 1;
+            }
+        </style>
+        <script>
+            document.addEventListener('astro:before-preparation', () => {
+                const bar = document.querySelector('.loading-bar');
+                if (bar) {
+                    bar.classList.add('active');
+                    bar.style.width = '30%';
+                }
+            });
+
+            document.addEventListener('astro:page-load', () => {
+                const bar = document.querySelector('.loading-bar');
+                if (bar) {
+                    bar.style.width = '100%';
+                    setTimeout(() => {
+                        bar.classList.remove('active');
+                        bar.style.width = '0';
+                    }, 300);
+                }
+            });
+        </script>
     </head>
     <body class="min-h-[calc(100vh-56px)] overflow-x-hidden">
+        <div class="loading-bar"></div>
         {showLoader && <PageLoader client:load />}
         <Header />
         <MobileMenu />

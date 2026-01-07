@@ -115,6 +115,7 @@ export default function DraggableImage({
                     filter: shadow ? 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))' : 'none'
                 }}
                 draggable={false}
+                loading="lazy"
                 whileHover={{ scale: 1.05 }}
                 transition={{ duration: 0.3 }}
             />
