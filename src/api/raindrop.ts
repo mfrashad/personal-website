@@ -1,9 +1,13 @@
 import type { Bookmark } from '@components/bookmarks/BookmarkItem.astro';
+import { withCache } from '@utils/cache';
 
 const PER_PAGE = 10;
 const RAINDROP_COLLECTION = 0;
 
-export const fetchBookmarks = async (page: number = 0) => {
+/**
+ * Internal function that does the actual fetching (without cache)
+ */
+const fetchBookmarksInternal = async (page: number = 0): Promise<Bookmark[]> => {
     const bookmarks: Bookmark[] = [];
 
     try {
@@ -55,7 +59,7 @@ export const fetchBookmarks = async (page: number = 0) => {
     }
 
     // Recursive case: Fetch the next page of items
-    const nextPageBookmarks = await fetchBookmarks(page + 1);
+    const nextPageBookmarks = await fetchBookmarksInternal(page + 1);
     bookmarks.push(...nextPageBookmarks);
 
     bookmarks.sort((a, b) => {
@@ -69,4 +73,16 @@ export const fetchBookmarks = async (page: number = 0) => {
         console.error('Error fetching bookmarks from Raindrop:', error);
         return [];
     }
+};
+
+/**
+ * Fetch bookmarks with caching (60 second TTL)
+ * This is the public API - use this instead of fetchBookmarksInternal
+ */
+export const fetchBookmarks = async (page: number = 0): Promise<Bookmark[]> => {
+    return withCache(
+        `raindrop-bookmarks-${page}`,
+        () => fetchBookmarksInternal(page),
+        60 // Cache for 60 seconds
+    );
 };

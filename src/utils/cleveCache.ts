@@ -1,8 +1,10 @@
 import { fetchCleveWritings, type CleveWriting } from '../api/cleve';
+import { withCache } from './cache';
 import fs from 'fs';
 import path from 'path';
 
 const CACHE_FILE = path.join(process.cwd(), 'src/data/cleve-cache.json');
+const CACHE_TTL = 60; // 60 seconds in-memory cache
 
 export interface CachedCleveData {
     updated_at: string;
@@ -38,18 +40,21 @@ export async function fetchAndCacheCleveWritings(): Promise<CachedCleveData> {
 
 /**
  * Gets Cleve writings from cache if available, otherwise fetches fresh data
+ * Uses in-memory cache (60s TTL) for fast access, with file cache as fallback
  */
 export async function getCleveWritings(): Promise<CachedCleveData> {
-    // Check if cache exists
-    if (fs.existsSync(CACHE_FILE)) {
-        console.log('Using cached Cleve writings');
-        const cached = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
-        return cached;
-    }
+    return withCache('cleve-writings', async () => {
+        // Try file cache first
+        if (fs.existsSync(CACHE_FILE)) {
+            console.log('Using file-cached Cleve writings');
+            const cached = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
+            return cached;
+        }
 
-    // No cache, fetch fresh data
-    console.log('No cache found, fetching fresh Cleve writings...');
-    return fetchAndCacheCleveWritings();
+        // No file cache, fetch fresh data
+        console.log('No file cache found, fetching fresh Cleve writings...');
+        return fetchAndCacheCleveWritings();
+    }, CACHE_TTL);
 }
 
 /**
