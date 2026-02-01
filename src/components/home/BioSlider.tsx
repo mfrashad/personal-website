@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { RoughNotation } from 'react-rough-notation';
 
 interface TimelineItem {
     text: string;
@@ -16,13 +17,38 @@ interface BioSliderProps {
     timeline: TimelineLevel[]; // Array of 20 timeline variations
 }
 
-// Helper to render markdown bold text and links
-function renderTextWithBold(text: string) {
-    const parts = text.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
+// Helper to render content inside notation (handles links inside annotations)
+function renderNotationContent(content: string) {
+    // Check if content is a markdown link
+    const linkMatch = content.match(/^\[(.*?)\]\((.*?)\)$/);
+    if (linkMatch) {
+        const [, linkText, url] = linkMatch;
+        const isExternal = url.startsWith('http://') || url.startsWith('https://');
+        return (
+            <a
+                href={url}
+                className="text-blue-600 hover:text-blue-800 underline transition-colors"
+                {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+            >
+                {linkText}
+            </a>
+        );
+    }
+    return content;
+}
+
+// Helper to render markdown bold text, links, and rough notation
+function renderTextWithBold(text: string, showAnnotations: boolean = false) {
+    // Enhanced regex to capture: **bold**, [link](url), and {type:text} for rough notation
+    const parts = text.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\)|\{[a-z-]+:.*?\})/g);
+    let annotationIndex = 0;
+
     return parts.map((part, i) => {
+        // Handle bold **text**
         if (part.startsWith('**') && part.endsWith('**')) {
             return <strong key={i}>{part.slice(2, -2)}</strong>;
         }
+
         // Handle markdown links [text](url)
         const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
         if (linkMatch) {
@@ -39,6 +65,42 @@ function renderTextWithBold(text: string) {
                 </a>
             );
         }
+
+        // Handle rough notation {type:text}
+        const notationMatch = part.match(/^\{([a-z-]+):(.*?)\}$/);
+        if (notationMatch) {
+            const [, type, content] = notationMatch;
+            const typeMap: Record<string, any> = {
+                'underline': { type: 'underline', color: '#3b82f6' },
+                'highlight': { type: 'highlight', color: '#fef08a' },
+                'box': { type: 'box', color: '#ef4444' },
+                'circle': { type: 'circle', color: '#8b5cf6', padding: 8 },
+                'strike': { type: 'strike-through', color: '#6b7280' },
+                'crossed': { type: 'crossed-off', color: '#dc2626' },
+                'bracket': { type: 'bracket', color: '#059669' },
+            };
+
+            const config = typeMap[type] || { type: 'underline', color: '#3b82f6' };
+            const currentIndex = annotationIndex++;
+            const delay = 600 + currentIndex * 300; // Stagger animations by 300ms
+
+            return (
+                <RoughNotation
+                    key={i}
+                    type={config.type}
+                    show={showAnnotations}
+                    color={config.color}
+                    animationDuration={800}
+                    animationDelay={delay}
+                    padding={config.padding}
+                    strokeWidth={2}
+                    iterations={2}
+                >
+                    {renderNotationContent(content)}
+                </RoughNotation>
+            );
+        }
+
         return part;
     });
 }
@@ -46,8 +108,28 @@ function renderTextWithBold(text: string) {
 export default function BioSlider({ bios, timeline }: BioSliderProps) {
     const [level, setLevel] = useState(8); // Start at level 8 (Standard range)
     const [isSticky, setIsSticky] = useState(true);
+    const [showAnnotations, setShowAnnotations] = useState(false);
 
     const currentTimeline = timeline[level];
+
+    // Trigger annotations to show after component mounts
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowAnnotations(true);
+        }, 200); // Small delay before starting animations
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Reset and restart annotations when level changes
+    useEffect(() => {
+        setShowAnnotations(false);
+        const timer = setTimeout(() => {
+            setShowAnnotations(true);
+        }, 50);
+
+        return () => clearTimeout(timer);
+    }, [level]);
 
     // Generate label for current level
     const getLevelLabel = (level: number) => {
@@ -103,7 +185,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
             {/* Bio Text */}
             <div className="bio-content mb-8 relative z-[120] w-full mx-auto">
                 <div className="text-neutral-700 leading-relaxed whitespace-pre-line w-full mx-auto">
-                    {renderTextWithBold(bios[level])}
+                    {renderTextWithBold(bios[level], showAnnotations)}
                 </div>
             </div>
 

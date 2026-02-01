@@ -28,6 +28,8 @@ import AnimationProvider from '@components/animations/AnimationProvider';
 import { HeroBackground } from '@components/animations/MorphingBlob';
 import AnimatedDivider from '@components/animations/AnimatedDivider';
 import { DoodleArrow, DoodleSquiggle } from '@components/animations/Doodles';
+import AnnotatedHeadline from '@components/ui/AnnotatedHeadline';
+import AnnotatedText from '@components/ui/AnnotatedText';
 
 // Import profile polaroid for mobile (WebP optimized)
 import profileImg from '@assets/polaroids/profile.webp';
@@ -128,7 +130,7 @@ import ContactForm from '@components/ContactForm';
                                 name="sticker-smiley-40"
                             />
                         </div>
-                        I'm Rashad,
+                        I'm <AnnotatedHeadline client:visible>Rashad</AnnotatedHeadline>,
                     </Headline>
 
                     <!-- Mobile Polaroid - Only visible on mobile/tablet -->
@@ -195,7 +197,8 @@ import ContactForm from '@components/ContactForm';
 
         <!-- Media Mentions Section -->
         <section>
-            <SectionContent title="Media Mentions">
+            <SectionContent>
+                <span slot="title"><AnnotatedText client:visible type="underline" delay={400}>Media Mentions</AnnotatedText></span>
                 Featured in publications and media outlets for my work in machine learning and software engineering.
                 <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Get press assets →</a>
             </SectionContent>
@@ -210,7 +213,8 @@ import ContactForm from '@components/ContactForm';
 
         <!-- Stats Section -->
         <section>
-            <SectionContent title="Stats & Metrics">
+            <SectionContent>
+                <span slot="title"><AnnotatedText client:visible type="highlight" delay={500}>Stats & Metrics</AnnotatedText></span>
                 A quick snapshot of my journey and impact across different areas.
             </SectionContent>
             <Grid>
@@ -224,7 +228,8 @@ import ContactForm from '@components/ContactForm';
 
         <!-- Speaking Section -->
         <section>
-            <SectionContent title="Speaking">
+            <SectionContent>
+                <span slot="title"><AnnotatedText client:visible type="circle" delay={600}>Speaking</AnnotatedText></span>
                 I speak at conferences and meetups about machine learning, AI, and software engineering.
                 <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Speaker kit →</a>
             </SectionContent>
@@ -250,7 +255,8 @@ import ContactForm from '@components/ContactForm';
 
         <!-- Writings Section -->
         <section>
-            <SectionContent title="Writings">
+            <SectionContent>
+                <span slot="title"><AnnotatedText client:visible type="box" delay={700}>Writings</AnnotatedText></span>
                 <div class="flex flex-col gap-2">
                     <p>From quick notes to long-form essays. I write about machine learning, software engineering, and personal growth.</p>
                     <div class="text-sm text-neutral-500">
