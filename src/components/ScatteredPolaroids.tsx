@@ -326,10 +326,25 @@ export default function ScatteredPolaroids() {
     const [bioOffset, setBioOffset] = useState(() => calculateOffset(DEFAULT_BIO_LEVEL));
 
     // Scale X position based on current viewport width
-    const scaleXPosition = (originalX: number) => {
+    const scaleXPosition = (originalX: number, pushOutward: boolean = false) => {
         if (screenWidth === 0) return originalX;
         const scale = screenWidth / REFERENCE_WIDTH;
-        return originalX * scale;
+        let scaledX = originalX * scale;
+
+        // For polaroids below the hero, push them further outward on smaller screens
+        // so they don't obscure page content
+        if (pushOutward && screenWidth < REFERENCE_WIDTH) {
+            const shrinkRatio = 1 - (screenWidth / REFERENCE_WIDTH);
+            const midpoint = screenWidth / 2;
+            const extraPush = shrinkRatio * 400;
+            if (scaledX < midpoint) {
+                scaledX -= extraPush;
+            } else {
+                scaledX += extraPush;
+            }
+        }
+
+        return scaledX;
     };
 
     useEffect(() => {
@@ -462,7 +477,8 @@ export default function ScatteredPolaroids() {
                 const adjustedY = shouldOffset ? polaroid.initialY + bioOffset : polaroid.initialY;
 
                 // Scale X position based on viewport width
-                const scaledX = scaleXPosition(polaroid.initialX || 100);
+                // Push outward for polaroids below hero to avoid obscuring content on smaller screens
+                const scaledX = scaleXPosition(polaroid.initialX || 100, shouldOffset);
 
                 return (
                     <DraggablePolaroid
