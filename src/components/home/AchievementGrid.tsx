@@ -282,7 +282,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                         {/* Back - Polaroid */}
                         {hasImage && (
                             <div
-                                className="flip-card-back rounded-lg p-2 bg-white shadow-lg"
+                                className="flip-card-back rounded-lg p-2 bg-surface-secondary shadow-lg"
                                 style={{
                                     backfaceVisibility: 'hidden',
                                     transform: 'rotateY(180deg)'
@@ -337,7 +337,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                             return (
                                 <div
                                     key={metric.id}
-                                    className="border border-neutral-200 rounded-lg p-4 bg-white hover:shadow-md transition-all duration-300"
+                                    className="border border-border rounded-lg p-4 bg-surface-secondary hover:shadow-md transition-all duration-300"
                                     style={{ minHeight: '120px' }}
                                 >
                                     <div className="flex items-center gap-2 mb-3">
@@ -387,7 +387,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                                 ? category === 'all'
                                     ? 'bg-neutral-900 text-white'
                                     : `${categoryColors[category]} text-white`
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                                : 'bg-surface-tertiary text-content-body hover:bg-surface-secondary'
                         }`}
                     >
                         {categoryLabels[category] || category}
@@ -428,10 +428,10 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
             {/* Stats Summary */}
             <div className="mt-6 flex items-center justify-center">
                 <div className="text-center">
-                    <h3 className="text-md font-bold text-neutral-900">
+                    <h3 className="text-md font-bold text-content-headings">
                         {unlockedCount} / {achievements.length} Achievements Unlocked
                     </h3>
-                    <p className="text-sm text-neutral-600">
+                    <p className="text-sm text-content-muted">
                         {Math.round((unlockedCount / achievements.length) * 100)}% complete
                     </p>
                 </div>

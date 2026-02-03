@@ -36,5 +36,10 @@ export const favoriteConcepts: ListItem[] = [
         name: 'Stoicism',
         description: 'Focus on what you can control, accept what you cannot',
         tags: ['philosophy', 'mindset', 'resilience']
+    },
+    {
+        name: 'Effective Altruism',
+        description: 'Use evidence and reason to do the most good possible',
+        tags: ['philosophy', 'impact', 'rationality']
     }
 ];

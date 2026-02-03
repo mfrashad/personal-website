@@ -91,7 +91,7 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
                                 }}
                                 onHoverEnd={() => setHoveredCard(null)}
                                 onClick={(e) => handleCardClick(e, metric.id)}
-                                className="border border-neutral-200 rounded-lg p-2 md:p-4 bg-white hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
+                                className="border border-border rounded-lg p-2 md:p-4 bg-surface-secondary hover:shadow-2xl transition-all duration-300 cursor-pointer relative overflow-hidden"
                                 style={{
                                     minHeight: '90px',
                                     transformStyle: 'preserve-3d',

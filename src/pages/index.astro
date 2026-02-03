@@ -89,9 +89,6 @@ const latestBookmarks = allBookmarks.slice(0, 6);
 
 // Books section component
 import BookSection from '@components/books/BookSection.astro';
-
-// Contact form
-import ContactForm from '@components/ContactForm';
 ---
 
 <Layout title="Rashad | AI Engineer, Entrepreneur, Speaker" showLoader={true}>
@@ -107,7 +104,7 @@ import ContactForm from '@components/ContactForm';
     </div>
 
     <!-- Hero Section with Bio Slider and Timeline (Compact) -->
-    <div class="hero-section relative lg:-mt-28 overflow-hidden bg-white">
+    <div class="hero-section relative lg:-mt-28 overflow-hidden bg-surface-primary">
         <!-- Animated morphing blob background -->
         <!-- <HeroBackground client:load /> -->
 
@@ -135,7 +132,7 @@ import ContactForm from '@components/ContactForm';
 
                     <!-- Mobile Polaroid - Only visible on mobile/tablet -->
                     <div class="flex justify-center mb-6 lg:hidden">
-                        <div class="bg-white p-3 rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                        <div class="bg-surface-secondary p-3 rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
                             <div class="bg-neutral-200 rounded overflow-hidden mb-3 w-[160px] h-[160px]">
                                 <img
                                     src={profileImg.src}
@@ -421,18 +418,6 @@ import ContactForm from '@components/ContactForm';
         </section>
 
         <AnimatedDivider variant="wave" client:visible />
-
-        <!-- Contact Section -->
-        <section>
-            <SectionContent title="Get in Touch">
-                Have a question or want to work together? Feel free to reach out!
-            </SectionContent>
-            <Grid>
-                <GridBox desktopStart={3} desktopEnd={11}>
-                    <ContactForm client:visible />
-                </GridBox>
-            </Grid>
-        </section>
     </div>
 </Layout>
 

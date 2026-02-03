@@ -3,6 +3,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 export default {
+    darkMode: 'class',
     purge: {
         content: ['./src/**/*.astro', './src/**/*.tsx'],
         options: {
@@ -17,6 +18,11 @@ export default {
                 'text-evergreen', 'bg-evergreen', 'border-evergreen', 'bg-evergreen-light', 'text-evergreen-dark', 'border-evergreen-border',
                 // Wiki links
                 'wiki-link', 'wiki-link-new',
+                // Theme colors
+                'bg-surface-primary', 'bg-surface-secondary', 'bg-surface-tertiary', 'bg-surface-overlay',
+                'text-content-body', 'text-content-muted', 'text-content-subtle', 'text-content-headings', 'text-content-link',
+                'border-border', 'border-border-subtle', 'border-border-emphasis',
+                'dark',
                 ...[1, 1.25, 1.5, 2.5, 3.5].flatMap((fraction) => [
                     `w-[calc(100%/${fraction}-1rem+${1 / fraction}rem)]`
                 ]),
@@ -107,6 +113,26 @@ export default {
                 DEFAULT: '#059669',
                 dark: '#047857',
                 border: '#6ee7b7'
+            },
+            // Semantic theme colors (CSS variable references)
+            surface: {
+                primary: 'var(--color-bg-primary)',
+                secondary: 'var(--color-bg-secondary)',
+                tertiary: 'var(--color-bg-tertiary)',
+                overlay: 'var(--color-bg-overlay)'
+            },
+            content: {
+                body: 'var(--color-text-body)',
+                muted: 'var(--color-text-muted)',
+                subtle: 'var(--color-text-subtle)',
+                headings: 'var(--color-text-headings)',
+                link: 'var(--color-text-link)',
+                'link-hover': 'var(--color-text-link-hover)'
+            },
+            border: {
+                DEFAULT: 'var(--color-border-default)',
+                subtle: 'var(--color-border-subtle)',
+                emphasis: 'var(--color-border-emphasis)'
             }
         },
         fontFamily: {
@@ -140,6 +166,10 @@ export default {
             },
             animation: {
                 'infinite-scroll': 'infinite-scroll 30s linear infinite'
+            },
+            boxShadow: {
+                'theme': '0 1em 0.5em var(--color-shadow)',
+                'theme-light': '0 10px 20px var(--color-shadow-light)'
             },
             typography: ({ theme }) => ({
                 DEFAULT: {

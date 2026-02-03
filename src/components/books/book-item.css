@@ -12,7 +12,7 @@
     height: 100%;
     transform-origin: 0 50%;
     -webkit-transform-origin: 0 50%;
-    background: #cbd5e1;
+    background: var(--color-book-cover);
     background-size: cover;
     border-radius: 3px;
     box-shadow:
@@ -82,17 +82,17 @@
     height: 96%;
     position: relative;
     top: 2%;
-    border: 1px solid grey;
+    border: 1px solid var(--color-book-border);
     border-radius: 3px;
-    background: white;
+    background: var(--color-book-inside);
     box-shadow:
-        10px 40px 40px -10px #00000030,
-        inset -2px 0 0 grey,
-        inset -3px 0 0 #dbdbdb,
-        inset -4px 0 0 white,
-        inset -5px 0 0 #dbdbdb,
-        inset -6px 0 0 white,
-        inset -7px 0 0 #dbdbdb,
-        inset -8px 0 0 white,
-        inset -9px 0 0 #dbdbdb;
+        10px 40px 40px -10px var(--color-shadow-light),
+        inset -2px 0 0 var(--color-book-border),
+        inset -3px 0 0 var(--color-book-pages),
+        inset -4px 0 0 var(--color-book-inside),
+        inset -5px 0 0 var(--color-book-pages),
+        inset -6px 0 0 var(--color-book-inside),
+        inset -7px 0 0 var(--color-book-pages),
+        inset -8px 0 0 var(--color-book-inside),
+        inset -9px 0 0 var(--color-book-pages);
 }

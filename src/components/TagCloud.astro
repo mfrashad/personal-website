@@ -20,7 +20,7 @@ const { tags, selectedTag, basePath, filterPath, filterLabel, total } = Astro.pr
 const sortedTags = [...tags].sort((a, b) => b.count - a.count);
 ---
 
-<details open class="group mb-12 rounded-lg border border-black-50 bg-neutral-50 p-4">
+<details open class="group mb-12 rounded-lg border border-border bg-surface-secondary p-4">
     <summary
         class="-m-2 flex cursor-pointer select-none items-center justify-between p-4 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue"
         aria-label="Toggle tag filter"
@@ -41,14 +41,14 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                 class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
                     !selectedTag
                         ? 'border-blue bg-blue text-white'
-                        : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
+                        : 'border-border bg-surface-tertiary hover:border-blue hover:text-blue'
                 }`}
             >
                 <span>all</span>
                 {
                     total && (
                         <span
-                            class={`ml-1 ${!selectedTag ? 'text-white-700' : 'text-neutral-400'}`}
+                            class={`ml-1 ${!selectedTag ? 'text-white-700' : 'text-content-subtle'}`}
                         >
                             ({total})
                         </span>
@@ -62,14 +62,14 @@ const sortedTags = [...tags].sort((a, b) => b.count - a.count);
                         class={`flex items-center rounded-full border px-3 py-1 font-mono text-xs transition-colors ${
                             selectedTag === tag.name
                                 ? 'border-blue bg-blue text-white'
-                                : 'border-neutral-200 bg-white hover:border-blue hover:text-blue'
+                                : 'border-border bg-surface-tertiary hover:border-blue hover:text-blue'
                         }`}
                     >
                         {tag.flag && <span class="mr-1">{tag.flag}</span>}
                         {tag.name}
                         <span
                             class={`ml-1 ${
-                                selectedTag === tag.name ? 'text-white-700' : 'text-neutral-400'
+                                selectedTag === tag.name ? 'text-white-700' : 'text-content-subtle'
                             }`}
                         >
                             ({tag.count})

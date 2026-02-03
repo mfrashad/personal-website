@@ -20,7 +20,7 @@ article h6:hover::before {
     content: '#';
     position: absolute;
     left: -1em;
-    color: #689bf7;
+    color: var(--color-text-link-hover);
     opacity: 0.8;
 }
 

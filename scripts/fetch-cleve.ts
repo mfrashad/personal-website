@@ -1,7 +1,12 @@
-import { fetchAndCacheCleveWritings } from '../src/utils/cleveCache';
+// Load environment variables from .env file BEFORE any other imports
+import dotenv from 'dotenv';
+dotenv.config();
 
 async function main() {
     try {
+        // Dynamic import after dotenv is loaded
+        const { fetchAndCacheCleveWritings } = await import('../src/utils/cleveCache');
+
         console.log('Starting Cleve writings fetch...');
         const data = await fetchAndCacheCleveWritings();
         console.log(`✓ Successfully cached ${data.count} writings`);

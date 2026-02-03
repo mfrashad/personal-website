@@ -18,7 +18,7 @@ export default function SoundToggle() {
     return (
         <motion.button
             onClick={toggleSound}
-            className="fixed bottom-6 right-6 z-50 bg-neutral-900 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+            className="fixed bottom-6 right-6 z-50 bg-surface-tertiary text-content-body p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, scale: 0 }}

@@ -85,9 +85,9 @@ export default function InfiniteGridBackground() {
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} size={gridSize} />
       </div>
 
-      {/* Layer 2: White overlay that follows mouse (makes grid fade out) */}
+      {/* Layer 2: Overlay that follows mouse (makes grid fade out) */}
       <motion.div
-        className="absolute inset-0 z-0 bg-neutral-100/80"
+        className="absolute inset-0 z-0 bg-surface-primary/80"
         style={{ maskImage, WebkitMaskImage: maskImage }}
       >
       </motion.div>

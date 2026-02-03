@@ -1,0 +1,82 @@
+/* Theme System - CSS Custom Properties */
+
+:root {
+    /* Surface colors */
+    --color-bg-primary: rgba(255, 255, 255, 1);
+    --color-bg-secondary: #f1f5f9;
+    --color-bg-tertiary: #e2e8f0;
+    --color-bg-overlay: rgba(255, 255, 255, 0.98);
+
+    /* Text colors */
+    --color-text-body: rgba(0, 0, 0, 0.9);
+    --color-text-muted: rgba(0, 0, 0, 0.6);
+    --color-text-subtle: rgba(0, 0, 0, 0.4);
+    --color-text-headings: rgba(0, 0, 0, 0.9);
+    --color-text-link: rgba(0, 0, 0, 0.7);
+    --color-text-link-hover: #689bf7;
+
+    /* Border colors */
+    --color-border-default: rgba(0, 0, 0, 0.1);
+    --color-border-subtle: rgba(0, 0, 0, 0.05);
+    --color-border-emphasis: rgba(0, 0, 0, 0.3);
+
+    /* Shadow colors */
+    --color-shadow: rgba(0, 0, 0, 0.3);
+    --color-shadow-light: rgba(0, 0, 0, 0.1);
+
+    /* Component-specific */
+    --color-wood-base: #c19a6b;
+    --color-book-cover: #cbd5e1;
+    --color-book-inside: white;
+    --color-book-pages: #dbdbdb;
+    --color-book-border: grey;
+    --color-loader-bar-bg: #e5e7eb;
+
+    /* Checkbox */
+    --color-checkbox-border: rgba(0, 0, 0, 0.3);
+    --color-checkbox-check: rgba(0, 0, 0, 0.7);
+
+    /* Code blocks */
+    --color-code-bg: #f1f5f9;
+}
+
+/* Dark theme */
+.dark {
+    /* Surface colors */
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
+    --color-bg-overlay: rgba(15, 23, 42, 0.98);
+
+    /* Text colors */
+    --color-text-body: rgba(255, 255, 255, 0.9);
+    --color-text-muted: rgba(255, 255, 255, 0.6);
+    --color-text-subtle: rgba(255, 255, 255, 0.4);
+    --color-text-headings: rgba(255, 255, 255, 0.95);
+    --color-text-link: rgba(255, 255, 255, 0.7);
+    --color-text-link-hover: #689bf7;
+
+    /* Border colors */
+    --color-border-default: rgba(255, 255, 255, 0.1);
+    --color-border-subtle: rgba(255, 255, 255, 0.05);
+    --color-border-emphasis: rgba(255, 255, 255, 0.3);
+
+    /* Shadow colors */
+    --color-shadow: rgba(0, 0, 0, 0.5);
+    --color-shadow-light: rgba(0, 0, 0, 0.3);
+
+    /* Component-specific */
+    --color-wood-base: #8b6914;
+    --color-book-cover: #475569;
+    --color-book-inside: #1e293b;
+    --color-book-pages: #475569;
+    --color-book-border: #64748b;
+    --color-loader-bar-bg: #334155;
+
+    /* Checkbox */
+    --color-checkbox-border: rgba(255, 255, 255, 0.3);
+    --color-checkbox-check: rgba(255, 255, 255, 0.7);
+
+    /* Code blocks */
+    --color-code-bg: #1e293b;
+}

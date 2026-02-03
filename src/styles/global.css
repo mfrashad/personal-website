@@ -100,7 +100,7 @@ html {
 }
 
 :root {
-    --active-bg-color: #f1f5f9;
+    --active-bg-color: var(--color-bg-secondary);
 }
 
 .noteCardEffect {
@@ -114,7 +114,7 @@ html {
     width: 50%;
     top: 80%;
     background: tomato;
-    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1em 0.5em var(--color-shadow);
 }
 .noteCardEffect:before {
     left: 0.5rem;
@@ -154,7 +154,7 @@ html {
     content: '';
     width: 50%;
     top: 80%;
-    box-shadow: 0 1em 0.5em rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1em 0.5em var(--color-shadow);
 }
 .corner-shadow-effect:before {
     left: 0.5rem;
@@ -199,7 +199,7 @@ details > summary::-webkit-details-marker {
 .backlinks-section {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 2px dashed theme('colors.neutral.200');
+    border-top: 2px dashed var(--color-border-default);
 }
 
 /* Slide up animation for notifications */
@@ -256,7 +256,7 @@ details > summary::-webkit-details-marker {
     position: relative;
     width: 200px;
     height: 4px;
-    background: #e5e7eb;
+    background: var(--color-loader-bar-bg);
     border-radius: 2px;
     overflow: hidden;
 }

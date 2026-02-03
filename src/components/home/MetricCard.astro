@@ -11,20 +11,20 @@ const hasMax = metric.maxValue !== undefined && metric.maxValue !== null;
 const progress = hasMax ? (metric.value / metric.maxValue!) * 100 : 100;
 ---
 
-<div class="metric-card border border-neutral-200 rounded-lg p-4 bg-white hover:shadow-md transition-all duration-300">
+<div class="metric-card border border-border rounded-lg p-4 bg-surface-secondary hover:shadow-md transition-all duration-300">
     <div class="flex items-start justify-between mb-3">
         <div class="flex-1">
-            <h3 class="font-semibold text-neutral-900 mb-1">
+            <h3 class="font-semibold text-content-headings mb-1">
                 {metric.label}
             </h3>
             <div class="text-2xl font-bold text-blue-600">
                 {metric.value.toLocaleString()}
                 {hasMax && (
-                    <span class="text-sm text-neutral-500 font-normal">
+                    <span class="text-sm text-content-subtle font-normal">
                         / {metric.maxValue!.toLocaleString()}
                     </span>
                 )}
-                <span class="text-sm text-neutral-600 font-normal ml-1">
+                <span class="text-sm text-content-muted font-normal ml-1">
                     {metric.unit}
                 </span>
             </div>
@@ -32,7 +32,7 @@ const progress = hasMax ? (metric.value / metric.maxValue!) * 100 : 100;
     </div>
 
     {hasMax && (
-        <div class="w-full bg-neutral-200 rounded-full h-2 overflow-hidden">
+        <div class="w-full bg-surface-tertiary rounded-full h-2 overflow-hidden">
             <div
                 class="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-500"
                 style={`width: ${progress}%`}
@@ -44,7 +44,7 @@ const progress = hasMax ? (metric.value / metric.maxValue!) * 100 : 100;
     {metric.tags && metric.tags.length > 0 && (
         <div class="flex flex-wrap gap-1 mt-3">
             {metric.tags.map((tag) => (
-                <span class="text-xs px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full font-mono">
+                <span class="text-xs px-2 py-1 bg-surface-tertiary text-content-muted rounded-full font-mono">
                     {tag}
                 </span>
             ))}

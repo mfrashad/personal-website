@@ -2,6 +2,7 @@
 import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
 import { Icon } from 'astro-icon/components';
+import ThemeToggle from './ThemeToggle';
 
 interface NavItem {
     name: string;
@@ -48,7 +49,7 @@ export const navData: NavItem[] = [
                 <a
                     href="/"
                     id="header-logo"
-                    class="flex -rotate-6 font-bold italic tracking-wider text-black-300 transition-all duration-300 ease-out-cubic hover:text-black"
+                    class="flex -rotate-6 font-bold italic tracking-wider text-content-muted transition-all duration-300 ease-out-cubic hover:text-content-body"
                 >
                     <span id="header-text" class="text-lg transition-all duration-300 ease-out-cubic">
                         rashad
@@ -57,7 +58,7 @@ export const navData: NavItem[] = [
             </div>
         </GridBox>
         <GridBox desktopStart={4} desktopEnd={12} classes="hidden lg:block">
-            <nav class="flex justify-end gap-8">
+            <nav class="flex items-center justify-end gap-8">
                 {
                     navData.map((item) => (
                         <a
@@ -75,6 +76,7 @@ export const navData: NavItem[] = [
                         </a>
                     ))
                 }
+                <ThemeToggle client:load />
             </nav>
         </GridBox>
     </Grid>
@@ -111,17 +113,17 @@ export const navData: NavItem[] = [
         const headerLogo = document.getElementById('header-logo');
         const headerText = document.getElementById('header-text') as HTMLSpanElement;
 
-        const logoClassesExpanded = ['-rotate-6', 'tracking-wider', 'text-black-300'];
-        const logoClassesCollapsed = ['text-sm', 'text-black', 'font-normal'];
+        const logoClassesExpanded = ['-rotate-6', 'tracking-wider', 'text-content-muted'];
+        const logoClassesCollapsed = ['text-sm', 'text-content-body', 'font-normal'];
         const textTypeClassesExpanded = ['text-lg'];
 
         if (window.scrollY < 56) {
-            header?.classList.remove('bg-white', 'border-b', 'border-neutral-200');
+            header?.classList.remove('bg-surface-primary', 'border-b', 'border-border');
             headerLogo?.classList.add(...logoClassesExpanded);
             headerText?.classList.add(...textTypeClassesExpanded);
             headerText?.classList.remove(...logoClassesCollapsed);
         } else {
-            header?.classList.add('bg-white', 'border-b', 'border-neutral-200');
+            header?.classList.add('bg-surface-primary', 'border-b', 'border-border');
             headerLogo?.classList.remove(...logoClassesExpanded);
             headerText?.classList.add(...logoClassesCollapsed);
             headerText?.classList.remove(...textTypeClassesExpanded);

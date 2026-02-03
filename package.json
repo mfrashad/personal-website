@@ -18,7 +18,7 @@
         "build:links": "tsx scripts/generate-links.ts",
         "build:topics": "tsx scripts/generate-topics.ts",
         "build:webmentions": "tsx scripts/get-webmentions.ts",
-        "build:all-data": "npm run build:links && npm run build:topics && npm run build:webmentions",
+        "build:all-data": "npm run fetch:cleve && npm run build:links && npm run build:topics && npm run build:webmentions",
         "update:hashtags": "tsx scripts/update-hashtags.ts",
         "update:hashtags:dry": "tsx scripts/update-hashtags.ts --dry-run"
     },

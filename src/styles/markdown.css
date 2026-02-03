@@ -1,13 +1,13 @@
 .markdown {
-    --tw-prose-body: rgba(0, 0, 0, 0.9);
-    --tw-prose-headings: rgba(0, 0, 0, 0.9);
-    --tw-prose-counters: rgba(0, 0, 0, 0.4);
-    --tw-prose-bullets: rgba(0, 0, 0, 0.3);
-    --tw-prose-bold: rgba(0, 0, 0, 1);
-    --tw-prose-links: rgba(0, 0, 0, 0.7);
-    --tw-prose-quote-borders: rgba(0, 0, 0, 0.2);
-    --tw-prose-td-borders: rgba(0, 0, 0, 0.1);
-    --tw-prose-th-borders: rgba(0, 0, 0, 0.3);
+    --tw-prose-body: var(--color-text-body);
+    --tw-prose-headings: var(--color-text-headings);
+    --tw-prose-counters: var(--color-text-subtle);
+    --tw-prose-bullets: var(--color-border-emphasis);
+    --tw-prose-bold: var(--color-text-headings);
+    --tw-prose-links: var(--color-text-link);
+    --tw-prose-quote-borders: var(--color-border-emphasis);
+    --tw-prose-td-borders: var(--color-border-default);
+    --tw-prose-th-borders: var(--color-border-emphasis);
 }
 
 .markdown.prose {
@@ -25,7 +25,7 @@
 .markdown hr:after {
     content: '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------';
     display: block;
-    color: rgba(0, 0, 0, 0.5);
+    color: var(--color-text-muted);
     position: absolute;
     margin: 0 32px;
     left: 0;
@@ -67,7 +67,7 @@
 
 .markdown a {
     text-decoration: none;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.3);
+    border-bottom: 1px dashed var(--color-border-emphasis);
     padding-bottom: 3px;
     position: relative;
     margin-right: 20px;
@@ -82,14 +82,14 @@
     line-height: 1.2em;
     right: -18px; /* Adjust the position as needed */
     font-size: 1.2em; /* Adjust the size as needed */
-    color: rgba(0, 0, 0, 0.4); /* Match the color of the link */
+    color: var(--color-text-subtle); /* Match the color of the link */
 }
 
 .markdown input[type='checkbox'] {
     appearance: none;
     width: 1.5em;
     height: 1.5em;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-checkbox-border);
     border-radius: 0.25em;
     margin-right: 0.5em;
     vertical-align: middle;
@@ -105,7 +105,7 @@
     left: 0.15em;
     font-size: 1.2em;
     line-height: 1em;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--color-checkbox-check);
 }
 
 .markdown ul:has(> li > input[type='checkbox']) {

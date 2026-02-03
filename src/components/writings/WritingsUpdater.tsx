@@ -178,7 +178,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
     // Create a post element that matches the BlogPostItem structure
     const createPostElement = (post: CleveWriting, isNew: boolean): HTMLElement => {
         const div = document.createElement('div');
-        div.className = 'list-item-image-hover-effect group relative flex flex-col justify-between gap-4 border-b border-neutral-300 py-4 md:flex-row md:gap-12 md:py-10 transition-all duration-500 opacity-0 translate-y-2';
+        div.className = 'list-item-image-hover-effect group relative flex flex-col justify-between gap-3 border-b border-neutral-300 py-3 md:flex-row md:gap-8 md:py-4 transition-all duration-500 opacity-0 translate-y-2';
         div.setAttribute('data-post-date', new Date(post.created_at).getTime().toString());
         div.setAttribute('data-new-post', 'true');
 
@@ -242,7 +242,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
         <>
             {/* New writings notification banner */}
             {showBanner && (
-                <div className="fixed bottom-4 right-4 z-50 max-w-sm animate-slide-up">
+                <div className="fixed bottom-4 right-4 z-[9999] max-w-sm animate-slide-up">
                     <div className="bg-white border border-neutral-200 rounded-lg shadow-lg p-4">
                         <div className="flex items-start gap-3">
                             <div className="flex-shrink-0">
@@ -253,7 +253,8 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
                                     {newWritings.length} new {newWritings.length === 1 ? 'writing' : 'writings'} found!
                                 </p>
                                 <p className="text-xs text-neutral-500 mt-1">
-                                    {newWritings.map(w => w.title).join(', ')}
+                                    {newWritings.slice(0, 5).map(w => w.title).join(', ')}
+                                    {newWritings.length > 5 && ` and ${newWritings.length - 5} more...`}
                                 </p>
                             </div>
                             <button

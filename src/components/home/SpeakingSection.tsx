@@ -66,36 +66,36 @@ export default function SpeakingSection({ engagements }: SpeakingSectionProps) {
             {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sortedEngagements.map((engagement) => (
-                        <div key={engagement.id} className="engagement-card border border-neutral-200 rounded-lg p-6 bg-white hover:shadow-md transition-all duration-300">
+                        <div key={engagement.id} className="engagement-card border border-border rounded-lg p-6 bg-surface-secondary hover:shadow-md transition-all duration-300">
                             <div className="flex items-start justify-between mb-2">
-                                <div className="text-xs font-mono text-neutral-500">
+                                <div className="text-xs font-mono text-content-subtle">
                                     {engagement.date.toLocaleDateString('en-US', {
                                         year: 'numeric',
                                         month: 'short',
                                         day: 'numeric'
                                     })}
                                 </div>
-                                <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full capitalize">
+                                <span className="text-xs px-2 py-1 bg-surface-tertiary text-content-muted rounded-full capitalize">
                                     {engagement.type}
                                 </span>
                             </div>
-                            <h3 className="font-semibold text-lg text-neutral-900 mb-2">
+                            <h3 className="font-semibold text-lg text-content-headings mb-2">
                                 {engagement.title}
                             </h3>
-                            <div className="text-sm text-neutral-700 mb-1">
+                            <div className="text-sm text-content-body mb-1">
                                 {engagement.event}
                             </div>
-                            <div className="text-xs text-neutral-600 mb-3">
+                            <div className="text-xs text-content-muted mb-3">
                                 by {engagement.organizer}
                                 {engagement.location && <> • 📍 {engagement.location}</>}
                             </div>
                             {engagement.description && (
-                                <p className="text-sm text-neutral-600 mb-3 line-clamp-2">
+                                <p className="text-sm text-content-muted mb-3 line-clamp-2">
                                     {engagement.description}
                                 </p>
                             )}
                             {engagement.audience && (
-                                <div className="text-xs text-neutral-500 mb-3">
+                                <div className="text-xs text-content-subtle mb-3">
                                     👥 {engagement.audience}
                                 </div>
                             )}

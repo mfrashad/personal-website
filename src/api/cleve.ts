@@ -1,4 +1,4 @@
-const CLEVE_API_KEY = import.meta.env.CLEVE_API_KEY || process.env.CLEVE_API_KEY;
+const CLEVE_API_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.CLEVE_API_KEY) || process.env.CLEVE_API_KEY;
 const CLEVE_API_URL = 'https://hkqfndytgnnwadrfsfvp.supabase.co/functions/v1/preview-public-api/v1/writings';
 
 export interface CleveWriting {

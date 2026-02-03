@@ -41,5 +41,11 @@ export const favoriteSoftware: ListItem[] = [
         description: 'Open-source product analytics',
         url: 'https://posthog.com/',
         tags: ['analytics', 'development']
+    },
+    {
+        name: 'Claude Code',
+        description: 'Agentic CLI tool for coding with Claude',
+        url: 'https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview',
+        tags: ['AI', 'development', 'CLI']
     }
 ];
