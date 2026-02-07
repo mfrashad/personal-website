@@ -1,0 +1,203 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import { Icon } from 'astro-icon/components';
+import { favoriteProducts } from '@data/lists/favorite-products';
+import { favoriteSoftware } from '@data/lists/favorite-software';
+import { favoritePodcasts } from '@data/lists/favorite-podcasts';
+import { favoriteBlogs } from '@data/lists/favorite-blogs';
+import { favoriteGames } from '@data/lists/favorite-games';
+import { favoriteMusic } from '@data/lists/favorite-music';
+import { favoritePeople } from '@data/lists/favorite-people';
+import { favoriteAnime } from '@data/lists/favorite-anime';
+import { favoriteNonfictionBooks } from '@data/lists/favorite-nonfiction-books';
+import { favoriteNovels } from '@data/lists/favorite-novels';
+import { favoriteWebnovels } from '@data/lists/favorite-webnovels';
+import { favoriteConcepts } from '@data/lists/favorite-concepts';
+import { klAiCommunities } from '@data/lists/kl-ai-communities';
+import { klTechCommunities } from '@data/lists/kl-tech-communities';
+import { studentAmbassadorPrograms, studentProgramsSourceUrl } from '@data/lists/student-ambassador-programs';
+import { developerAmbassadorPrograms, developerProgramsSourceUrl } from '@data/lists/developer-ambassador-programs';
+import { studentFreePerks, studentPerksSourceUrl } from '@data/lists/student-free-perks';
+import { startupAccelerators } from '@data/lists/startup-accelerators';
+import { malaysiaGovGrants, malaysiaGrantsSourceUrl } from '@data/lists/malaysia-gov-grants';
+import { globalStudentCompetitions } from '@data/lists/global-student-competitions';
+import { malaysiaStudentCompetitions } from '@data/lists/malaysia-student-competitions';
+import { malaysiaOpenCompetitions } from '@data/lists/malaysia-open-competitions';
+import { startupLearningResources } from '@data/lists/startup-learning-resources';
+import { startupIdeation } from '@data/lists/startup-ideation';
+import { startupBuildingMvp } from '@data/lists/startup-building-mvp';
+import { startupFundraising } from '@data/lists/startup-fundraising';
+import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
+import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
+import { myStartupTools } from '@data/lists/my-startup-tools';
+
+export async function getStaticPaths() {
+    return [
+        { params: { category: 'products' } },
+        { params: { category: 'software' } },
+        { params: { category: 'podcasts' } },
+        { params: { category: 'blogs' } },
+        { params: { category: 'games' } },
+        { params: { category: 'music' } },
+        { params: { category: 'people' } },
+        { params: { category: 'anime' } },
+        { params: { category: 'nonfiction-books' } },
+        { params: { category: 'novels' } },
+        { params: { category: 'webnovels' } },
+        { params: { category: 'concepts' } },
+        { params: { category: 'kl-ai-communities' } },
+        { params: { category: 'kl-tech-communities' } },
+        { params: { category: 'student-ambassador-programs' } },
+        { params: { category: 'developer-ambassador-programs' } },
+        { params: { category: 'student-free-perks' } },
+        { params: { category: 'startup-accelerators' } },
+        { params: { category: 'malaysia-gov-grants' } },
+        { params: { category: 'global-student-competitions' } },
+        { params: { category: 'malaysia-student-competitions' } },
+        { params: { category: 'malaysia-open-competitions' } },
+        { params: { category: 'startup-learning-resources' } },
+        { params: { category: 'startup-ideation' } },
+        { params: { category: 'startup-building-mvp' } },
+        { params: { category: 'startup-fundraising' } },
+        { params: { category: 'startup-marketing-growth' } },
+        { params: { category: 'startup-ai-tech-stack' } },
+        { params: { category: 'my-startup-tools' } }
+    ];
+}
+
+const { category } = Astro.params;
+
+const listData: Record<string, any> = {
+    products: { items: favoriteProducts, title: 'Best Purchases', icon: 'ph:shopping-bag' },
+    software: { items: favoriteSoftware, title: 'Favorite Software', icon: 'ph:app-window' },
+    podcasts: { items: favoritePodcasts, title: 'Favorite Podcasts', icon: 'ph:microphone' },
+    blogs: { items: favoriteBlogs, title: 'Favorite Blogs', icon: 'ph:article' },
+    games: { items: favoriteGames, title: 'Favorite Games', icon: 'ph:game-controller' },
+    music: { items: favoriteMusic, title: 'Favorite Music', icon: 'ph:music-notes' },
+    people: { items: favoritePeople, title: 'People Who Inspire Me', icon: 'ph:users' },
+    anime: { items: favoriteAnime, title: 'Favorite Anime', icon: 'ph:television' },
+    'nonfiction-books': { items: favoriteNonfictionBooks, title: 'Favorite Nonfiction Books', icon: 'ph:book-open' },
+    novels: { items: favoriteNovels, title: 'Favorite Novels', icon: 'ph:book' },
+    webnovels: { items: favoriteWebnovels, title: 'Favorite Web Novels', icon: 'ph:scroll' },
+    concepts: { items: favoriteConcepts, title: 'Favorite Concepts', icon: 'ph:lightbulb' },
+    'kl-ai-communities': { items: klAiCommunities, title: 'KL AI Communities', icon: 'ph:users-three' },
+    'kl-tech-communities': { items: klTechCommunities, title: 'KL Tech Communities', icon: 'ph:code' },
+    'student-ambassador-programs': { items: studentAmbassadorPrograms, title: 'Student Tech Ambassador Programs', icon: 'ph:student', sourceUrl: studentProgramsSourceUrl },
+    'developer-ambassador-programs': { items: developerAmbassadorPrograms, title: 'Developer Ambassador Programs', icon: 'ph:trophy', sourceUrl: developerProgramsSourceUrl },
+    'student-free-perks': { items: studentFreePerks, title: 'Student Free Perks', icon: 'ph:gift', sourceUrl: studentPerksSourceUrl },
+    'startup-accelerators': { items: startupAccelerators, title: 'Best Startup Accelerators', icon: 'ph:rocket-launch' },
+    'malaysia-gov-grants': { items: malaysiaGovGrants, title: 'Malaysia Government Grants', icon: 'ph:bank', sourceUrl: malaysiaGrantsSourceUrl },
+    'global-student-competitions': { items: globalStudentCompetitions, title: 'Global Student Competitions', icon: 'ph:trophy' },
+    'malaysia-student-competitions': { items: malaysiaStudentCompetitions, title: 'Malaysia Student Competitions', icon: 'ph:medal' },
+    'malaysia-open-competitions': { items: malaysiaOpenCompetitions, title: 'Malaysia Open Competitions', icon: 'ph:flag-banner' },
+    'startup-learning-resources': { items: startupLearningResources, title: 'Startup Learning Resources', icon: 'ph:graduation-cap' },
+    'startup-ideation': { items: startupIdeation, title: 'Startup Ideation', icon: 'ph:lightbulb-filament' },
+    'startup-building-mvp': { items: startupBuildingMvp, title: 'Building MVPs', icon: 'ph:hammer' },
+    'startup-fundraising': { items: startupFundraising, title: 'Startup Fundraising', icon: 'ph:hand-coins' },
+    'startup-marketing-growth': { items: startupMarketingGrowth, title: 'Startup Marketing & Growth', icon: 'ph:chart-line-up' },
+    'startup-ai-tech-stack': { items: startupAiTechStack, title: 'AI Tech Stack for Startups', icon: 'ph:stack' },
+    'my-startup-tools': { items: myStartupTools, title: 'Tools My Startup Uses', icon: 'ph:toolbox' }
+};
+
+const data = listData[category || 'products'];
+const items = data?.items || [];
+const title = data?.title || 'List';
+const icon = data?.icon || 'ph:list-bullets';
+const sourceUrl = data?.sourceUrl;
+---
+
+<Layout title={`${title} | Rashad`} description={title}>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <div class="mb-6">
+                <a
+                    href="/resources"
+                    class="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mb-4"
+                >
+                    <Icon name="ph:arrow-left" width={16} height={16} />
+                    <span>Back to all resources</span>
+                </a>
+            </div>
+
+            <SectionContent title={title} classes="!px-0">
+                <div class="flex items-center gap-2 text-neutral-600 mb-4">
+                    <Icon name={icon} width={24} height={24} />
+                    <span class="font-mono text-sm">{items.length} items</span>
+                </div>
+            </SectionContent>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
+                {items.map((item: any) => (
+                    <div class="border border-border rounded-lg p-6 bg-surface-secondary hover:shadow-md transition-all duration-300">
+                        <div class="flex items-start gap-4 mb-3">
+                            {item.image && (
+                                <div class="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl bg-background/80 border border-border/60">
+                                    <img
+                                        src={item.image}
+                                        alt={`${item.name} logo`}
+                                        class="max-h-8 w-full object-contain opacity-75"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            )}
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-lg text-content-headings mb-2">
+                                    {item.name}
+                                </h3>
+                                {item.description && (
+                                    <p class="text-sm text-content-muted mb-3">
+                                        {item.description}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+
+                        {item.tags && item.tags.length > 0 && (
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                {item.tags.map((tag: string) => (
+                                    <span class="text-xs px-2 py-1 bg-surface-tertiary text-content-subtle rounded-full font-mono">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {item.url && (
+                            <a
+                                href={item.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors group"
+                            >
+                                <span>Visit</span>
+                                <Icon
+                                    name="ph:arrow-square-out"
+                                    width={16}
+                                    height={16}
+                                    class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                />
+                            </a>
+                        )}
+                    </div>
+                ))}
+            </div>
+
+            {sourceUrl && (
+                <div class="mt-8 text-center">
+                    <a
+                        href={sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-2 text-sm text-content-muted hover:text-blue-600 transition-colors"
+                    >
+                        <span>See more programs</span>
+                        <Icon name="ph:arrow-square-out" width={14} height={14} />
+                    </a>
+                </div>
+            )}
+        </GridBox>
+    </Grid>
+</Layout>

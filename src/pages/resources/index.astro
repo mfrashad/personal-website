@@ -1,0 +1,91 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import ResourcesFilter from '@components/resources/ResourcesFilter';
+import { favoriteProducts } from '@data/lists/favorite-products';
+import { favoriteSoftware } from '@data/lists/favorite-software';
+import { favoritePodcasts } from '@data/lists/favorite-podcasts';
+import { favoriteBlogs } from '@data/lists/favorite-blogs';
+import { favoriteGames } from '@data/lists/favorite-games';
+import { favoriteMusic } from '@data/lists/favorite-music';
+import { favoritePeople } from '@data/lists/favorite-people';
+import { favoriteAnime } from '@data/lists/favorite-anime';
+import { favoriteNonfictionBooks } from '@data/lists/favorite-nonfiction-books';
+import { favoriteNovels } from '@data/lists/favorite-novels';
+import { favoriteWebnovels } from '@data/lists/favorite-webnovels';
+import { favoriteConcepts } from '@data/lists/favorite-concepts';
+import { klAiCommunities } from '@data/lists/kl-ai-communities';
+import { klTechCommunities } from '@data/lists/kl-tech-communities';
+import { studentAmbassadorPrograms } from '@data/lists/student-ambassador-programs';
+import { developerAmbassadorPrograms } from '@data/lists/developer-ambassador-programs';
+import { studentFreePerks } from '@data/lists/student-free-perks';
+import { startupAccelerators } from '@data/lists/startup-accelerators';
+import { malaysiaGovGrants } from '@data/lists/malaysia-gov-grants';
+import { globalStudentCompetitions } from '@data/lists/global-student-competitions';
+import { malaysiaStudentCompetitions } from '@data/lists/malaysia-student-competitions';
+import { malaysiaOpenCompetitions } from '@data/lists/malaysia-open-competitions';
+import { startupLearningResources } from '@data/lists/startup-learning-resources';
+import { startupIdeation } from '@data/lists/startup-ideation';
+import { startupBuildingMvp } from '@data/lists/startup-building-mvp';
+import { startupFundraising } from '@data/lists/startup-fundraising';
+import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
+import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
+import { myStartupTools } from '@data/lists/my-startup-tools';
+
+const lists = [
+    { title: 'Best Purchases', items: favoriteProducts, href: '/resources/products', icon: 'ph:shopping-bag', tags: ['tools', 'favorites'] },
+    { title: 'Favorite Software', items: favoriteSoftware, href: '/resources/software', icon: 'ph:app-window', tags: ['tools', 'favorites'] },
+    { title: 'Favorite Games', items: favoriteGames, href: '/resources/games', icon: 'ph:game-controller', tags: ['games', 'favorites'] },
+    { title: 'Favorite Anime', items: favoriteAnime, href: '/resources/anime', icon: 'ph:television', tags: ['anime', 'favorites'] },
+    { title: 'Favorite Nonfiction Books', items: favoriteNonfictionBooks, href: '/resources/nonfiction-books', icon: 'ph:book-open', tags: ['books', 'favorites'] },
+    { title: 'Favorite Novels', items: favoriteNovels, href: '/resources/novels', icon: 'ph:book', tags: ['books', 'favorites'] },
+    { title: 'Favorite Web Novels', items: favoriteWebnovels, href: '/resources/webnovels', icon: 'ph:scroll', tags: ['books', 'favorites'] },
+    { title: 'Favorite Concepts', items: favoriteConcepts, href: '/resources/concepts', icon: 'ph:lightbulb', tags: ['learning', 'favorites'] },
+    { title: 'Favorite Podcasts', items: favoritePodcasts, href: '/resources/podcasts', icon: 'ph:microphone', tags: ['learning', 'favorites'] },
+    { title: 'Favorite Blogs', items: favoriteBlogs, href: '/resources/blogs', icon: 'ph:article', tags: ['learning', 'favorites'] },
+    { title: 'Favorite Music', items: favoriteMusic, href: '/resources/music', icon: 'ph:music-notes', tags: ['favorites'] },
+    { title: 'People Who Inspire Me', items: favoritePeople, href: '/resources/people', icon: 'ph:users', tags: ['favorites'] },
+    { title: 'KL AI Communities', items: klAiCommunities, href: '/resources/kl-ai-communities', icon: 'ph:users-three', tags: ['communities', 'malaysia'] },
+    { title: 'KL Tech Communities', items: klTechCommunities, href: '/resources/kl-tech-communities', icon: 'ph:code', tags: ['communities', 'malaysia'] },
+    { title: 'Student Tech Ambassador Programs', items: studentAmbassadorPrograms, href: '/resources/student-ambassador-programs', icon: 'ph:student', tags: ['student', 'freebies', 'opportunities'] },
+    { title: 'Developer Ambassador Programs', items: developerAmbassadorPrograms, href: '/resources/developer-ambassador-programs', icon: 'ph:trophy', tags: ['freebies', 'opportunities'] },
+    { title: 'Student Free Perks', items: studentFreePerks, href: '/resources/student-free-perks', icon: 'ph:gift', tags: ['student', 'freebies', 'opportunities'] },
+    { title: 'Best Startup Accelerators', items: startupAccelerators, href: '/resources/startup-accelerators', icon: 'ph:rocket-launch', tags: ['startup', 'funding', 'opportunities'] },
+    { title: 'Malaysia Government Grants', items: malaysiaGovGrants, href: '/resources/malaysia-gov-grants', icon: 'ph:bank', tags: ['startup', 'grants', 'funding', 'malaysia', 'opportunities'] },
+    { title: 'Global Student Competitions', items: globalStudentCompetitions, href: '/resources/global-student-competitions', icon: 'ph:trophy', tags: ['student', 'competitions', 'opportunities'] },
+    { title: 'Malaysia Student Competitions', items: malaysiaStudentCompetitions, href: '/resources/malaysia-student-competitions', icon: 'ph:medal', tags: ['student', 'competitions', 'malaysia', 'opportunities'] },
+    { title: 'Malaysia Open Competitions', items: malaysiaOpenCompetitions, href: '/resources/malaysia-open-competitions', icon: 'ph:flag-banner', tags: ['competitions', 'malaysia', 'opportunities'] },
+    { title: 'Startup Learning Resources', items: startupLearningResources, href: '/resources/startup-learning-resources', icon: 'ph:graduation-cap', tags: ['startup', 'learning'] },
+    { title: 'Startup Ideation', items: startupIdeation, href: '/resources/startup-ideation', icon: 'ph:lightbulb-filament', tags: ['startup', 'learning'] },
+    { title: 'Building MVPs', items: startupBuildingMvp, href: '/resources/startup-building-mvp', icon: 'ph:hammer', tags: ['startup', 'learning'] },
+    { title: 'Startup Fundraising', items: startupFundraising, href: '/resources/startup-fundraising', icon: 'ph:hand-coins', tags: ['startup', 'funding', 'learning'] },
+    { title: 'Startup Marketing & Growth', items: startupMarketingGrowth, href: '/resources/startup-marketing-growth', icon: 'ph:chart-line-up', tags: ['startup', 'learning'] },
+    { title: 'AI Tech Stack for Startups', items: startupAiTechStack, href: '/resources/startup-ai-tech-stack', icon: 'ph:stack', tags: ['startup', 'tools'] },
+    { title: 'Tools My Startup Uses', items: myStartupTools, href: '/resources/my-startup-tools', icon: 'ph:toolbox', tags: ['startup', 'tools'] },
+].filter(list => list.items.length > 0);
+
+// Extract all unique tags and sort them
+const allTags = [...new Set(lists.flatMap(list => list.tags))].sort();
+---
+
+<Layout
+    title="Resources | Rashad"
+    description="Curated resources for startups, students, and creators"
+>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Resources" classes="!px-0">
+                <p>
+                    Curated resources and recommendations - from startup tools to learning materials.
+                    Based on personal experience and genuine appreciation.
+                </p>
+            </SectionContent>
+
+            <div class="my-8">
+                <ResourcesFilter lists={lists} allTags={allTags} client:load />
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>
