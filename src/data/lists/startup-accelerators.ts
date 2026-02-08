@@ -13,7 +13,7 @@ export const startupAccelerators: AcceleratorItem[] = [
         tags: ['Top tier'],
     },
     {
-        name: 'Antler ($400k for 10%)',
+        name: 'Antler ($100K-$400K for 10%)',
         description: 'Global day-zero investor with residency programs. $250k for 10% + $150k MFN SAFE. Strong Asia presence including Singapore, KL.',
         url: 'https://www.antler.co/',
         tags: ['Global', 'Co-founder matching'],

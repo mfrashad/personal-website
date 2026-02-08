@@ -12,7 +12,7 @@ import { Icon } from 'astro-icon/components';
 import SideProjectSection from '@components/SideProjectSection.astro';
 
 // New components
-import BioSlider from '@components/home/BioSlider';
+import MinimalBioSlider from '@components/home/MinimalBioSlider';
 import ContributionGraph from '@components/writings/ContributionGraph';
 import MediaMentionList from '@components/MediaMentionList';
 import AchievementGrid from '@components/home/AchievementGrid';
@@ -28,8 +28,6 @@ import AnimationProvider from '@components/animations/AnimationProvider';
 import { HeroBackground } from '@components/animations/MorphingBlob';
 import AnimatedDivider from '@components/animations/AnimatedDivider';
 import { DoodleArrow, DoodleSquiggle } from '@components/animations/Doodles';
-import AnnotatedHeadline from '@components/ui/AnnotatedHeadline';
-import AnnotatedText from '@components/ui/AnnotatedText';
 
 // Import profile polaroid for mobile (WebP optimized)
 import profileImg from '@assets/polaroids/profile.webp';
@@ -38,13 +36,65 @@ import profileImg from '@assets/polaroids/profile.webp';
 import { achievements, metrics } from '@data/achievements';
 import { brandKit } from '@data/brand-kit';
 import { mediaMentions } from '@data/media-mentions';
+// All lists imports
 import { favoriteProducts } from '@data/lists/favorite-products';
 import { favoriteSoftware } from '@data/lists/favorite-software';
-import { favoritePodcasts } from '@data/lists/favorite-podcasts';
-import { favoriteBlogs } from '@data/lists/favorite-blogs';
-import { favoriteMusic } from '@data/lists/favorite-music';
 import { favoriteGames } from '@data/lists/favorite-games';
-import { favoritePeople } from '@data/lists/favorite-people';
+import { favoriteAnime } from '@data/lists/favorite-anime';
+import { favoriteNonfictionBooks } from '@data/lists/favorite-nonfiction-books';
+import { favoriteNovels } from '@data/lists/favorite-novels';
+import { favoriteWebnovels } from '@data/lists/favorite-webnovels';
+import { favoriteConcepts } from '@data/lists/favorite-concepts';
+import { klAiCommunities } from '@data/lists/kl-ai-communities';
+import { klTechCommunities } from '@data/lists/kl-tech-communities';
+import { studentAmbassadorPrograms } from '@data/lists/student-ambassador-programs';
+import { developerAmbassadorPrograms } from '@data/lists/developer-ambassador-programs';
+import { studentFreePerks } from '@data/lists/student-free-perks';
+import { startupAccelerators } from '@data/lists/startup-accelerators';
+import { malaysiaGovGrants } from '@data/lists/malaysia-gov-grants';
+import { globalStudentCompetitions } from '@data/lists/global-student-competitions';
+import { malaysiaStudentCompetitions } from '@data/lists/malaysia-student-competitions';
+import { malaysiaOpenCompetitions } from '@data/lists/malaysia-open-competitions';
+import { startupLearningResources } from '@data/lists/startup-learning-resources';
+import { startupIdeation } from '@data/lists/startup-ideation';
+import { startupBuildingMvp } from '@data/lists/startup-building-mvp';
+import { startupFundraising } from '@data/lists/startup-fundraising';
+import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
+import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
+import { myStartupTools } from '@data/lists/my-startup-tools';
+
+// All available lists with metadata
+const allLists = [
+    { title: 'Best Purchases', items: favoriteProducts, href: '/resources/products', icon: 'ph:shopping-bag' },
+    { title: 'Favorite Software', items: favoriteSoftware, href: '/resources/software', icon: 'ph:app-window' },
+    { title: 'Favorite Games', items: favoriteGames, href: '/resources/games', icon: 'ph:game-controller' },
+    { title: 'Favorite Anime', items: favoriteAnime, href: '/resources/anime', icon: 'ph:television' },
+    { title: 'Favorite Nonfiction Books', items: favoriteNonfictionBooks, href: '/resources/nonfiction-books', icon: 'ph:book-open' },
+    { title: 'Favorite Novels', items: favoriteNovels, href: '/resources/novels', icon: 'ph:book' },
+    { title: 'Favorite Web Novels', items: favoriteWebnovels, href: '/resources/webnovels', icon: 'ph:scroll' },
+    { title: 'Favorite Concepts', items: favoriteConcepts, href: '/resources/concepts', icon: 'ph:lightbulb' },
+    { title: 'KL AI Communities', items: klAiCommunities, href: '/resources/kl-ai-communities', icon: 'ph:users-three' },
+    { title: 'KL Tech Communities', items: klTechCommunities, href: '/resources/kl-tech-communities', icon: 'ph:code' },
+    { title: 'Student Ambassador Programs', items: studentAmbassadorPrograms, href: '/resources/student-ambassador-programs', icon: 'ph:student' },
+    { title: 'Developer Ambassador Programs', items: developerAmbassadorPrograms, href: '/resources/developer-ambassador-programs', icon: 'ph:trophy' },
+    { title: 'Student Free Perks', items: studentFreePerks, href: '/resources/student-free-perks', icon: 'ph:gift' },
+    { title: 'Startup Accelerators', items: startupAccelerators, href: '/resources/startup-accelerators', icon: 'ph:rocket-launch' },
+    { title: 'Malaysia Gov Grants', items: malaysiaGovGrants, href: '/resources/malaysia-gov-grants', icon: 'ph:bank' },
+    { title: 'Global Student Competitions', items: globalStudentCompetitions, href: '/resources/global-student-competitions', icon: 'ph:trophy' },
+    { title: 'Malaysia Student Competitions', items: malaysiaStudentCompetitions, href: '/resources/malaysia-student-competitions', icon: 'ph:medal' },
+    { title: 'Malaysia Open Competitions', items: malaysiaOpenCompetitions, href: '/resources/malaysia-open-competitions', icon: 'ph:flag-banner' },
+    { title: 'Startup Learning Resources', items: startupLearningResources, href: '/resources/startup-learning-resources', icon: 'ph:graduation-cap' },
+    { title: 'Startup Ideation', items: startupIdeation, href: '/resources/startup-ideation', icon: 'ph:lightbulb-filament' },
+    { title: 'Building MVPs', items: startupBuildingMvp, href: '/resources/startup-building-mvp', icon: 'ph:hammer' },
+    { title: 'Startup Fundraising', items: startupFundraising, href: '/resources/startup-fundraising', icon: 'ph:hand-coins' },
+    { title: 'Startup Marketing & Growth', items: startupMarketingGrowth, href: '/resources/startup-marketing-growth', icon: 'ph:chart-line-up' },
+    { title: 'AI Tech Stack', items: startupAiTechStack, href: '/resources/startup-ai-tech-stack', icon: 'ph:stack' },
+    { title: 'My Startup Tools', items: myStartupTools, href: '/resources/my-startup-tools', icon: 'ph:toolbox' },
+].filter(list => list.items.length > 0);
+
+// Randomly select 9 lists
+const shuffled = [...allLists].sort(() => Math.random() - 0.5);
+const selectedLists = shuffled.slice(0, 9);
 
 // Content collections
 import { getCollection } from 'astro:content';
@@ -127,7 +177,7 @@ import BookSection from '@components/books/BookSection.astro';
                                 name="sticker-smiley-40"
                             />
                         </div>
-                        I'm <AnnotatedHeadline client:visible>Rashad</AnnotatedHeadline>,
+                        I'm Rashad,
                     </Headline>
 
                     <!-- Mobile Polaroid - Only visible on mobile/tablet -->
@@ -180,11 +230,11 @@ import BookSection from '@components/books/BookSection.astro';
                             </a>
                         ))}
                     </div>
-                </div>
-            </GridBox>
-            <GridBox desktopStart={3} desktopEnd={11}>
-                <div class="relative max-w-3xl mx-auto w-full">
-                    <BioSlider bios={brandKit.bios} timeline={brandKit.timeline} client:load />
+
+                    <!-- Minimal Bio Slider -->
+                    <div class="relative z-[120]">
+                        <MinimalBioSlider bios={brandKit.bios} client:load />
+                    </div>
                 </div>
             </GridBox>
         </Grid>
@@ -194,8 +244,7 @@ import BookSection from '@components/books/BookSection.astro';
 
         <!-- Media Mentions Section -->
         <section>
-            <SectionContent>
-                <span slot="title"><AnnotatedText client:visible type="underline" delay={400}>Media Mentions</AnnotatedText></span>
+            <SectionContent title="Media Mentions">
                 Featured in publications and media outlets for my work in machine learning and software engineering.
                 <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Get press assets →</a>
             </SectionContent>
@@ -210,8 +259,7 @@ import BookSection from '@components/books/BookSection.astro';
 
         <!-- Stats Section -->
         <section>
-            <SectionContent>
-                <span slot="title"><AnnotatedText client:visible type="highlight" delay={500}>Stats & Metrics</AnnotatedText></span>
+            <SectionContent title="Stats & Metrics">
                 A quick snapshot of my journey and impact across different areas.
             </SectionContent>
             <Grid>
@@ -225,8 +273,7 @@ import BookSection from '@components/books/BookSection.astro';
 
         <!-- Speaking Section -->
         <section>
-            <SectionContent>
-                <span slot="title"><AnnotatedText client:visible type="circle" delay={600}>Speaking</AnnotatedText></span>
+            <SectionContent title="Speaking">
                 I speak at conferences and meetups about machine learning, AI, and software engineering.
                 <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Speaker kit →</a>
             </SectionContent>
@@ -252,8 +299,7 @@ import BookSection from '@components/books/BookSection.astro';
 
         <!-- Writings Section -->
         <section>
-            <SectionContent>
-                <span slot="title"><AnnotatedText client:visible type="box" delay={700}>Writings</AnnotatedText></span>
+            <SectionContent title="Writings">
                 <div class="flex flex-col gap-2">
                     <p>From quick notes to long-form essays. I write about machine learning, software engineering, and personal growth.</p>
                     <div class="text-sm text-neutral-500">
@@ -347,24 +393,14 @@ import BookSection from '@components/books/BookSection.astro';
             <Grid>
                 <GridBox desktopFull>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <ListPreview
-                            title="Best Purchases"
-                            items={favoriteProducts}
-                            href="/resources/products"
-                            icon="ph:shopping-bag"
-                        />
-                        <ListPreview
-                            title="Favorite Software"
-                            items={favoriteSoftware}
-                            href="/resources/software"
-                            icon="ph:app-window"
-                        />
-                        <ListPreview
-                            title="Favorite Games"
-                            items={favoriteGames}
-                            href="/resources/games"
-                            icon="ph:game-controller"
-                        />
+                        {selectedLists.map((list) => (
+                            <ListPreview
+                                title={list.title}
+                                items={list.items}
+                                href={list.href}
+                                icon={list.icon}
+                            />
+                        ))}
                     </div>
 
                     <!-- View All Button -->
