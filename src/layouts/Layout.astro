@@ -32,17 +32,6 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
         <meta charset="UTF-8" />
         <meta name="description" content={adjustedDescription} />
         <meta name="viewport" content="width=device-width" />
-        <!-- Theme initialization - must be inline and blocking to prevent flash -->
-        <script is:inline>
-            (function() {
-                const stored = localStorage.getItem('theme');
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const isDark = stored === 'dark' || (stored === 'system' && prefersDark);
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                }
-            })();
-        </script>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

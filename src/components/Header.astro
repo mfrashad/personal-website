@@ -2,7 +2,6 @@
 import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
 import { Icon } from 'astro-icon/components';
-import ThemeToggle from './ThemeToggle';
 
 interface NavItem {
     name: string;
@@ -76,7 +75,6 @@ export const navData: NavItem[] = [
                         </a>
                     ))
                 }
-                <ThemeToggle client:load />
             </nav>
         </GridBox>
     </Grid>
