@@ -2,16 +2,15 @@
 import Layout from '@layouts/Layout.astro';
 import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
-import BookmarkItem from '@components/bookmarks/BookmarkItem.astro';
-import TagCloud from '@components/TagCloud.astro';
+import BookmarksFilter from '@components/bookmarks/BookmarksFilter';
 import { fetchBookmarks } from 'src/api/raindrop';
-import type { Bookmark } from '@components/bookmarks/BookmarkItem.astro';
+import type { Bookmark } from '@components/bookmarks/BookmarksFilter';
 import BookmarksStage from '@components/bookmarks/BookmarksStage.astro';
 
-const bookmarks: Bookmark[] = await fetchBookmarks(0);
+const bookmarks: Bookmark[] = (await fetchBookmarks(0)) || [];
 
 // Get tag counts
-const allTags = bookmarks.flatMap((bookmark) => bookmark.tags);
+const allTags = (bookmarks || []).flatMap((bookmark) => bookmark.tags || []);
 const tagCounts = allTags.reduce(
     (acc, tag) => {
         acc[tag] = (acc[tag] || 0) + 1;
@@ -29,16 +28,11 @@ tags.sort((a, b) => b.count - a.count);
     <BookmarksStage />
     <Grid classes="mt-16">
         <GridBox desktopFull>
-            <TagCloud 
-                tags={tags} 
-                basePath="/bookmarks" 
-                filterPath="tag"
-                filterLabel="tag"
-                total={bookmarks.length} 
+            <BookmarksFilter
+                client:load
+                bookmarks={bookmarks}
+                allTags={tags}
             />
-            <ul class="mb-40">
-                {bookmarks.map((bookmark: Bookmark) => <BookmarkItem bookmark={bookmark} />)}
-            </ul>
         </GridBox>
     </Grid>
 </Layout>
@@ -54,5 +48,3 @@ tags.sort((a, b) => b.count - a.count);
         text-underline-offset: 0.2em;
     }
 </style>
-
-<script src="../../scripts/listItemImageHoverEffect.js"></script>

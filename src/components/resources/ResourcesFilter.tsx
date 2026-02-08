@@ -148,19 +148,21 @@ export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps
 
                 {/* Tag Filters */}
                 <div className="flex flex-wrap gap-2">
-                    {allTags.map((tag) => (
-                        <button
-                            key={tag}
-                            onClick={() => toggleTag(tag)}
-                            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                                selectedTags.includes(tag)
-                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
-                                    : 'bg-surface-tertiary text-content-subtle hover:bg-surface-secondary hover:text-content-body'
-                            }`}
-                        >
-                            {tag}
-                        </button>
-                    ))}
+                    {allTags.map((tag) => {
+                        const isActive = selectedTags.includes(tag);
+                        return (
+                            <button
+                                key={tag}
+                                onClick={() => toggleTag(tag)}
+                                className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                                    !isActive ? 'bg-surface-tertiary text-content-subtle hover:bg-surface-secondary hover:text-content-body' : ''
+                                }`}
+                                style={isActive ? { backgroundColor: '#d1fae5', color: '#047857' } : undefined}
+                            >
+                                {tag}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Active Filters Summary */}
@@ -215,53 +217,74 @@ export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps
                             {/* List Tags */}
                             {list.tags.length > 0 && (
                                 <div className="mb-3 flex flex-wrap gap-1">
-                                    {list.tags.map((tag) => (
-                                        <span
-                                            key={tag}
-                                            className={`cursor-pointer rounded-full px-2 py-0.5 font-mono text-[10px] transition-colors ${
-                                                selectedTags.includes(tag)
-                                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
-                                                    : 'bg-surface-tertiary text-content-subtle hover:bg-surface-secondary'
-                                            }`}
-                                            onClick={() => toggleTag(tag)}
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
+                                    {list.tags.map((tag) => {
+                                        const isActive = selectedTags.includes(tag);
+                                        return (
+                                            <span
+                                                key={tag}
+                                                className={`cursor-pointer rounded-full px-2 py-0.5 font-mono text-[10px] transition-colors ${
+                                                    !isActive ? 'bg-surface-tertiary text-content-subtle hover:bg-surface-secondary' : ''
+                                                }`}
+                                                style={isActive ? { backgroundColor: '#d1fae5', color: '#047857' } : undefined}
+                                                onClick={() => toggleTag(tag)}
+                                            >
+                                                {tag}
+                                            </span>
+                                        );
+                                    })}
                                 </div>
                             )}
 
                             <ul className="space-y-1">
-                                {list.items.map((item: any, index: number) => (
-                                    <li key={index} className="group/item">
-                                        <span className="relative inline-flex items-center gap-2 py-0.5 text-sm text-content-body">
-                                            {item.image && (
-                                                <img
-                                                    src={item.image}
-                                                    alt={`${item.name} logo`}
-                                                    className="h-5 w-5 rounded object-contain"
-                                                    loading="lazy"
-                                                />
-                                            )}
-                                            {item.url ? (
-                                                <a
-                                                    href={item.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1 transition-colors hover:text-blue-600"
-                                                >
-                                                    {item.name}
-                                                    <ArrowSquareOut
-                                                        size={12}
-                                                        className="opacity-0 transition-opacity group-hover/item:opacity-100"
+                                {list.items.map((item: any, index: number) => {
+                                    const hasDetails = item.description || (item.tags && item.tags.length > 0);
+                                    return (
+                                        <li key={index} className="group/item relative">
+                                            <span className="relative inline-flex items-center gap-2 py-0.5 text-sm text-content-body">
+                                                {item.image && (
+                                                    <img
+                                                        src={item.image}
+                                                        alt={`${item.name} logo`}
+                                                        className="h-5 w-5 rounded object-contain"
+                                                        loading="lazy"
                                                     />
-                                                </a>
-                                            ) : (
-                                                <span>{item.name}</span>
-                                            )}
-                                        </span>
-                                    </li>
-                                ))}
+                                                )}
+                                                {item.url ? (
+                                                    <a
+                                                        href={item.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1 transition-colors hover:text-blue-600"
+                                                    >
+                                                        {item.name}
+                                                        <ArrowSquareOut
+                                                            size={12}
+                                                            className="opacity-0 transition-opacity group-hover/item:opacity-100"
+                                                        />
+                                                    </a>
+                                                ) : (
+                                                    <span>{item.name}</span>
+                                                )}
+                                                {hasDetails && (
+                                                    <div className="item-tooltip">
+                                                        {item.description && (
+                                                            <div className="text-xs text-content-muted">{item.description}</div>
+                                                        )}
+                                                        {item.tags && item.tags.length > 0 && (
+                                                            <div className="flex flex-wrap gap-1 mt-1.5">
+                                                                {item.tags.map((tag: string, tagIndex: number) => (
+                                                                    <span key={tagIndex} className="text-[10px] px-1.5 py-0.5 bg-surface-tertiary text-content-subtle rounded-full font-mono">
+                                                                        {tag}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     ))}
@@ -288,6 +311,35 @@ export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps
 
                 .list-card {
                     break-inside: avoid;
+                }
+
+                .group\\/item {
+                    position: relative;
+                }
+
+                .item-tooltip {
+                    position: absolute;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%) translateX(4px);
+                    z-index: 50;
+                    width: max-content;
+                    max-width: 280px;
+                    padding: 0.5rem 0.75rem;
+                    background: var(--color-bg-overlay, #fff);
+                    border: 1px solid var(--color-border-default, #e5e5e5);
+                    border-radius: 0.5rem;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    pointer-events: none;
+                    opacity: 0;
+                    transition: opacity 0.15s ease, transform 0.15s ease;
+                    margin-left: 0.25rem;
+                }
+
+                .group\\/item:hover .item-tooltip {
+                    opacity: 1;
+                    transform: translateY(-50%) translateX(0);
+                    pointer-events: auto;
                 }
             `}</style>
         </div>
