@@ -42,4 +42,16 @@ export const klAiCommunities: CommunityItem[] = [
         url: 'https://rakantutor.org/',
         image: '/communities/rakan-tutor-logo.png',
     },
+    {
+        name: 'Cursor Malaysia',
+        description: 'The Cursor community for Malaysia, hosting hackathons, meetups, and workshops for developers building with the AI-powered code editor.',
+        url: 'https://www.instagram.com/cursor.my/',
+        image: '/communities/cursor_my_logo.jpg',
+    },
+    {
+        name: 'CoderPuffs',
+        description: 'A women-first initiative where we learn coding and AI while café-hopping together.',
+        url: 'https://www.instagram.com/coderpuffs/',
+        image: '/communities/coderpuffs_logo.jpg',
+    },
 ];
