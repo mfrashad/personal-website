@@ -14,7 +14,8 @@
             "@api/*": ["src/api/*"],
             "@mdx/*": ["src/components/mdx/*"],
             "@types/*": ["src/types/*"],
-            "@scripts/*": ["scripts/*"]
+            "@scripts/*": ["scripts/*"],
+            "@lib/*": ["src/lib/*"]
         },
         "jsx": "react-jsx",
         "jsxImportSource": "react"
