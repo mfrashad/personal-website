@@ -62,10 +62,10 @@ export const studentAmbassadorPrograms: ProgramItem[] = [
         tags: ['No stipend', '$150/mo Azure + VS Enterprise + certs', 'Ongoing', 'Students (16+)'],
     },
     {
-        name: 'Lovable Student Discount',
-        description: '50% off Lovable Pro for verified students. Lovable is an AI-powered tool to build and deploy web apps by chatting with AI.\n\n<strong>Discount:</strong> 50% off Lovable Pro subscription\n<strong>Features:</strong> Chat with AI to build web apps, sync with GitHub, one-click deploy\n<strong>Eligibility:</strong> Verified students\n<strong>Note:</strong> The Campus Leaders school giveaway ($100k/school) ran as a one-time promotion ending Jan 30, 2026.',
-        url: 'https://lovable.dev/students',
-        tags: ['No stipend', '50% off Pro', 'Ongoing', 'Students only'],
+        name: 'Lovable Campus Leaders',
+        description: 'Coming soon. Student-led program bringing Lovable to universities through meetups, hackathons, and more.\n\n<strong>Status:</strong> Coming soon \u2014 details not yet announced\n<strong>Format:</strong> Student-led meetups, hackathons, and community events at universities',
+        url: 'https://lovable.dev/community',
+        tags: ['Coming soon', 'Students only'],
     },
 ];
 
