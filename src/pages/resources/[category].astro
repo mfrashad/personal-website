@@ -33,6 +33,7 @@ import { startupFundraising } from '@data/lists/startup-fundraising';
 import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
 import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
 import { myStartupTools } from '@data/lists/my-startup-tools';
+import resourceImagesData from '@data/resource-images.json';
 
 export async function getStaticPaths() {
     return [
@@ -107,6 +108,30 @@ const items = data?.items || [];
 const title = data?.title || 'List';
 const icon = data?.icon || 'ph:list-bullets';
 const sourceUrl = data?.sourceUrl;
+
+const resourceImages = (resourceImagesData as any).images || {};
+
+function getImageKey(url?: string): string | null {
+    if (!url) return null;
+    try {
+        const hostname = new URL(url).hostname.replace(/^www\./, '');
+        return hostname.replace(/\./g, '-');
+    } catch {
+        return null;
+    }
+}
+
+function getItemImages(item: any) {
+    const key = getImageKey(item.url);
+    const manifest = key ? resourceImages[key] : null;
+    return {
+        // Manual image takes priority
+        manualImage: item.image || null,
+        favicon: manifest?.favicon || null,
+        ogImage: manifest?.ogImage || null,
+        screenshot: manifest?.screenshot || null,
+    };
+}
 ---
 
 <Layout title={`${title} | Rashad`} description={title}>
@@ -130,59 +155,105 @@ const sourceUrl = data?.sourceUrl;
             </SectionContent>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
-                {items.map((item: any) => (
-                    <div class="border border-border rounded-lg p-6 bg-surface-secondary hover:shadow-md transition-all duration-300">
-                        <div class="flex items-start gap-4 mb-3">
-                            {item.image && (
-                                <div class="flex h-12 w-16 shrink-0 items-center justify-center rounded-xl bg-background/80 border border-border/60">
+                {items.map((item: any) => {
+                    const images = getItemImages(item);
+                    const bannerSrc = images.manualImage ? null : (images.ogImage || images.screenshot);
+                    const iconSrc = images.manualImage || images.favicon;
+                    return (
+                        <div class="border border-border rounded-lg bg-surface-secondary hover:shadow-md transition-all duration-300 overflow-visible">
+                            {/* Banner image — OG image, screenshot fallback, or gradient */}
+                            <div class="w-full h-32 rounded-t-lg overflow-hidden bg-surface-tertiary relative">
+                                {bannerSrc ? (
                                     <img
-                                        src={item.image}
-                                        alt={`${item.name} logo`}
-                                        class="max-h-8 w-full object-contain opacity-75"
+                                        src={bannerSrc}
+                                        alt={`${item.name} preview`}
+                                        class="w-full h-full object-cover"
                                         loading="lazy"
+                                        onerror="this.style.display='none'"
                                     />
-                                </div>
-                            )}
-                            <div class="flex-1">
+                                ) : (
+                                    <div class="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200" />
+                                )}
+                            </div>
+
+                            {/* Icon badge — centered, overlapping the image/content boundary */}
+                            <div class="flex justify-center -mt-5 relative z-10">
+                                {iconSrc ? (
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-secondary border-2 border-border shadow-sm">
+                                        <img
+                                            src={iconSrc}
+                                            alt={`${item.name} icon`}
+                                            class="h-5 w-5 rounded-sm object-contain"
+                                            loading="lazy"
+                                        />
+                                    </div>
+                                ) : (
+                                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-secondary border-2 border-border shadow-sm">
+                                        <Icon name={icon} width={18} height={18} class="text-content-muted" />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Card content */}
+                            <div class="px-6 pb-6 pt-3 text-center">
                                 <h3 class="font-semibold text-lg text-content-headings mb-2">
                                     {item.name}
                                 </h3>
                                 {item.description && (
-                                    <p class="text-sm text-content-muted mb-3">
+                                    <p class="text-sm text-content-muted mb-3 text-left">
                                         {item.description}
                                     </p>
                                 )}
+
+                                {item.tags && item.tags.length > 0 && (
+                                    <div class="flex flex-wrap justify-center gap-1 mb-3">
+                                        {item.tags.map((tag: string) => (
+                                            <span class="text-xs px-2 py-1 bg-surface-tertiary text-content-subtle rounded-full font-mono">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {item.url && (
+                                    <div class="flex items-center justify-center gap-3">
+                                        <a
+                                            href={item.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors group"
+                                        >
+                                            <span>Visit</span>
+                                            <Icon
+                                                name="ph:arrow-square-out"
+                                                width={16}
+                                                height={16}
+                                                class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                            />
+                                        </a>
+                                        {images.screenshot && (
+                                            <button
+                                                class="screenshot-btn"
+                                                data-screenshot={images.screenshot}
+                                                data-name={item.name}
+                                                aria-label={`View ${item.name} screenshot`}
+                                            >
+                                                <Icon name="ph:monitor" width={16} height={16} class="text-content-muted hover:text-blue-600 cursor-pointer transition-colors" />
+                                                <div class="screenshot-tooltip">
+                                                    <img
+                                                        src={images.screenshot}
+                                                        alt={`${item.name} screenshot`}
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
-
-                        {item.tags && item.tags.length > 0 && (
-                            <div class="flex flex-wrap gap-1 mb-3">
-                                {item.tags.map((tag: string) => (
-                                    <span class="text-xs px-2 py-1 bg-surface-tertiary text-content-subtle rounded-full font-mono">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
-                        {item.url && (
-                            <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors group"
-                            >
-                                <span>Visit</span>
-                                <Icon
-                                    name="ph:arrow-square-out"
-                                    width={16}
-                                    height={16}
-                                    class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                                />
-                            </a>
-                        )}
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {sourceUrl && (
@@ -201,3 +272,126 @@ const sourceUrl = data?.sourceUrl;
         </GridBox>
     </Grid>
 </Layout>
+
+<style>
+    .screenshot-btn {
+        background: none;
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+    }
+    .screenshot-btn .screenshot-tooltip {
+        display: none;
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+        width: 280px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+        border: 1px solid var(--color-border, #e0e0e0);
+        background: white;
+        pointer-events: none;
+    }
+    .screenshot-btn .screenshot-tooltip img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .screenshot-btn:hover .screenshot-tooltip {
+        display: block;
+    }
+
+    #screenshot-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        padding: 24px;
+        cursor: pointer;
+    }
+    #screenshot-lightbox.open {
+        display: flex;
+    }
+    #screenshot-lightbox .lightbox-inner {
+        position: relative;
+        max-width: 900px;
+        width: 100%;
+        cursor: default;
+    }
+    #screenshot-lightbox .lightbox-title {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    #screenshot-lightbox img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    #screenshot-lightbox .lightbox-close {
+        position: absolute;
+        top: -12px;
+        right: -12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: #fff;
+        color: #333;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div id="screenshot-lightbox">
+    <div class="lightbox-inner">
+        <div class="lightbox-title" id="lightbox-title"></div>
+        <img id="lightbox-img" src="" alt="" />
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+    </div>
+</div>
+
+<script>
+    const lightbox = document.getElementById('screenshot-lightbox')!;
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lightboxTitle = document.getElementById('lightbox-title')!;
+    const lightboxClose = document.getElementById('lightbox-close')!;
+
+    document.querySelectorAll('.screenshot-btn').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const src = (btn as HTMLElement).dataset.screenshot || '';
+            const name = (btn as HTMLElement).dataset.name || '';
+            lightboxImg.src = src;
+            lightboxImg.alt = `${name} screenshot`;
+            lightboxTitle.textContent = name;
+            lightbox.classList.add('open');
+        });
+    });
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) lightbox.classList.remove('open');
+    });
+    lightboxClose.addEventListener('click', () => lightbox.classList.remove('open'));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') lightbox.classList.remove('open');
+    });
+</script>

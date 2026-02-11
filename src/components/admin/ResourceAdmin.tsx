@@ -250,6 +250,7 @@ export default function ResourceAdmin() {
                                     const isFetching = fetching === item.name;
                                     const faviconSrc = item.image || freshImages?.favicon || manifestImages.favicon;
                                     const ogSrc = freshImages?.ogImage || manifestImages.ogImage;
+                                    const screenshotSrc = (manifestImages as any).screenshot;
 
                                     return (
                                         <div key={item.name} style={styles.itemCard}>
@@ -411,7 +412,7 @@ export default function ResourceAdmin() {
                                                     </label>
 
                                                     {/* Image previews */}
-                                                    {(faviconSrc || ogSrc || edit.image) && (
+                                                    {(faviconSrc || ogSrc || screenshotSrc || edit.image) && (
                                                         <div style={styles.imagePreviews}>
                                                             <span
                                                                 style={{
@@ -447,6 +448,22 @@ export default function ResourceAdmin() {
                                                                         />
                                                                         <span style={styles.previewLabel}>
                                                                             OG Image
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                                {screenshotSrc && (
+                                                                    <div style={styles.imagePreview}>
+                                                                        <img
+                                                                            src={screenshotSrc}
+                                                                            alt="Screenshot"
+                                                                            style={{
+                                                                                ...styles.previewImg,
+                                                                                width: 160,
+                                                                                height: 90,
+                                                                            }}
+                                                                        />
+                                                                        <span style={styles.previewLabel}>
+                                                                            Screenshot
                                                                         </span>
                                                                     </div>
                                                                 )}

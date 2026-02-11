@@ -14,6 +14,8 @@
         "astro": "astro",
         "fetch:movies": "tsx scripts/fetch-letterboxd.ts",
         "fetch:cleve": "tsx scripts/fetch-cleve.ts",
+        "fetch:resource-images": "tsx scripts/fetch-resource-images.ts",
+        "fetch:resource-screenshots": "tsx scripts/fetch-resource-screenshots.ts",
         "migrate:blog": "tsx scripts/migrate-blog-frontmatter.ts",
         "build:links": "tsx scripts/generate-links.ts",
         "build:topics": "tsx scripts/generate-topics.ts",
@@ -89,6 +91,7 @@
         "prettier": "^3.1.0",
         "prettier-plugin-astro": "^0.12.2",
         "prettier-plugin-tailwindcss": "^0.0.0-insiders.38f2be3",
+        "puppeteer": "^24.37.2",
         "tsx": "^4.7.0"
     },
     "description": "## 🤖 Development",
