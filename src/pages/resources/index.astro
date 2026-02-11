@@ -41,6 +41,7 @@ import { aiResearchTools } from '@data/lists/ai-research-tools';
 import { aiDesignTools } from '@data/lists/ai-design-tools';
 import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
 import { learnProgramming } from '@data/lists/learn-programming';
+import { paidOpenSourcePrograms } from '@data/lists/paid-open-source-programs';
 import resourceImagesData from '@data/resource-images.json';
 
 const lists = [
@@ -81,6 +82,7 @@ const lists = [
     { title: 'AI Design Tools', items: aiDesignTools, href: '/resources/ai-design-tools', icon: 'ph:palette', tags: ['ai', 'tools'] },
     { title: 'AI Avatar Tools', items: aiAvatarTools, href: '/resources/ai-avatar-tools', icon: 'ph:user-circle', tags: ['ai', 'tools'] },
     { title: 'Learn Programming', items: learnProgramming, href: '/resources/learn-programming', icon: 'ph:code-block', tags: ['learning', 'tools'] },
+    { title: 'Paid Open Source Programs', items: paidOpenSourcePrograms, href: '/resources/paid-open-source-programs', icon: 'ph:currency-dollar', tags: ['open source', 'opportunities', 'student'] },
 ].filter(list => list.items.length > 0);
 
 // Extract all unique tags and sort them

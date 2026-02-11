@@ -244,7 +244,8 @@
       "screenshot": "/resource-images/screenshots/eranyc-com.png"
     },
     "cradle-com-my": {
-      "favicon": "/resource-images/favicons/cradle-com-my.jpg"
+      "favicon": "/resource-images/favicons/cradle-com-my.jpg",
+      "screenshot": "/resource-images/screenshots/cradle-com-my.png"
     },
     "mdec-my": {
       "favicon": "/resource-images/favicons/mdec-my.png",
@@ -269,7 +270,8 @@
       "screenshot": "/resource-images/screenshots/ekuinas-com-my.png"
     },
     "imaginecup-microsoft-com": {
-      "favicon": "/resource-images/favicons/imaginecup-microsoft-com.ico"
+      "favicon": "/resource-images/favicons/imaginecup-microsoft-com.ico",
+      "screenshot": "/resource-images/screenshots/imaginecup-microsoft-com.png"
     },
     "hultprize-org": {
       "favicon": "/resource-images/favicons/hultprize-org.png",
@@ -795,6 +797,29 @@
     },
     "leetcode-com": {
       "screenshot": "/resource-images/screenshots/leetcode-com.png"
+    },
+    "mentorship-lfx-linuxfoundation-org": {
+      "favicon": "/resource-images/favicons/mentorship-lfx-linuxfoundation-org.png",
+      "screenshot": "/resource-images/screenshots/mentorship-lfx-linuxfoundation-org.png"
+    },
+    "igalia-com": {
+      "favicon": "/resource-images/favicons/igalia-com.png",
+      "ogImage": "/resource-images/og/igalia-com.png",
+      "screenshot": "/resource-images/screenshots/igalia-com.png"
+    },
+    "outreachy-org": {
+      "ogImage": "/resource-images/og/outreachy-org.png",
+      "screenshot": "/resource-images/screenshots/outreachy-org.png"
+    },
+    "processingfoundation-org": {
+      "favicon": "/resource-images/favicons/processingfoundation-org.png",
+      "screenshot": "/resource-images/screenshots/processingfoundation-org.png"
+    },
+    "mystartup-gov-my": {
+      "screenshot": "/resource-images/screenshots/mystartup-gov-my.png"
+    },
+    "esoc-dev": {
+      "screenshot": "/resource-images/screenshots/esoc-dev.png"
     }
   }
 }
