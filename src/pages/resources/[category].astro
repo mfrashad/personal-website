@@ -227,9 +227,7 @@ function getItemImages(item: any) {
                                     {item.name}
                                 </h3>
                                 {item.description && (
-                                    <p class="text-sm text-content-muted mb-3 text-left whitespace-pre-line">
-                                        {item.description}
-                                    </p>
+                                    <p class="text-sm text-content-muted mb-3 text-left whitespace-pre-line" set:html={item.description} />
                                 )}
 
                                 {item.tags && item.tags.length > 0 && (

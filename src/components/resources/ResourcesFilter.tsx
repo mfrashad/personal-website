@@ -285,7 +285,7 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                                                 {hasDetails && (
                                                     <div className="item-tooltip">
                                                         {item.description && (
-                                                            <div className="text-xs text-content-muted whitespace-pre-line">{item.description}</div>
+                                                            <div className="text-xs text-content-muted whitespace-pre-line" dangerouslySetInnerHTML={{ __html: item.description }} />
                                                         )}
                                                         {item.tags && item.tags.length > 0 && (
                                                             <div className="flex flex-wrap gap-1 mt-1.5">
