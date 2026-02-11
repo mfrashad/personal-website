@@ -72,8 +72,8 @@ export const POST: APIRoute = async ({ request }) => {
         const buffer = Buffer.from(await file.arrayBuffer());
         fs.writeFileSync(filePath, buffer);
 
-        // Build relative path for manifest
-        const relativePath = `/resource-images/${TYPE_DIRS[imageType].split('/').slice(1).join('/')}/${filename}`;
+        // Build relative path for manifest (strip 'public/' prefix)
+        const relativePath = `/${TYPE_DIRS[imageType].replace('public/', '')}/${filename}`;
 
         // Update manifest
         let manifest = { images: {} as Record<string, any> };

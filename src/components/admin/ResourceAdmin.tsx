@@ -47,6 +47,7 @@ function ImageDropZone({
     const [dragging, setDragging] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [localPreview, setLocalPreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const zoneRef = useRef<HTMLDivElement>(null);
 
@@ -59,6 +60,9 @@ function ImageDropZone({
             setError('Not an image file');
             return;
         }
+        // Show local preview immediately
+        const blobUrl = URL.createObjectURL(file);
+        setLocalPreview(blobUrl);
         setUploading(true);
         setError(null);
         try {
@@ -72,6 +76,8 @@ function ImageDropZone({
             onUploaded(data.path, imageType);
         } catch (err: any) {
             setError(err.message);
+            setLocalPreview(null);
+            URL.revokeObjectURL(blobUrl);
         } finally {
             setUploading(false);
         }
@@ -99,6 +105,7 @@ function ImageDropZone({
     const isFavicon = imageType === 'favicon';
     const imgW = isFavicon ? 48 : 160;
     const imgH = isFavicon ? 48 : 90;
+    const displaySrc = localPreview || (currentSrc ? currentSrc + '?t=' + Date.now() : null);
 
     return (
         <div
@@ -139,9 +146,9 @@ function ImageDropZone({
                     e.target.value = '';
                 }}
             />
-            {currentSrc ? (
+            {displaySrc ? (
                 <img
-                    src={currentSrc + '?t=' + Date.now()}
+                    src={displaySrc}
                     alt={label}
                     style={{
                         width: imgW,
