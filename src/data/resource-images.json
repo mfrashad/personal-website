@@ -2,70 +2,88 @@
   "images": {
     "readwise-io": {
       "favicon": "/resource-images/favicons/readwise-io.png",
-      "ogImage": "/resource-images/og/readwise-io.jpg"
+      "ogImage": "/resource-images/og/readwise-io.jpg",
+      "screenshot": "/resource-images/screenshots/readwise-io.png"
     },
     "linear-app": {
-      "favicon": "/resource-images/favicons/linear-app.png"
+      "favicon": "/resource-images/favicons/linear-app.png",
+      "screenshot": "/resource-images/screenshots/linear-app.png"
     },
     "cursor-sh": {
       "favicon": "/resource-images/favicons/cursor-sh.png",
-      "ogImage": "/resource-images/og/cursor-sh.png"
+      "ogImage": "/resource-images/og/cursor-sh.png",
+      "screenshot": "/resource-images/screenshots/cursor-sh.png"
     },
     "cleve-ai": {
-      "favicon": "/resource-images/favicons/cleve-ai.png"
+      "favicon": "/resource-images/favicons/cleve-ai.png",
+      "screenshot": "/resource-images/screenshots/cleve-ai.png"
     },
     "posthog-com": {
       "favicon": "/resource-images/favicons/posthog-com.png",
-      "ogImage": "/resource-images/og/posthog-com.png"
+      "ogImage": "/resource-images/og/posthog-com.png",
+      "screenshot": "/resource-images/screenshots/posthog-com.png"
     },
     "docs-anthropic-com": {
       "favicon": "/resource-images/favicons/docs-anthropic-com.png",
-      "ogImage": "/resource-images/og/docs-anthropic-com.png"
+      "ogImage": "/resource-images/og/docs-anthropic-com.png",
+      "screenshot": "/resource-images/screenshots/docs-anthropic-com.png"
     },
     "buildclub-ai": {
       "favicon": "/resource-images/favicons/buildclub-ai.webp",
-      "ogImage": "/resource-images/og/buildclub-ai.webp"
+      "ogImage": "/resource-images/og/buildclub-ai.webp",
+      "screenshot": "/resource-images/screenshots/buildclub-ai.png"
     },
     "buildwithai-my": {
-      "favicon": "/resource-images/favicons/buildwithai-my.png"
+      "favicon": "/resource-images/favicons/buildwithai-my.png",
+      "screenshot": "/resource-images/screenshots/buildwithai-my.png"
     },
     "aitinkerers-org": {
       "favicon": "/resource-images/favicons/aitinkerers-org.png",
-      "ogImage": "/resource-images/og/aitinkerers-org.jpg"
+      "ogImage": "/resource-images/og/aitinkerers-org.jpg",
+      "screenshot": "/resource-images/screenshots/aitinkerers-org.png"
     },
     "aihackerdorm-com": {
       "favicon": "/resource-images/favicons/aihackerdorm-com.png",
-      "ogImage": "/resource-images/og/aihackerdorm-com.png"
+      "ogImage": "/resource-images/og/aihackerdorm-com.png",
+      "screenshot": "/resource-images/screenshots/aihackerdorm-com.png"
     },
     "aisea-builders": {
-      "favicon": "/resource-images/favicons/aisea-builders.png"
+      "favicon": "/resource-images/favicons/aisea-builders.png",
+      "screenshot": "/resource-images/screenshots/aisea-builders.png"
     },
     "rakantutor-org": {
       "favicon": "/resource-images/favicons/rakantutor-org.png",
-      "ogImage": "/resource-images/og/rakantutor-org.png"
+      "ogImage": "/resource-images/og/rakantutor-org.png",
+      "screenshot": "/resource-images/screenshots/rakantutor-org.png"
     },
     "instagram-com": {
-      "favicon": "/resource-images/favicons/instagram-com.png"
+      "favicon": "/resource-images/favicons/instagram-com.png",
+      "screenshot": "/resource-images/screenshots/instagram-com.png"
     },
     "developerkaki-my": {
-      "favicon": "/resource-images/favicons/developerkaki-my.png"
+      "favicon": "/resource-images/favicons/developerkaki-my.png",
+      "screenshot": "/resource-images/screenshots/developerkaki-my.png"
     },
     "krackeddevs-com": {
-      "favicon": "/resource-images/favicons/krackeddevs-com.png"
+      "favicon": "/resource-images/favicons/krackeddevs-com.png",
+      "screenshot": "/resource-images/screenshots/krackeddevs-com.png"
     },
     "linktr-ee": {
       "favicon": "/resource-images/favicons/linktr-ee.png",
-      "ogImage": "/resource-images/og/linktr-ee.jpg"
+      "ogImage": "/resource-images/og/linktr-ee.jpg",
+      "screenshot": "/resource-images/screenshots/linktr-ee.png"
     },
     "meetup-com": {
       "favicon": "/resource-images/favicons/meetup-com.png",
       "ogImage": "/resource-images/og/meetup-com.webp"
     },
     "gdg-community-dev": {
-      "favicon": "/resource-images/favicons/gdg-community-dev.webp"
+      "favicon": "/resource-images/favicons/gdg-community-dev.webp",
+      "screenshot": "/resource-images/screenshots/gdg-community-dev.png"
     },
     "summerofcode-withgoogle-com": {
-      "favicon": "/resource-images/favicons/summerofcode-withgoogle-com.png"
+      "favicon": "/resource-images/favicons/summerofcode-withgoogle-com.png",
+      "screenshot": "/resource-images/screenshots/summerofcode-withgoogle-com.png"
     },
     "aws-amazon-com": {
       "favicon": "/resource-images/favicons/aws-amazon-com.svg",
@@ -73,296 +91,375 @@
     },
     "notionup-typeform-com": {
       "favicon": "/resource-images/favicons/notionup-typeform-com.png",
-      "ogImage": "/resource-images/og/notionup-typeform-com.png"
+      "ogImage": "/resource-images/og/notionup-typeform-com.png",
+      "screenshot": "/resource-images/screenshots/notionup-typeform-com.png"
     },
     "education-github-com": {
       "favicon": "/resource-images/favicons/education-github-com.svg",
-      "ogImage": "/resource-images/og/education-github-com.png"
+      "ogImage": "/resource-images/og/education-github-com.png",
+      "screenshot": "/resource-images/screenshots/education-github-com.png"
     },
     "mvp-microsoft-com": {
       "favicon": "/resource-images/favicons/mvp-microsoft-com.png",
-      "ogImage": "/resource-images/og/mvp-microsoft-com.jpg"
+      "ogImage": "/resource-images/og/mvp-microsoft-com.jpg",
+      "screenshot": "/resource-images/screenshots/mvp-microsoft-com.png"
     },
     "lovable-dev": {
-      "favicon": "/resource-images/favicons/lovable-dev.png"
+      "favicon": "/resource-images/favicons/lovable-dev.png",
+      "screenshot": "/resource-images/screenshots/lovable-dev.png"
     },
     "developers-google-com": {
       "favicon": "/resource-images/favicons/developers-google-com.png",
-      "ogImage": "/resource-images/og/developers-google-com.png"
+      "ogImage": "/resource-images/og/developers-google-com.png",
+      "screenshot": "/resource-images/screenshots/developers-google-com.png"
     },
     "stars-github-com": {
       "favicon": "/resource-images/favicons/stars-github-com.png",
-      "ogImage": "/resource-images/og/stars-github-com.jpg"
+      "ogImage": "/resource-images/og/stars-github-com.jpg",
+      "screenshot": "/resource-images/screenshots/stars-github-com.png"
     },
     "docker-com": {
       "favicon": "/resource-images/favicons/docker-com.webp",
-      "ogImage": "/resource-images/og/docker-com.webp"
+      "ogImage": "/resource-images/og/docker-com.webp",
+      "screenshot": "/resource-images/screenshots/docker-com.png"
     },
     "cncf-io": {
       "favicon": "/resource-images/favicons/cncf-io.webp",
-      "ogImage": "/resource-images/og/cncf-io.jpg"
+      "ogImage": "/resource-images/og/cncf-io.jpg",
+      "screenshot": "/resource-images/screenshots/cncf-io.png"
     },
     "cursor-com": {
       "favicon": "/resource-images/favicons/cursor-com.png",
-      "ogImage": "/resource-images/og/cursor-com.png"
+      "ogImage": "/resource-images/og/cursor-com.png",
+      "screenshot": "/resource-images/screenshots/cursor-com.png"
     },
     "ambassadors-lovable-app": {
-      "favicon": "/resource-images/favicons/ambassadors-lovable-app.ico"
+      "favicon": "/resource-images/favicons/ambassadors-lovable-app.ico",
+      "screenshot": "/resource-images/screenshots/ambassadors-lovable-app.png"
     },
     "gemini-google": {
       "favicon": "/resource-images/favicons/gemini-google.png",
-      "ogImage": "/resource-images/og/gemini-google.png"
+      "ogImage": "/resource-images/og/gemini-google.png",
+      "screenshot": "/resource-images/screenshots/gemini-google.png"
     },
     "unity-com": {
       "favicon": "/resource-images/favicons/unity-com.ico",
-      "ogImage": "/resource-images/og/unity-com.jpg"
+      "ogImage": "/resource-images/og/unity-com.jpg",
+      "screenshot": "/resource-images/screenshots/unity-com.png"
     },
     "ycombinator-com": {
       "favicon": "/resource-images/favicons/ycombinator-com.ico",
-      "ogImage": "/resource-images/og/ycombinator-com.png"
+      "ogImage": "/resource-images/og/ycombinator-com.png",
+      "screenshot": "/resource-images/screenshots/ycombinator-com.png"
     },
     "antler-co": {
       "favicon": "/resource-images/favicons/antler-co.jpg",
-      "ogImage": "/resource-images/og/antler-co.jpg"
+      "ogImage": "/resource-images/og/antler-co.jpg",
+      "screenshot": "/resource-images/screenshots/antler-co.png"
     },
     "500-co": {
       "favicon": "/resource-images/favicons/500-co.ico",
-      "ogImage": "/resource-images/og/500-co.png"
+      "ogImage": "/resource-images/og/500-co.png",
+      "screenshot": "/resource-images/screenshots/500-co.png"
     },
     "joinef-com": {
-      "favicon": "/resource-images/favicons/joinef-com.png"
+      "favicon": "/resource-images/favicons/joinef-com.png",
+      "screenshot": "/resource-images/screenshots/joinef-com.png"
     },
     "speedrun-a16z-com": {
       "favicon": "/resource-images/favicons/speedrun-a16z-com.png",
-      "ogImage": "/resource-images/og/speedrun-a16z-com.png"
+      "ogImage": "/resource-images/og/speedrun-a16z-com.png",
+      "screenshot": "/resource-images/screenshots/speedrun-a16z-com.png"
     },
     "f-inc": {
-      "favicon": "/resource-images/favicons/f-inc.webp"
+      "favicon": "/resource-images/favicons/f-inc.webp",
+      "screenshot": "/resource-images/screenshots/f-inc.png"
     },
     "skydeck-berkeley-edu": {
-      "favicon": "/resource-images/favicons/skydeck-berkeley-edu.png"
+      "favicon": "/resource-images/favicons/skydeck-berkeley-edu.png",
+      "screenshot": "/resource-images/screenshots/skydeck-berkeley-edu.png"
     },
     "pear-vc": {
-      "favicon": "/resource-images/favicons/pear-vc.webp"
+      "favicon": "/resource-images/favicons/pear-vc.webp",
+      "screenshot": "/resource-images/screenshots/pear-vc.png"
     },
     "southparkcommons-com": {
       "favicon": "/resource-images/favicons/southparkcommons-com.png",
-      "ogImage": "/resource-images/og/southparkcommons-com.png"
+      "ogImage": "/resource-images/og/southparkcommons-com.png",
+      "screenshot": "/resource-images/screenshots/southparkcommons-com.png"
     },
     "greylock-com": {
-      "favicon": "/resource-images/favicons/greylock-com.png"
+      "favicon": "/resource-images/favicons/greylock-com.png",
+      "screenshot": "/resource-images/screenshots/greylock-com.png"
     },
     "hf0-com": {
-      "favicon": "/resource-images/favicons/hf0-com.png"
+      "favicon": "/resource-images/favicons/hf0-com.png",
+      "screenshot": "/resource-images/screenshots/hf0-com.png"
     },
     "fi-co": {
       "favicon": "/resource-images/favicons/fi-co.png",
-      "ogImage": "/resource-images/og/fi-co.jpg"
+      "ogImage": "/resource-images/og/fi-co.jpg",
+      "screenshot": "/resource-images/screenshots/fi-co.png"
     },
     "techstars-com": {
       "favicon": "/resource-images/favicons/techstars-com.png",
-      "ogImage": "/resource-images/og/techstars-com.jpg"
+      "ogImage": "/resource-images/og/techstars-com.jpg",
+      "screenshot": "/resource-images/screenshots/techstars-com.png"
     },
     "plugandplaytechcenter-com": {
-      "favicon": "/resource-images/favicons/plugandplaytechcenter-com.png"
+      "favicon": "/resource-images/favicons/plugandplaytechcenter-com.png",
+      "screenshot": "/resource-images/screenshots/plugandplaytechcenter-com.png"
     },
     "seedcamp-com": {
       "favicon": "/resource-images/favicons/seedcamp-com.png",
-      "ogImage": "/resource-images/og/seedcamp-com.jpg"
+      "ogImage": "/resource-images/og/seedcamp-com.jpg",
+      "screenshot": "/resource-images/screenshots/seedcamp-com.png"
     },
     "afore-vc": {
       "favicon": "/resource-images/favicons/afore-vc.png",
-      "ogImage": "/resource-images/og/afore-vc.png"
+      "ogImage": "/resource-images/og/afore-vc.png",
+      "screenshot": "/resource-images/screenshots/afore-vc.png"
     },
     "launch-co": {
       "favicon": "/resource-images/favicons/launch-co.png",
-      "ogImage": "/resource-images/og/launch-co.png"
+      "ogImage": "/resource-images/og/launch-co.png",
+      "screenshot": "/resource-images/screenshots/launch-co.png"
     },
     "conviction-com": {
-      "ogImage": "/resource-images/og/conviction-com.png"
+      "ogImage": "/resource-images/og/conviction-com.png",
+      "screenshot": "/resource-images/screenshots/conviction-com.png"
     },
     "forumvc-com": {
-      "favicon": "/resource-images/favicons/forumvc-com.png"
+      "favicon": "/resource-images/favicons/forumvc-com.png",
+      "screenshot": "/resource-images/screenshots/forumvc-com.png"
     },
     "ai2incubator-com": {
       "favicon": "/resource-images/favicons/ai2incubator-com.webp",
-      "ogImage": "/resource-images/og/ai2incubator-com.png"
+      "ogImage": "/resource-images/og/ai2incubator-com.png",
+      "screenshot": "/resource-images/screenshots/ai2incubator-com.png"
     },
     "eranyc-com": {
-      "favicon": "/resource-images/favicons/eranyc-com.png"
+      "favicon": "/resource-images/favicons/eranyc-com.png",
+      "screenshot": "/resource-images/screenshots/eranyc-com.png"
     },
     "cradle-com-my": {
       "favicon": "/resource-images/favicons/cradle-com-my.jpg"
     },
     "mdec-my": {
       "favicon": "/resource-images/favicons/mdec-my.png",
-      "ogImage": "/resource-images/og/mdec-my.jpg"
+      "ogImage": "/resource-images/og/mdec-my.jpg",
+      "screenshot": "/resource-images/screenshots/mdec-my.png"
     },
     "sc-com-my": {
       "favicon": "/resource-images/favicons/sc-com-my.ico",
-      "ogImage": "/resource-images/og/sc-com-my.png"
+      "ogImage": "/resource-images/og/sc-com-my.png",
+      "screenshot": "/resource-images/screenshots/sc-com-my.png"
     },
     "venturetech-my": {
-      "favicon": "/resource-images/favicons/venturetech-my.png"
+      "favicon": "/resource-images/favicons/venturetech-my.png",
+      "screenshot": "/resource-images/screenshots/venturetech-my.png"
     },
     "nanomalaysia-com-my": {
-      "favicon": "/resource-images/favicons/nanomalaysia-com-my.png"
+      "favicon": "/resource-images/favicons/nanomalaysia-com-my.png",
+      "screenshot": "/resource-images/screenshots/nanomalaysia-com-my.png"
     },
     "ekuinas-com-my": {
-      "favicon": "/resource-images/favicons/ekuinas-com-my.ico"
+      "favicon": "/resource-images/favicons/ekuinas-com-my.ico",
+      "screenshot": "/resource-images/screenshots/ekuinas-com-my.png"
     },
     "imaginecup-microsoft-com": {
       "favicon": "/resource-images/favicons/imaginecup-microsoft-com.ico"
     },
     "hultprize-org": {
-      "favicon": "/resource-images/favicons/hultprize-org.png"
+      "favicon": "/resource-images/favicons/hultprize-org.png",
+      "screenshot": "/resource-images/screenshots/hultprize-org.png"
     },
     "enactus-org": {
-      "favicon": "/resource-images/favicons/enactus-org.png"
+      "favicon": "/resource-images/favicons/enactus-org.png",
+      "screenshot": "/resource-images/screenshots/enactus-org.png"
     },
     "eonetwork-org": {
-      "favicon": "/resource-images/favicons/eonetwork-org.webp"
+      "favicon": "/resource-images/favicons/eonetwork-org.webp",
+      "screenshot": "/resource-images/screenshots/eonetwork-org.png"
     },
     "rbpc-rice-edu": {
-      "favicon": "/resource-images/favicons/rbpc-rice-edu.png"
+      "favicon": "/resource-images/favicons/rbpc-rice-edu.png",
+      "screenshot": "/resource-images/screenshots/rbpc-rice-edu.png"
     },
     "jamesdysonaward-org": {
-      "favicon": "/resource-images/favicons/jamesdysonaward-org.png"
+      "favicon": "/resource-images/favicons/jamesdysonaward-org.png",
+      "screenshot": "/resource-images/screenshots/jamesdysonaward-org.png"
     },
     "spaceappschallenge-org": {
       "favicon": "/resource-images/favicons/spaceappschallenge-org.png",
-      "ogImage": "/resource-images/og/spaceappschallenge-org.png"
+      "ogImage": "/resource-images/og/spaceappschallenge-org.png",
+      "screenshot": "/resource-images/screenshots/spaceappschallenge-org.png"
     },
     "hyperbyte-ai": {
       "favicon": "/resource-images/favicons/hyperbyte-ai.webp",
-      "ogImage": "/resource-images/og/hyperbyte-ai.jpg"
+      "ogImage": "/resource-images/og/hyperbyte-ai.jpg",
+      "screenshot": "/resource-images/screenshots/hyperbyte-ai.png"
     },
     "umhackathon-com": {
-      "favicon": "/resource-images/favicons/umhackathon-com.png"
+      "favicon": "/resource-images/favicons/umhackathon-com.png",
+      "screenshot": "/resource-images/screenshots/umhackathon-com.png"
     },
     "innovationlabs-sunway-edu-my": {
-      "favicon": "/resource-images/favicons/innovationlabs-sunway-edu-my.png"
+      "favicon": "/resource-images/favicons/innovationlabs-sunway-edu-my.png",
+      "screenshot": "/resource-images/screenshots/innovationlabs-sunway-edu-my.png"
     },
     "kitahack2026-my": {
-      "favicon": "/resource-images/favicons/kitahack2026-my.ico"
+      "favicon": "/resource-images/favicons/kitahack2026-my.ico",
+      "screenshot": "/resource-images/screenshots/kitahack2026-my.png"
     },
     "ey-com": {
       "favicon": "/resource-images/favicons/ey-com.jpg",
-      "ogImage": "/resource-images/og/ey-com.jpg"
+      "ogImage": "/resource-images/og/ey-com.jpg",
+      "screenshot": "/resource-images/screenshots/ey-com.png"
     },
     "growthcharger-com": {
-      "favicon": "/resource-images/favicons/growthcharger-com.webp"
+      "favicon": "/resource-images/favicons/growthcharger-com.webp",
+      "screenshot": "/resource-images/screenshots/growthcharger-com.png"
     },
     "myhackathon-gov-my": {
       "favicon": "/resource-images/favicons/myhackathon-gov-my.webp",
-      "ogImage": "/resource-images/og/myhackathon-gov-my.webp"
+      "ogImage": "/resource-images/og/myhackathon-gov-my.webp",
+      "screenshot": "/resource-images/screenshots/myhackathon-gov-my.png"
     },
     "1337-ventures": {
       "favicon": "/resource-images/favicons/1337-ventures.jpg",
-      "ogImage": "/resource-images/og/1337-ventures.png"
+      "ogImage": "/resource-images/og/1337-ventures.png",
+      "screenshot": "/resource-images/screenshots/1337-ventures.png"
     },
     "startupschool-org": {
       "favicon": "/resource-images/favicons/startupschool-org.ico",
-      "ogImage": "/resource-images/og/startupschool-org.jpg"
+      "ogImage": "/resource-images/og/startupschool-org.jpg",
+      "screenshot": "/resource-images/screenshots/startupschool-org.png"
     },
     "paulgraham-com": {
-      "favicon": "/resource-images/favicons/paulgraham-com.png"
+      "favicon": "/resource-images/favicons/paulgraham-com.png",
+      "screenshot": "/resource-images/screenshots/paulgraham-com.png"
     },
     "blog-samaltman-com": {
-      "favicon": "/resource-images/favicons/blog-samaltman-com.ico"
+      "favicon": "/resource-images/favicons/blog-samaltman-com.ico",
+      "screenshot": "/resource-images/screenshots/blog-samaltman-com.png"
     },
     "youtube-com": {
       "favicon": "/resource-images/favicons/youtube-com.png",
-      "ogImage": "/resource-images/og/youtube-com.jpg"
+      "ogImage": "/resource-images/og/youtube-com.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com.png"
     },
     "lnkd-in": {
       "favicon": "/resource-images/favicons/lnkd-in.ico",
-      "ogImage": "/resource-images/og/lnkd-in.ico"
+      "ogImage": "/resource-images/og/lnkd-in.ico",
+      "screenshot": "/resource-images/screenshots/lnkd-in.png"
     },
     "reddit-com": {
-      "favicon": "/resource-images/favicons/reddit-com.png"
+      "favicon": "/resource-images/favicons/reddit-com.png",
+      "screenshot": "/resource-images/screenshots/reddit-com.png"
     },
     "hubstaff-com": {
       "favicon": "/resource-images/favicons/hubstaff-com.ico",
-      "ogImage": "/resource-images/og/hubstaff-com.jpg"
+      "ogImage": "/resource-images/og/hubstaff-com.jpg",
+      "screenshot": "/resource-images/screenshots/hubstaff-com.png"
     },
     "review-firstround-com": {
       "favicon": "/resource-images/favicons/review-firstround-com.webp",
-      "ogImage": "/resource-images/og/review-firstround-com.jpg"
+      "ogImage": "/resource-images/og/review-firstround-com.jpg",
+      "screenshot": "/resource-images/screenshots/review-firstround-com.png"
     },
     "lawsofux-com": {
       "favicon": "/resource-images/favicons/lawsofux-com.png",
-      "ogImage": "/resource-images/og/lawsofux-com.png"
+      "ogImage": "/resource-images/og/lawsofux-com.png",
+      "screenshot": "/resource-images/screenshots/lawsofux-com.png"
     },
     "getfluently-notion-site": {
       "favicon": "/resource-images/favicons/getfluently-notion-site.png",
-      "ogImage": "/resource-images/og/getfluently-notion-site.png"
+      "ogImage": "/resource-images/og/getfluently-notion-site.png",
+      "screenshot": "/resource-images/screenshots/getfluently-notion-site.png"
     },
     "linkedin-com": {
       "favicon": "/resource-images/favicons/linkedin-com.ico",
-      "ogImage": "/resource-images/og/linkedin-com.jpg"
+      "ogImage": "/resource-images/og/linkedin-com.jpg",
+      "screenshot": "/resource-images/screenshots/linkedin-com.png"
     },
     "signal-nfx-com": {
       "favicon": "/resource-images/favicons/signal-nfx-com.ico",
-      "ogImage": "/resource-images/og/signal-nfx-com.png"
+      "ogImage": "/resource-images/og/signal-nfx-com.png",
+      "screenshot": "/resource-images/screenshots/signal-nfx-com.png"
     },
     "loops-so": {
-      "favicon": "/resource-images/favicons/loops-so.webp"
+      "favicon": "/resource-images/favicons/loops-so.webp",
+      "screenshot": "/resource-images/screenshots/loops-so.png"
     },
     "socialgrowthengineers-com": {
       "favicon": "/resource-images/favicons/socialgrowthengineers-com.png",
-      "ogImage": "/resource-images/og/socialgrowthengineers-com.png"
+      "ogImage": "/resource-images/og/socialgrowthengineers-com.png",
+      "screenshot": "/resource-images/screenshots/socialgrowthengineers-com.png"
     },
     "first100users-com": {
       "favicon": "/resource-images/favicons/first100users-com.png",
-      "ogImage": "/resource-images/og/first100users-com.png"
+      "ogImage": "/resource-images/og/first100users-com.png",
+      "screenshot": "/resource-images/screenshots/first100users-com.png"
     },
     "lennysnewsletter-com": {
       "favicon": "/resource-images/favicons/lennysnewsletter-com.png",
-      "ogImage": "/resource-images/og/lennysnewsletter-com.jpg"
+      "ogImage": "/resource-images/og/lennysnewsletter-com.jpg",
+      "screenshot": "/resource-images/screenshots/lennysnewsletter-com.png"
     },
     "convex-dev": {
       "favicon": "/resource-images/favicons/convex-dev.ico",
-      "ogImage": "/resource-images/og/convex-dev.png"
+      "ogImage": "/resource-images/og/convex-dev.png",
+      "screenshot": "/resource-images/screenshots/convex-dev.png"
     },
     "supabase-com": {
       "favicon": "/resource-images/favicons/supabase-com.ico",
-      "ogImage": "/resource-images/og/supabase-com.png"
+      "ogImage": "/resource-images/og/supabase-com.png",
+      "screenshot": "/resource-images/screenshots/supabase-com.png"
     },
     "trigger-dev": {
       "favicon": "/resource-images/favicons/trigger-dev.ico",
-      "ogImage": "/resource-images/og/trigger-dev.jpg"
+      "ogImage": "/resource-images/og/trigger-dev.jpg",
+      "screenshot": "/resource-images/screenshots/trigger-dev.png"
     },
     "tailwindcss-com": {
       "favicon": "/resource-images/favicons/tailwindcss-com.png",
-      "ogImage": "/resource-images/og/tailwindcss-com.jpg"
+      "ogImage": "/resource-images/og/tailwindcss-com.jpg",
+      "screenshot": "/resource-images/screenshots/tailwindcss-com.png"
     },
     "ui-shadcn-com": {
       "favicon": "/resource-images/favicons/ui-shadcn-com.png",
-      "ogImage": "/resource-images/og/ui-shadcn-com.png"
+      "ogImage": "/resource-images/og/ui-shadcn-com.png",
+      "screenshot": "/resource-images/screenshots/ui-shadcn-com.png"
     },
     "21st-dev": {
-      "favicon": "/resource-images/favicons/21st-dev.png"
+      "favicon": "/resource-images/favicons/21st-dev.png",
+      "screenshot": "/resource-images/screenshots/21st-dev.png"
     },
     "knock-app": {
       "favicon": "/resource-images/favicons/knock-app.svg",
-      "ogImage": "/resource-images/og/knock-app.png"
+      "ogImage": "/resource-images/og/knock-app.png",
+      "screenshot": "/resource-images/screenshots/knock-app.png"
     },
     "sentry-io": {
       "favicon": "/resource-images/favicons/sentry-io.ico",
-      "ogImage": "/resource-images/og/sentry-io.webp"
+      "ogImage": "/resource-images/og/sentry-io.webp",
+      "screenshot": "/resource-images/screenshots/sentry-io.png"
     },
     "useautumn-com": {
       "favicon": "/resource-images/favicons/useautumn-com.webp",
-      "ogImage": "/resource-images/og/useautumn-com.webp"
+      "ogImage": "/resource-images/og/useautumn-com.webp",
+      "screenshot": "/resource-images/screenshots/useautumn-com.png"
     },
     "stripe-com": {
       "favicon": "/resource-images/favicons/stripe-com.png",
-      "ogImage": "/resource-images/og/stripe-com.jpg"
+      "ogImage": "/resource-images/og/stripe-com.jpg",
+      "screenshot": "/resource-images/screenshots/stripe-com.png"
     },
     "firebase-google-com": {
       "favicon": "/resource-images/favicons/firebase-google-com.png",
-      "ogImage": "/resource-images/og/firebase-google-com.png"
+      "ogImage": "/resource-images/og/firebase-google-com.png",
+      "screenshot": "/resource-images/screenshots/firebase-google-com.png"
     },
     "clerk-com": {
       "favicon": "/resource-images/favicons/clerk-com.ico",
@@ -372,49 +469,101 @@
       "favicon": "/resource-images/favicons/resend-com.png"
     },
     "bun-sh": {
-      "favicon": "/resource-images/favicons/bun-sh.png"
+      "favicon": "/resource-images/favicons/bun-sh.png",
+      "screenshot": "/resource-images/screenshots/bun-sh.png"
     },
     "vercel-com": {
-      "favicon": "/resource-images/favicons/vercel-com.png"
+      "favicon": "/resource-images/favicons/vercel-com.png",
+      "screenshot": "/resource-images/screenshots/vercel-com.png"
     },
     "next-forge-com": {
-      "favicon": "/resource-images/favicons/next-forge-com.ico"
+      "favicon": "/resource-images/favicons/next-forge-com.ico",
+      "screenshot": "/resource-images/screenshots/next-forge-com.png"
     },
     "ai-sdk-dev": {
       "favicon": "/resource-images/favicons/ai-sdk-dev.png",
-      "ogImage": "/resource-images/og/ai-sdk-dev.png"
+      "ogImage": "/resource-images/og/ai-sdk-dev.png",
+      "screenshot": "/resource-images/screenshots/ai-sdk-dev.png"
     },
     "mobbin-com": {
       "favicon": "/resource-images/favicons/mobbin-com.png",
-      "ogImage": "/resource-images/og/mobbin-com.png"
+      "ogImage": "/resource-images/og/mobbin-com.png",
+      "screenshot": "/resource-images/screenshots/mobbin-com.png"
     },
     "intercom-com": {
       "favicon": "/resource-images/favicons/intercom-com.png",
-      "ogImage": "/resource-images/og/intercom-com.jpg"
+      "ogImage": "/resource-images/og/intercom-com.jpg",
+      "screenshot": "/resource-images/screenshots/intercom-com.png"
     },
     "expo-dev": {
-      "favicon": "/resource-images/favicons/expo-dev.png"
+      "favicon": "/resource-images/favicons/expo-dev.png",
+      "screenshot": "/resource-images/screenshots/expo-dev.png"
     },
     "revenuecat-com": {
       "favicon": "/resource-images/favicons/revenuecat-com.png",
-      "ogImage": "/resource-images/og/revenuecat-com.jpg"
+      "ogImage": "/resource-images/og/revenuecat-com.jpg",
+      "screenshot": "/resource-images/screenshots/revenuecat-com.png"
     },
     "notion-so": {
       "favicon": "/resource-images/favicons/notion-so.png",
-      "ogImage": "/resource-images/og/notion-so.png"
+      "ogImage": "/resource-images/og/notion-so.png",
+      "screenshot": "/resource-images/screenshots/notion-so.png"
     },
     "granola-ai": {
-      "ogImage": "/resource-images/og/granola-ai.png"
+      "ogImage": "/resource-images/og/granola-ai.png",
+      "screenshot": "/resource-images/screenshots/granola-ai.png"
     },
     "discord-com": {
-      "favicon": "/resource-images/favicons/discord-com.ico"
+      "favicon": "/resource-images/favicons/discord-com.ico",
+      "screenshot": "/resource-images/screenshots/discord-com.png"
     },
     "github-com": {
-      "favicon": "/resource-images/favicons/github-com.svg"
+      "favicon": "/resource-images/favicons/github-com.svg",
+      "screenshot": "/resource-images/screenshots/github-com.png"
     },
     "claude-com": {
       "favicon": "/resource-images/favicons/claude-com.png",
-      "ogImage": "/resource-images/og/claude-com.jpg"
+      "ogImage": "/resource-images/og/claude-com.jpg",
+      "screenshot": "/resource-images/screenshots/claude-com.png"
+    },
+    "facebook-com": {
+      "screenshot": "/resource-images/screenshots/facebook-com.png"
+    },
+    "perplexity-ai": {
+      "screenshot": "/resource-images/screenshots/perplexity-ai.png"
+    },
+    "khazanah-com-my": {
+      "screenshot": "/resource-images/screenshots/khazanah-com-my.png"
+    },
+    "mtdc-com-my": {
+      "screenshot": "/resource-images/screenshots/mtdc-com-my.png"
+    },
+    "mdv-com-my": {
+      "screenshot": "/resource-images/screenshots/mdv-com-my.png"
+    },
+    "mlh-io": {
+      "screenshot": "/resource-images/screenshots/mlh-io.png"
+    },
+    "smecorp-gov-my": {
+      "screenshot": "/resource-images/screenshots/smecorp-gov-my.png"
+    },
+    "punb-com-my": {
+      "screenshot": "/resource-images/screenshots/punb-com-my.png"
+    },
+    "e-huawei-com": {
+      "screenshot": "/resource-images/screenshots/e-huawei-com.png"
+    },
+    "mystartupaccelerator-org": {
+      "screenshot": "/resource-images/screenshots/mystartupaccelerator-org.png"
+    },
+    "figma-com": {
+      "screenshot": "/resource-images/screenshots/figma-com.png"
+    },
+    "carta-com": {
+      "screenshot": "/resource-images/screenshots/carta-com.png"
+    },
+    "pioneer-app": {
+      "screenshot": "/resource-images/screenshots/pioneer-app.png"
     }
   }
 }
