@@ -5,12 +5,13 @@ import * as path from 'path';
 const ROOT = path.resolve(process.cwd());
 const FAVICONS_DIR = path.join(ROOT, 'public/resource-images/favicons');
 const OG_DIR = path.join(ROOT, 'public/resource-images/og');
+const SCREENSHOTS_DIR = path.join(ROOT, 'public/resource-images/screenshots');
 const MANIFEST_PATH = path.join(ROOT, 'src/data/resource-images.json');
 const MAX_IMAGE_SIZE = 500 * 1024;
 const FETCH_TIMEOUT = 10_000;
 
 export interface ImageManifest {
-    images: Record<string, { favicon?: string; ogImage?: string }>;
+    images: Record<string, { favicon?: string; ogImage?: string; screenshot?: string }>;
 }
 
 export function domainKey(url: string): string {
@@ -157,38 +158,81 @@ export function saveManifest(manifest: ImageManifest): void {
     fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
 }
 
-export async function fetchImagesForUrl(url: string): Promise<{ favicon?: string; ogImage?: string }> {
+let stealthInitialized = false;
+
+async function launchStealthBrowser() {
+    const puppeteer = await import('puppeteer-extra');
+    if (!stealthInitialized) {
+        const StealthPlugin = (await import('puppeteer-extra-plugin-stealth')).default;
+        puppeteer.default.use(StealthPlugin());
+        stealthInitialized = true;
+    }
+    return puppeteer.default.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+}
+
+export async function fetchImagesForUrl(url: string): Promise<{ favicon?: string; ogImage?: string; screenshot?: string }> {
     fs.mkdirSync(FAVICONS_DIR, { recursive: true });
     fs.mkdirSync(OG_DIR, { recursive: true });
+    fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
 
     const key = domainKey(url);
     if (!key) throw new Error(`Invalid URL: ${url}`);
 
-    const res = await fetchWithTimeout(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
+    // Use stealth Puppeteer for everything — avoids 403s from Cloudflare
+    const browser = await launchStealthBrowser();
+    let html = '';
+    let finalUrl = url;
+    let screenshotPath: string | null = null;
 
-    const html = await res.text();
-    const finalUrl = res.url || url;
+    try {
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1280, height: 800 });
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 20_000 });
+        await new Promise((r) => setTimeout(r, 1500));
 
-    const faviconUrl = extractFaviconUrl(html, finalUrl);
-    let faviconPath: string | null = null;
-    if (faviconUrl) {
-        faviconPath = await downloadImage(faviconUrl, FAVICONS_DIR, key);
+        finalUrl = page.url();
+        html = await page.content();
+
+        // Take screenshot
+        const screenshotFilename = `${key}.png`;
+        const screenshotDest = path.join(SCREENSHOTS_DIR, screenshotFilename);
+        await page.screenshot({ path: screenshotDest, type: 'png' });
+        screenshotPath = `/resource-images/screenshots/${screenshotFilename}`;
+
+        await page.close();
+    } catch (err: any) {
+        console.error(`Puppeteer failed for ${url}:`, err.message?.slice(0, 100));
+    } finally {
+        await browser.close();
     }
 
-    const ogImageUrl = extractOgImageUrl(html, finalUrl);
+    // Parse HTML for favicon and OG image URLs
+    let faviconPath: string | null = null;
     let ogImagePath: string | null = null;
-    if (ogImageUrl) {
-        ogImagePath = await downloadImage(ogImageUrl, OG_DIR, key);
+
+    if (html) {
+        const faviconUrl = extractFaviconUrl(html, finalUrl);
+        if (faviconUrl) {
+            faviconPath = await downloadImage(faviconUrl, FAVICONS_DIR, key);
+        }
+
+        const ogImageUrl = extractOgImageUrl(html, finalUrl);
+        if (ogImageUrl) {
+            ogImagePath = await downloadImage(ogImageUrl, OG_DIR, key);
+        }
     }
 
     // Update manifest
     const manifest = loadManifest();
-    const entry: { favicon?: string; ogImage?: string } = {};
+    const entry: { favicon?: string; ogImage?: string; screenshot?: string } = {};
     if (faviconPath) entry.favicon = faviconPath;
     if (ogImagePath) entry.ogImage = ogImagePath;
+    if (screenshotPath) entry.screenshot = screenshotPath;
 
-    if (faviconPath || ogImagePath) {
+    if (faviconPath || ogImagePath || screenshotPath) {
         manifest.images[key] = { ...manifest.images[key], ...entry };
         saveManifest(manifest);
     }
@@ -196,5 +240,6 @@ export async function fetchImagesForUrl(url: string): Promise<{ favicon?: string
     return {
         favicon: faviconPath || undefined,
         ogImage: ogImagePath || undefined,
+        screenshot: screenshotPath || undefined,
     };
 }

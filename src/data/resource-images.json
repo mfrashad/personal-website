@@ -532,6 +532,7 @@
       "screenshot": "/resource-images/screenshots/claude-com.png"
     },
     "facebook-com": {
+      "favicon": "/resource-images/favicons/facebook-com.svg",
       "screenshot": "/resource-images/screenshots/facebook-com.png"
     },
     "perplexity-ai": {
@@ -551,7 +552,9 @@
       "screenshot": "/resource-images/screenshots/mdv-com-my.png"
     },
     "mlh-io": {
-      "screenshot": "/resource-images/screenshots/mlh-io.png"
+      "screenshot": "/resource-images/screenshots/mlh-io.png",
+      "favicon": "/resource-images/favicons/mlh-io.ico",
+      "ogImage": "/resource-images/og/mlh-io.jpg"
     },
     "smecorp-gov-my": {
       "screenshot": "/resource-images/screenshots/smecorp-gov-my.png"
@@ -561,12 +564,14 @@
       "screenshot": "/resource-images/screenshots/punb-com-my.png"
     },
     "e-huawei-com": {
-      "screenshot": "/resource-images/screenshots/e-huawei-com.png"
+      "screenshot": "/resource-images/screenshots/e-huawei-com.png",
+      "favicon": "/resource-images/favicons/e-huawei-com.ico"
     },
     "mystartupaccelerator-org": {
       "screenshot": "/resource-images/screenshots/mystartupaccelerator-org.png"
     },
     "figma-com": {
+      "favicon": "/resource-images/favicons/figma-com.svg",
       "screenshot": "/resource-images/screenshots/figma-com.png"
     },
     "carta-com": {
@@ -744,22 +749,32 @@
       "screenshot": "/resource-images/screenshots/minimaxi-com.png"
     },
     "higgsfield-ai": {
-      "screenshot": "/resource-images/screenshots/higgsfield-ai.png"
+      "screenshot": "/resource-images/screenshots/higgsfield-ai.png",
+      "favicon": "/resource-images/favicons/higgsfield-ai.png",
+      "ogImage": "/resource-images/og/higgsfield-ai.jpg"
     },
     "hailuoai-video": {
-      "screenshot": "/resource-images/screenshots/hailuoai-video.png"
+      "screenshot": "/resource-images/screenshots/hailuoai-video.png",
+      "favicon": "/resource-images/favicons/hailuoai-video.png",
+      "ogImage": "/resource-images/og/hailuoai-video.png"
     },
     "consensus-app": {
-      "screenshot": "/resource-images/screenshots/consensus-app.png"
+      "screenshot": "/resource-images/screenshots/consensus-app.png",
+      "favicon": "/resource-images/favicons/consensus-app.png",
+      "ogImage": "/resource-images/og/consensus-app.png"
     },
     "canva-com": {
+      "favicon": "/resource-images/favicons/canva-com.svg",
       "screenshot": "/resource-images/screenshots/canva-com.png"
     },
     "looka-com": {
-      "screenshot": "/resource-images/screenshots/looka-com.png"
+      "screenshot": "/resource-images/screenshots/looka-com.png",
+      "favicon": "/resource-images/favicons/looka-com.png"
     },
     "creatify-ai": {
-      "screenshot": "/resource-images/screenshots/creatify-ai.png"
+      "screenshot": "/resource-images/screenshots/creatify-ai.png",
+      "favicon": "/resource-images/favicons/creatify-ai.webp",
+      "ogImage": "/resource-images/og/creatify-ai.webp"
     },
     "codedex-io": {
       "favicon": "/resource-images/favicons/codedex-io.png",
@@ -797,7 +812,9 @@
       "screenshot": "/resource-images/screenshots/fireship-dev.png"
     },
     "leetcode-com": {
-      "screenshot": "/resource-images/screenshots/leetcode-com.png"
+      "screenshot": "/resource-images/screenshots/leetcode-com.png",
+      "favicon": "/resource-images/favicons/leetcode-com.png",
+      "ogImage": "/resource-images/og/leetcode-com.png"
     },
     "mentorship-lfx-linuxfoundation-org": {
       "favicon": "/resource-images/favicons/mentorship-lfx-linuxfoundation-org.png",
@@ -821,6 +838,27 @@
     },
     "esoc-dev": {
       "screenshot": "/resource-images/screenshots/esoc-dev.png"
+    },
+    "diariumapp-com": {
+      "favicon": "/resource-images/favicons/diariumapp-com.svg",
+      "screenshot": "/resource-images/screenshots/diariumapp-com.png"
+    },
+    "500-house": {
+      "favicon": "/resource-images/favicons/500-house.png",
+      "screenshot": "/resource-images/screenshots/500-house.png"
+    },
+    "amazon-com": {
+      "favicon": "/resource-images/favicons/amazon-com.png",
+      "screenshot": "/resource-images/screenshots/amazon-com.webp"
+    },
+    "canon-co-uk": {
+      "ogImage": "/resource-images/og/canon-co-uk.png",
+      "screenshot": "/resource-images/screenshots/canon-co-uk.png",
+      "favicon": "/resource-images/favicons/canon-co-uk.png"
+    },
+    "soundcore-com": {
+      "favicon": "/resource-images/favicons/soundcore-com.png",
+      "screenshot": "/resource-images/screenshots/soundcore-com.png"
     }
   }
 }

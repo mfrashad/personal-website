@@ -321,7 +321,7 @@ export default function ResourceAdmin() {
             if (!res.ok) throw new Error(data.error || 'Fetch failed');
             setFetchedImages((s) => ({ ...s, [name]: data }));
             // Also update manifest cache so images persist across tab switches
-            if (data.favicon || data.ogImage) {
+            if (data.favicon || data.ogImage || data.screenshot) {
                 try {
                     const hostname = new URL(url).hostname.replace(/^www\./, '');
                     const key = hostname.replace(/\./g, '-');

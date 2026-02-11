@@ -54,4 +54,9 @@ export const klAiCommunities: CommunityItem[] = [
         url: 'https://www.instagram.com/coderpuffs/',
         image: '/communities/coderpuffs_logo.jpg',
     },
+    {
+        name: '500 AI Residency',
+        description: 'An AI residency program focused on rapid building and shipping, bringing together builders to create and scale AI projects together.',
+        url: 'https://www.500.house/',
+    },
 ];

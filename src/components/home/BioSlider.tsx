@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import AnnotatedText from '../ui/AnnotatedText';
 
 interface TimelineItem {
     text: string;
@@ -16,12 +17,29 @@ interface BioSliderProps {
     timeline: TimelineLevel[]; // Array of 20 timeline variations
 }
 
-// Helper to render markdown bold text and links
-function renderTextWithBold(text: string) {
-    const parts = text.split(/(\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
+// Helper to render inline elements: **bold**, [links](url), and {type:text} annotations
+function renderInline(text: string, keyPrefix: string = '') {
+    // Match annotations {type:content}, bold **content**, and links [text](url)
+    const parts = text.split(/(\{(?:highlight|underline|circle|box):.*?\}|\*\*.*?\*\*|\[.*?\]\(.*?\))/g);
+    let annotationDelay = 600;
     return parts.map((part, i) => {
+        const key = `${keyPrefix}${i}`;
+        // Annotation: {type:content}
+        const annotationMatch = part.match(/^\{(highlight|underline|circle|box):(.*)\}$/);
+        if (annotationMatch) {
+            const [, type, content] = annotationMatch;
+            const delay = annotationDelay;
+            annotationDelay += 400;
+            // Content inside an annotation may contain links
+            const inner = renderInline(content, `${key}-`);
+            return (
+                <AnnotatedText key={key} type={type as any} delay={delay}>
+                    {inner}
+                </AnnotatedText>
+            );
+        }
         if (part.startsWith('**') && part.endsWith('**')) {
-            return <strong key={i}>{part.slice(2, -2)}</strong>;
+            return <strong key={key}>{part.slice(2, -2)}</strong>;
         }
         // Handle markdown links [text](url)
         const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
@@ -30,7 +48,7 @@ function renderTextWithBold(text: string) {
             const isExternal = url.startsWith('http://') || url.startsWith('https://');
             return (
                 <a
-                    key={i}
+                    key={key}
                     href={url}
                     className="text-blue-600 hover:text-blue-800 underline transition-colors"
                     {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
@@ -103,7 +121,7 @@ export default function BioSlider({ bios, timeline }: BioSliderProps) {
             {/* Bio Text */}
             <div className="bio-content mb-8 relative z-[120] w-full mx-auto">
                 <div className="text-content-body leading-relaxed whitespace-pre-line w-full mx-auto">
-                    {renderTextWithBold(bios[level])}
+                    {renderInline(bios[level])}
                 </div>
             </div>
 

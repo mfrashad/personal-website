@@ -2,6 +2,7 @@ export interface AcceleratorItem {
     name: string;
     description?: string;
     url?: string;
+    image?: string;
     tags?: string[];
 }
 
