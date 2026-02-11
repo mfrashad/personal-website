@@ -18,6 +18,7 @@ export interface HardcoverUserBook {
     date_added: string;
     book: HardcoverBook;
     user_book_reads: {
+        finished_at: string | null;
         edition: {
             image: {
                 url: string;
@@ -64,6 +65,7 @@ export const getReadBooks = async () => {
                                     }
                                 }
                                 user_book_reads {
+                                    finished_at
                                     edition {
                                         image {
                                             url
@@ -103,8 +105,9 @@ export const getReadBooks = async () => {
         const booksByYear = new Map<string, any[]>();
 
         userBooks.forEach((userBook) => {
-            // Use reviewed_at if available, otherwise use date_added
-            const dateString = userBook.reviewed_at || userBook.date_added;
+            // Use finished_at first, then reviewed_at, then date_added
+            const finishedAt = userBook.user_book_reads?.[0]?.finished_at;
+            const dateString = finishedAt || userBook.reviewed_at || userBook.date_added;
             const year = new Date(dateString).getFullYear().toString();
 
             // Transform to match our existing Book interface

@@ -1,22 +1,102 @@
 {
-  "updated_at": "2026-02-01T10:38:23.651Z",
-  "count": 56,
+  "updated_at": "2026-02-11T18:48:31.102Z",
+  "count": 68,
   "writings": [
+    {
+      "id": "19dc300a-b854-4299-98bf-8b9e717a8ba2",
+      "title": "10/2 - February Week #1 Review",
+      "category": "notes",
+      "created_at": "2026-02-10T03:06:25.181129+00:00",
+      "updated_at": "2026-02-10T03:13:03.307376+00:00",
+      "content_markdown": "# 10/2 - February Week #1 Review\n\nToday is the start of the 2nd week of February.\n\nLet's review the first week of february. What did I do?\n\n- [x] Write 5-10 compiled resources to be made into content\n- [x] Hired an editor\n- [x] Setup Canva, uploaded photos, etc to work with the editor\n- [x] Add tabs, MCP to [x.cleve.ai](http://x.cleve.ai)\n- [x] Fixed some of the Chrome extension bug for saved posts\n\nFun:\n\n- [x] Rewatched EPIC the musical. 11/10\n- [x] Watched The Housemaid. 4/5\n- [x] Watched F1: The Movie. 4/5\n- [x] Started reading Odyssey by Homer\n- [x] Started reading Empire of AI by Karen Hao"
+    },
+    {
+      "id": "eae1defb-578c-4d2a-bfc3-952db071f677",
+      "title": "8/2 - Content Planning",
+      "category": "notes",
+      "created_at": "2026-02-08T13:26:30.513982+00:00",
+      "updated_at": "2026-02-09T01:02:58.397726+00:00",
+      "content_markdown": "# 8/2 - Content Planning\n\nMy plan was to start focusing on content and take content creation seriously on February.\n\nHere is what I've done so far:\n\n- [x] Hire 1 editor\n- [x] upload all photos to canva\n- [x] plan 5-10 content ideas\n\nThings I need to do:\n\n- finish 5-10 posts.\n\nif i post everyday? 2 post day\n\n1 week = 14 post\n\nideally i need to finish 20 post"
+    },
+    {
+      "id": "9c110c25-646b-44d5-aae8-3ef6420956b3",
+      "title": "4/2 - Refactored Cleve onboarding & Sofea",
+      "category": "notes",
+      "created_at": "2026-02-05T04:38:20.054567+00:00",
+      "updated_at": "2026-02-05T04:44:42.721158+00:00",
+      "content_markdown": "# 4/2 - Refactored Cleve onboarding & Sofea\n\nWe went to office today for the first time for a while. Sofea will also be joining us full time for the next month or so.\n\nThe main discussion today was on our marketing effort this month and also faw sharing on the new refactored app.\n\nFour of us (me, ash, liz, sofea) will be focusing more on marketing this month, while faw will keep the dev side running. We thought of doing it a competition for four of us of who will get the most views for Cleve content.\n\nWe also had an idea of writing or content club, which basically means, just us reviewing each other content.\n\nOther notable thing was Faw refactored app. It was really well done and FAST. We switched from Supabase to Convex, and it's a game changer. Also started using various other tools that's really helpful, useautumn (a stripe wrapper for LLM apps), betterstack (for uptime monitoring), dub (for notification), etc. Faw is really good at keeping up with the latest new stuff."
+    },
+    {
+      "id": "77c584a4-5cca-45a6-b98c-958d4ce2d617",
+      "title": "Ideas I want to share/remind",
+      "category": "notes",
+      "created_at": "2026-02-03T20:04:08.383584+00:00",
+      "updated_at": "2026-02-04T18:32:06.257182+00:00",
+      "content_markdown": "# Ideas I want to share/remind\n\nI should be more intentional in my messaging or the ideas people will remember when they see my brand.\n\nIdeally i should raise awareness on AI or educate people in AI\n\nUseful Tools:\n\n• Adguard - How to read manhwa without ads\n• Tailscale - How to code from your phone\n• Raindrop - Bookmark manager\n• Readwise\n• Linear\n\nAI Awareness:\n\n• On AI training on copyrighted data\n• On AGI\n- Anthropic ethics vs chatgpt\n- chatgpt decision on ads & adult\n- elon, altman, dario\n- on AI and data center and water usage"
+    },
+    {
+      "id": "ce451189-9784-4079-a3ad-82cc362bf612",
+      "title": "Improving eloquency with rehearsed thoughts",
+      "category": "notes",
+      "created_at": "2026-02-02T15:28:27.929136+00:00",
+      "updated_at": "2026-02-05T04:37:16.390233+00:00",
+      "content_markdown": "# Improving eloquency with rehearsed thoughts\n\nOne thing I realize from good speakers in various topic is that they have spoken, wrote, or shared about the topic before. And hence it's much easier to share it again. They had the practice. Often times, the famous speaker or author always speak the same topic anyway. \n\nUsually the way this happen I believe is by having friends. Where you can talk about these thoughtful ideas and in turn practiced formulating your thoughts in the topic. The problem is for ppl like me, who barely have friends and socialize. I don't have ppl to practice my thoughts with or don't have the social energy for it.\n\nSo my idea instead is to write these thoughts instead. Write the arguments, the good and against. Think about the audience. \n\nfirst I should identify what are the common topics/question that I would often be asked as an expert in my domain? where my opinion holds weight?\n\nTechnology:\n\n- Will AI replace jobs?\n- What do i think about AI harms to environment?\n- What do I think about AI being used for deepfakes for sexual harrasment or without consent?\n- What do I think on AI and copyrights? the stolen data AI is trained on? The artists?\n- What do I think about regulations around AI right now?\n- What do I think about vibe-coding?\n- What do I think about AI safety?\n- What should goverment do in terms of AI regulation? AI governance?"
+    },
+    {
+      "id": "9d491241-da4c-4075-91bd-e46b956e3730",
+      "title": "How to write a a review",
+      "category": "notes",
+      "created_at": "2026-02-02T14:10:28.134578+00:00",
+      "updated_at": "2026-02-02T15:37:41.646827+00:00",
+      "content_markdown": "# How to write a a review\n\nThis will be my living notes for me to refer when I need to write a book/movie review.\n\nFor now I think I should stick to a template first. And continuously improve the template as I continue updating this note.\n\n---\n\n### Movie/Book Review Template\n\nRating: X/5\n\nSummary:\n\nWhat I liked:\n\nWhat I disliked\n\nHow it changed/affected me;\n\n[For book reviews]\n\nNew insights I learned:\n\nInsights I know but worth sharing again:\n\n---\n\n### Notes on writing review:\n\n- Think about the audience (general audience? literary critique?\n- Express opinion but support your criticism"
+    },
+    {
+      "id": "96189372-99f7-4ed0-b1cf-498a7e4298fb",
+      "title": "The 80/20 rule lists",
+      "category": "notes",
+      "created_at": "2026-02-02T13:53:33.503716+00:00",
+      "updated_at": "2026-02-05T04:38:18.912874+00:00",
+      "content_markdown": "# The 80/20 rule lists\n\nA lot of tasks can be done well by just learning that one important aspect of the task that's responsible for 80% of the outcome and doing it really well. \n\nAnd a lot of things you did by winging it can actually be vastly improved by just googling the proper way that tons of people already optimized. One good example of this is the first time I googled how to peel egg faster. Rolling the egg and making cracks all over the egg won't come into my mind on my own. My original approach was just peeling egg normally. Any my best idea was just slashing the egg and scooping it. But a quick google search just improved my egg peeling efficiency. Often times you'd be surprised how inefficient the method you first thought of is.\n\nAnyway so i had this idea, before doing any tasks that are new to me (or not). Why not do a quick search on how to do it? and find the best way to do it. Often, you won't have enough time to learn the best way to do it. But you can find that one most important skill that can be learned in an hour to achieve 80% of the outcome. \n\nThe goal of this note is the write down these important skills/guide I will try to identify after googling when I need to do a new task.\n\nWriting (WIP)\n\n- List of writing structure or format\n\n  - Hero's journey\n\nFilmaking:\n\n- What does wide/closeup/mid shot do?\n-"
+    },
+    {
+      "id": "b71aba4f-0af9-4178-aef4-ea46306c6a8e",
+      "title": "Movie Review: Hamilton (Broadway)",
+      "category": "notes",
+      "created_at": "2026-02-02T13:51:41.967759+00:00",
+      "updated_at": "2026-02-02T14:47:20.333272+00:00",
+      "content_markdown": "# Movie Review: Hamilton (Broadway)\n\nRating: 5/5\n\nSummary:\n\nA musical play about the biography of Hamilton, one of the founding father of USA. His success from being a a poor orphan immigrant into the founding father and building the economic policies of USA. The musical covers, both his personal life (his affair, family, rivalries) and his political career.\n\nWhat I liked:\n\nI watched Hamilton a while ago and really loved it. Thoroughly enjoyed the lyrics and music. I also loved how they tell the story in the form of these catchy lyrics. The story of hamilton itself is interesting and inspiring at the same time. Especially the 'Hamilton wrote the other 51!'. The fact that it's a rags to riches story also helps.\n\nNow I finally get why people love hamilton.\n\nSo summary of what I liked are:\n\n- Catchy lyrics that rhyme\n- Inspiring stories and interesting history\n- The music melody are actually good\n\nWhat I disliked:\n\n- Certain scenes/lyrics are quite repetitive\n- I didn't like the kings song tbh\n\nHow it changed me:\n\n- I was obsessed with listening to Hamilton songs for about 1-2 weeks.\n- I understand why people are obsessed with broadways shows now\n- I learned more about the US history and culture (e.g Duel, etc)\n- I am more open to watching musicals now"
+    },
+    {
+      "id": "034eca55-9d26-4bf1-b7fc-3e0746ea679d",
+      "title": "2/2 - Reading Empire of AI",
+      "category": "notes",
+      "created_at": "2026-02-02T13:42:00.693157+00:00",
+      "updated_at": "2026-02-02T14:51:05.247591+00:00",
+      "content_markdown": "# 2/2 - Reading Empire of AI\n\nToday was my brother's birthday.\n\nI spent today mostly just resting. Catching up on my lack of sleep for the past week. And occasionally continued reading the Empire of AI by Karen Hao. My impression so far is it's avery fascinating read. Mainly because I get to learn more on the personal life of the tech billionaires, the startup hub (YC), and their close networks.\n\nI learned quite a bit based on what those successful tech entreprenuers did or their behaviours, The book describes several anecdotes with influetential tech people such as Paul Graham, Sam Altman, Elon Musk, Dario Amodei, Ilya Sutskever, etc\n\nThe book also made me see them as more human, which i mean that they are also full of flaws and vices than the normal narrative in the tech space itelf where we often idolize or glorify the work ethics/strategy/behaviour of successful tech moguls as well in the hope of replicating their success. But seeing their personal accounts and behaviour in more details helps you to see more in what they are.\n\nI personally think people in tech/startup space should really read the book. One, you can learn from their experience. Two, you can also be aware to not be like them in certain trait or choice.\n\nAnyway it's time for me to work back to be honest. I've been ignoring messages for a while just to take a break. It's also a new month, so I ought to set a new goals and todos for this upcoming month.\n\nOther interesting things:\n\n-"
+    },
+    {
+      "id": "1c193d4e-e519-4a29-bf28-3e9a117ae2a7",
+      "title": "Books Reviews",
+      "category": "notes",
+      "created_at": "2026-02-01T13:54:50.209965+00:00",
+      "updated_at": "2026-02-01T13:55:38.025944+00:00",
+      "content_markdown": "# Books Reviews\n\n- \n- \n- \n- \n-"
+    },
     {
       "id": "f951da16-b4b6-4de9-9e9e-28705aa911e2",
       "title": "1/2 - Reading Empire of AI",
       "category": "notes",
       "created_at": "2026-02-01T05:20:43.787676+00:00",
-      "updated_at": "2026-02-01T10:01:22.573056+00:00",
-      "content_markdown": "# 1/2 - Reading Empire of AI"
+      "updated_at": "2026-02-01T12:12:28.786225+00:00",
+      "content_markdown": "# 1/2 - Reading Empire of AI\n\nThings I did today:"
     },
     {
       "id": "3625771b-4c39-4c69-864d-8eff95d826e7",
       "title": "Book Review: Stubborn Skill Grinder in a Timeloop",
       "category": "notes",
       "created_at": "2026-02-01T05:15:05.699916+00:00",
-      "updated_at": "2026-02-01T05:20:02.91444+00:00",
-      "content_markdown": "# Book Review: Stubborn Skill Grinder in a Timeloop\n\nRating: 4/5\n\nEnjoyed the series. It's a mix of my favorite genres: progressive fantasy, timeloop, and litrpg. It's also a fresh take on the timeloop genre. Whereas most MC will hide their timeloop abilities in fear of enemies finding workaround (soul/mind altering attack or torture and captivity) and people thinking they are crazy. This MC always openly share that he is in timeloop.\n\nThe main drawback is the MC is quite dumb and rely too much on the plot armor of his infinite willpower.\n\nOverall, if you liked Mother of Learning, i recommed this book."
+      "updated_at": "2026-02-02T15:38:35.42053+00:00",
+      "content_markdown": "# Book Review: Stubborn Skill Grinder in a Timeloop\n\nRating: 4/5\n\nSummary:\n\nEnjoyed the series. It's a mix of my favorite genres: progressive fantasy, timeloop, and litrpg. It's also a fresh take on the timeloop genre. Whereas most MC will hide their timeloop abilities in fear of enemies finding workaround (soul/mind altering attack or torture and captivity) and people thinking they are crazy. This MC always openly share that he is in timeloop.\n\nThe main drawback is the MC is quite dumb and rely too much on the plot armor of his infinite willpower.\n\nOverall, if you liked Mother of Learning, i recommed this book."
     },
     {
       "id": "2662c2c8-64a8-469f-8aff-c820f78cdb05",
@@ -28,11 +108,11 @@
     },
     {
       "id": "e9eed834-bc8a-4233-b0f8-231ef1ed10e5",
-      "title": "Book Review: Utopia for Realist",
+      "title": "Polished Version",
       "category": "notes",
       "created_at": "2026-02-01T04:56:31.806283+00:00",
-      "updated_at": "2026-02-01T09:54:11.487242+00:00",
-      "content_markdown": "Book Review: Utopia for Realist\n\nRating: 4.5/5\n\nReally enjoyed the book. Felt like cathartic release on what's wrong with the world. Or with capitalism. And then the book gave an idea of the future that we can hope or dream for.\n\nI think there are 5 main points from the book that I was intersting:\n\n• Less working hour • Universal basic income (UBI) • A better measurement of progress than GDP • Bullshit jobs • Open border\n\nI was quite skeptical with some ideas like open border, but the book arguments are surprisingly convincing and persuasive. It provides quite a lot of study, although I haven't fully verified the rigority of the source of study.\n\nI did feel the book is somewhat biased and there is lack of arguments thats' against the idea, and it's full of arguments/data that support the idea. Which makes me think of cherry picking and biased information.\n\nFor example, I wished the book discussed more on some concerns regarding UBI, e.g can we afford it? will this cause inflation? etc.\n\nBut it's great that the book does debunks some of the main myths: e.g the poor are poor becasuse they are lazy rather than the stress and shacke of poverty. People won't work when given handouts, etc.\n\nAnother thing I really liked was th final chapter actually addressed my concern in the book being biased. He talks about how we are prone to cognitive dissonances, and only finding information that agrees with our view and rejects or try to do mental gymanstic to justify the rest.\n\nHe talks about cognitive dissonate, and I found his thoughts on how ideas can change the world was insightful as well. On how humands are more prone to change to overwheming shock that counter their belief rather than a gradual convincing or reason. Which then makes me view the book is written purposely to be convincing and persuasive, rather than aiming for full accuracy and capturing all the nuances.\n\nThe last chapter elevated the book from 4 star to 4.5 or 5 star for me.\n\n---\n\n### Polished Version\n\n**Rating: 4.5/5**\n\nReading *Utopia for Realists* felt like a cathartic diagnosis of modern capitalism—validating the fatigue we feel and offering a structured dream for the future.\n\nRutger Bregman anchors his vision in five provocative pillars:\n\n- **A 15-hour work week**\n- **Universal Basic Income (UBI)**\n- **Replacing GDP with meaningful progress metrics**\n- **Eliminating \"bullshit jobs\"**\n- **Open borders**\n\nI was initially most skeptical about open borders, yet Bregman’s arguments were surprisingly persuasive. While the citations are plentiful, I admit I haven't fully vetted the rigor of every source. At times, the book feels like an exercise in confirmation bias; it advocates fiercely for its ideas without always steel-manning the counter-arguments—such as the inflationary risks or fiscal sustainability of UBI.\n\nHowever, the final chapter completely elevated the experience for me. Bregman steps back to address the very nature of belief and cognitive dissonance. He argues that history isn't changed by gradual reasoning, but by overwhelming shocks to the system that force us to adopt ideas previously deemed \"impossible.\"\n\nThis meta-commentary reframed the book for me: it isn't trying to be a neutral academic study, but rather a persuasive manifesto designed to stretch the window of political possibility. That self-awareness turned a 4-star read into a 4.5-star favorite."
+      "updated_at": "2026-02-03T16:44:03.724472+00:00",
+      "content_markdown": "# \n\nBook Review: Utopia for Realist\n\nRating: 4.5/5\n\nReally enjoyed the book. Felt like cathartic release on what's wrong with the world. Or with capitalism. And then the book gave an idea of the future that we can hope or dream for.\n\nI think there are 5 main points from the book that was intersting:\n\n• Less working hour \n• Universal basic income (UBI) \n• A better measurement of progress than GDP \n• Bullshit jobs \n• Open border\n\nI don't know if I fully agree with all his proposal. I was quite skeptical with some ideas like open border, but the book arguments are surprisingly convincing and persuasive. It provides quite a lot of study, although I haven't fully verified the rigority of the source of study.\n\nI did feel the book is somewhat biased. For example, I wished the book discussed more detailed on some concerns regarding UBI, e.g can we afford it? will this cause inflation? etc.\n\nBut the book does debunks some of the main myths against UBI: e.g the poor are poor becasuse they are lazy rather than the stress and shacke of poverty. People won't work when given handouts, etc. with studies included.\n\nAnother thing I liked was the final chapter actually addressed my concern in the book being biased. He talks about how we are prone to cognitive dissonances, and only finding information that agrees with our view and rejects or try to do mental gymanstic to justify the rest.\n\nHe talks about cognitive dissonance, and I found his thoughts on how ideas can change the world was insightful as well. On how humands are more prone to change to overwheming shock that counter their belief rather than a gradual convincing or reason. Which then makes me view the book is written purposely to be convincing and persuasive, rather than aiming for full accuracy and capturing all the nuances.\n\nThe last chapter elevated the book from 4 star to 4.5 or 5 star for me.\n\n---\n\n### Polished Version\n\n**Rating: 4.5/5**\n\nReading *Utopia for Realists* felt like a cathartic diagnosis of modern capitalism—validating the fatigue we feel and offering a structured dream for the future.\n\nRutger Bregman anchors his vision in five provocative pillars:\n\n- **A 15-hour work week**\n- **Universal Basic Income (UBI)**\n- **Replacing GDP with meaningful progress metrics**\n- **Eliminating \"bullshit jobs\"**\n- **Open borders**\n\nI was initially most skeptical about open borders, yet Bregman’s arguments were surprisingly persuasive. While the citations are plentiful, I admit I haven't fully vetted the rigor of every source. At times, the book feels like an exercise in confirmation bias; it advocates fiercely for its ideas without always steel-manning the counter-arguments—such as the inflationary risks or fiscal sustainability of UBI.\n\nHowever, the final chapter completely elevated the experience for me. Bregman steps back to address the very nature of belief and cognitive dissonance. He argues that history isn't changed by gradual reasoning, but by overwhelming shocks to the system that force us to adopt ideas previously deemed \"impossible.\"\n\nThis meta-commentary reframed the book for me: it isn't trying to be a neutral academic study, but rather a persuasive manifesto designed to stretch the window of political possibility. That self-awareness turned a 4-star read into a 4.5-star favorite."
     },
     {
       "id": "ac1ad4a9-c7c1-4ae9-b699-a897c7cb8cb7",
@@ -46,15 +126,23 @@
       "id": "3a0ab57b-78f5-462a-a652-58365cf4b0ec",
       "title": "31/1 - Reading and submitted brand content",
       "category": "notes",
-      "created_at": "2026-02-01T03:56:44.614631+00:00",
+      "created_at": "2026-01-31T03:56:44+00:00",
       "updated_at": "2026-02-01T10:00:09.708612+00:00",
       "content_markdown": "# 31/1 - Reading and submitted brand content\n\nspent most of the day readingstubborn skill grider in timeloop book 2\n\ni also finished utopia realist and the art and business of online writing\n\nalso posted my peaches and cream videos and submitted the link"
+    },
+    {
+      "id": "23132d7a-a01e-4196-a302-a18d61400913",
+      "title": "30/1",
+      "category": "notes",
+      "created_at": "2026-01-30T05:17:17.0623+00:00",
+      "updated_at": "2026-01-30T14:21:40.392076+00:00",
+      "content_markdown": "# 30/1\n\nTime block"
     },
     {
       "id": "5a84f07a-790a-49e2-84cb-dbf4d5059be4",
       "title": "30/1 - Reading and applied to Mozilla Fellowship",
       "category": "notes",
-      "created_at": "2026-02-01T03:53:55.345117+00:00",
+      "created_at": "2026-01-30T03:53:55+00:00",
       "updated_at": "2026-02-01T09:59:50.188894+00:00",
       "content_markdown": "# 30/1 - Reading and applied to Mozilla Fellowship\n\ni think i spent most of the day reading the book\n\nstubbon skill grinder in a timeloop\n\none productive thing i did is applying to mozilla fellowship"
     },
@@ -67,6 +155,14 @@
       "content_markdown": "# 29/1 - Hospital Review: UMSC - Stroke Treatment\n\n**Rating: 1/5**\n\nToday I went to the UM Specialist Centre (UMSC) for our third appointment for my dad's stroke with Dr. Tan Kay Sin. Overall our whole experience at UMSC is quite disappointing. We kept getting referred left and right to other doctors, while the doctors themselves questioned why they received the referral and why we came to them.\n\n**The Backstory: GH vs. UMSC** For context, we first went to GH when we suspected my dad's stroke. We did a CT scan which confirmed it. However, GH simply dismissed us, claiming nothing could be done. They prescribed medication with barely any explanation, and the next specialist appointment was set for 3 months later.\n\nSince that wait was too long, we went to UMSC based on a recommendation.\n\n**The Run-Around & Testing** We were first referred to Dr. Goh in the neurology department. Dr. Goh provided little consultation and candidly said, \"Well, stroke is not my expertise, you should go to Dr. Tan Kay Sin since he's the stroke expert.\" So we made an appointment to see him.\n\nAt our first appointment, we were told to do 4 tests: MRI scan, blood & urine test, ECG, and Echocardiogram.\n\nWe tried to do the MRI at UMSC but were told we had to wait 2 weeks. Which is ridiculous. This is not even a government hospital; it's semi-private. Refusing to wait, we made an appointment at Tung Shin Hospital for the day after tomorrow. We went in as walk-ins. They quoted RM4000 for 3 MRIs (Brain with contrast, MRA, and MRA neck). We managed to get it done by 2pm and received the result instantly. The radiologist graciously explained the results when we asked. We even received a discount, paying RM3500. Overall the Tung Shin experience was far superior to UMSC.\n\n**The \"Expert\" Consultation** A few days later, we returned to UMSC for the appointment with Dr. Tan Kay Sin and provided the MRI result.\n\nHe didn't even look at the scan; he merely read the summary report from the radiology file cover. That is something I can do—just ask ChatGPT to translate it for me. He noted narrowing around the eye (reiterating the summary's jargon) but claimed it wasn't clear, so we needed a Doppler eye test.\n\nIt makes us suspect if he even read the result honestly, or if the test was even necessary. It seems weird to suggest the MRI scan wouldn't show the narrowing around the eye (occipital lobe) clearly enough, requiring a Doppler test, WITHOUT HIM EVEN LOOKING AT THE MRI SCAN. but i may be wrong.\n\nTo make things funnier, on top of Dr. Tan, the hospital inexplicably referred us to Dr. Imran from Cardiology to explain the Echocardiogram and ECG results. But honestly, the result itself clearly stated it's okay. Even Dr. Imran didn't know why he received the referral and looked confused. IT'S ridiculous, because we still had to pay the consultation fee for the hospital's confusion which offered no benefit to us.\n\n**Today's Experience (3rd Appointment)** The filing and organization seem poor, and the fact that the nurse changes each time makes it worse.\n\n- **Scheduling Mess:** We came to get the result for the Transcranial Doppler test. The appointment was supposed to be yesterday, but for some reason, we were turned away and rescheduled to today.\n- **The Wait:** We arrived at 2pm. They couldn't even find the Doppler test result, forcing us to wait another hour.\n- **The Doctor's Memory:** When called, the doctor didn't even remember us, asking \"Where is the MRI test?\"—which we already did and shared with him during the last appointment.\n- **The Result:** After all that, the doctor essentially repeated his findings from the MRI scan result. Overall verdict: nothing to do except continue meds for blood thinner, blood pressure, cholesterol, diabetes, etc.\n\n**The Worst Parts**\n\n1. **Missing Crucial Care (Aphasia):** We explicitly told the doctor my dad had aphasia symptoms. Throughout 3 weeks of back-and-forth with UMSC, he made NO MENTION of getting therapy for his speech problem. I had to read online that speech therapy is crucial and best done early, as most improvement happens in the first month. The fact that the \"expert\" didn't even mention this felt negligent. To top it off, when we tried to make an appointment for the therapy, we were told we had to wait 4 months. Laughable.\n2. **Unsigned Results:** When we asked for the hard copy of the Doppler test result, we couldn't get it because he hadn't signed it yet. Which is ridiculous. We've been waiting a week since the test. The hospital was supposed to call today, yet we had to freaking go to the hospital and pick it up again.\n3. **The Audacity:** During the session, the Dr had the gall to ask, **\"Why do you come here actually?\"** Freaking ridiculous. This is our third appointment with him and he doesn't even remember. He kept complaining, \"why do we see so many doctors\" or \"why did this dr refer him\". It's clear my dad is having a stroke and HE is the stroke expert. All the referrals and passing between doctors are not by us anyway. IT'S BY THE FREAKING HOSPITAL.\n\nI felt like the hospital never admits any mistake or apologizes. It's clearly the hospital's confusion and repeated mistakes, but instead, they blame us or give excuses like \"why do we see so many doctors\" or \"why did this dr refer him\".,\"oh your file is missing\", \"oh the result has a mistake, I have to correct it first before signing.\"\n\n**Summary** After 3 weeks, 5 appointments, and probably RM5-7K later, I feel like we barely gained anything or any new insights. It was a lot of wasted consultations and tests. We didn't even get the crucial treatment needed for my dad (speech therapy for aphasia ASAP), just the basic preventative medicine.\n\nRating: 1/5. Avoid."
     },
     {
+      "id": "72ed48fb-8420-4cf9-afa0-62fb851d50f0",
+      "title": "29/1",
+      "category": "notes",
+      "created_at": "2026-01-29T05:12:51+00:00",
+      "updated_at": "2026-01-30T05:18:07.247599+00:00",
+      "content_markdown": "# 29/1\n\nBesides going to the hospital \n\nHere is a journal of other things i did:\n\n- Read utopia for realist, I'm pretty close to finishing it\n- Read Stubborn Skill Grinder in a Time Loop\n\n  - litrpg timeloop like Mother of Learning\n- Played Cult of The Lamb"
+    },
+    {
       "id": "6970f52d-0d30-48f6-9eba-da26433698ca",
       "title": "Movie review: Pompo The Cinephile",
       "category": "notes",
@@ -76,11 +172,11 @@
     },
     {
       "id": "bbd84a0c-243c-4624-adbf-45c825a05db4",
-      "title": "Book Review: My Stroke of Insight",
+      "title": "28/1",
       "category": "notes",
       "created_at": "2026-01-28T06:56:43.366081+00:00",
-      "updated_at": "2026-01-28T07:28:35.332659+00:00",
-      "content_markdown": "# Book Review: My Stroke of Insight\n\n**Rating: 3.5/5**\n\n### The Premise\n\nIt’s a rare and terrifying paradox: a neuroanatomist watching her own brain shut down. Dr. Jill Bolte Taylor’s *My Stroke of Insight* offers a first-person account of a massive stroke in the left hemisphere of her brain, stripping away her ability to process language, numbers, and ego, leaving her in a state of pure right-brain consciousness.\n\n### The Breakdown: Anatomy of a Stroke\n\nThe strongest part of this book is the visceral, almost clinical description of cognitive deterioration. Taylor chronicles the exact moment she realized she was having a stroke, followed by the terrifying struggle to perform basic tasks—like dialing a phone number—while her cognitive faculties (reading, speech, numerical processing) dissolved in real-time.\n\nFor anyone fascinated by the mechanics of the mind, this section is gripping. The vulnerability of living alone while losing the capacity to communicate or even understand one’s own existence is portrayed with haunting clarity.\n\n### The Recovery: Identity and Care\n\nBeyond the event itself, the book shines in its exploration of recovery. Taylor doesn't just discuss physical rehabilitation; she dives into the mental anguish of capacity loss—the feeling of being \"less than\" who you were before.\n\nShe offers valuable tactical advice for caregivers, emphasizing that recovery isn't just about medical intervention but about how patients are treated and engaged with. It’s a compassionate look at the patience required to rebuild a self from scratch.\n\n### The Critique: Science vs. Spirituality\n\nWhere the book lost me was in its second half. Taylor pivots heavily into spiritual language—describing \"being present\" through lenses of energy fields and \"cosmic connection.\" While I respect intuition, the terminology felt imprecise and occasionally distracted from the neurological grounding of her experience.\n\nFurthermore, the titular \"stroke of insight\"—that we can choose to step into a peaceful right-brain consciousness—felt slightly underwhelming. To me, this \"insight\" closely mirrors existing concepts of Stoicism or emotional regulation: the ability to observe thoughts without attachment and control one's perception. It’s a valid practice, but perhaps not the revolutionary revelation it’s framed as.\n\n### Verdict\n\n*My Stroke of Insight* is a fascinating case study of the brain from the inside out. While the spiritual conclusions may not land for everyone, the detailed account of the stroke and the empathetic guide to recovery make it a worthy read."
+      "updated_at": "2026-02-03T16:41:56.972849+00:00",
+      "content_markdown": "# 28/1"
     },
     {
       "id": "bb93a4f9-5dc0-422a-bca3-0641a0dad0fc",
@@ -111,8 +207,8 @@
       "title": "January Review",
       "category": "notes",
       "created_at": "2026-01-25T18:05:04.386734+00:00",
-      "updated_at": "2026-01-25T20:32:20.786895+00:00",
-      "content_markdown": "# January Review\n\nbased on the weekly review, what can i imprve?\n\n- time blocking\n- weekly review\n- monthly goal\n- 80/20 rule (try one new thing per week)\n\nList of task I want to get done before end of January\n\n- [ ] Reply to Mole Interview\n- [ ] Schedule content calendar for February\n- [ ] Set goal for February\n- [ ] Apply to Mozilla Fellowship\n- [ ] Finish my personal website\n- [ ] Finish 2 book\n\n- [ ] The Will of Many\n- [ ] My stroke of insight\n\nCleve\n\n- [x] Saved post chrome extension\n- [x] Image generation\n- [x] Bi-directional links\n- [x] Publish page\n- [x] API integration\n- [x] Transcriber\n- [ ] Fixes Mobile App\n\n- [x] Chat history\n- [x] Writing migration\n- [ ] Rich text editor\n- [ ] Tool call\n- [ ] Robust search tool\n- [ ] Cleve MCP\n- [ ] Streak\n\nLogs:\n\nBooks:\n\n- Will of Many\n\nMovies:\n\n- Hamilton\n- Maze runner\n- Black bag?\n- Novocaine?"
+      "updated_at": "2026-02-02T13:51:21.781378+00:00",
+      "content_markdown": "# January Review\n\nbased on the weekly review, what can i imprve?\n\n- time blocking\n- weekly review\n- monthly goal\n- 80/20 rule (try one new thing per week)\n\nList of task I want to get done before end of January\n\n- [ ] Reply to Mole Interview\n- [ ] Schedule content calendar for February\n- [ ] Set goal for February\n- [x] Apply to Mozilla Fellowship\n- [x] Finish my personal website\n- [x] Finish 2 book\n\n- [ ] The Will of Many\n- [ ] My stroke of insight\n\nCleve\n\n- [x] Saved post chrome extension\n- [x] Image generation\n- [x] Bi-directional links\n- [x] Publish page\n- [x] API integration\n- [x] Transcriber\n- [ ] Fixes Mobile App\n\n- [x] Chat history\n- [x] Writing migration\n- [ ] Rich text editor\n- [ ] Tool call\n- [ ] Robust search tool\n- [ ] Cleve MCP\n- [ ] Streak\n\nLogs:\n\nBooks:\n\n- Will of Many\n\nMovies:\n\n- Hamilton\n- Maze runner\n- Black bag?\n- Novocaine?"
     },
     {
       "id": "f829a89f-38d4-46ae-8290-1bccfad91609",

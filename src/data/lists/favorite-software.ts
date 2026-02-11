@@ -34,8 +34,10 @@ export const favoriteSoftware: ListItem[] = [
     {
         name: 'Diarium',
         description: 'Beautiful journaling app',
-        tags: ['journaling', 'personal']
+        url: 'https://diariumapp.com/',
+        tags: ['journaling', 'personal'],
     },
+
     {
         name: 'PostHog',
         description: 'Open-source product analytics',

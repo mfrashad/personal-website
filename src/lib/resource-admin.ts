@@ -48,7 +48,12 @@ export function getListFilePath(category: string): string {
 }
 
 function escapeTs(val: string): string {
-    return val.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return val
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t');
 }
 
 export function serializeItem(item: Record<string, any>): string {
