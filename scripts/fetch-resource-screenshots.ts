@@ -32,6 +32,14 @@ import { startupFundraising } from '../src/data/lists/startup-fundraising';
 import { startupMarketingGrowth } from '../src/data/lists/startup-marketing-growth';
 import { startupAiTechStack } from '../src/data/lists/startup-ai-tech-stack';
 import { myStartupTools } from '../src/data/lists/my-startup-tools';
+import { aiWritingTools } from '../src/data/lists/ai-writing-tools';
+import { aiImageTools } from '../src/data/lists/ai-image-tools';
+import { aiAudioTools } from '../src/data/lists/ai-audio-tools';
+import { aiVideoTools } from '../src/data/lists/ai-video-tools';
+import { aiResearchTools } from '../src/data/lists/ai-research-tools';
+import { aiDesignTools } from '../src/data/lists/ai-design-tools';
+import { aiAvatarTools } from '../src/data/lists/ai-avatar-tools';
+import { learnProgramming } from '../src/data/lists/learn-programming';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SCREENSHOTS_DIR = path.join(ROOT, 'public/resource-images/screenshots');
@@ -64,6 +72,9 @@ function collectItems(): { name: string; url: string }[] {
         globalStudentCompetitions, malaysiaStudentCompetitions, malaysiaOpenCompetitions,
         startupLearningResources, startupIdeation, startupBuildingMvp,
         startupFundraising, startupMarketingGrowth, startupAiTechStack, myStartupTools,
+        aiWritingTools, aiImageTools, aiAudioTools, aiVideoTools,
+        aiResearchTools, aiDesignTools, aiAvatarTools,
+        learnProgramming,
     ];
 
     const items: { name: string; url: string }[] = [];

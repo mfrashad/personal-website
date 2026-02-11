@@ -33,6 +33,14 @@ import { startupFundraising } from '@data/lists/startup-fundraising';
 import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
 import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
 import { myStartupTools } from '@data/lists/my-startup-tools';
+import { aiWritingTools } from '@data/lists/ai-writing-tools';
+import { aiImageTools } from '@data/lists/ai-image-tools';
+import { aiAudioTools } from '@data/lists/ai-audio-tools';
+import { aiVideoTools } from '@data/lists/ai-video-tools';
+import { aiResearchTools } from '@data/lists/ai-research-tools';
+import { aiDesignTools } from '@data/lists/ai-design-tools';
+import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
+import { learnProgramming } from '@data/lists/learn-programming';
 import resourceImagesData from '@data/resource-images.json';
 
 export async function getStaticPaths() {
@@ -65,7 +73,15 @@ export async function getStaticPaths() {
         { params: { category: 'startup-fundraising' } },
         { params: { category: 'startup-marketing-growth' } },
         { params: { category: 'startup-ai-tech-stack' } },
-        { params: { category: 'my-startup-tools' } }
+        { params: { category: 'my-startup-tools' } },
+        { params: { category: 'ai-writing-tools' } },
+        { params: { category: 'ai-image-tools' } },
+        { params: { category: 'ai-audio-tools' } },
+        { params: { category: 'ai-video-tools' } },
+        { params: { category: 'ai-research-tools' } },
+        { params: { category: 'ai-design-tools' } },
+        { params: { category: 'ai-avatar-tools' } },
+        { params: { category: 'learn-programming' } }
     ];
 }
 
@@ -100,7 +116,15 @@ const listData: Record<string, any> = {
     'startup-fundraising': { items: startupFundraising, title: 'Startup Fundraising', icon: 'ph:hand-coins' },
     'startup-marketing-growth': { items: startupMarketingGrowth, title: 'Startup Marketing & Growth', icon: 'ph:chart-line-up' },
     'startup-ai-tech-stack': { items: startupAiTechStack, title: 'AI Tech Stack for Startups', icon: 'ph:stack' },
-    'my-startup-tools': { items: myStartupTools, title: 'Tools My Startup Uses', icon: 'ph:toolbox' }
+    'my-startup-tools': { items: myStartupTools, title: 'Tools My Startup Uses', icon: 'ph:toolbox' },
+    'ai-writing-tools': { items: aiWritingTools, title: 'AI Writing Tools', icon: 'ph:pencil-line' },
+    'ai-image-tools': { items: aiImageTools, title: 'AI Image Tools', icon: 'ph:image' },
+    'ai-audio-tools': { items: aiAudioTools, title: 'AI Audio Tools', icon: 'ph:waveform' },
+    'ai-video-tools': { items: aiVideoTools, title: 'AI Video Tools', icon: 'ph:film-strip' },
+    'ai-research-tools': { items: aiResearchTools, title: 'AI Research Tools', icon: 'ph:magnifying-glass' },
+    'ai-design-tools': { items: aiDesignTools, title: 'AI Design Tools', icon: 'ph:palette' },
+    'ai-avatar-tools': { items: aiAvatarTools, title: 'AI Avatar Tools', icon: 'ph:user-circle' },
+    'learn-programming': { items: learnProgramming, title: 'Learn Programming', icon: 'ph:code-block' }
 };
 
 const data = listData[category || 'products'];

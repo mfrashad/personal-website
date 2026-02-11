@@ -75,7 +75,8 @@
     },
     "meetup-com": {
       "favicon": "/resource-images/favicons/meetup-com.png",
-      "ogImage": "/resource-images/og/meetup-com.webp"
+      "ogImage": "/resource-images/og/meetup-com.webp",
+      "screenshot": "/resource-images/screenshots/meetup-com.png"
     },
     "gdg-community-dev": {
       "favicon": "/resource-images/favicons/gdg-community-dev.webp",
@@ -463,10 +464,12 @@
     },
     "clerk-com": {
       "favicon": "/resource-images/favicons/clerk-com.ico",
-      "ogImage": "/resource-images/og/clerk-com.jpg"
+      "ogImage": "/resource-images/og/clerk-com.jpg",
+      "screenshot": "/resource-images/screenshots/clerk-com.png"
     },
     "resend-com": {
-      "favicon": "/resource-images/favicons/resend-com.png"
+      "favicon": "/resource-images/favicons/resend-com.png",
+      "screenshot": "/resource-images/screenshots/resend-com.png"
     },
     "bun-sh": {
       "favicon": "/resource-images/favicons/bun-sh.png",
@@ -536,9 +539,12 @@
       "screenshot": "/resource-images/screenshots/khazanah-com-my.png"
     },
     "mtdc-com-my": {
+      "favicon": "/resource-images/favicons/mtdc-com-my.png",
       "screenshot": "/resource-images/screenshots/mtdc-com-my.png"
     },
     "mdv-com-my": {
+      "favicon": "/resource-images/favicons/mdv-com-my.png",
+      "ogImage": "/resource-images/og/mdv-com-my.png",
       "screenshot": "/resource-images/screenshots/mdv-com-my.png"
     },
     "mlh-io": {
@@ -548,6 +554,7 @@
       "screenshot": "/resource-images/screenshots/smecorp-gov-my.png"
     },
     "punb-com-my": {
+      "favicon": "/resource-images/favicons/punb-com-my.png",
       "screenshot": "/resource-images/screenshots/punb-com-my.png"
     },
     "e-huawei-com": {
@@ -564,6 +571,230 @@
     },
     "pioneer-app": {
       "screenshot": "/resource-images/screenshots/pioneer-app.png"
+    },
+    "sidec-com-my": {
+      "favicon": "/resource-images/favicons/sidec-com-my.webp",
+      "ogImage": "/resource-images/og/sidec-com-my.webp",
+      "screenshot": "/resource-images/screenshots/sidec-com-my.png"
+    },
+    "chatgpt-com": {
+      "favicon": "/resource-images/favicons/chatgpt-com.webp",
+      "screenshot": "/resource-images/screenshots/chatgpt-com.png"
+    },
+    "gemini-google-com": {
+      "favicon": "/resource-images/favicons/gemini-google-com.png",
+      "ogImage": "/resource-images/og/gemini-google-com.png",
+      "screenshot": "/resource-images/screenshots/gemini-google-com.png"
+    },
+    "claude-ai": {
+      "favicon": "/resource-images/favicons/claude-ai.png",
+      "ogImage": "/resource-images/og/claude-ai.png",
+      "screenshot": "/resource-images/screenshots/claude-ai.png"
+    },
+    "chat-deepseek-com": {
+      "favicon": "/resource-images/favicons/chat-deepseek-com.png",
+      "screenshot": "/resource-images/screenshots/chat-deepseek-com.png"
+    },
+    "chat-qwen-ai": {
+      "favicon": "/resource-images/favicons/chat-qwen-ai.png",
+      "screenshot": "/resource-images/screenshots/chat-qwen-ai.png"
+    },
+    "blackforestlabs-ai": {
+      "favicon": "/resource-images/favicons/blackforestlabs-ai.png",
+      "ogImage": "/resource-images/og/blackforestlabs-ai.png",
+      "screenshot": "/resource-images/screenshots/blackforestlabs-ai.png"
+    },
+    "gentube-app": {
+      "favicon": "/resource-images/favicons/gentube-app.png",
+      "ogImage": "/resource-images/og/gentube-app.webp",
+      "screenshot": "/resource-images/screenshots/gentube-app.png"
+    },
+    "elevenlabs-io": {
+      "favicon": "/resource-images/favicons/elevenlabs-io.png",
+      "ogImage": "/resource-images/og/elevenlabs-io.png",
+      "screenshot": "/resource-images/screenshots/elevenlabs-io.png"
+    },
+    "vapi-ai": {
+      "favicon": "/resource-images/favicons/vapi-ai.png",
+      "ogImage": "/resource-images/og/vapi-ai.png",
+      "screenshot": "/resource-images/screenshots/vapi-ai.png"
+    },
+    "murf-ai": {
+      "favicon": "/resource-images/favicons/murf-ai.png",
+      "ogImage": "/resource-images/og/murf-ai.webp",
+      "screenshot": "/resource-images/screenshots/murf-ai.png"
+    },
+    "resemble-ai": {
+      "favicon": "/resource-images/favicons/resemble-ai.webp",
+      "ogImage": "/resource-images/og/resemble-ai.jpg",
+      "screenshot": "/resource-images/screenshots/resemble-ai.png"
+    },
+    "lovo-ai": {
+      "favicon": "/resource-images/favicons/lovo-ai.png",
+      "ogImage": "/resource-images/og/lovo-ai.png",
+      "screenshot": "/resource-images/screenshots/lovo-ai.png"
+    },
+    "capcut-com": {
+      "favicon": "/resource-images/favicons/capcut-com.ico",
+      "ogImage": "/resource-images/og/capcut-com.jpg",
+      "screenshot": "/resource-images/screenshots/capcut-com.png"
+    },
+    "runwayml-com": {
+      "favicon": "/resource-images/favicons/runwayml-com.png",
+      "ogImage": "/resource-images/og/runwayml-com.png",
+      "screenshot": "/resource-images/screenshots/runwayml-com.png"
+    },
+    "pika-art": {
+      "favicon": "/resource-images/favicons/pika-art.ico",
+      "ogImage": "/resource-images/og/pika-art.jpg",
+      "screenshot": "/resource-images/screenshots/pika-art.png"
+    },
+    "klingai-com": {
+      "favicon": "/resource-images/favicons/klingai-com.png",
+      "screenshot": "/resource-images/screenshots/klingai-com.png"
+    },
+    "deepmind-google": {
+      "favicon": "/resource-images/favicons/deepmind-google.png",
+      "ogImage": "/resource-images/og/deepmind-google.webp",
+      "screenshot": "/resource-images/screenshots/deepmind-google.png"
+    },
+    "notebooklm-google-com": {
+      "favicon": "/resource-images/favicons/notebooklm-google-com.ico",
+      "screenshot": "/resource-images/screenshots/notebooklm-google-com.png"
+    },
+    "semanticscholar-org": {
+      "favicon": "/resource-images/favicons/semanticscholar-org.png",
+      "ogImage": "/resource-images/og/semanticscholar-org.png",
+      "screenshot": "/resource-images/screenshots/semanticscholar-org.png"
+    },
+    "jenni-ai": {
+      "favicon": "/resource-images/favicons/jenni-ai.svg",
+      "ogImage": "/resource-images/og/jenni-ai.webp",
+      "screenshot": "/resource-images/screenshots/jenni-ai.png"
+    },
+    "elicit-com": {
+      "favicon": "/resource-images/favicons/elicit-com.webp",
+      "ogImage": "/resource-images/og/elicit-com.webp",
+      "screenshot": "/resource-images/screenshots/elicit-com.png"
+    },
+    "scite-ai": {
+      "favicon": "/resource-images/favicons/scite-ai.ico",
+      "ogImage": "/resource-images/og/scite-ai.png",
+      "screenshot": "/resource-images/screenshots/scite-ai.png"
+    },
+    "researchrabbit-ai": {
+      "favicon": "/resource-images/favicons/researchrabbit-ai.png",
+      "screenshot": "/resource-images/screenshots/researchrabbit-ai.png"
+    },
+    "litmaps-com": {
+      "favicon": "/resource-images/favicons/litmaps-com.png",
+      "screenshot": "/resource-images/screenshots/litmaps-com.png"
+    },
+    "firefly-adobe-com": {
+      "favicon": "/resource-images/favicons/firefly-adobe-com.png",
+      "screenshot": "/resource-images/screenshots/firefly-adobe-com.png"
+    },
+    "framer-com": {
+      "favicon": "/resource-images/favicons/framer-com.webp",
+      "ogImage": "/resource-images/og/framer-com.webp",
+      "screenshot": "/resource-images/screenshots/framer-com.png"
+    },
+    "penpot-app": {
+      "favicon": "/resource-images/favicons/penpot-app.ico",
+      "ogImage": "/resource-images/og/penpot-app.webp",
+      "screenshot": "/resource-images/screenshots/penpot-app.png"
+    },
+    "synthesia-io": {
+      "favicon": "/resource-images/favicons/synthesia-io.png",
+      "ogImage": "/resource-images/og/synthesia-io.jpg",
+      "screenshot": "/resource-images/screenshots/synthesia-io.png"
+    },
+    "heygen-com": {
+      "favicon": "/resource-images/favicons/heygen-com.ico",
+      "ogImage": "/resource-images/og/heygen-com.webp",
+      "screenshot": "/resource-images/screenshots/heygen-com.png"
+    },
+    "hedra-com": {
+      "favicon": "/resource-images/favicons/hedra-com.svg",
+      "ogImage": "/resource-images/og/hedra-com.png",
+      "screenshot": "/resource-images/screenshots/hedra-com.png"
+    },
+    "d-id-com": {
+      "favicon": "/resource-images/favicons/d-id-com.png",
+      "ogImage": "/resource-images/og/d-id-com.png"
+    },
+    "colossyan-com": {
+      "favicon": "/resource-images/favicons/colossyan-com.png",
+      "screenshot": "/resource-images/screenshots/colossyan-com.png"
+    },
+    "jogg-ai": {
+      "favicon": "/resource-images/favicons/jogg-ai.ico",
+      "screenshot": "/resource-images/screenshots/jogg-ai.png"
+    },
+    "ideogram-ai": {
+      "screenshot": "/resource-images/screenshots/ideogram-ai.png"
+    },
+    "midjourney-com": {
+      "screenshot": "/resource-images/screenshots/midjourney-com.png"
+    },
+    "minimaxi-com": {
+      "screenshot": "/resource-images/screenshots/minimaxi-com.png"
+    },
+    "higgsfield-ai": {
+      "screenshot": "/resource-images/screenshots/higgsfield-ai.png"
+    },
+    "hailuoai-video": {
+      "screenshot": "/resource-images/screenshots/hailuoai-video.png"
+    },
+    "consensus-app": {
+      "screenshot": "/resource-images/screenshots/consensus-app.png"
+    },
+    "canva-com": {
+      "screenshot": "/resource-images/screenshots/canva-com.png"
+    },
+    "looka-com": {
+      "screenshot": "/resource-images/screenshots/looka-com.png"
+    },
+    "creatify-ai": {
+      "screenshot": "/resource-images/screenshots/creatify-ai.png"
+    },
+    "codedex-io": {
+      "favicon": "/resource-images/favicons/codedex-io.png",
+      "ogImage": "/resource-images/og/codedex-io.png",
+      "screenshot": "/resource-images/screenshots/codedex-io.png"
+    },
+    "theodinproject-com": {
+      "favicon": "/resource-images/favicons/theodinproject-com.png",
+      "ogImage": "/resource-images/og/theodinproject-com.png",
+      "screenshot": "/resource-images/screenshots/theodinproject-com.png"
+    },
+    "sololearn-com": {
+      "favicon": "/resource-images/favicons/sololearn-com.ico",
+      "ogImage": "/resource-images/og/sololearn-com.webp",
+      "screenshot": "/resource-images/screenshots/sololearn-com.png"
+    },
+    "w3schools-com": {
+      "favicon": "/resource-images/favicons/w3schools-com.png",
+      "ogImage": "/resource-images/og/w3schools-com.png",
+      "screenshot": "/resource-images/screenshots/w3schools-com.png"
+    },
+    "codefinity-com": {
+      "favicon": "/resource-images/favicons/codefinity-com.png",
+      "ogImage": "/resource-images/og/codefinity-com.png",
+      "screenshot": "/resource-images/screenshots/codefinity-com.png"
+    },
+    "freecodecamp-org": {
+      "favicon": "/resource-images/favicons/freecodecamp-org.webp",
+      "ogImage": "/resource-images/og/freecodecamp-org.webp",
+      "screenshot": "/resource-images/screenshots/freecodecamp-org.png"
+    },
+    "fireship-dev": {
+      "favicon": "/resource-images/favicons/fireship-dev.ico",
+      "ogImage": "/resource-images/og/fireship-dev.jpg",
+      "screenshot": "/resource-images/screenshots/fireship-dev.png"
+    },
+    "leetcode-com": {
+      "screenshot": "/resource-images/screenshots/leetcode-com.png"
     }
   }
 }

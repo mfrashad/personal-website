@@ -30,6 +30,14 @@ export const listFileMap: Record<string, { file: string; varName: string; title:
     'startup-marketing-growth': { file: 'startup-marketing-growth.ts', varName: 'startupMarketingGrowth', title: 'Startup Marketing & Growth', icon: 'ph:chart-line-up' },
     'startup-ai-tech-stack': { file: 'startup-ai-tech-stack.ts', varName: 'startupAiTechStack', title: 'AI Tech Stack for Startups', icon: 'ph:stack' },
     'my-startup-tools': { file: 'my-startup-tools.ts', varName: 'myStartupTools', title: 'Tools My Startup Uses', icon: 'ph:toolbox' },
+    'ai-writing-tools': { file: 'ai-writing-tools.ts', varName: 'aiWritingTools', title: 'AI Writing Tools', icon: 'ph:pencil-line' },
+    'ai-image-tools': { file: 'ai-image-tools.ts', varName: 'aiImageTools', title: 'AI Image Tools', icon: 'ph:image' },
+    'ai-audio-tools': { file: 'ai-audio-tools.ts', varName: 'aiAudioTools', title: 'AI Audio Tools', icon: 'ph:waveform' },
+    'ai-video-tools': { file: 'ai-video-tools.ts', varName: 'aiVideoTools', title: 'AI Video Tools', icon: 'ph:film-strip' },
+    'ai-research-tools': { file: 'ai-research-tools.ts', varName: 'aiResearchTools', title: 'AI Research Tools', icon: 'ph:magnifying-glass' },
+    'ai-design-tools': { file: 'ai-design-tools.ts', varName: 'aiDesignTools', title: 'AI Design Tools', icon: 'ph:palette' },
+    'ai-avatar-tools': { file: 'ai-avatar-tools.ts', varName: 'aiAvatarTools', title: 'AI Avatar Tools', icon: 'ph:user-circle' },
+    'learn-programming': { file: 'learn-programming.ts', varName: 'learnProgramming', title: 'Learn Programming', icon: 'ph:code-block' },
 };
 
 export function getListFilePath(category: string): string {
