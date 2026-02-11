@@ -44,6 +44,7 @@ export interface ResourceList {
 interface ResourcesFilterProps {
     lists: ResourceList[];
     allTags: string[];
+    resourceImages?: Record<string, { favicon?: string; ogImage?: string }>;
 }
 
 // Map icon names to Phosphor components
@@ -78,7 +79,17 @@ const iconMap: Record<string, PhosphorIcon> = {
     'ph:toolbox': Toolbox,
 };
 
-export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps) {
+function getImageKey(url?: string): string | null {
+    if (!url) return null;
+    try {
+        const hostname = new URL(url).hostname.replace(/^www\./, '');
+        return hostname.replace(/\./g, '-');
+    } catch {
+        return null;
+    }
+}
+
+export default function ResourcesFilter({ lists, allTags, resourceImages = {} }: ResourcesFilterProps) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -238,17 +249,23 @@ export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps
                             <ul className="space-y-1">
                                 {list.items.map((item: any, index: number) => {
                                     const hasDetails = item.description || (item.tags && item.tags.length > 0);
+                                    const imageKey = getImageKey(item.url);
+                                    const manifestEntry = imageKey ? resourceImages[imageKey] : null;
+                                    const faviconSrc = item.image || manifestEntry?.favicon;
+                                    const FallbackIcon = iconMap[list.icon];
                                     return (
                                         <li key={index} className="group/item relative">
                                             <span className="relative inline-flex items-center gap-2 py-0.5 text-sm text-content-body">
-                                                {item.image && (
+                                                {faviconSrc ? (
                                                     <img
-                                                        src={item.image}
-                                                        alt={`${item.name} logo`}
-                                                        className="h-5 w-5 rounded object-contain"
+                                                        src={faviconSrc}
+                                                        alt={`${item.name} icon`}
+                                                        className="h-4 w-4 rounded object-contain shrink-0"
                                                         loading="lazy"
                                                     />
-                                                )}
+                                                ) : FallbackIcon ? (
+                                                    <FallbackIcon size={14} className="shrink-0 text-content-subtle" />
+                                                ) : null}
                                                 {item.url ? (
                                                     <a
                                                         href={item.url}
@@ -268,7 +285,7 @@ export default function ResourcesFilter({ lists, allTags }: ResourcesFilterProps
                                                 {hasDetails && (
                                                     <div className="item-tooltip">
                                                         {item.description && (
-                                                            <div className="text-xs text-content-muted">{item.description}</div>
+                                                            <div className="text-xs text-content-muted whitespace-pre-line">{item.description}</div>
                                                         )}
                                                         {item.tags && item.tags.length > 0 && (
                                                             <div className="flex flex-wrap gap-1 mt-1.5">
