@@ -535,7 +535,8 @@
       "screenshot": "/resource-images/screenshots/facebook-com.png"
     },
     "perplexity-ai": {
-      "screenshot": "/resource-images/screenshots/perplexity-ai.png"
+      "screenshot": "/resource-images/screenshots/perplexity-ai.png",
+      "favicon": "/resource-images/favicons/perplexity-ai.png"
     },
     "khazanah-com-my": {
       "screenshot": "/resource-images/screenshots/khazanah-com-my.png"
