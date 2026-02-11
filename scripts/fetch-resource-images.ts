@@ -49,6 +49,7 @@ import { aiResearchTools } from '../src/data/lists/ai-research-tools';
 import { aiDesignTools } from '../src/data/lists/ai-design-tools';
 import { aiAvatarTools } from '../src/data/lists/ai-avatar-tools';
 import { learnProgramming } from '../src/data/lists/learn-programming';
+import { paidOpenSourcePrograms } from '../src/data/lists/paid-open-source-programs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const FAVICONS_DIR = path.join(ROOT, 'public/resource-images/favicons');
@@ -68,7 +69,7 @@ function collectItems(): { name: string; url: string }[] {
         startupFundraising, startupMarketingGrowth, startupAiTechStack, myStartupTools,
         aiWritingTools, aiImageTools, aiAudioTools, aiVideoTools,
         aiResearchTools, aiDesignTools, aiAvatarTools,
-        learnProgramming,
+        learnProgramming, paidOpenSourcePrograms,
     ];
 
     const items: { name: string; url: string }[] = [];

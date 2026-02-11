@@ -41,6 +41,7 @@ import { aiResearchTools } from '@data/lists/ai-research-tools';
 import { aiDesignTools } from '@data/lists/ai-design-tools';
 import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
 import { learnProgramming } from '@data/lists/learn-programming';
+import { paidOpenSourcePrograms } from '@data/lists/paid-open-source-programs';
 import resourceImagesData from '@data/resource-images.json';
 
 export async function getStaticPaths() {
@@ -81,7 +82,8 @@ export async function getStaticPaths() {
         { params: { category: 'ai-research-tools' } },
         { params: { category: 'ai-design-tools' } },
         { params: { category: 'ai-avatar-tools' } },
-        { params: { category: 'learn-programming' } }
+        { params: { category: 'learn-programming' } },
+        { params: { category: 'paid-open-source-programs' } }
     ];
 }
 
@@ -124,7 +126,8 @@ const listData: Record<string, any> = {
     'ai-research-tools': { items: aiResearchTools, title: 'AI Research Tools', icon: 'ph:magnifying-glass' },
     'ai-design-tools': { items: aiDesignTools, title: 'AI Design Tools', icon: 'ph:palette' },
     'ai-avatar-tools': { items: aiAvatarTools, title: 'AI Avatar Tools', icon: 'ph:user-circle' },
-    'learn-programming': { items: learnProgramming, title: 'Learn Programming', icon: 'ph:code-block' }
+    'learn-programming': { items: learnProgramming, title: 'Learn Programming', icon: 'ph:code-block' },
+    'paid-open-source-programs': { items: paidOpenSourcePrograms, title: 'Paid Open Source Programs', icon: 'ph:currency-dollar' }
 };
 
 const data = listData[category || 'products'];

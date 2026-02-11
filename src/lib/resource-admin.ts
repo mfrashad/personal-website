@@ -38,6 +38,7 @@ export const listFileMap: Record<string, { file: string; varName: string; title:
     'ai-design-tools': { file: 'ai-design-tools.ts', varName: 'aiDesignTools', title: 'AI Design Tools', icon: 'ph:palette' },
     'ai-avatar-tools': { file: 'ai-avatar-tools.ts', varName: 'aiAvatarTools', title: 'AI Avatar Tools', icon: 'ph:user-circle' },
     'learn-programming': { file: 'learn-programming.ts', varName: 'learnProgramming', title: 'Learn Programming', icon: 'ph:code-block' },
+    'paid-open-source-programs': { file: 'paid-open-source-programs.ts', varName: 'paidOpenSourcePrograms', title: 'Paid Open Source Programs', icon: 'ph:currency-dollar' },
 };
 
 export function getListFilePath(category: string): string {
