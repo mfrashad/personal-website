@@ -33,6 +33,15 @@ import { startupFundraising } from '@data/lists/startup-fundraising';
 import { startupMarketingGrowth } from '@data/lists/startup-marketing-growth';
 import { startupAiTechStack } from '@data/lists/startup-ai-tech-stack';
 import { myStartupTools } from '@data/lists/my-startup-tools';
+import { aiWritingTools } from '@data/lists/ai-writing-tools';
+import { aiImageTools } from '@data/lists/ai-image-tools';
+import { aiAudioTools } from '@data/lists/ai-audio-tools';
+import { aiVideoTools } from '@data/lists/ai-video-tools';
+import { aiResearchTools } from '@data/lists/ai-research-tools';
+import { aiDesignTools } from '@data/lists/ai-design-tools';
+import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
+import { learnProgramming } from '@data/lists/learn-programming';
+import resourceImagesData from '@data/resource-images.json';
 
 const lists = [
     { title: 'Best Purchases', items: favoriteProducts, href: '/resources/products', icon: 'ph:shopping-bag', tags: ['tools', 'favorites'] },
@@ -64,6 +73,14 @@ const lists = [
     { title: 'Startup Marketing & Growth', items: startupMarketingGrowth, href: '/resources/startup-marketing-growth', icon: 'ph:chart-line-up', tags: ['startup', 'learning'] },
     { title: 'AI Tech Stack for Startups', items: startupAiTechStack, href: '/resources/startup-ai-tech-stack', icon: 'ph:stack', tags: ['startup', 'tools'] },
     { title: 'Tools My Startup Uses', items: myStartupTools, href: '/resources/my-startup-tools', icon: 'ph:toolbox', tags: ['startup', 'tools'] },
+    { title: 'AI Writing Tools', items: aiWritingTools, href: '/resources/ai-writing-tools', icon: 'ph:pencil-line', tags: ['ai', 'tools'] },
+    { title: 'AI Image Tools', items: aiImageTools, href: '/resources/ai-image-tools', icon: 'ph:image', tags: ['ai', 'tools'] },
+    { title: 'AI Audio Tools', items: aiAudioTools, href: '/resources/ai-audio-tools', icon: 'ph:waveform', tags: ['ai', 'tools'] },
+    { title: 'AI Video Tools', items: aiVideoTools, href: '/resources/ai-video-tools', icon: 'ph:film-strip', tags: ['ai', 'tools'] },
+    { title: 'AI Research Tools', items: aiResearchTools, href: '/resources/ai-research-tools', icon: 'ph:magnifying-glass', tags: ['ai', 'tools'] },
+    { title: 'AI Design Tools', items: aiDesignTools, href: '/resources/ai-design-tools', icon: 'ph:palette', tags: ['ai', 'tools'] },
+    { title: 'AI Avatar Tools', items: aiAvatarTools, href: '/resources/ai-avatar-tools', icon: 'ph:user-circle', tags: ['ai', 'tools'] },
+    { title: 'Learn Programming', items: learnProgramming, href: '/resources/learn-programming', icon: 'ph:code-block', tags: ['learning', 'tools'] },
 ].filter(list => list.items.length > 0);
 
 // Extract all unique tags and sort them
@@ -84,7 +101,7 @@ const allTags = [...new Set(lists.flatMap(list => list.tags))].sort();
             </SectionContent>
 
             <div class="my-8">
-                <ResourcesFilter lists={lists} allTags={allTags} client:load />
+                <ResourcesFilter lists={lists} allTags={allTags} resourceImages={(resourceImagesData as any).images || {}} client:load />
             </div>
         </GridBox>
     </Grid>
