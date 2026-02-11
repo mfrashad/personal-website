@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 interface Item {
     name: string;
@@ -21,6 +21,160 @@ interface ImageResult {
     ogImage?: string;
 }
 
+function getDomainKey(url?: string): string | null {
+    if (!url) return null;
+    try {
+        const hostname = new URL(url).hostname.replace(/^www\./, '');
+        return hostname.replace(/\./g, '-');
+    } catch {
+        return null;
+    }
+}
+
+function ImageDropZone({
+    label,
+    imageType,
+    currentSrc,
+    domainKey,
+    onUploaded,
+}: {
+    label: string;
+    imageType: 'favicon' | 'ogImage' | 'screenshot';
+    currentSrc?: string;
+    domainKey: string | null;
+    onUploaded: (path: string, type: string) => void;
+}) {
+    const [dragging, setDragging] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const zoneRef = useRef<HTMLDivElement>(null);
+
+    const upload = useCallback(async (file: File) => {
+        if (!domainKey) {
+            setError('No URL set - add a URL first');
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            setError('Not an image file');
+            return;
+        }
+        setUploading(true);
+        setError(null);
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('domainKey', domainKey);
+            formData.append('imageType', imageType);
+            const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Upload failed');
+            onUploaded(data.path, imageType);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setUploading(false);
+        }
+    }, [domainKey, imageType, onUploaded]);
+
+    useEffect(() => {
+        const zone = zoneRef.current;
+        if (!zone) return;
+        const handlePaste = (e: ClipboardEvent) => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const file = item.getAsFile();
+                    if (file) upload(file);
+                    return;
+                }
+            }
+        };
+        zone.addEventListener('paste', handlePaste);
+        return () => zone.removeEventListener('paste', handlePaste);
+    }, [upload]);
+
+    const isFavicon = imageType === 'favicon';
+    const imgW = isFavicon ? 48 : 160;
+    const imgH = isFavicon ? 48 : 90;
+
+    return (
+        <div
+            ref={zoneRef}
+            tabIndex={0}
+            onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+                e.preventDefault();
+                setDragging(false);
+                const file = e.dataTransfer.files[0];
+                if (file) upload(file);
+            }}
+            onClick={() => fileInputRef.current?.click()}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 6,
+                padding: 10,
+                border: dragging ? '2px dashed #4361ee' : '2px dashed #ddd',
+                borderRadius: 8,
+                background: dragging ? '#f0f4ff' : '#fafafa',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+                outline: 'none',
+                minWidth: isFavicon ? 80 : 180,
+            }}
+        >
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) upload(file);
+                    e.target.value = '';
+                }}
+            />
+            {currentSrc ? (
+                <img
+                    src={currentSrc + '?t=' + Date.now()}
+                    alt={label}
+                    style={{
+                        width: imgW,
+                        height: imgH,
+                        objectFit: 'contain',
+                        borderRadius: 4,
+                        border: '1px solid #e0e0e0',
+                        background: '#fff',
+                    }}
+                />
+            ) : (
+                <div style={{
+                    width: imgW,
+                    height: imgH,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#bbb',
+                    fontSize: 11,
+                    textAlign: 'center',
+                }}>
+                    No image
+                </div>
+            )}
+            <span style={{ fontSize: 10, fontWeight: 600, color: '#555' }}>{label}</span>
+            <span style={{ fontSize: 9, color: '#aaa' }}>
+                {uploading ? 'Uploading...' : 'Drop, paste, or click'}
+            </span>
+            {error && <span style={{ fontSize: 9, color: '#e74c3c' }}>{error}</span>}
+        </div>
+    );
+}
+
 export default function ResourceAdmin() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [selected, setSelected] = useState<string | null>(null);
@@ -29,7 +183,7 @@ export default function ResourceAdmin() {
     const [saving, setSaving] = useState<string | null>(null);
     const [fetching, setFetching] = useState<string | null>(null);
     const [fetchedImages, setFetchedImages] = useState<Record<string, ImageResult>>({});
-    const [resourceImages, setResourceImages] = useState<Record<string, { favicon?: string; ogImage?: string }>>({});
+    const [resourceImages, setResourceImages] = useState<Record<string, { favicon?: string; ogImage?: string; screenshot?: string }>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
@@ -71,7 +225,7 @@ export default function ResourceAdmin() {
         );
     });
 
-    function getManifestImages(url?: string): { favicon?: string; ogImage?: string } {
+    function getManifestImages(url?: string): { favicon?: string; ogImage?: string; screenshot?: string } {
         if (!url) return {};
         try {
             const hostname = new URL(url).hostname.replace(/^www\./, '');
@@ -80,6 +234,15 @@ export default function ResourceAdmin() {
         } catch {
             return {};
         }
+    }
+
+    function handleImageUploaded(url: string | undefined, uploadedPath: string, imageType: string) {
+        const key = getDomainKey(url);
+        if (!key) return;
+        setResourceImages((s) => ({
+            ...s,
+            [key]: { ...s[key], [imageType]: uploadedPath },
+        }));
     }
 
     function getEditItem(name: string, original: Item): Item {
@@ -411,77 +574,35 @@ export default function ResourceAdmin() {
                                                         />
                                                     </label>
 
-                                                    {/* Image previews */}
-                                                    {(faviconSrc || ogSrc || screenshotSrc || edit.image) && (
-                                                        <div style={styles.imagePreviews}>
-                                                            <span
-                                                                style={{
-                                                                    ...styles.label,
-                                                                    marginBottom: 4,
-                                                                }}
-                                                            >
-                                                                Image Previews
-                                                            </span>
-                                                            <div style={styles.imageRow}>
-                                                                {faviconSrc && (
-                                                                    <div style={styles.imagePreview}>
-                                                                        <img
-                                                                            src={faviconSrc}
-                                                                            alt="Favicon"
-                                                                            style={styles.previewImg}
-                                                                        />
-                                                                        <span style={styles.previewLabel}>
-                                                                            Favicon
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {ogSrc && (
-                                                                    <div style={styles.imagePreview}>
-                                                                        <img
-                                                                            src={ogSrc}
-                                                                            alt="OG"
-                                                                            style={{
-                                                                                ...styles.previewImg,
-                                                                                width: 160,
-                                                                                height: 90,
-                                                                            }}
-                                                                        />
-                                                                        <span style={styles.previewLabel}>
-                                                                            OG Image
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {screenshotSrc && (
-                                                                    <div style={styles.imagePreview}>
-                                                                        <img
-                                                                            src={screenshotSrc}
-                                                                            alt="Screenshot"
-                                                                            style={{
-                                                                                ...styles.previewImg,
-                                                                                width: 160,
-                                                                                height: 90,
-                                                                            }}
-                                                                        />
-                                                                        <span style={styles.previewLabel}>
-                                                                            Screenshot
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                                {edit.image && (
-                                                                    <div style={styles.imagePreview}>
-                                                                        <img
-                                                                            src={edit.image}
-                                                                            alt="Manual"
-                                                                            style={styles.previewImg}
-                                                                        />
-                                                                        <span style={styles.previewLabel}>
-                                                                            Manual
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                    {/* Image upload zones */}
+                                                    <div style={styles.imagePreviews}>
+                                                        <span style={{ ...styles.label, marginBottom: 4 }}>
+                                                            Images (drop, paste, or click to upload)
+                                                        </span>
+                                                        <div style={styles.imageRow}>
+                                                            <ImageDropZone
+                                                                label="Favicon"
+                                                                imageType="favicon"
+                                                                currentSrc={manifestImages.favicon}
+                                                                domainKey={getDomainKey(edit.url || item.url)}
+                                                                onUploaded={(p, t) => handleImageUploaded(edit.url || item.url, p, t)}
+                                                            />
+                                                            <ImageDropZone
+                                                                label="OG Image"
+                                                                imageType="ogImage"
+                                                                currentSrc={ogSrc}
+                                                                domainKey={getDomainKey(edit.url || item.url)}
+                                                                onUploaded={(p, t) => handleImageUploaded(edit.url || item.url, p, t)}
+                                                            />
+                                                            <ImageDropZone
+                                                                label="Screenshot"
+                                                                imageType="screenshot"
+                                                                currentSrc={screenshotSrc}
+                                                                domainKey={getDomainKey(edit.url || item.url)}
+                                                                onUploaded={(p, t) => handleImageUploaded(edit.url || item.url, p, t)}
+                                                            />
                                                         </div>
-                                                    )}
+                                                    </div>
 
                                                     <div style={styles.editActions}>
                                                         <button
@@ -749,24 +870,6 @@ const styles: Record<string, React.CSSProperties> = {
         display: 'flex',
         gap: 16,
         flexWrap: 'wrap' as const,
-    },
-    imagePreview: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 4,
-    },
-    previewImg: {
-        width: 48,
-        height: 48,
-        objectFit: 'contain' as const,
-        border: '1px solid #e0e0e0',
-        borderRadius: 6,
-        background: '#fafafa',
-    },
-    previewLabel: {
-        fontSize: 10,
-        color: '#888',
     },
     editActions: {
         display: 'flex',
