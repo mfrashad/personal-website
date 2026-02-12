@@ -326,8 +326,9 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {selectedList.items.map((item: any, index: number) => {
                     const images = getItemImages(item);
-                    const bannerSrc = images.manualImage ? null : (images.ogImage || images.screenshot);
+                    const bannerSrc = images.manualImage || images.ogImage || images.screenshot;
                     const iconSrc = images.manualImage || images.favicon;
+                    const hoverScreenshot = images.screenshot || images.manualImage || images.ogImage;
                     const FallbackIcon = iconMap[selectedList.icon];
 
                     return (
@@ -405,16 +406,16 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                                                 className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                                             />
                                         </a>
-                                        {images.screenshot && (
+                                        {hoverScreenshot && (
                                             <button
-                                                onClick={() => setLightbox({ src: images.screenshot!, name: item.name })}
+                                                onClick={() => setLightbox({ src: hoverScreenshot!, name: item.name })}
                                                 className="screenshot-preview-btn"
                                                 aria-label={`View ${item.name} screenshot`}
                                             >
                                                 <Monitor size={16} className="text-content-muted hover:text-blue-600 cursor-pointer transition-colors" />
                                                 <div className="screenshot-preview-tooltip">
                                                     <img
-                                                        src={images.screenshot}
+                                                        src={hoverScreenshot}
                                                         alt={`${item.name} screenshot`}
                                                         loading="lazy"
                                                     />
