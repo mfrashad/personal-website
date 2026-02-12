@@ -191,7 +191,8 @@ export async function fetchImagesForUrl(url: string): Promise<{ favicon?: string
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800 });
         await page.goto(url, { waitUntil: 'networkidle2', timeout: 20_000 });
-        await new Promise((r) => setTimeout(r, 1500));
+        // Wait for JS rendering and lazy-loaded elements
+        await new Promise((r) => setTimeout(r, 5000));
 
         finalUrl = page.url();
         html = await page.content();

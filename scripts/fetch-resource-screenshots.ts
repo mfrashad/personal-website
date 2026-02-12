@@ -102,8 +102,8 @@ async function screenshotUrl(
     try {
         await page.setViewport(VIEWPORT);
         await page.goto(url, { waitUntil: 'networkidle2', timeout: NAV_TIMEOUT });
-        // Small delay for JS rendering
-        await new Promise((r) => setTimeout(r, 1500));
+        // Wait for JS rendering and lazy-loaded elements
+        await new Promise((r) => setTimeout(r, 5000));
 
         const filename = `${key}.png`;
         const destPath = path.join(SCREENSHOTS_DIR, filename);
