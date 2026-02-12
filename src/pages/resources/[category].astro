@@ -184,7 +184,7 @@ function getItemImages(item: any) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
                 {items.map((item: any) => {
                     const images = getItemImages(item);
-                    const bannerSrc = images.manualImage ? null : (images.ogImage || images.screenshot);
+                    const bannerSrc = images.ogImage || images.screenshot;
                     const iconSrc = images.manualImage || images.favicon;
                     return (
                         <div class="border border-border rounded-lg bg-surface-secondary hover:shadow-md transition-all duration-300 overflow-visible">
