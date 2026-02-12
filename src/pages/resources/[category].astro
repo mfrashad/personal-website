@@ -184,8 +184,9 @@ function getItemImages(item: any) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
                 {items.map((item: any) => {
                     const images = getItemImages(item);
-                    const bannerSrc = images.ogImage || images.screenshot;
+                    const bannerSrc = images.manualImage || images.ogImage || images.screenshot;
                     const iconSrc = images.manualImage || images.favicon;
+                    const hoverScreenshot = images.screenshot || images.manualImage || images.ogImage;
                     return (
                         <div class="border border-border rounded-lg bg-surface-secondary hover:shadow-md transition-all duration-300 overflow-visible">
                             {/* Banner image — OG image, screenshot fallback, or gradient */}
@@ -256,17 +257,17 @@ function getItemImages(item: any) {
                                                 class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                                             />
                                         </a>
-                                        {images.screenshot && (
+                                        {hoverScreenshot && (
                                             <button
                                                 class="screenshot-btn"
-                                                data-screenshot={images.screenshot}
+                                                data-screenshot={hoverScreenshot}
                                                 data-name={item.name}
                                                 aria-label={`View ${item.name} screenshot`}
                                             >
                                                 <Icon name="ph:monitor" width={16} height={16} class="text-content-muted hover:text-blue-600 cursor-pointer transition-colors" />
                                                 <div class="screenshot-tooltip">
                                                     <img
-                                                        src={images.screenshot}
+                                                        src={hoverScreenshot}
                                                         alt={`${item.name} screenshot`}
                                                         loading="lazy"
                                                     />
