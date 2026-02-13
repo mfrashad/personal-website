@@ -22,7 +22,8 @@
         "build:webmentions": "tsx scripts/get-webmentions.ts",
         "build:all-data": "npm run fetch:cleve && npm run build:links && npm run build:topics && npm run build:webmentions",
         "update:hashtags": "tsx scripts/update-hashtags.ts",
-        "update:hashtags:dry": "tsx scripts/update-hashtags.ts --dry-run"
+        "update:hashtags:dry": "tsx scripts/update-hashtags.ts --dry-run",
+        "remotion:studio": "npx remotion studio remotion/index.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -35,6 +36,10 @@
         "@fontsource-variable/fraunces": "^5.2.9",
         "@lottiefiles/react-lottie-player": "^3.6.0",
         "@phosphor-icons/react": "^2.1.6",
+        "@remotion/bundler": "^4.0.421",
+        "@remotion/cli": "^4.0.421",
+        "@remotion/player": "^4.0.421",
+        "@remotion/renderer": "^4.0.421",
         "@types/howler": "^2.2.12",
         "@types/node": "^25.0.3",
         "@types/react": "^18.3.1",
@@ -75,6 +80,7 @@
         "remark-parse": "^11.0.0",
         "remark-unwrap-images": "^4.0.1",
         "remark-wiki-link": "^2.0.1",
+        "remotion": "^4.0.421",
         "resend": "^6.0.1",
         "sanitize-html": "^2.14.0",
         "tailwind-merge": "^3.4.0",

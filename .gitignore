@@ -33,6 +33,9 @@ pnpm-debug.log*
 #SynoResource*
 .SynoResource
 
+# content generator output
+public/content-generator/output/
+
 # cached data
 src/data/letterboxd-cache.json
 .vercel
