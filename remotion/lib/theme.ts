@@ -8,13 +8,20 @@ export const VIDEO = {
     height: 1920,
     fps: 30,
     hookDurationSec: 3,
-    itemDurationSec: 3.5,
+    itemDurationSec: 2,
     ctaDurationSec: 2,
 };
 
-export function getVideoDuration(itemCount: number): number {
-    const { fps, hookDurationSec, itemDurationSec, ctaDurationSec } = VIDEO;
-    return Math.ceil((hookDurationSec + itemCount * itemDurationSec + ctaDurationSec) * fps);
+export function getVideoDuration(
+    itemCount: number,
+    customHookFrames?: number,
+    customItemFrames?: number,
+    customCtaFrames?: number,
+): number {
+    const hookFrames = customHookFrames ?? Math.ceil(VIDEO.hookDurationSec * VIDEO.fps);
+    const itemFrames = customItemFrames ?? Math.ceil(VIDEO.itemDurationSec * VIDEO.fps);
+    const ctaFrames = customCtaFrames ?? Math.ceil(VIDEO.ctaDurationSec * VIDEO.fps);
+    return hookFrames + itemCount * itemFrames + ctaFrames;
 }
 
 export const colors = {

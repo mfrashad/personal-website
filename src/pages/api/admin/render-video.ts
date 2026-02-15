@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
         const { renderMedia, selectComposition } = await import('@remotion/renderer');
 
         const body = await request.json();
-        const { backgroundVideo, backgroundImage, hookText, subtitle, brandName, items } = body;
+        const { backgroundVideo, backgroundImage, videoBackgroundMode, backgroundFallbackColor, audioSrc, hookDurationFrames, itemDurationFrames, ctaDurationFrames, hookText, subtitle, brandName, items, layoutOverrides, logoUrls } = body;
 
         if (!hookText || !items?.length) {
             return new Response(
@@ -58,10 +58,18 @@ export const POST: APIRoute = async ({ request }) => {
         const inputProps = {
             backgroundVideo: backgroundVideo || undefined,
             backgroundImage: backgroundImage || undefined,
+            videoBackgroundMode: videoBackgroundMode || 'full',
+            backgroundFallbackColor: backgroundFallbackColor || '#0f172a',
+            audioSrc: audioSrc || undefined,
+            hookDurationFrames: hookDurationFrames || undefined,
+            itemDurationFrames: itemDurationFrames || undefined,
+            ctaDurationFrames: ctaDurationFrames || undefined,
             hookText,
             subtitle: subtitle || undefined,
-            brandName: brandName || '@rashad',
+            brandName: brandName || '@rashadcodes',
             items,
+            layoutOverrides: layoutOverrides || undefined,
+            logoUrls: logoUrls || [],
         };
 
         const composition = await selectComposition({

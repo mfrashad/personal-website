@@ -17,6 +17,13 @@ function getExtFromMime(mime: string): string {
         'video/mp4': '.mp4',
         'video/webm': '.webm',
         'video/quicktime': '.mov',
+        'audio/mpeg': '.mp3',
+        'audio/mp3': '.mp3',
+        'audio/wav': '.wav',
+        'audio/ogg': '.ogg',
+        'audio/aac': '.aac',
+        'audio/x-m4a': '.m4a',
+        'audio/mp4': '.m4a',
     };
     return map[mime] || '.png';
 }

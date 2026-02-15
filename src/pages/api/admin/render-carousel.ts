@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
         const { renderStill, selectComposition } = await import('@remotion/renderer');
 
         const body = await request.json();
-        const { backgroundImage, hookText, subtitle, brandName, items } = body;
+        const { backgroundImage, hookText, subtitle, brandName, ctaText, logoUrls, items, hookLayout, itemOverrides } = body;
 
         if (!backgroundImage || !hookText || !items?.length) {
             return new Response(
@@ -58,7 +58,9 @@ export const POST: APIRoute = async ({ request }) => {
             backgroundImage: bgUrl,
             hookText,
             subtitle: subtitle || undefined,
-            brandName: brandName || '@rashad',
+            brandName: brandName || '@rashadcodes',
+            layout: hookLayout || undefined,
+            logoUrls: logoUrls || [],
         };
 
         const hookComposition = await selectComposition({
@@ -89,7 +91,8 @@ export const POST: APIRoute = async ({ request }) => {
                 images: images || undefined,
                 slideNumber: i + 1,
                 totalSlides: items.length,
-                brandName: brandName || '@rashad',
+                brandName: brandName || '@rashadcodes',
+                overrides: itemOverrides || undefined,
             };
 
             const itemComposition = await selectComposition({
@@ -105,6 +108,30 @@ export const POST: APIRoute = async ({ request }) => {
                 inputProps: itemInputProps,
             });
             outputPaths.push(`/content-generator/output/carousel-${timestamp}/slide-${slideNum}.png`);
+        }
+
+        // Render CTA slide
+        if (ctaText) {
+            const ctaSlideOutput = path.join(outputSubdir, `slide-${String(items.length + 1).padStart(2, '0')}-cta.png`);
+            const ctaInputProps = {
+                backgroundImage: bgUrl,
+                ctaText,
+                brandName: brandName || '@rashadcodes',
+            };
+
+            const ctaComposition = await selectComposition({
+                serveUrl: bundleCache,
+                id: 'CarouselCtaSlide',
+                inputProps: ctaInputProps,
+            });
+
+            await renderStill({
+                serveUrl: bundleCache,
+                composition: ctaComposition,
+                output: ctaSlideOutput,
+                inputProps: ctaInputProps,
+            });
+            outputPaths.push(`/content-generator/output/carousel-${timestamp}/slide-${String(items.length + 1).padStart(2, '0')}-cta.png`);
         }
 
         return new Response(

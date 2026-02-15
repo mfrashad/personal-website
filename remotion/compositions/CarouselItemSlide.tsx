@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, Img } from 'remotion';
 import type { CarouselItemSlideProps } from '../lib/types';
 import { CAROUSEL, colors, fonts, spacing } from '../lib/theme';
+import { LayoutRenderer } from './LayoutRenderer';
 
 export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
     backgroundImage,
@@ -10,6 +11,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
     slideNumber,
     totalSlides,
     brandName,
+    overrides,
 }) => {
     const favicon = images?.favicon;
     const screenshot = images?.screenshot || images?.ogImage;
@@ -18,6 +20,15 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
             ? item.description.slice(0, 117) + '...'
             : item.description
         : '';
+
+    // Apply overrides with defaults
+    const nameFontSize = overrides?.nameFontSize ?? 44;
+    const descFontSize = overrides?.descriptionFontSize ?? 28;
+    const screenshotHeight = overrides?.screenshotHeight ?? 400;
+    const cardMaxWidth = overrides?.cardMaxWidth ?? 920;
+    const cardPadding = overrides?.cardPadding ?? spacing.cardPadding;
+    const brandPos = overrides?.brandPosition ?? { x: spacing.pagePadding, y: spacing.pagePadding };
+    const showLinks = overrides?.showLinks ?? false;
 
     return (
         <AbsoluteFill>
@@ -47,10 +58,10 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                 <div
                     style={{
                         width: '100%',
-                        maxWidth: 920,
+                        maxWidth: cardMaxWidth,
                         backgroundColor: colors.card,
                         borderRadius: 32,
-                        padding: spacing.cardPadding,
+                        padding: cardPadding,
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 28,
@@ -80,7 +91,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                         <div
                             style={{
                                 fontFamily: fonts.heading,
-                                fontSize: 44,
+                                fontSize: nameFontSize,
                                 fontWeight: 700,
                                 color: colors.textPrimary,
                                 lineHeight: 1.2,
@@ -96,7 +107,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                         <div
                             style={{
                                 fontFamily: fonts.body,
-                                fontSize: 28,
+                                fontSize: descFontSize,
                                 fontWeight: 400,
                                 color: colors.textSecondary,
                                 lineHeight: 1.5,
@@ -119,7 +130,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                                 src={screenshot}
                                 style={{
                                     width: '100%',
-                                    height: 400,
+                                    height: screenshotHeight,
                                     objectFit: 'cover',
                                 }}
                             />
@@ -154,14 +165,54 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* URL - below card, centered, cursor-selection style */}
+                {showLinks && item.url && (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginTop: 24,
+                        }}
+                    >
+                        <div
+                            style={{
+                                fontFamily: 'ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace',
+                                fontSize: 28,
+                                fontWeight: 600,
+                                color: '#FFFFFF',
+                                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                padding: '8px 20px',
+                                borderRadius: 6,
+                                letterSpacing: '0.01em',
+                            }}
+                        >
+                            {item.url.replace(/\/$/, '')}
+                        </div>
+                    </div>
+                )}
             </AbsoluteFill>
+
+            {/* Custom elements overlay */}
+            {overrides?.customElements && overrides.customElements.length > 0 && (
+                <AbsoluteFill>
+                    <LayoutRenderer
+                        layout={{ elements: overrides.customElements }}
+                        data={{
+                            brandName,
+                            itemName: item.name,
+                            itemDescription: description,
+                        }}
+                    />
+                </AbsoluteFill>
+            )}
 
             {/* Brand watermark - top left */}
             <div
                 style={{
                     position: 'absolute',
-                    top: spacing.pagePadding,
-                    left: spacing.pagePadding,
+                    top: brandPos.y,
+                    left: brandPos.x,
                     fontFamily: fonts.body,
                     fontSize: 24,
                     fontWeight: 700,

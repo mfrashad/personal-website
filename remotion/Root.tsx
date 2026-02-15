@@ -2,15 +2,15 @@ import React from 'react';
 import { Still, Composition } from 'remotion';
 import { CarouselHookSlide } from './compositions/CarouselHookSlide';
 import { CarouselItemSlide } from './compositions/CarouselItemSlide';
+import { CarouselCtaSlide } from './compositions/CarouselCtaSlide';
 import { VideoComposition } from './compositions/VideoComposition';
 import { CAROUSEL, VIDEO, getVideoDuration } from './lib/theme';
-import type { CarouselHookSlideProps, CarouselItemSlideProps, VideoReelProps } from './lib/types';
+import type { CarouselHookSlideProps, CarouselItemSlideProps, CarouselCtaSlideProps, VideoReelProps } from './lib/types';
 
 const defaultHookProps: CarouselHookSlideProps = {
     backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&h=1350&fit=crop',
     hookText: 'Top 10 Tools Every Startup Needs',
-    subtitle: 'Curated list of the best resources',
-    brandName: '@rashad',
+    brandName: '@rashadcodes',
 };
 
 const defaultItemProps: CarouselItemSlideProps = {
@@ -22,14 +22,19 @@ const defaultItemProps: CarouselItemSlideProps = {
     },
     slideNumber: 1,
     totalSlides: 10,
-    brandName: '@rashad',
+    brandName: '@rashadcodes',
+};
+
+const defaultCtaProps: CarouselCtaSlideProps = {
+    backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&h=1350&fit=crop',
+    ctaText: 'Comment links to get all links sent to you',
+    brandName: '@rashadcodes',
 };
 
 const defaultVideoProps: VideoReelProps = {
     backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&h=1920&fit=crop',
     hookText: 'Top Tools Every Startup Needs',
-    subtitle: 'Curated by Rashad',
-    brandName: '@rashad',
+    brandName: '@rashadcodes',
     items: [
         {
             item: { name: 'Tool One', description: 'First tool description.', tags: ['productivity'] },
@@ -59,6 +64,13 @@ export const RemotionRoot: React.FC = () => {
                 width={CAROUSEL.width}
                 height={CAROUSEL.height}
                 defaultProps={defaultItemProps}
+            />
+            <Still
+                id="CarouselCtaSlide"
+                component={CarouselCtaSlide}
+                width={CAROUSEL.width}
+                height={CAROUSEL.height}
+                defaultProps={defaultCtaProps}
             />
             <Composition
                 id="VideoReel"
