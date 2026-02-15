@@ -4,7 +4,7 @@ import type { SlideLayout, DesignElement } from '../../../../remotion/lib/design
 interface AddElementToolbarProps {
     layout: SlideLayout;
     selectedElementId: string | null;
-    editingSlideType: 'hook' | 'item';
+    editingSlideType: 'hook' | 'item' | 'mockup';
     onAddText: () => void;
     onSelectElement: (id: string | null) => void;
     onDeleteElement: (id: string) => void;

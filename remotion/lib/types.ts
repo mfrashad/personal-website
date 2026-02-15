@@ -10,7 +10,10 @@ export interface ResourceImages {
     favicon?: string;
     ogImage?: string;
     screenshot?: string;
+    mockup?: string;
 }
+
+export type ItemSlideTemplate = 'card' | 'mockup';
 
 export interface CarouselHookSlideProps {
     backgroundImage: string;
@@ -38,6 +41,16 @@ export interface CarouselItemSlideProps {
     overrides?: import('./design-types').ItemSlideOverrides;
 }
 
+export interface CarouselMockupSlideProps {
+    item: ResourceItem;
+    mockupImage: string;
+    slideNumber: number;
+    totalSlides: number;
+    brandName: string;
+    favicon?: string;
+    layout?: import('./design-types').SlideLayout;
+}
+
 export interface VideoLayoutOverrides {
     hookTextPosition?: { x: number; y: number };
     hookTextFontSize?: number;
@@ -59,6 +72,7 @@ export interface VideoLayoutOverrides {
 }
 
 export interface VideoReelProps {
+    template?: ItemSlideTemplate;
     backgroundVideo?: string;
     backgroundImage?: string;
     /** 'full' = video plays entire duration, 'hook-only' = video on hook slide only */
@@ -78,6 +92,10 @@ export interface VideoReelProps {
         images?: ResourceImages;
     }>;
     layoutOverrides?: VideoLayoutOverrides;
+    /** Hook slide layout from carousel editor (positions text elements) */
+    hookLayout?: import('./design-types').SlideLayout;
+    /** Mockup slide layout from carousel editor (positions text + logo elements) */
+    mockupLayout?: import('./design-types').SlideLayout;
     /** Favicon URLs for logo grid on hook section */
     logoUrls?: string[];
 }

@@ -9,61 +9,73 @@ export interface ListItem {
 export const favoriteNonfictionBooks: ListItem[] = [
     {
         name: 'Atomic Habits',
+        url: 'https://hardcover.app/books/atomic-habits',
         description: 'Build better habits, break bad ones',
         tags: ['self-help', 'productivity', 'habits']
     },
     {
         name: 'Die With Zero',
+        url: 'https://hardcover.app/books/die-with-zero',
         description: 'Get the most out of your money and your life',
         tags: ['finance', 'life', 'philosophy']
     },
     {
         name: 'Doing Good Better',
+        url: 'https://hardcover.app/books/doing-good-better',
         description: 'Effective altruism and how to make a difference',
         tags: ['philosophy', 'altruism', 'impact']
     },
     {
         name: 'Millionaire Fast Lane',
+        url: 'https://hardcover.app/books/the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89',
         description: 'Build wealth through entrepreneurship',
         tags: ['business', 'entrepreneurship', 'wealth']
     },
     {
         name: 'Deep Work by Cal Newport',
+        url: 'https://hardcover.app/books/deep-work',
         description: 'Focus and productivity in a distracted world',
         tags: ['productivity', 'focus', 'work']
     },
     {
         name: 'Educated by Tara Westover',
+        url: 'https://hardcover.app/books/educated',
         description: 'A memoir about the transformative power of education',
         tags: ['memoir', 'education', 'inspiration']
     },
     {
         name: 'Models by Mark Manson',
+        url: 'https://hardcover.app/books/models-attract-women-through-honesty',
         description: 'Attract women through honesty and authenticity',
         tags: ['relationships', 'self-help', 'dating']
     },
     {
         name: 'The Slight Edge',
+        url: 'https://hardcover.app/books/the-slight-edge-2005',
         description: 'Small daily decisions compound over time',
         tags: ['self-help', 'habits', 'philosophy']
     },
     {
         name: 'Building a Second Brain',
+        url: 'https://hardcover.app/books/building-a-second-brain',
         description: 'Organize your digital life and unlock your creative potential',
         tags: ['productivity', 'knowledge-management', 'creativity']
     },
     {
         name: 'Getting Things Done',
+        url: 'https://hardcover.app/books/getting-things-done',
         description: 'The art of stress-free productivity',
         tags: ['productivity', 'organization', 'work']
     },
     {
         name: 'Flow',
+        url: 'https://hardcover.app/books/flow-1990',
         description: 'The psychology of optimal experience',
         tags: ['psychology', 'productivity', 'happiness']
     },
     {
         name: 'Be So Good They Can\'t Ignore You',
+        url: 'https://hardcover.app/books/so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061',
         description: 'Skills trump passion in the quest for work you love',
         tags: ['career', 'skills', 'work']
     }

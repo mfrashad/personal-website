@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
         const { renderStill, selectComposition } = await import('@remotion/renderer');
 
         const body = await request.json();
-        const { backgroundImage, hookText, subtitle, brandName, ctaText, logoUrls, items, hookLayout, itemOverrides } = body;
+        const { backgroundImage, hookText, subtitle, brandName, ctaText, logoUrls, items, hookLayout, mockupLayout, itemOverrides, template } = body;
 
         if (!backgroundImage || !hookText || !items?.length) {
             return new Response(
@@ -80,33 +80,59 @@ export const POST: APIRoute = async ({ request }) => {
         outputPaths.push(`/content-generator/output/carousel-${timestamp}/slide-00-hook.png`);
 
         // Render item slides
+        const useMockup = template === 'mockup';
         for (let i = 0; i < items.length; i++) {
-            const { item, images } = items[i];
+            const { item, images, mockupImage } = items[i];
             const slideNum = String(i + 1).padStart(2, '0');
             const slideOutput = path.join(outputSubdir, `slide-${slideNum}.png`);
 
-            const itemInputProps = {
-                backgroundImage: bgUrl,
-                item,
-                images: images || undefined,
-                slideNumber: i + 1,
-                totalSlides: items.length,
-                brandName: brandName || '@rashadcodes',
-                overrides: itemOverrides || undefined,
-            };
+            if (useMockup && mockupImage) {
+                const mockupInputProps = {
+                    item,
+                    mockupImage,
+                    slideNumber: i + 1,
+                    totalSlides: items.length,
+                    brandName: brandName || '@rashadcodes',
+                    favicon: images?.favicon || undefined,
+                    layout: mockupLayout || undefined,
+                };
 
-            const itemComposition = await selectComposition({
-                serveUrl: bundleCache,
-                id: 'CarouselItemSlide',
-                inputProps: itemInputProps,
-            });
+                const mockupComposition = await selectComposition({
+                    serveUrl: bundleCache,
+                    id: 'CarouselMockupSlide',
+                    inputProps: mockupInputProps,
+                });
 
-            await renderStill({
-                serveUrl: bundleCache,
-                composition: itemComposition,
-                output: slideOutput,
-                inputProps: itemInputProps,
-            });
+                await renderStill({
+                    serveUrl: bundleCache,
+                    composition: mockupComposition,
+                    output: slideOutput,
+                    inputProps: mockupInputProps,
+                });
+            } else {
+                const itemInputProps = {
+                    backgroundImage: bgUrl,
+                    item,
+                    images: images || undefined,
+                    slideNumber: i + 1,
+                    totalSlides: items.length,
+                    brandName: brandName || '@rashadcodes',
+                    overrides: itemOverrides || undefined,
+                };
+
+                const itemComposition = await selectComposition({
+                    serveUrl: bundleCache,
+                    id: 'CarouselItemSlide',
+                    inputProps: itemInputProps,
+                });
+
+                await renderStill({
+                    serveUrl: bundleCache,
+                    composition: itemComposition,
+                    output: slideOutput,
+                    inputProps: itemInputProps,
+                });
+            }
             outputPaths.push(`/content-generator/output/carousel-${timestamp}/slide-${slideNum}.png`);
         }
 

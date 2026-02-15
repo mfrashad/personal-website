@@ -43,10 +43,13 @@ const TextElementRenderer: React.FC<{ el: TextElement; data: Record<string, stri
     );
 };
 
-const ImageElementRenderer: React.FC<{ el: ImageElement }> = ({ el }) => {
+const ImageElementRenderer: React.FC<{ el: ImageElement; data: Record<string, string> }> = ({ el, data }) => {
+    const resolvedSrc = resolveTokens(el.src, data);
+    if (!resolvedSrc) return null;
+
     return (
         <Img
-            src={el.src}
+            src={resolvedSrc}
             style={{
                 position: 'absolute',
                 left: el.x,
@@ -108,7 +111,7 @@ export const LayoutRenderer: React.FC<LayoutRendererProps> = ({ layout, data, lo
                         return <TextElementRenderer key={el.id} el={el} data={data} />;
                     }
                     if (el.type === 'image') {
-                        return <ImageElementRenderer key={el.id} el={el} />;
+                        return <ImageElementRenderer key={el.id} el={el} data={data} />;
                     }
                     if (el.type === 'logo-grid') {
                         return <LogoGridElementRenderer key={el.id} el={el} logoUrls={logoUrls || []} />;

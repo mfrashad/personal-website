@@ -43,6 +43,7 @@ import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
 import { learnProgramming } from '@data/lists/learn-programming';
 import { paidOpenSourcePrograms } from '@data/lists/paid-open-source-programs';
 import resourceImagesData from '@data/resource-images.json';
+import { resourceKey } from '@lib/fetch-resource-image';
 
 export async function getStaticPaths() {
     return [
@@ -140,12 +141,8 @@ const resourceImages = (resourceImagesData as any).images || {};
 
 function getImageKey(url?: string): string | null {
     if (!url) return null;
-    try {
-        const hostname = new URL(url).hostname.replace(/^www\./, '');
-        return hostname.replace(/\./g, '-');
-    } catch {
-        return null;
-    }
+    const key = resourceKey(url);
+    return key || null;
 }
 
 function getItemImages(item: any) {

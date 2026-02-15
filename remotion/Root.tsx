@@ -3,9 +3,11 @@ import { Still, Composition } from 'remotion';
 import { CarouselHookSlide } from './compositions/CarouselHookSlide';
 import { CarouselItemSlide } from './compositions/CarouselItemSlide';
 import { CarouselCtaSlide } from './compositions/CarouselCtaSlide';
+import { CarouselMockupSlide } from './compositions/CarouselMockupSlide';
 import { VideoComposition } from './compositions/VideoComposition';
 import { CAROUSEL, VIDEO, getVideoDuration } from './lib/theme';
-import type { CarouselHookSlideProps, CarouselItemSlideProps, CarouselCtaSlideProps, VideoReelProps } from './lib/types';
+import { getDefaultMockupSlideLayout } from './lib/default-layouts';
+import type { CarouselHookSlideProps, CarouselItemSlideProps, CarouselMockupSlideProps, CarouselCtaSlideProps, VideoReelProps } from './lib/types';
 
 const defaultHookProps: CarouselHookSlideProps = {
     backgroundImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&h=1350&fit=crop',
@@ -23,6 +25,19 @@ const defaultItemProps: CarouselItemSlideProps = {
     slideNumber: 1,
     totalSlides: 10,
     brandName: '@rashadcodes',
+};
+
+const defaultMockupProps: CarouselMockupSlideProps = {
+    item: {
+        name: 'Example Tool',
+        description: 'A great tool for building products faster.',
+        tags: ['productivity', 'saas'],
+    },
+    mockupImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1080&h=1350&fit=crop',
+    slideNumber: 1,
+    totalSlides: 10,
+    brandName: '@rashadcodes',
+    layout: getDefaultMockupSlideLayout(),
 };
 
 const defaultCtaProps: CarouselCtaSlideProps = {
@@ -64,6 +79,13 @@ export const RemotionRoot: React.FC = () => {
                 width={CAROUSEL.width}
                 height={CAROUSEL.height}
                 defaultProps={defaultItemProps}
+            />
+            <Still
+                id="CarouselMockupSlide"
+                component={CarouselMockupSlide}
+                width={CAROUSEL.width}
+                height={CAROUSEL.height}
+                defaultProps={defaultMockupProps}
             />
             <Still
                 id="CarouselCtaSlide"

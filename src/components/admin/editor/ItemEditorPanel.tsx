@@ -9,6 +9,7 @@ interface ItemImages {
 interface ItemEdits {
     name?: string;
     description?: string;
+    url?: string;
 }
 
 interface ItemImageEdits {
@@ -19,11 +20,12 @@ interface ItemImageEdits {
 interface ItemEditorPanelProps {
     itemName: string;
     itemDescription?: string;
+    itemUrl?: string;
     images?: ItemImages;
     edits: ItemEdits;
     imageEdits: ItemImageEdits;
     imagePreviews: { favicon?: string; screenshot?: string };
-    onUpdateEdit: (field: 'name' | 'description', value: string) => void;
+    onUpdateEdit: (field: 'name' | 'description' | 'url', value: string) => void;
     onUploadImage: (type: 'favicon' | 'screenshot', file: File) => void;
     onResetImage: (type: 'favicon' | 'screenshot') => void;
     onReset: () => void;
@@ -32,6 +34,7 @@ interface ItemEditorPanelProps {
 export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
     itemName,
     itemDescription,
+    itemUrl,
     images,
     edits,
     imageEdits,
@@ -56,10 +59,11 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
 
     const currentName = edits.name ?? itemName;
     const currentDesc = edits.description ?? itemDescription ?? '';
+    const currentUrl = edits.url ?? itemUrl ?? '';
     const currentFavicon = imagePreviews.favicon || imageEdits.favicon || images?.favicon;
     const currentScreenshot = imagePreviews.screenshot || imageEdits.screenshot || images?.screenshot || images?.ogImage;
 
-    const hasEdits = edits.name !== undefined || edits.description !== undefined ||
+    const hasEdits = edits.name !== undefined || edits.description !== undefined || edits.url !== undefined ||
         imageEdits.favicon !== undefined || imageEdits.screenshot !== undefined;
 
     return (
@@ -91,6 +95,18 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
                     value={currentDesc}
                     onChange={(e) => onUpdateEdit('description', e.target.value)}
                     style={{ ...inputStyle, minHeight: 60, resize: 'vertical' }}
+                />
+            </div>
+
+            {/* URL */}
+            <div>
+                <div style={labelStyle}>URL</div>
+                <input
+                    type="text"
+                    value={currentUrl}
+                    onChange={(e) => onUpdateEdit('url', e.target.value)}
+                    placeholder="https://..."
+                    style={{ ...inputStyle, fontFamily: 'ui-monospace, monospace', fontSize: 12 }}
                 />
             </div>
 

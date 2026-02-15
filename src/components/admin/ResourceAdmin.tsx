@@ -24,8 +24,14 @@ interface ImageResult {
 function getDomainKey(url?: string): string | null {
     if (!url) return null;
     try {
-        const hostname = new URL(url).hostname.replace(/^www\./, '');
-        return hostname.replace(/\./g, '-');
+        const parsed = new URL(url);
+        const hostname = parsed.hostname.replace(/^www\./, '');
+        const domain = hostname.replace(/\./g, '-');
+        const pathSegments = parsed.pathname.split('/').filter(Boolean);
+        if (pathSegments.length >= 2) {
+            return `${domain}-${pathSegments.join('-')}`;
+        }
+        return domain;
     } catch {
         return null;
     }

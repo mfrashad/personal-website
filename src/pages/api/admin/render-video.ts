@@ -23,7 +23,7 @@ export const POST: APIRoute = async ({ request }) => {
         const { renderMedia, selectComposition } = await import('@remotion/renderer');
 
         const body = await request.json();
-        const { backgroundVideo, backgroundImage, videoBackgroundMode, backgroundFallbackColor, audioSrc, hookDurationFrames, itemDurationFrames, ctaDurationFrames, hookText, subtitle, brandName, items, layoutOverrides, logoUrls } = body;
+        const { backgroundVideo, backgroundImage, videoBackgroundMode, backgroundFallbackColor, audioSrc, hookDurationFrames, itemDurationFrames, ctaDurationFrames, hookText, subtitle, brandName, items, layoutOverrides, hookLayout, mockupLayout, logoUrls, template } = body;
 
         if (!hookText || !items?.length) {
             return new Response(
@@ -56,6 +56,7 @@ export const POST: APIRoute = async ({ request }) => {
         const outputPath = path.join(outputSubdir, 'reel.mp4');
 
         const inputProps = {
+            template: template || 'card',
             backgroundVideo: backgroundVideo || undefined,
             backgroundImage: backgroundImage || undefined,
             videoBackgroundMode: videoBackgroundMode || 'full',
@@ -69,6 +70,8 @@ export const POST: APIRoute = async ({ request }) => {
             brandName: brandName || '@rashadcodes',
             items,
             layoutOverrides: layoutOverrides || undefined,
+            hookLayout: hookLayout || undefined,
+            mockupLayout: mockupLayout || undefined,
             logoUrls: logoUrls || [],
         };
 

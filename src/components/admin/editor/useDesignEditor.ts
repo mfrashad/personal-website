@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { SlideLayout, DesignElement, TextElement, ItemSlideOverrides } from '../../../../remotion/lib/design-types';
 import type { VideoLayoutOverrides } from '../../../../remotion/lib/types';
-import { getDefaultHookSlideLayout, getDefaultItemSlideOverrides } from '../../../../remotion/lib/default-layouts';
+import { getDefaultHookSlideLayout, getDefaultItemSlideOverrides, getDefaultMockupSlideLayout } from '../../../../remotion/lib/default-layouts';
 import { fonts } from '../../../../remotion/lib/theme';
 
 let _nextCustomId = 1;
@@ -11,19 +11,30 @@ function nextCustomId() {
 
 export function useDesignEditor() {
     const [hookLayout, setHookLayout] = useState<SlideLayout>(getDefaultHookSlideLayout);
+    const [mockupLayout, setMockupLayout] = useState<SlideLayout>(getDefaultMockupSlideLayout);
     const [itemOverrides, setItemOverrides] = useState<ItemSlideOverrides>(getDefaultItemSlideOverrides);
     const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
-    const [editingSlideType, setEditingSlideType] = useState<'hook' | 'item'>('hook');
+    const [editingSlideType, setEditingSlideType] = useState<'hook' | 'item' | 'mockup'>('hook');
 
     const selectedElement = editingSlideType === 'hook'
         ? hookLayout.elements.find((el) => el.id === selectedElementId) ?? null
+        : editingSlideType === 'mockup'
+        ? mockupLayout.elements.find((el) => el.id === selectedElementId) ?? null
         : itemOverrides.customElements?.find((el) => el.id === selectedElementId) ?? null;
 
     const updateElement = useCallback(
         (id: string, updates: Record<string, any>) => {
-            // Hook elements always update hook layout, regardless of current editing slide
+            // Route to correct layout based on element id prefix or current editing type
             const isHookElement = id.startsWith('hook-');
-            if (isHookElement || editingSlideType === 'hook') {
+            const isMockupElement = id.startsWith('mockup-');
+            if (isMockupElement || editingSlideType === 'mockup') {
+                setMockupLayout((prev) => ({
+                    ...prev,
+                    elements: prev.elements.map((el) =>
+                        el.id === id ? ({ ...el, ...updates } as DesignElement) : el,
+                    ),
+                }));
+            } else if (isHookElement || editingSlideType === 'hook') {
                 setHookLayout((prev) => ({
                     ...prev,
                     elements: prev.elements.map((el) =>
@@ -67,6 +78,11 @@ export function useDesignEditor() {
                 ...prev,
                 elements: [...prev.elements, newEl],
             }));
+        } else if (editingSlideType === 'mockup') {
+            setMockupLayout((prev) => ({
+                ...prev,
+                elements: [...prev.elements, newEl],
+            }));
         } else {
             setItemOverrides((prev) => ({
                 ...prev,
@@ -83,6 +99,11 @@ export function useDesignEditor() {
                     ...prev,
                     elements: prev.elements.filter((el) => el.id !== id),
                 }));
+            } else if (editingSlideType === 'mockup') {
+                setMockupLayout((prev) => ({
+                    ...prev,
+                    elements: prev.elements.filter((el) => el.id !== id),
+                }));
             } else {
                 setItemOverrides((prev) => ({
                     ...prev,
@@ -96,6 +117,11 @@ export function useDesignEditor() {
 
     const resetHookLayout = useCallback(() => {
         setHookLayout(getDefaultHookSlideLayout());
+        setSelectedElementId(null);
+    }, []);
+
+    const resetMockupLayout = useCallback(() => {
+        setMockupLayout(getDefaultMockupSlideLayout());
         setSelectedElementId(null);
     }, []);
 
@@ -127,6 +153,7 @@ export function useDesignEditor() {
 
     return {
         hookLayout,
+        mockupLayout,
         itemOverrides,
         videoOverrides,
         selectedElementId,
@@ -138,6 +165,7 @@ export function useDesignEditor() {
         addTextElement,
         deleteElement,
         resetHookLayout,
+        resetMockupLayout,
         resetItemOverrides,
         updateItemOverride,
         updateVideoOverride,

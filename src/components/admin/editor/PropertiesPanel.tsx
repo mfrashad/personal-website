@@ -1,9 +1,9 @@
 import React from 'react';
-import type { DesignElement, TextElement, LogoGridElement, ItemSlideOverrides } from '../../../../remotion/lib/design-types';
+import type { DesignElement, TextElement, ImageElement, LogoGridElement, ItemSlideOverrides } from '../../../../remotion/lib/design-types';
 
 interface PropertiesPanelProps {
     element: DesignElement | null;
-    editingSlideType: 'hook' | 'item';
+    editingSlideType: 'hook' | 'item' | 'mockup';
     itemOverrides: ItemSlideOverrides;
     onUpdateElement: (id: string, updates: Record<string, any>) => void;
     onUpdateItemOverride: <K extends keyof ItemSlideOverrides>(
@@ -196,6 +196,26 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         </>
                     )}
 
+                    {/* Image-specific */}
+                    {element.type === 'image' && (
+                        <>
+                            <SliderField
+                                label="Border Radius"
+                                value={(element as ImageElement).borderRadius}
+                                min={0}
+                                max={60}
+                                onChange={(v) => onUpdateElement(element.id, { borderRadius: v })}
+                            />
+                            <SliderField
+                                label="Opacity"
+                                value={Math.round((element as ImageElement).opacity * 100)}
+                                min={0}
+                                max={100}
+                                onChange={(v) => onUpdateElement(element.id, { opacity: v / 100 })}
+                            />
+                        </>
+                    )}
+
                     {/* Logo-grid-specific */}
                     {element.type === 'logo-grid' && (
                         <>
@@ -255,7 +275,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     </div>
                 </>
             ) : (
-                editingSlideType === 'hook' && (
+                (editingSlideType === 'hook' || editingSlideType === 'mockup') && (
                     <div style={{ color: '#94a3b8', fontSize: 13, textAlign: 'center', padding: 20 }}>
                         Click an element to edit
                     </div>

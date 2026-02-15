@@ -11,6 +11,8 @@ import {
     useVideoConfig,
 } from 'remotion';
 import type { VideoReelProps, VideoLayoutOverrides } from '../lib/types';
+import type { SlideLayout } from '../lib/design-types';
+import { LayoutRenderer } from './LayoutRenderer';
 import { VIDEO, colors, fonts, spacing } from '../lib/theme';
 
 const DEFAULT_HOOK_FRAMES = VIDEO.hookDurationSec * VIDEO.fps;
@@ -23,8 +25,24 @@ const HookSection: React.FC<{
     subtitle?: string;
     brandName: string;
     overrides?: VideoLayoutOverrides;
+    hookLayout?: SlideLayout;
     logoUrls?: string[];
-}> = ({ hookText, subtitle, brandName, overrides, logoUrls }) => {
+}> = ({ hookText, subtitle, brandName, overrides, hookLayout, logoUrls }) => {
+    // If a layout is provided, use LayoutRenderer for positioning
+    if (hookLayout) {
+        const data: Record<string, string> = {
+            hookText,
+            subtitle: subtitle || '',
+            brandName,
+        };
+        return (
+            <AbsoluteFill>
+                <LayoutRenderer layout={hookLayout} data={data} logoUrls={logoUrls} />
+            </AbsoluteFill>
+        );
+    }
+
+    // Fallback: hardcoded layout using overrides
     const hookFontSize = overrides?.hookTextFontSize ?? 80;
     const subtitleFontSize = overrides?.subtitleFontSize ?? 36;
     const brandFontSize = overrides?.brandFontSize ?? 28;
@@ -351,6 +369,169 @@ const ItemSection: React.FC<{
     );
 };
 
+/* --- Continuous mockup image track (prevents background flash between items) --- */
+const MockupImageTrack: React.FC<{
+    items: VideoReelProps['items'];
+    itemFrames: number;
+}> = ({ items, itemFrames }) => {
+    const frame = useCurrentFrame();
+    const currentIndex = Math.min(Math.floor(frame / itemFrames), items.length - 1);
+    const mockupImage = items[currentIndex]?.images?.mockup;
+
+    if (!mockupImage) return null;
+
+    return (
+        <AbsoluteFill>
+            <img
+                src={mockupImage}
+                style={{
+                    width: VIDEO.width,
+                    height: VIDEO.height,
+                    objectFit: 'cover',
+                }}
+            />
+            {/* Bottom gradient */}
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 400,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
+                }}
+            />
+        </AbsoluteFill>
+    );
+};
+
+/* --- Mockup Item Section (text overlays only — image handled by MockupImageTrack) --- */
+const MockupItemSection: React.FC<{
+    item: VideoReelProps['items'][number];
+    slideNumber: number;
+    totalSlides: number;
+    brandName: string;
+    overrides?: VideoLayoutOverrides;
+    mockupLayout?: SlideLayout;
+}> = ({ item: { item, images }, slideNumber, totalSlides, brandName, overrides, mockupLayout }) => {
+    const frame = useCurrentFrame();
+    const { fps, durationInFrames } = useVideoConfig();
+
+    const noTransition = overrides?.disableItemTransition ?? false;
+    const speed = overrides?.transitionSpeed ?? 0.5;
+    const springDamping = 8 + speed * 22;
+    const springMass = 1.2 - speed * 0.9;
+    const exitFrames = Math.round(4 + (1 - speed) * 16);
+
+    const cardIn = noTransition
+        ? 1
+        : spring({ frame, fps, config: { damping: springDamping, mass: springMass } });
+    const exitStart = durationInFrames - exitFrames;
+    const cardOut = noTransition
+        ? 1
+        : interpolate(frame, [exitStart, durationInFrames], [1, 0], {
+              extrapolateLeft: 'clamp',
+              extrapolateRight: 'clamp',
+          });
+
+    const combinedOpacity = cardIn * cardOut;
+
+    const domain = item.url
+        ? (() => { try { return new URL(item.url).hostname.replace(/^www\./, ''); } catch { return undefined; } })()
+        : undefined;
+
+    // If a mockup layout is provided, use LayoutRenderer for positioning
+    if (mockupLayout) {
+        const data: Record<string, string> = {
+            itemName: item.name,
+            itemDomain: domain || '',
+            brandName,
+            counter: `${slideNumber}/${totalSlides}`,
+            itemFavicon: images?.favicon || '',
+        };
+        return (
+            <AbsoluteFill style={{ opacity: combinedOpacity }}>
+                <LayoutRenderer layout={mockupLayout} data={data} />
+            </AbsoluteFill>
+        );
+    }
+
+    // Fallback: hardcoded layout
+    const brandFontSize = overrides?.brandFontSize ?? 28;
+    const brandPos = overrides?.brandPosition ?? { x: spacing.pagePadding, y: 80 };
+
+    return (
+        <AbsoluteFill>
+            {/* Item name at bottom */}
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 160,
+                    left: spacing.pagePadding,
+                    right: spacing.pagePadding,
+                    fontFamily: fonts.heading,
+                    fontSize: 48,
+                    fontWeight: 800,
+                    color: colors.white,
+                    textShadow: '0 2px 20px rgba(0,0,0,0.6)',
+                    opacity: combinedOpacity,
+                }}
+            >
+                {item.name}
+            </div>
+
+            {/* Domain */}
+            {domain && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 120,
+                        left: spacing.pagePadding,
+                        fontFamily: fonts.body,
+                        fontSize: 24,
+                        fontWeight: 500,
+                        color: 'rgba(255,255,255,0.6)',
+                        opacity: combinedOpacity,
+                    }}
+                >
+                    {domain}
+                </div>
+            )}
+
+            {/* Slide counter */}
+            <div
+                style={{
+                    position: 'absolute',
+                    bottom: 80,
+                    right: spacing.pagePadding,
+                    fontFamily: fonts.body,
+                    fontSize: 28,
+                    fontWeight: 700,
+                    color: 'rgba(255,255,255,0.7)',
+                    opacity: combinedOpacity,
+                }}
+            >
+                {slideNumber}/{totalSlides}
+            </div>
+
+            {/* Brand */}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: brandPos.y,
+                    left: brandPos.x,
+                    fontFamily: fonts.body,
+                    fontSize: brandFontSize,
+                    fontWeight: 700,
+                    color: 'rgba(255,255,255,0.85)',
+                }}
+            >
+                {brandName}
+            </div>
+        </AbsoluteFill>
+    );
+};
+
 /* --- CTA Section --- */
 const CtaSection: React.FC<{
     brandName: string;
@@ -407,6 +588,7 @@ const CtaSection: React.FC<{
 
 /* --- Main Video Composition --- */
 export const VideoComposition: React.FC<VideoReelProps> = ({
+    template = 'card',
     backgroundVideo,
     backgroundImage,
     videoBackgroundMode = 'full',
@@ -420,6 +602,8 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
     brandName,
     items,
     layoutOverrides,
+    hookLayout,
+    mockupLayout,
     logoUrls,
 }) => {
     const HOOK_FRAMES = hookDurationFrames ?? DEFAULT_HOOK_FRAMES;
@@ -480,24 +664,43 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
                     subtitle={subtitle}
                     brandName={brandName}
                     overrides={layoutOverrides}
+                    hookLayout={hookLayout}
                     logoUrls={logoUrls}
                 />
             </Sequence>
 
-            {/* Items */}
+            {/* Continuous mockup image track — single sequence, no gaps */}
+            {template === 'mockup' && items.length > 0 && (
+                <Sequence from={HOOK_FRAMES} durationInFrames={items.length * ITEM_FRAMES}>
+                    <MockupImageTrack items={items} itemFrames={ITEM_FRAMES} />
+                </Sequence>
+            )}
+
+            {/* Items (text overlays for mockup, full sections for card) */}
             {items.map((entry, i) => (
                 <Sequence
                     key={i}
                     from={HOOK_FRAMES + i * ITEM_FRAMES}
                     durationInFrames={ITEM_FRAMES}
                 >
-                    <ItemSection
-                        item={entry}
-                        slideNumber={i + 1}
-                        totalSlides={items.length}
-                        brandName={brandName}
-                        overrides={layoutOverrides}
-                    />
+                    {template === 'mockup' && entry.images?.mockup ? (
+                        <MockupItemSection
+                            item={entry}
+                            slideNumber={i + 1}
+                            totalSlides={items.length}
+                            brandName={brandName}
+                            overrides={layoutOverrides}
+                            mockupLayout={mockupLayout}
+                        />
+                    ) : (
+                        <ItemSection
+                            item={entry}
+                            slideNumber={i + 1}
+                            totalSlides={items.length}
+                            brandName={brandName}
+                            overrides={layoutOverrides}
+                        />
+                    )}
                 </Sequence>
             ))}
 

@@ -859,6 +859,114 @@
     "soundcore-com": {
       "favicon": "/resource-images/favicons/soundcore-com.png",
       "screenshot": "/resource-images/screenshots/soundcore-com.png"
+    },
+    "hardcover-app-books-atomic-habits": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-atomic-habits.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-atomic-habits.jpg"
+    },
+    "hardcover-app-books-die-with-zero": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-die-with-zero.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-die-with-zero.jpg"
+    },
+    "hardcover-app-books-doing-good-better": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-doing-good-better.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-doing-good-better.jpg"
+    },
+    "hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg"
+    },
+    "hardcover-app-books-deep-work": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-deep-work.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-deep-work.jpg"
+    },
+    "hardcover-app-books-educated": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-educated.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-educated.jpg"
+    },
+    "hardcover-app-books-models-attract-women-through-honesty": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-models-attract-women-through-honesty.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-models-attract-women-through-honesty.jpg"
+    },
+    "hardcover-app-books-the-slight-edge-2005": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-slight-edge-2005.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-slight-edge-2005.jpg"
+    },
+    "hardcover-app-books-building-a-second-brain": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-building-a-second-brain.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-building-a-second-brain.jpg"
+    },
+    "hardcover-app-books-getting-things-done": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-getting-things-done.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-getting-things-done.jpg"
+    },
+    "hardcover-app-books-flow-1990": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-flow-1990.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-flow-1990.jpg"
+    },
+    "hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg"
+    },
+    "hardcover-app-books-project-hail-mary": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-project-hail-mary.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-project-hail-mary.jpg"
+    },
+    "hardcover-app-books-babel": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-babel.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-babel.jpg"
+    },
+    "hardcover-app-books-red-rising": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-red-rising.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-red-rising.jpg"
+    },
+    "hardcover-app-books-dark-matter": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-dark-matter.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-dark-matter.jpg"
+    },
+    "hardcover-app-books-the-hunger-games": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-hunger-games.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-hunger-games.jpg"
+    },
+    "hardcover-app-books-mistborn": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-mistborn.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-mistborn.jpg"
+    },
+    "hardcover-app-books-omniscient-reader-s-viewpoint-volume-1": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png",
+      "ogImage": "/resource-images/og/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png"
+    },
+    "hardcover-app-books-mother-of-learning": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-mother-of-learning.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-mother-of-learning.jpg"
+    },
+    "hardcover-app-books-the-perfect-run": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-perfect-run.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-perfect-run.jpg"
+    },
+    "hardcover-app-books-shadow-slave": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-shadow-slave.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-shadow-slave.jpg"
+    },
+    "hardcover-app-books-the-novels-extra": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-novels-extra.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-novels-extra.jpg"
+    },
+    "hardcover-app-books-everyone-else-is-a-returnee": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-everyone-else-is-a-returnee.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-everyone-else-is-a-returnee.jpg"
+    },
+    "hardcover-app-books-the-tutorial-is-too-hard": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-tutorial-is-too-hard.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-tutorial-is-too-hard.jpg"
+    },
+    "hardcover-app-books-the-primal-hunter": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-the-primal-hunter.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-the-primal-hunter.jpg"
+    },
+    "hardcover-app-books-mushoku-tensei-2021": {
+      "favicon": "/resource-images/favicons/hardcover-app-books-mushoku-tensei-2021.jpg",
+      "ogImage": "/resource-images/og/hardcover-app-books-mushoku-tensei-2021.jpg"
     }
   }
 }

@@ -3,9 +3,10 @@ import { Player } from '@remotion/player';
 import { CarouselHookSlide } from '../../../remotion/compositions/CarouselHookSlide';
 import { CarouselItemSlide } from '../../../remotion/compositions/CarouselItemSlide';
 import { CarouselCtaSlide } from '../../../remotion/compositions/CarouselCtaSlide';
+import { CarouselMockupSlide } from '../../../remotion/compositions/CarouselMockupSlide';
 import { VideoComposition } from '../../../remotion/compositions/VideoComposition';
 import { CAROUSEL, VIDEO, getVideoDuration } from '../../../remotion/lib/theme';
-import type { ResourceItem, ResourceImages } from '../../../remotion/lib/types';
+import type { ResourceItem, ResourceImages, ItemSlideTemplate } from '../../../remotion/lib/types';
 import { useDesignEditor } from './editor/useDesignEditor';
 import { EditorOverlay } from './editor/EditorOverlay';
 import { PropertiesPanel } from './editor/PropertiesPanel';
@@ -19,6 +20,7 @@ import { MediaPicker } from './editor/MediaPicker';
 interface ItemEdits {
     name?: string;
     description?: string;
+    url?: string;
 }
 
 interface ItemImageEdits {
@@ -64,8 +66,46 @@ function getDomainKey(url?: string): string | null {
     }
 }
 
+const VIRAL_HOOKS = [
+    'free courses I regret not knowing as a student 😭',
+    'websites that feel illegal to know',
+    '5 apps I use to build my startup',
+    '5 free resources I wish I knew when first learning to code',
+    'websites that make you better at programming',
+    '5 YouTubers that got me a software engineering job at Amazon',
+    '7 coding tips I\'d tell my 18-year-old self',
+    'if I had 90 days to learn to code...',
+    'math YouTubers that will save your life',
+    'free tools every developer should be using',
+    'websites I use daily as a software engineer',
+    'AI tools that replaced my entire workflow',
+    'repos on GitHub you need to know about',
+    'extensions every VS Code user needs',
+    'books that made me a better engineer',
+    'side project ideas that actually make money',
+    'APIs most developers don\'t know exist',
+    'things I wish I knew before my first tech interview',
+];
+
 export default function ContentGenerator() {
     const [mode, setMode] = useState<Mode>('carousel');
+    const [itemTemplate, setItemTemplate] = useState<ItemSlideTemplate>('card');
+    // Greenscreen / mockup state
+    const [mockupBasePath, setMockupBasePath] = useState<string | null>(null);
+    const [mockupBasePreview, setMockupBasePreview] = useState<string | null>(null);
+    const [mockupTemplateUrl, setMockupTemplateUrl] = useState<string | null>(null);
+    const [mockupCorners, setMockupCorners] = useState<number[][] | null>(null);
+    const [mockupImages, setMockupImages] = useState<Record<string, string>>({});
+    const [isCompositing, setIsCompositing] = useState(false);
+    const [compositingProgress, setCompositingProgress] = useState('');
+    const [greenscreenConnected, setGreenscreenConnected] = useState<boolean | null>(null);
+    const [gsTemplates, setGsTemplates] = useState<Array<{ id: string; filename: string; thumbUrl: string; fullUrl: string; corners: number[][]; width: number; height: number }>>([]);
+    const [selectedGsTemplate, setSelectedGsTemplate] = useState<string | null>(null);
+    const [mockupAdjustments, setMockupAdjustments] = useState<Record<string, number>>({
+        blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0,
+    });
+    const [mockupAdjustmentsOpen, setMockupAdjustmentsOpen] = useState(false);
+    const mockupBaseInputRef = useRef<HTMLInputElement>(null);
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [imageManifest, setImageManifest] = useState<ImageManifest>({ images: {} });
@@ -108,7 +148,7 @@ export default function ContentGenerator() {
     // Per-item image previews (blob URLs for instant preview)
     const [itemImagePreviews, setItemImagePreviews] = useState<Record<string, { favicon?: string; screenshot?: string }>>({});
 
-    const updateItemEdit = useCallback((itemName: string, field: 'name' | 'description', value: string) => {
+    const updateItemEdit = useCallback((itemName: string, field: 'name' | 'description' | 'url', value: string) => {
         setItemEdits((prev) => ({
             ...prev,
             [itemName]: { ...prev[itemName], [field]: value },
@@ -204,6 +244,7 @@ export default function ContentGenerator() {
             ...item,
             ...(edits.name !== undefined && { name: edits.name }),
             ...(edits.description !== undefined && { description: edits.description }),
+            ...(edits.url !== undefined && { url: edits.url }),
         };
     }
 
@@ -263,9 +304,13 @@ export default function ContentGenerator() {
 
     // Sync editing slide type with current slide
     useEffect(() => {
-        editor.setEditingSlideType(currentSlide === 0 ? 'hook' : currentSlide <= activeItems.length ? 'item' : 'hook');
+        const slideType = currentSlide === 0 ? 'hook'
+            : currentSlide <= activeItems.length
+                ? (itemTemplate === 'mockup' ? 'mockup' : 'item')
+                : 'hook';
+        editor.setEditingSlideType(slideType);
         editor.setSelectedElementId(null);
-    }, [currentSlide]);
+    }, [currentSlide, itemTemplate]);
 
     function getItemImages(item: Item): ResourceImages | undefined {
         const domainKey = getDomainKey(item.url);
@@ -384,6 +429,149 @@ export default function ContentGenerator() {
         }
     }, [audioPreview, audioSrc]);
 
+    // Greenscreen health check + template loading
+    const checkGreenscreen = useCallback(async () => {
+        try {
+            const res = await fetch('/api/admin/greenscreen', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'health' }),
+            });
+            const data = await res.json();
+            setGreenscreenConnected(data.connected);
+
+            // If connected, also load templates
+            if (data.connected) {
+                const tmplRes = await fetch('/api/admin/greenscreen', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'list-templates' }),
+                });
+                const tmplData = await tmplRes.json();
+                if (tmplRes.ok && tmplData.templates) {
+                    setGsTemplates(tmplData.templates);
+                }
+            }
+        } catch {
+            setGreenscreenConnected(false);
+        }
+    }, []);
+
+    // Check greenscreen when mockup template is selected
+    useEffect(() => {
+        if (itemTemplate === 'mockup') {
+            checkGreenscreen();
+        }
+    }, [itemTemplate, checkGreenscreen]);
+
+    // Select a greenscreen template (from the server's defaults)
+    const handleSelectGsTemplate = useCallback((tmpl: typeof gsTemplates[number]) => {
+        setSelectedGsTemplate(tmpl.id);
+        setMockupTemplateUrl(tmpl.fullUrl);
+        setMockupBasePreview(tmpl.thumbUrl);
+        setMockupBasePath(null); // not a local path
+        setMockupCorners(tmpl.corners);
+        setMockupImages({}); // reset composited images when template changes
+        setCompositingProgress('');
+        showToast(`Template "${tmpl.id}" selected`);
+    }, [gsTemplates]);
+
+    // Upload custom greenscreen base image
+    const handleMockupBaseUpload = useCallback(async (file: File) => {
+        if (!file.type.startsWith('image/')) {
+            showToast('Not an image file');
+            return;
+        }
+        const preview = URL.createObjectURL(file);
+        setMockupBasePreview(preview);
+        setSelectedGsTemplate(null); // deselect any server template
+        setMockupTemplateUrl(null);
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', `mockup-base-${Date.now()}`);
+        try {
+            const res = await fetch('/api/admin/media-library', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+            setMockupBasePath(data.path);
+
+            // Auto-detect corners
+            const detectRes = await fetch('/api/admin/greenscreen', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'detect', baseImagePath: data.path }),
+            });
+            const detectData = await detectRes.json();
+            if (detectRes.ok && detectData.corners) {
+                setMockupCorners(detectData.corners);
+                showToast('Green screen detected!');
+            }
+        } catch (err: any) {
+            showToast(`Upload failed: ${err.message}`);
+            setMockupBasePreview(null);
+        }
+    }, []);
+
+    // Composite all items
+    const handleCompositeAll = useCallback(async () => {
+        if (!mockupBasePath && !mockupTemplateUrl) {
+            showToast('Select a template or upload a base image first');
+            return;
+        }
+
+        const itemsToComposite = activeItems
+            .map((item) => {
+                const imgs = getEditedImages(item);
+                const screenshot = imgs?.screenshot;
+                const domainKey = getDomainKey(item.url);
+                if (!screenshot || !domainKey) return null;
+                return { domainKey, screenshotPath: screenshot, itemName: item.name };
+            })
+            .filter((x): x is NonNullable<typeof x> => x !== null);
+
+        if (itemsToComposite.length === 0) {
+            showToast('No items have screenshots to composite');
+            return;
+        }
+
+        setIsCompositing(true);
+        setCompositingProgress(`Compositing 0/${itemsToComposite.length}...`);
+
+        const results: Record<string, string> = {};
+        for (let i = 0; i < itemsToComposite.length; i++) {
+            const entry = itemsToComposite[i];
+            setCompositingProgress(`Compositing ${i + 1}/${itemsToComposite.length}: ${entry.itemName}...`);
+            try {
+                const res = await fetch('/api/admin/greenscreen', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'composite-one',
+                        ...(mockupTemplateUrl
+                            ? { templateUrl: mockupTemplateUrl }
+                            : { baseImagePath: mockupBasePath }),
+                        screenshotPath: entry.screenshotPath,
+                        corners: mockupCorners || undefined,
+                        domainKey: entry.domainKey,
+                        adjustments: mockupAdjustments,
+                    }),
+                });
+                const data = await res.json();
+                if (res.ok && data.path) {
+                    results[entry.itemName] = data.path;
+                }
+            } catch (err) {
+                console.error(`Failed to composite ${entry.itemName}:`, err);
+            }
+        }
+
+        setMockupImages((prev) => ({ ...prev, ...results }));
+        setIsCompositing(false);
+        setCompositingProgress(`Done! ${Object.keys(results).length}/${itemsToComposite.length} composited.`);
+        showToast(`Composited ${Object.keys(results).length} mockups`);
+    }, [mockupBasePath, mockupTemplateUrl, mockupCorners, mockupAdjustments, activeItems]);
+
     const handleBgDrop = useCallback(
         (e: React.DragEvent) => {
             e.preventDefault();
@@ -424,14 +612,17 @@ export default function ContentGenerator() {
                     subtitle,
                     brandName,
                     ctaText,
+                    template: itemTemplate,
                     logoUrls: showLogos ? logoUrlsForRender : [],
                     hookLayout: editor.hookLayout,
+                    mockupLayout: editor.mockupLayout,
                     itemOverrides: editor.itemOverrides,
                     items: activeItems.map((item) => {
                         const edited = getEditedItem(item);
                         return {
                             item: edited,
                             images: getRenderImages(item),
+                            mockupImage: mockupImages[item.name] || undefined,
                         };
                     }),
                 }),
@@ -446,7 +637,7 @@ export default function ContentGenerator() {
         } finally {
             setRendering(false);
         }
-    }, [backgroundImage, hookText, subtitle, brandName, ctaText, activeItems, editor.hookLayout, editor.itemOverrides, itemEdits, itemImageEdits]);
+    }, [backgroundImage, hookText, subtitle, brandName, ctaText, activeItems, editor.hookLayout, editor.mockupLayout, editor.itemOverrides, itemEdits, itemImageEdits, itemTemplate, mockupImages]);
 
     // Render video
     const handleRenderVideo = useCallback(async () => {
@@ -479,13 +670,17 @@ export default function ContentGenerator() {
                     hookText,
                     subtitle,
                     brandName,
+                    template: itemTemplate,
                     layoutOverrides: editor.videoOverrides,
+                    hookLayout: editor.hookLayout,
+                    mockupLayout: editor.mockupLayout,
                     logoUrls: logoUrlsForRender,
                     items: activeItems.map((item) => {
                         const edited = getEditedItem(item);
                         return {
                             item: edited,
                             images: getRenderImages(item),
+                            mockupImage: mockupImages[item.name] || undefined,
                         };
                     }),
                 }),
@@ -500,7 +695,7 @@ export default function ContentGenerator() {
         } finally {
             setRendering(false);
         }
-    }, [backgroundVideo, backgroundImage, hookText, subtitle, brandName, activeItems, editor.videoOverrides, itemEdits, itemImageEdits, hookDurationSec, beatIntervalSec]);
+    }, [backgroundVideo, backgroundImage, hookText, subtitle, brandName, activeItems, editor.videoOverrides, editor.hookLayout, editor.mockupLayout, itemEdits, itemImageEdits, hookDurationSec, beatIntervalSec, itemTemplate, mockupImages]);
 
     function showToast(msg: string) {
         setToast(msg);
@@ -535,6 +730,7 @@ export default function ContentGenerator() {
     // Current slide props (carousel mode)
     const isHookSlide = currentSlide === 0;
     const isCtaSlide = currentSlide === activeItems.length + 1;
+    const isMockupSlide = !isHookSlide && !isCtaSlide && itemTemplate === 'mockup';
     const currentItemIndex = currentSlide - 1;
     const currentItem = activeItems[currentItemIndex];
 
@@ -635,10 +831,312 @@ export default function ContentGenerator() {
                                 </div>
                             </div>
 
+                            {/* Template toggle */}
+                            <div style={{ marginBottom: 24 }}>
+                                <div style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 8 }}>
+                                    Item Slide Template
+                                </div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        background: '#f1f5f9',
+                                        borderRadius: 8,
+                                        padding: 3,
+                                    }}
+                                >
+                                    <button
+                                        onClick={() => setItemTemplate('card')}
+                                        style={{
+                                            ...toggleBtnStyle,
+                                            flex: 1,
+                                            background: itemTemplate === 'card' ? '#fff' : 'transparent',
+                                            color: itemTemplate === 'card' ? '#4f46e5' : '#64748b',
+                                            boxShadow: itemTemplate === 'card' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                        }}
+                                    >
+                                        Card
+                                    </button>
+                                    <button
+                                        onClick={() => setItemTemplate('mockup')}
+                                        style={{
+                                            ...toggleBtnStyle,
+                                            flex: 1,
+                                            background: itemTemplate === 'mockup' ? '#fff' : 'transparent',
+                                            color: itemTemplate === 'mockup' ? '#4f46e5' : '#64748b',
+                                            boxShadow: itemTemplate === 'mockup' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                        }}
+                                    >
+                                        Mockup
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Greenscreen / Mockup Config (when mockup template selected) */}
+                            {itemTemplate === 'mockup' && (
+                                <div style={{ marginBottom: 24, padding: 16, background: '#f8fafc', borderRadius: 12, border: '1px solid #e2e8f0' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                                        <div style={{ fontSize: 14, fontWeight: 600, color: '#334155' }}>
+                                            Greenscreen Config
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            <div
+                                                style={{
+                                                    width: 8,
+                                                    height: 8,
+                                                    borderRadius: '50%',
+                                                    background: greenscreenConnected === true ? '#22c55e' : greenscreenConnected === false ? '#ef4444' : '#94a3b8',
+                                                }}
+                                            />
+                                            <span style={{ fontSize: 11, color: '#64748b' }}>
+                                                {greenscreenConnected === true ? 'Connected' : greenscreenConnected === false ? 'Disconnected' : 'Checking...'}
+                                            </span>
+                                            <button onClick={checkGreenscreen} style={{ ...smallBtnStyle, fontSize: 11, padding: '2px 6px' }}>
+                                                Retry
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {greenscreenConnected === false && (
+                                        <div style={{
+                                            padding: '8px 12px',
+                                            background: '#fef2f2',
+                                            border: '1px solid #fecaca',
+                                            borderRadius: 8,
+                                            fontSize: 12,
+                                            color: '#dc2626',
+                                            marginBottom: 12,
+                                        }}>
+                                            Python greenscreen server not running. Start it with: cd ../greenscreen &amp;&amp; python server.py
+                                        </div>
+                                    )}
+
+                                    {/* Template picker from greenscreen server */}
+                                    {gsTemplates.length > 0 && (
+                                        <div style={{ marginBottom: 12 }}>
+                                            <div style={{ fontSize: 13, fontWeight: 500, color: '#475569', marginBottom: 6 }}>
+                                                Templates
+                                            </div>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    gap: 8,
+                                                    overflowX: 'auto',
+                                                    paddingBottom: 4,
+                                                }}
+                                            >
+                                                {gsTemplates.map((tmpl) => (
+                                                    <img
+                                                        key={tmpl.id}
+                                                        src={tmpl.thumbUrl}
+                                                        onClick={() => handleSelectGsTemplate(tmpl)}
+                                                        style={{
+                                                            width: 56,
+                                                            height: 75,
+                                                            objectFit: 'cover',
+                                                            borderRadius: 6,
+                                                            cursor: 'pointer',
+                                                            flexShrink: 0,
+                                                            border: selectedGsTemplate === tmpl.id
+                                                                ? '2px solid #4f46e5'
+                                                                : '2px solid transparent',
+                                                            opacity: selectedGsTemplate === tmpl.id ? 1 : 0.7,
+                                                            transition: 'all 0.15s',
+                                                        }}
+                                                        title={tmpl.id}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Custom upload (alternative to templates) */}
+                                    <div style={{ fontSize: 13, fontWeight: 500, color: '#475569', marginBottom: 6 }}>
+                                        {gsTemplates.length > 0 ? 'Or upload your own' : 'Base Image (mockup with green screen)'}
+                                    </div>
+                                    <div
+                                        onClick={() => mockupBaseInputRef.current?.click()}
+                                        style={{
+                                            border: '2px dashed #cbd5e1',
+                                            borderRadius: 8,
+                                            padding: 12,
+                                            textAlign: 'center',
+                                            cursor: 'pointer',
+                                            background: mockupBasePreview && !selectedGsTemplate
+                                                ? `url(${mockupBasePreview}) center/contain no-repeat`
+                                                : '#fff',
+                                            minHeight: 48,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            position: 'relative',
+                                        }}
+                                    >
+                                        {mockupBasePreview && !selectedGsTemplate && (
+                                            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', borderRadius: 6 }} />
+                                        )}
+                                        <span style={{
+                                            position: 'relative',
+                                            color: mockupBasePreview && !selectedGsTemplate ? '#fff' : '#94a3b8',
+                                            fontSize: 12,
+                                            fontWeight: 500,
+                                        }}>
+                                            {mockupBasePath ? 'Custom image uploaded - click to replace' : 'Click to upload custom base image'}
+                                        </span>
+                                        <input
+                                            ref={mockupBaseInputRef}
+                                            type="file"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) handleMockupBaseUpload(file);
+                                            }}
+                                        />
+                                    </div>
+
+                                    {mockupCorners && (
+                                        <div style={{ marginTop: 8, fontSize: 11, color: '#22c55e', fontWeight: 600 }}>
+                                            Green screen detected ({mockupCorners.length} corners)
+                                        </div>
+                                    )}
+
+                                    {/* Screenshot Adjustments (collapsible) */}
+                                    {(mockupBasePath || mockupTemplateUrl) && (
+                                        <div style={{ marginTop: 12 }}>
+                                            <button
+                                                onClick={() => setMockupAdjustmentsOpen((v) => !v)}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 6,
+                                                    width: '100%',
+                                                    background: 'none',
+                                                    border: '1px solid #e2e8f0',
+                                                    borderRadius: 6,
+                                                    padding: '6px 10px',
+                                                    cursor: 'pointer',
+                                                    fontSize: 12,
+                                                    fontWeight: 600,
+                                                    color: '#475569',
+                                                }}
+                                            >
+                                                <span style={{
+                                                    display: 'inline-block',
+                                                    transform: mockupAdjustmentsOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                                                    transition: 'transform 0.15s',
+                                                    fontSize: 10,
+                                                }}>
+                                                    ▶
+                                                </span>
+                                                Screenshot Adjustments
+                                                {Object.values(mockupAdjustments).some((v) => v !== 0) && (
+                                                    <span style={{ marginLeft: 'auto', fontSize: 10, color: '#6366f1' }}>modified</span>
+                                                )}
+                                            </button>
+                                            {mockupAdjustmentsOpen && (
+                                                <div style={{
+                                                    marginTop: 8,
+                                                    padding: '10px 12px',
+                                                    background: '#f8fafc',
+                                                    borderRadius: 8,
+                                                    border: '1px solid #e2e8f0',
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    gap: 10,
+                                                }}>
+                                                    {([
+                                                        { key: 'blur', label: 'Blur', min: 0, max: 10, step: 0.5 },
+                                                        { key: 'brightness', label: 'Brightness', min: -100, max: 100, step: 5 },
+                                                        { key: 'contrast', label: 'Contrast', min: -100, max: 100, step: 5 },
+                                                        { key: 'temperature', label: 'Temperature', min: -100, max: 100, step: 5 },
+                                                        { key: 'saturation', label: 'Saturation', min: -100, max: 100, step: 5 },
+                                                    ] as const).map(({ key, label, min, max, step }) => (
+                                                        <div key={key}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#64748b', marginBottom: 3 }}>
+                                                                <span>{label}</span>
+                                                                <span style={{ fontFamily: 'monospace', minWidth: 32, textAlign: 'right' }}>{mockupAdjustments[key]}</span>
+                                                            </div>
+                                                            <input
+                                                                type="range"
+                                                                min={min}
+                                                                max={max}
+                                                                step={step}
+                                                                value={mockupAdjustments[key]}
+                                                                onChange={(e) => setMockupAdjustments((prev) => ({ ...prev, [key]: parseFloat(e.target.value) }))}
+                                                                style={{ width: '100%', accentColor: '#6366f1' }}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                    <button
+                                                        onClick={() => setMockupAdjustments({ blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0 })}
+                                                        style={{
+                                                            alignSelf: 'flex-end',
+                                                            background: 'none',
+                                                            border: 'none',
+                                                            fontSize: 11,
+                                                            color: '#94a3b8',
+                                                            cursor: 'pointer',
+                                                            padding: '2px 0',
+                                                        }}
+                                                    >
+                                                        Reset all
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Composite All button */}
+                                    {(mockupBasePath || mockupTemplateUrl) && (
+                                        <button
+                                            onClick={handleCompositeAll}
+                                            disabled={isCompositing || !greenscreenConnected}
+                                            style={{
+                                                marginTop: 12,
+                                                width: '100%',
+                                                padding: '10px 16px',
+                                                background: isCompositing ? '#94a3b8' : '#059669',
+                                                color: '#fff',
+                                                border: 'none',
+                                                borderRadius: 8,
+                                                fontSize: 14,
+                                                fontWeight: 600,
+                                                cursor: isCompositing ? 'default' : 'pointer',
+                                            }}
+                                        >
+                                            {isCompositing ? 'Compositing...' : 'Composite All Items'}
+                                        </button>
+                                    )}
+                                    {compositingProgress && (
+                                        <div style={{ marginTop: 6, fontSize: 12, color: '#64748b' }}>
+                                            {compositingProgress}
+                                        </div>
+                                    )}
+
+                                    {Object.keys(mockupImages).length > 0 && (
+                                        <div style={{ marginTop: 8, fontSize: 12, color: '#059669', fontWeight: 500 }}>
+                                            {Object.keys(mockupImages).length} mockups ready
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             {/* Text inputs */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 24 }}>
                                 <label style={labelStyle}>
                                     Hook Text
+                                    <select
+                                        value=""
+                                        onChange={(e) => {
+                                            if (e.target.value) setHookText(e.target.value);
+                                        }}
+                                        style={{ ...inputStyle, marginBottom: 6, color: hookText ? '#94a3b8' : '#334155' }}
+                                    >
+                                        <option value="">— pick a viral hook template —</option>
+                                        {VIRAL_HOOKS.map((hook) => (
+                                            <option key={hook} value={hook}>{hook}</option>
+                                        ))}
+                                    </select>
                                     <input
                                         type="text"
                                         value={hookText}
@@ -1296,31 +1794,85 @@ export default function ContentGenerator() {
                                                 }}
                                             />
                                         ) : currentItem ? (
-                                            <Player
-                                                component={CarouselItemSlide}
-                                                compositionWidth={CAROUSEL.width}
-                                                compositionHeight={CAROUSEL.height}
-                                                durationInFrames={1}
-                                                fps={1}
-                                                style={{ width: '100%', height: '100%' }}
-                                                inputProps={{
-                                                    backgroundImage: previewBg,
-                                                    item: (() => {
-                                                        const edited = getEditedItem(currentItem);
-                                                        return {
-                                                            name: edited.name,
-                                                            description: edited.description,
-                                                            url: edited.url,
-                                                            tags: edited.tags,
-                                                        };
-                                                    })(),
-                                                    images: getEditedImages(currentItem),
-                                                    slideNumber: currentItemIndex + 1,
-                                                    totalSlides: activeItems.length,
-                                                    brandName,
-                                                    overrides: editor.itemOverrides,
-                                                }}
-                                            />
+                                            itemTemplate === 'mockup' && mockupImages[currentItem.name] ? (
+                                                <EditorOverlay
+                                                    compositionWidth={CAROUSEL.width}
+                                                    compositionHeight={CAROUSEL.height}
+                                                    layout={editor.mockupLayout}
+                                                    selectedElementId={editor.selectedElementId}
+                                                    onSelectElement={editor.setSelectedElementId}
+                                                    onUpdateElement={editor.updateElement}
+                                                    onDeleteElement={editor.deleteElement}
+                                                >
+                                                    <Player
+                                                        component={CarouselMockupSlide}
+                                                        compositionWidth={CAROUSEL.width}
+                                                        compositionHeight={CAROUSEL.height}
+                                                        durationInFrames={1}
+                                                        fps={1}
+                                                        style={{ width: '100%', height: '100%' }}
+                                                        inputProps={{
+                                                            item: (() => {
+                                                                const edited = getEditedItem(currentItem);
+                                                                return {
+                                                                    name: edited.name,
+                                                                    description: edited.description,
+                                                                    url: edited.url,
+                                                                    tags: edited.tags,
+                                                                };
+                                                            })(),
+                                                            mockupImage: mockupImages[currentItem.name],
+                                                            slideNumber: currentItemIndex + 1,
+                                                            totalSlides: activeItems.length,
+                                                            brandName,
+                                                            favicon: getEditedImages(currentItem)?.favicon,
+                                                            layout: editor.mockupLayout,
+                                                        }}
+                                                    />
+                                                </EditorOverlay>
+                                            ) : itemTemplate === 'mockup' ? (
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        height: '100%',
+                                                        aspectRatio: '1080/1350',
+                                                        color: '#94a3b8',
+                                                        gap: 8,
+                                                    }}
+                                                >
+                                                    <div style={{ fontSize: 14 }}>Mockup not composited yet</div>
+                                                    <div style={{ fontSize: 12, color: '#64748b' }}>{currentItem.name}</div>
+                                                </div>
+                                            ) : (
+                                                <Player
+                                                    component={CarouselItemSlide}
+                                                    compositionWidth={CAROUSEL.width}
+                                                    compositionHeight={CAROUSEL.height}
+                                                    durationInFrames={1}
+                                                    fps={1}
+                                                    style={{ width: '100%', height: '100%' }}
+                                                    inputProps={{
+                                                        backgroundImage: previewBg,
+                                                        item: (() => {
+                                                            const edited = getEditedItem(currentItem);
+                                                            return {
+                                                                name: edited.name,
+                                                                description: edited.description,
+                                                                url: edited.url,
+                                                                tags: edited.tags,
+                                                            };
+                                                        })(),
+                                                        images: getEditedImages(currentItem),
+                                                        slideNumber: currentItemIndex + 1,
+                                                        totalSlides: activeItems.length,
+                                                        brandName,
+                                                        overrides: editor.itemOverrides,
+                                                    }}
+                                                />
+                                            )
                                         ) : (
                                             <div
                                                 style={{
@@ -1363,6 +1915,7 @@ export default function ContentGenerator() {
                                                 controls
                                                 loop
                                                 inputProps={{
+                                                    template: itemTemplate,
                                                     backgroundImage: previewBg,
                                                     backgroundVideo: bgVideoPreview || backgroundVideo || undefined,
                                                     videoBackgroundMode,
@@ -1375,6 +1928,8 @@ export default function ContentGenerator() {
                                                     subtitle: subtitle || undefined,
                                                     brandName,
                                                     layoutOverrides: editor.videoOverrides,
+                                                    hookLayout: editor.hookLayout,
+                                                    mockupLayout: editor.mockupLayout,
                                                     logoUrls,
                                                     items: activeItems.map((item) => {
                                                         const edited = getEditedItem(item);
@@ -1385,7 +1940,10 @@ export default function ContentGenerator() {
                                                                 url: edited.url,
                                                                 tags: edited.tags,
                                                             },
-                                                            images: getEditedImages(item),
+                                                            images: {
+                                                                ...getEditedImages(item),
+                                                                mockup: mockupImages[item.name] || undefined,
+                                                            },
                                                         };
                                                     }),
                                                 }}
@@ -1425,16 +1983,16 @@ export default function ContentGenerator() {
                                         Design Editor
                                     </div>
 
-                                    {isHookSlide && (
+                                    {(isHookSlide || isMockupSlide) && (
                                         <div style={{ marginBottom: 16 }}>
                                             <AddElementToolbar
-                                                layout={editor.hookLayout}
+                                                layout={isHookSlide ? editor.hookLayout : editor.mockupLayout}
                                                 selectedElementId={editor.selectedElementId}
                                                 editingSlideType={editor.editingSlideType}
                                                 onAddText={editor.addTextElement}
                                                 onSelectElement={editor.setSelectedElementId}
                                                 onDeleteElement={editor.deleteElement}
-                                                onResetLayout={editor.resetHookLayout}
+                                                onResetLayout={isHookSlide ? editor.resetHookLayout : editor.resetMockupLayout}
                                             />
                                         </div>
                                     )}
@@ -1453,6 +2011,7 @@ export default function ContentGenerator() {
                                             <ItemEditorPanel
                                                 itemName={currentItem.name}
                                                 itemDescription={currentItem.description}
+                                                itemUrl={currentItem.url}
                                                 images={getItemImages(currentItem)}
                                                 edits={itemEdits[currentItem.name] || {}}
                                                 imageEdits={itemImageEdits[currentItem.name] || {}}
