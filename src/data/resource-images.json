@@ -58,7 +58,8 @@
     },
     "instagram-com": {
       "favicon": "/resource-images/favicons/instagram-com.png",
-      "screenshot": "/resource-images/screenshots/instagram-com.png"
+      "screenshot": "/resource-images/screenshots/instagram-com.png",
+      "ogImage": "/resource-images/og/instagram-com.png"
     },
     "developerkaki-my": {
       "favicon": "/resource-images/favicons/developerkaki-my.png",
@@ -96,7 +97,7 @@
       "screenshot": "/resource-images/screenshots/notionup-typeform-com.png"
     },
     "education-github-com": {
-      "favicon": "/resource-images/favicons/education-github-com.svg",
+      "favicon": "/resource-images/favicons/education-github-com.ico",
       "ogImage": "/resource-images/og/education-github-com.png",
       "screenshot": "/resource-images/screenshots/education-github-com.png"
     },
@@ -524,7 +525,8 @@
     },
     "github-com": {
       "favicon": "/resource-images/favicons/github-com.svg",
-      "screenshot": "/resource-images/screenshots/github-com.png"
+      "screenshot": "/resource-images/screenshots/github-com.png",
+      "ogImage": "/resource-images/og/github-com.png"
     },
     "claude-com": {
       "favicon": "/resource-images/favicons/claude-com.png",
@@ -540,7 +542,8 @@
       "favicon": "/resource-images/favicons/perplexity-ai.png"
     },
     "khazanah-com-my": {
-      "screenshot": "/resource-images/screenshots/khazanah-com-my.png"
+      "screenshot": "/resource-images/screenshots/khazanah-com-my.png",
+      "favicon": "/resource-images/favicons/khazanah-com-my.ico"
     },
     "mtdc-com-my": {
       "favicon": "/resource-images/favicons/mtdc-com-my.png",
@@ -571,8 +574,9 @@
       "screenshot": "/resource-images/screenshots/mystartupaccelerator-org.png"
     },
     "figma-com": {
-      "favicon": "/resource-images/favicons/figma-com.svg",
-      "screenshot": "/resource-images/screenshots/figma-com.png"
+      "favicon": "/resource-images/favicons/figma-com.png",
+      "screenshot": "/resource-images/screenshots/figma-com.png",
+      "ogImage": "/resource-images/og/figma-com.webp"
     },
     "carta-com": {
       "screenshot": "/resource-images/screenshots/carta-com.png"
@@ -862,111 +866,516 @@
     },
     "hardcover-app-books-atomic-habits": {
       "favicon": "/resource-images/favicons/hardcover-app-books-atomic-habits.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-atomic-habits.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-atomic-habits.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-atomic-habits.jpg"
     },
     "hardcover-app-books-die-with-zero": {
       "favicon": "/resource-images/favicons/hardcover-app-books-die-with-zero.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-die-with-zero.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-die-with-zero.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-die-with-zero.jpg"
     },
     "hardcover-app-books-doing-good-better": {
       "favicon": "/resource-images/favicons/hardcover-app-books-doing-good-better.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-doing-good-better.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-doing-good-better.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-doing-good-better.jpg"
     },
     "hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-millionaire-fastlane-a7371799-9f55-4283-bb8a-509ae440af89.jpg"
     },
     "hardcover-app-books-deep-work": {
       "favicon": "/resource-images/favicons/hardcover-app-books-deep-work.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-deep-work.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-deep-work.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-deep-work.jpg"
     },
     "hardcover-app-books-educated": {
       "favicon": "/resource-images/favicons/hardcover-app-books-educated.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-educated.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-educated.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-educated.jpg"
     },
     "hardcover-app-books-models-attract-women-through-honesty": {
       "favicon": "/resource-images/favicons/hardcover-app-books-models-attract-women-through-honesty.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-models-attract-women-through-honesty.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-models-attract-women-through-honesty.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-models-attract-women-through-honesty.jpg"
     },
     "hardcover-app-books-the-slight-edge-2005": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-slight-edge-2005.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-slight-edge-2005.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-slight-edge-2005.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-slight-edge-2005.jpg"
     },
     "hardcover-app-books-building-a-second-brain": {
       "favicon": "/resource-images/favicons/hardcover-app-books-building-a-second-brain.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-building-a-second-brain.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-building-a-second-brain.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-building-a-second-brain.jpg"
     },
     "hardcover-app-books-getting-things-done": {
       "favicon": "/resource-images/favicons/hardcover-app-books-getting-things-done.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-getting-things-done.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-getting-things-done.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-getting-things-done.jpg"
     },
     "hardcover-app-books-flow-1990": {
       "favicon": "/resource-images/favicons/hardcover-app-books-flow-1990.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-flow-1990.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-flow-1990.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-flow-1990.jpg"
     },
     "hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061": {
       "favicon": "/resource-images/favicons/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-so-good-they-cant-ignore-you-a2200d25-8bcb-45c1-90b1-c4d2e7bb8061.jpg"
     },
     "hardcover-app-books-project-hail-mary": {
       "favicon": "/resource-images/favicons/hardcover-app-books-project-hail-mary.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-project-hail-mary.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-project-hail-mary.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-project-hail-mary.jpg"
     },
     "hardcover-app-books-babel": {
       "favicon": "/resource-images/favicons/hardcover-app-books-babel.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-babel.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-babel.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-babel.jpg"
     },
     "hardcover-app-books-red-rising": {
       "favicon": "/resource-images/favicons/hardcover-app-books-red-rising.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-red-rising.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-red-rising.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-red-rising.jpg"
     },
     "hardcover-app-books-dark-matter": {
       "favicon": "/resource-images/favicons/hardcover-app-books-dark-matter.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-dark-matter.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-dark-matter.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-dark-matter.jpg"
     },
     "hardcover-app-books-the-hunger-games": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-hunger-games.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-hunger-games.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-hunger-games.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-hunger-games.jpg"
     },
     "hardcover-app-books-mistborn": {
       "favicon": "/resource-images/favicons/hardcover-app-books-mistborn.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-mistborn.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-mistborn.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-mistborn.jpg"
     },
     "hardcover-app-books-omniscient-reader-s-viewpoint-volume-1": {
       "favicon": "/resource-images/favicons/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png",
-      "ogImage": "/resource-images/og/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png"
+      "ogImage": "/resource-images/og/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-omniscient-reader-s-viewpoint-volume-1.png"
     },
     "hardcover-app-books-mother-of-learning": {
       "favicon": "/resource-images/favicons/hardcover-app-books-mother-of-learning.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-mother-of-learning.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-mother-of-learning.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-mother-of-learning.jpg"
     },
     "hardcover-app-books-the-perfect-run": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-perfect-run.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-perfect-run.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-perfect-run.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-perfect-run.jpg"
     },
     "hardcover-app-books-shadow-slave": {
       "favicon": "/resource-images/favicons/hardcover-app-books-shadow-slave.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-shadow-slave.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-shadow-slave.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-shadow-slave.jpg"
     },
     "hardcover-app-books-the-novels-extra": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-novels-extra.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-novels-extra.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-novels-extra.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-novels-extra.jpg"
     },
     "hardcover-app-books-everyone-else-is-a-returnee": {
       "favicon": "/resource-images/favicons/hardcover-app-books-everyone-else-is-a-returnee.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-everyone-else-is-a-returnee.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-everyone-else-is-a-returnee.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-everyone-else-is-a-returnee.jpg"
     },
     "hardcover-app-books-the-tutorial-is-too-hard": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-tutorial-is-too-hard.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-tutorial-is-too-hard.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-tutorial-is-too-hard.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-tutorial-is-too-hard.jpg"
     },
     "hardcover-app-books-the-primal-hunter": {
       "favicon": "/resource-images/favicons/hardcover-app-books-the-primal-hunter.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-the-primal-hunter.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-the-primal-hunter.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-the-primal-hunter.jpg"
     },
     "hardcover-app-books-mushoku-tensei-2021": {
       "favicon": "/resource-images/favicons/hardcover-app-books-mushoku-tensei-2021.jpg",
-      "ogImage": "/resource-images/og/hardcover-app-books-mushoku-tensei-2021.jpg"
+      "ogImage": "/resource-images/og/hardcover-app-books-mushoku-tensei-2021.jpg",
+      "screenshot": "/resource-images/screenshots/hardcover-app-books-mushoku-tensei-2021.jpg"
+    },
+    "unity-com-products-unity-student": {
+      "screenshot": "/resource-images/screenshots/unity-com-products-unity-student.png",
+      "favicon": "/resource-images/favicons/unity-com-products-unity-student.ico"
+    },
+    "github-com-education-students-campus-expert": {
+      "favicon": "/resource-images/favicons/github-com-education-students-campus-expert.png",
+      "screenshot": "/resource-images/screenshots/github-com-education-students-campus-expert.png"
+    },
+    "paulgraham-com-articles.html": {
+      "favicon": "/resource-images/favicons/paulgraham-com-articles.html.png",
+      "screenshot": "/resource-images/screenshots/paulgraham-com-articles.html.png"
+    },
+    "youtube-com-@ycombinator": {
+      "favicon": "/resource-images/favicons/youtube-com-@ycombinator.png",
+      "ogImage": "/resource-images/og/youtube-com-@ycombinator.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@ycombinator.png"
+    },
+    "youtube-com-@a16z": {
+      "favicon": "/resource-images/favicons/youtube-com-@a16z.png",
+      "ogImage": "/resource-images/og/youtube-com-@a16z.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@a16z.png"
+    },
+    "youtube-com-@LennysPodcast": {
+      "favicon": "/resource-images/favicons/youtube-com-@LennysPodcast.png",
+      "ogImage": "/resource-images/og/youtube-com-@LennysPodcast.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@LennysPodcast.png"
+    },
+    "instagram-com-femalesintech.my": {
+      "favicon": "/resource-images/favicons/instagram-com-femalesintech.my.png",
+      "ogImage": "/resource-images/og/instagram-com-femalesintech.my.jpg",
+      "screenshot": "/resource-images/screenshots/instagram-com-femalesintech.my.png"
+    },
+    "facebook-com-groups-kualalumpurjs": {
+      "favicon": "/resource-images/favicons/facebook-com-groups-kualalumpurjs.png",
+      "ogImage": "/resource-images/og/facebook-com-groups-kualalumpurjs.jpg",
+      "screenshot": "/resource-images/screenshots/facebook-com-groups-kualalumpurjs.png"
+    },
+    "facebook-com-groups-laravel.my": {
+      "favicon": "/resource-images/favicons/facebook-com-groups-laravel.my.png",
+      "ogImage": "/resource-images/og/facebook-com-groups-laravel.my.jpg",
+      "screenshot": "/resource-images/screenshots/facebook-com-groups-laravel.my.png"
+    },
+    "facebook-com-groups-python.malaysia": {
+      "favicon": "/resource-images/favicons/facebook-com-groups-python.malaysia.ico",
+      "ogImage": "/resource-images/og/facebook-com-groups-python.malaysia.jpg",
+      "screenshot": "/resource-images/screenshots/facebook-com-groups-python.malaysia.png"
+    },
+    "facebook-com-groups-klxrb": {
+      "favicon": "/resource-images/favicons/facebook-com-groups-klxrb.ico",
+      "screenshot": "/resource-images/screenshots/facebook-com-groups-klxrb.png",
+      "ogImage": "/resource-images/og/facebook-com-groups-klxrb.jpg"
+    },
+    "gdg-community-dev-gdg-kuala-lumpur": {
+      "favicon": "/resource-images/favicons/gdg-community-dev-gdg-kuala-lumpur.webp",
+      "screenshot": "/resource-images/screenshots/gdg-community-dev-gdg-kuala-lumpur.png"
+    },
+    "meetup-com-flutter-kl": {
+      "favicon": "/resource-images/favicons/meetup-com-flutter-kl.png",
+      "ogImage": "/resource-images/og/meetup-com-flutter-kl.png",
+      "screenshot": "/resource-images/screenshots/meetup-com-flutter-kl.png"
+    },
+    "meetup-com-devopsmalaysia": {
+      "favicon": "/resource-images/favicons/meetup-com-devopsmalaysia.png",
+      "ogImage": "/resource-images/og/meetup-com-devopsmalaysia.jpg",
+      "screenshot": "/resource-images/screenshots/meetup-com-devopsmalaysia.png"
+    },
+    "meetup-com-cloud-native-kuala-lumpur": {
+      "favicon": "/resource-images/favicons/meetup-com-cloud-native-kuala-lumpur.png",
+      "ogImage": "/resource-images/og/meetup-com-cloud-native-kuala-lumpur.jpg",
+      "screenshot": "/resource-images/screenshots/meetup-com-cloud-native-kuala-lumpur.png"
+    },
+    "meetup-com-awsugmy": {
+      "favicon": "/resource-images/favicons/meetup-com-awsugmy.png",
+      "ogImage": "/resource-images/og/meetup-com-awsugmy.webp",
+      "screenshot": "/resource-images/screenshots/meetup-com-awsugmy.png"
+    },
+    "instagram-com-coderpuffs": {
+      "favicon": "/resource-images/favicons/instagram-com-coderpuffs.png",
+      "ogImage": "/resource-images/og/instagram-com-coderpuffs.jpg",
+      "screenshot": "/resource-images/screenshots/instagram-com-coderpuffs.png"
+    },
+    "instagram-com-cursor.my": {
+      "favicon": "/resource-images/favicons/instagram-com-cursor.my.png",
+      "ogImage": "/resource-images/og/instagram-com-cursor.my.jpg",
+      "screenshot": "/resource-images/screenshots/instagram-com-cursor.my.png"
+    },
+    "notionup-typeform-com-campusleaders": {
+      "favicon": "/resource-images/favicons/notionup-typeform-com-campusleaders.png",
+      "ogImage": "/resource-images/og/notionup-typeform-com-campusleaders.png",
+      "screenshot": "/resource-images/screenshots/notionup-typeform-com-campusleaders.png"
+    },
+    "claude-com-programs-campus": {
+      "favicon": "/resource-images/favicons/claude-com-programs-campus.png",
+      "ogImage": "/resource-images/og/claude-com-programs-campus.jpg",
+      "screenshot": "/resource-images/screenshots/claude-com-programs-campus.png"
+    },
+    "aws-amazon-com-developer-community-students-cloudclubs": {
+      "favicon": "/resource-images/favicons/aws-amazon-com-developer-community-students-cloudclubs.svg",
+      "ogImage": "/resource-images/og/aws-amazon-com-developer-community-students-cloudclubs.png",
+      "screenshot": "/resource-images/screenshots/aws-amazon-com-developer-community-students-cloudclubs.png"
+    },
+    "instagram-com-figmacampusleaders": {
+      "favicon": "/resource-images/favicons/instagram-com-figmacampusleaders.png",
+      "ogImage": "/resource-images/og/instagram-com-figmacampusleaders.jpg",
+      "screenshot": "/resource-images/screenshots/instagram-com-figmacampusleaders.png"
+    },
+    "store-steampowered-com-app-1868140-DAVE_THE_DIVER": {
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1868140-DAVE_THE_DIVER.png",
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1868140-DAVE_THE_DIVER.jpg",
+      "screenshot": "/resource-images/screenshots/store-steampowered-com-app-1868140-DAVE_THE_DIVER.png"
+    },
+    "store-steampowered-com-app-1092790-Inscryption": {
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1092790-Inscryption.png",
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1092790-Inscryption.jpg",
+      "screenshot": "/resource-images/screenshots/store-steampowered-com-app-1092790-Inscryption.png"
+    },
+    "store-steampowered-com-app-391540-Undertale": {
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-391540-Undertale.png",
+      "ogImage": "/resource-images/og/store-steampowered-com-app-391540-Undertale.jpg",
+      "screenshot": "/resource-images/screenshots/store-steampowered-com-app-391540-Undertale.png"
+    },
+    "store-steampowered-com-app-1145360-Hades": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1145360-Hades.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1145360-Hades.jpg"
+    },
+    "store-steampowered-com-app-1145350-Hades_II": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1145350-Hades_II.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1145350-Hades_II.jpg"
+    },
+    "store-steampowered-com-app-1086940-Baldurs_Gate_3": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1086940-Baldurs_Gate_3.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1086940-Baldurs_Gate_3.jpg"
+    },
+    "store-steampowered-com-app-1903340-Clair_Obscur_Expedition_33": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1903340-Clair_Obscur_Expedition_33.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1903340-Clair_Obscur_Expedition_33.jpg"
+    },
+    "store-steampowered-com-app-413150-Stardew_Valley": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-413150-Stardew_Valley.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-413150-Stardew_Valley.jpg"
+    },
+    "store-steampowered-com-app-1097200-Twelve_Minutes": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-1097200-Twelve_Minutes.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-1097200-Twelve_Minutes.jpg"
+    },
+    "store-steampowered-com-app-753640-Outer_Wilds": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-753640-Outer_Wilds.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-753640-Outer_Wilds.jpg"
+    },
+    "store-steampowered-com-app-236850-Europa_Universalis_IV": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-236850-Europa_Universalis_IV.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-236850-Europa_Universalis_IV.jpg"
+    },
+    "store-steampowered-com-app-294100-RimWorld": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-294100-RimWorld.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-294100-RimWorld.jpg"
+    },
+    "store-steampowered-com-app-292030-The_Witcher_3_Wild_Hunt": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-292030-The_Witcher_3_Wild_Hunt.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-292030-The_Witcher_3_Wild_Hunt.jpg"
+    },
+    "store-steampowered-com-app-387290-Ori_and_the_Blind_Forest_Definitive_Edition": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-387290-Ori_and_the_Blind_Forest_Definitive_Edition.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-387290-Ori_and_the_Blind_Forest_Definitive_Edition.jpg"
+    },
+    "store-steampowered-com-app-287700-METAL_GEAR_SOLID_V_THE_PHANTOM_PAIN": {
+      "ogImage": "/resource-images/og/store-steampowered-com-app-287700-METAL_GEAR_SOLID_V_THE_PHANTOM_PAIN.jpg",
+      "favicon": "/resource-images/favicons/store-steampowered-com-app-287700-METAL_GEAR_SOLID_V_THE_PHANTOM_PAIN.jpg"
+    },
+    "themoviedb-org-tv-31724": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-31724.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-31724.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-31724.jpg"
+    },
+    "themoviedb-org-tv-13916": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-13916.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-13916.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-13916.jpg"
+    },
+    "themoviedb-org-tv-97525": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-97525.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-97525.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-97525.jpg"
+    },
+    "themoviedb-org-tv-24835": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-24835.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-24835.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-24835.jpg"
+    },
+    "themoviedb-org-tv-42942": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-42942.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-42942.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-42942.jpg"
+    },
+    "themoviedb-org-tv-100565": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-100565.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-100565.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-100565.jpg"
+    },
+    "themoviedb-org-tv-36041": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-36041.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-36041.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-36041.jpg"
+    },
+    "themoviedb-org-tv-60808": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-60808.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-60808.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-60808.jpg"
+    },
+    "themoviedb-org-tv-45782": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-45782.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-45782.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-45782.jpg"
+    },
+    "themoviedb-org-tv-86031": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-86031.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-86031.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-86031.jpg"
+    },
+    "themoviedb-org-tv-85937": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-85937.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-85937.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-85937.jpg"
+    },
+    "themoviedb-org-tv-46283": {
+      "ogImage": "/resource-images/og/themoviedb-org-tv-46283.jpg",
+      "favicon": "/resource-images/favicons/themoviedb-org-tv-46283.jpg",
+      "screenshot": "/resource-images/screenshots/themoviedb-org-tv-46283.jpg"
+    },
+    "facebook-com-codingcompetitions-hacker-cup": {
+      "favicon": "/resource-images/favicons/facebook-com-codingcompetitions-hacker-cup.png",
+      "screenshot": "/resource-images/screenshots/facebook-com-codingcompetitions-hacker-cup.png"
+    },
+    "mvp-microsoft-com-studentambassadors": {
+      "favicon": "/resource-images/favicons/mvp-microsoft-com-studentambassadors.png",
+      "screenshot": "/resource-images/screenshots/mvp-microsoft-com-studentambassadors.png"
+    },
+    "lovable-dev-community": {
+      "favicon": "/resource-images/favicons/lovable-dev-community.png",
+      "screenshot": "/resource-images/screenshots/lovable-dev-community.png"
+    },
+    "docker-com-community-captains": {
+      "favicon": "/resource-images/favicons/docker-com-community-captains.png",
+      "ogImage": "/resource-images/og/docker-com-community-captains.png",
+      "screenshot": "/resource-images/screenshots/docker-com-community-captains.png"
+    },
+    "aws-amazon-com-developer-community-heroes": {
+      "favicon": "/resource-images/favicons/aws-amazon-com-developer-community-heroes.svg",
+      "ogImage": "/resource-images/og/aws-amazon-com-developer-community-heroes.png",
+      "screenshot": "/resource-images/screenshots/aws-amazon-com-developer-community-heroes.png"
+    },
+    "cncf-io-people-ambassadors": {
+      "favicon": "/resource-images/favicons/cncf-io-people-ambassadors.png",
+      "ogImage": "/resource-images/og/cncf-io-people-ambassadors.jpg",
+      "screenshot": "/resource-images/screenshots/cncf-io-people-ambassadors.png"
+    },
+    "developers-google-com-community-experts": {
+      "favicon": "/resource-images/favicons/developers-google-com-community-experts.png",
+      "ogImage": "/resource-images/og/developers-google-com-community-experts.png",
+      "screenshot": "/resource-images/screenshots/developers-google-com-community-experts.png"
+    },
+    "youtube-com-watch": {
+      "favicon": "/resource-images/favicons/youtube-com-watch.png",
+      "ogImage": "/resource-images/og/youtube-com-watch.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-watch.png"
+    },
+    "youtube-com-@20VC": {
+      "favicon": "/resource-images/favicons/youtube-com-@20VC.png",
+      "ogImage": "/resource-images/og/youtube-com-@20VC.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@20VC.png"
+    },
+    "youtube-com-@GregIsenberg": {
+      "favicon": "/resource-images/favicons/youtube-com-@GregIsenberg.png",
+      "ogImage": "/resource-images/og/youtube-com-@GregIsenberg.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@GregIsenberg.png"
+    },
+    "youtube-com-@marc-lou": {
+      "favicon": "/resource-images/favicons/youtube-com-@marc-lou.png",
+      "ogImage": "/resource-images/og/youtube-com-@marc-lou.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@marc-lou.png"
+    },
+    "youtube-com-@starterstory": {
+      "favicon": "/resource-images/favicons/youtube-com-@starterstory.png",
+      "ogImage": "/resource-images/og/youtube-com-@starterstory.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@starterstory.png"
+    },
+    "youtube-com-@MastersofScale_": {
+      "favicon": "/resource-images/favicons/youtube-com-@MastersofScale_.png",
+      "ogImage": "/resource-images/og/youtube-com-@MastersofScale_.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@MastersofScale_.png"
+    },
+    "youtube-com-@Foundr": {
+      "favicon": "/resource-images/favicons/youtube-com-@Foundr.png",
+      "ogImage": "/resource-images/og/youtube-com-@Foundr.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@Foundr.png"
+    },
+    "youtube-com-@eoglobal": {
+      "favicon": "/resource-images/favicons/youtube-com-@eoglobal.png",
+      "ogImage": "/resource-images/og/youtube-com-@eoglobal.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@eoglobal.png"
+    },
+    "youtube-com-@MyFirstMillionPod": {
+      "favicon": "/resource-images/favicons/youtube-com-@MyFirstMillionPod.png",
+      "ogImage": "/resource-images/og/youtube-com-@MyFirstMillionPod.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@MyFirstMillionPod.png"
+    },
+    "processingfoundation-org-grants": {
+      "favicon": "/resource-images/favicons/processingfoundation-org-grants.png",
+      "ogImage": "/resource-images/og/processingfoundation-org-grants.jpg",
+      "screenshot": "/resource-images/screenshots/processingfoundation-org-grants.png"
+    },
+    "processingfoundation-org-fellowships": {
+      "favicon": "/resource-images/favicons/processingfoundation-org-fellowships.png",
+      "screenshot": "/resource-images/screenshots/processingfoundation-org-fellowships.png"
+    },
+    "youtube-com-@PeterYangYT": {
+      "favicon": "/resource-images/favicons/youtube-com-@PeterYangYT.png",
+      "ogImage": "/resource-images/og/youtube-com-@PeterYangYT.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@PeterYangYT.png"
+    },
+    "youtube-com-@BroCodez": {
+      "favicon": "/resource-images/favicons/youtube-com-@BroCodez.png",
+      "ogImage": "/resource-images/og/youtube-com-@BroCodez.jpg",
+      "screenshot": "/resource-images/screenshots/youtube-com-@BroCodez.png"
+    },
+    "gemini-google-students": {
+      "favicon": "/resource-images/favicons/gemini-google-students.png",
+      "ogImage": "/resource-images/og/gemini-google-students.png",
+      "screenshot": "/resource-images/screenshots/gemini-google-students.png"
+    },
+    "cursor-com-students": {
+      "favicon": "/resource-images/favicons/cursor-com-students.png",
+      "ogImage": "/resource-images/og/cursor-com-students.png",
+      "screenshot": "/resource-images/screenshots/cursor-com-students.png"
+    },
+    "education-github-com-pack": {
+      "favicon": "/resource-images/favicons/education-github-com-pack.ico",
+      "ogImage": "/resource-images/og/education-github-com-pack.png",
+      "screenshot": "/resource-images/screenshots/education-github-com-pack.png"
+    },
+    "cursor-com-ambassadors": {
+      "favicon": "/resource-images/favicons/cursor-com-ambassadors.png",
+      "ogImage": "/resource-images/og/cursor-com-ambassadors.png",
+      "screenshot": "/resource-images/screenshots/cursor-com-ambassadors.png"
+    },
+    "reddit-com-r-SomebodyMakeThis": {
+      "favicon": "/resource-images/favicons/reddit-com-r-SomebodyMakeThis.ico",
+      "screenshot": "/resource-images/screenshots/reddit-com-r-SomebodyMakeThis.png"
+    },
+    "ycombinator-com-rfs": {
+      "favicon": "/resource-images/favicons/ycombinator-com-rfs.ico",
+      "ogImage": "/resource-images/og/ycombinator-com-rfs.jpg",
+      "screenshot": "/resource-images/screenshots/ycombinator-com-rfs.png"
+    },
+    "hubstaff-com-blog-test-your-startup-idea": {
+      "favicon": "/resource-images/favicons/hubstaff-com-blog-test-your-startup-idea.ico",
+      "ogImage": "/resource-images/og/hubstaff-com-blog-test-your-startup-idea.jpg",
+      "screenshot": "/resource-images/screenshots/hubstaff-com-blog-test-your-startup-idea.png"
+    },
+    "mdec-my-grants": {
+      "favicon": "/resource-images/favicons/mdec-my-grants.png",
+      "ogImage": "/resource-images/og/mdec-my-grants.jpg",
+      "screenshot": "/resource-images/screenshots/mdec-my-grants.png"
+    },
+    "perplexity-ai-campus-partners": {
+      "screenshot": "/resource-images/screenshots/perplexity-ai-campus-partners.png",
+      "favicon": "/resource-images/favicons/perplexity-ai-campus-partners.png"
+    },
+    "docs-anthropic-com-en-docs-agents-and-tools-claude-code-overview": {
+      "favicon": "/resource-images/favicons/docs-anthropic-com-en-docs-agents-and-tools-claude-code-overview.png",
+      "ogImage": "/resource-images/og/docs-anthropic-com-en-docs-agents-and-tools-claude-code-overview.png",
+      "screenshot": "/resource-images/screenshots/docs-anthropic-com-en-docs-agents-and-tools-claude-code-overview.png"
+    },
+    "claude-com-product-claude-code": {
+      "favicon": "/resource-images/favicons/claude-com-product-claude-code.png",
+      "ogImage": "/resource-images/og/claude-com-product-claude-code.jpg",
+      "screenshot": "/resource-images/screenshots/claude-com-product-claude-code.png"
     }
   }
 }
