@@ -4,6 +4,8 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 puppeteer.use(StealthPlugin());
 import * as fs from 'fs';
 import * as path from 'path';
+import { getPlaywrightContext, screenshotWithPlaywright, launchStealthBrowser, type PlaywrightSession } from '../src/lib/fetch-resource-image';
+import type { BrowserContext } from 'playwright';
 
 // Import all list files
 import { favoriteProducts } from '../src/data/lists/favorite-products';
@@ -92,17 +94,32 @@ function collectItems(): { name: string; url: string }[] {
     return items;
 }
 
-async function screenshotUrl(
+async function screenshotUrlPlaywright(
+    context: BrowserContext,
+    key: string,
+    url: string,
+): Promise<string | null> {
+    try {
+        const result = await screenshotWithPlaywright(context, key, url);
+        if (result.screenshotPath) {
+            console.log(`  ✓ Screenshot (Playwright): ${result.screenshotPath}`);
+        }
+        return result.screenshotPath;
+    } catch (err: any) {
+        console.log(`  ✗ Playwright Error: ${err.message?.slice(0, 80) || err}`);
+        return null;
+    }
+}
+
+async function screenshotUrlPuppeteer(
     browser: puppeteer.Browser,
     key: string,
     url: string,
-    name: string,
 ): Promise<string | null> {
     const page = await browser.newPage();
     try {
         await page.setViewport(VIEWPORT);
         await page.goto(url, { waitUntil: 'networkidle2', timeout: NAV_TIMEOUT });
-        // Wait for JS rendering and lazy-loaded elements
         await new Promise((r) => setTimeout(r, 3000));
 
         const filename = `${key}.png`;
@@ -110,24 +127,42 @@ async function screenshotUrl(
         await page.screenshot({ path: destPath, type: 'png' });
 
         const relativePath = `/resource-images/screenshots/${filename}`;
-        console.log(`  ✓ Screenshot: ${relativePath}`);
+        console.log(`  ✓ Screenshot (Puppeteer): ${relativePath}`);
         return relativePath;
     } catch (err: any) {
-        console.log(`  ✗ Error: ${err.message?.slice(0, 80) || err}`);
+        console.log(`  ✗ Puppeteer Error: ${err.message?.slice(0, 80) || err}`);
         return null;
     } finally {
         await page.close();
     }
 }
 
-async function processChunk(
+async function processChunkPlaywright(
+    context: BrowserContext,
+    chunk: [string, { name: string; url: string }][],
+    manifest: ImageManifest,
+): Promise<number> {
+    const results = await Promise.allSettled(
+        chunk.map(async ([key, item]) => {
+            const screenshotPath = await screenshotUrlPlaywright(context, key, item.url);
+            if (screenshotPath) {
+                manifest.images[key] = { ...manifest.images[key], screenshot: screenshotPath };
+                return true;
+            }
+            return false;
+        }),
+    );
+    return results.filter((r) => r.status === 'fulfilled' && r.value).length;
+}
+
+async function processChunkPuppeteer(
     browser: puppeteer.Browser,
     chunk: [string, { name: string; url: string }][],
     manifest: ImageManifest,
 ): Promise<number> {
     const results = await Promise.allSettled(
         chunk.map(async ([key, item]) => {
-            const screenshotPath = await screenshotUrl(browser, key, item.url, item.name);
+            const screenshotPath = await screenshotUrlPuppeteer(browser, key, item.url);
             if (screenshotPath) {
                 manifest.images[key] = { ...manifest.images[key], screenshot: screenshotPath };
                 return true;
@@ -178,10 +213,15 @@ async function main() {
         return;
     }
 
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    // Try Playwright first (CDP → profile copy → clean), fall back to Puppeteer stealth
+    const session = await getPlaywrightContext();
+    const usePlaywright = session !== null;
+
+    let puppeteerBrowser: puppeteer.Browser | null = null;
+    if (!usePlaywright) {
+        console.log('Falling back to Puppeteer stealth');
+        puppeteerBrowser = await launchStealthBrowser();
+    }
 
     let fetched = 0;
     let failed = 0;
@@ -192,7 +232,9 @@ async function main() {
         const chunkNames = chunk.map(([, item]) => item.name).join(', ');
         console.log(`\n[${i + 1}-${Math.min(i + CONCURRENCY, toProcess.length)}/${toProcess.length}] ${chunkNames}`);
 
-        const count = await processChunk(browser, chunk, manifest);
+        const count = usePlaywright
+            ? await processChunkPlaywright(session!.context, chunk, manifest)
+            : await processChunkPuppeteer(puppeteerBrowser!, chunk, manifest);
         fetched += count;
         failed += chunk.length - count;
 
@@ -202,7 +244,9 @@ async function main() {
         }
     }
 
-    await browser.close();
+    // Clean up
+    if (session) await session.cleanup();
+    if (puppeteerBrowser) await puppeteerBrowser.close();
 
     // Final manifest write
     fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
