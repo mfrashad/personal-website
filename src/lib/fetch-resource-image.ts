@@ -23,6 +23,32 @@ export function domainKey(url: string): string {
     }
 }
 
+/**
+ * Generate a unique resource key from a URL.
+ * For most URLs, this is just the domain (e.g., "readwise-io").
+ * For URLs with meaningful path segments (like hardcover.app/books/slug),
+ * includes the path to distinguish between items on the same domain.
+ */
+export function resourceKey(url: string): string {
+    try {
+        const parsed = new URL(url);
+        const hostname = parsed.hostname.replace(/^www\./, '');
+        const domain = hostname.replace(/\./g, '-');
+
+        // For URLs with path segments beyond just "/" , include the path
+        const pathSegments = parsed.pathname.split('/').filter(Boolean);
+        if (pathSegments.length >= 2) {
+            // e.g., hardcover.app/books/atomic-habits → hardcover-app-books-atomic-habits
+            const pathPart = pathSegments.join('-');
+            return `${domain}-${pathPart}`;
+        }
+
+        return domain;
+    } catch {
+        return '';
+    }
+}
+
 export function resolveUrl(base: string, relative: string): string {
     try {
         return new URL(relative, base).href;
