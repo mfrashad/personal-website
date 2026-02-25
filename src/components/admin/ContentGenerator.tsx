@@ -8,6 +8,7 @@ import { VideoComposition } from '../../../remotion/compositions/VideoCompositio
 import { CAROUSEL, VIDEO, getVideoDuration } from '../../../remotion/lib/theme';
 import type { ResourceItem, ResourceImages, ItemSlideTemplate } from '../../../remotion/lib/types';
 import { useDesignEditor } from './editor/useDesignEditor';
+import { getDefaultHookSlideLayout, getDefaultItemSlideOverrides, getDefaultMockupSlideLayout } from '../../../remotion/lib/default-layouts';
 import { EditorOverlay } from './editor/EditorOverlay';
 import { PropertiesPanel } from './editor/PropertiesPanel';
 import { AddElementToolbar } from './editor/AddElementToolbar';
@@ -29,6 +30,43 @@ interface ItemImageEdits {
 }
 
 type Mode = 'carousel' | 'video';
+
+interface CategoryCache {
+    hookText: string;
+    subtitle: string;
+    itemTemplate: ItemSlideTemplate;
+    mode: Mode;
+    // Design editor
+    hookLayout: import('../../../remotion/lib/design-types').SlideLayout;
+    mockupLayout: import('../../../remotion/lib/design-types').SlideLayout;
+    itemOverrides: import('../../../remotion/lib/design-types').ItemSlideOverrides;
+    videoOverrides: import('../../../remotion/lib/types').VideoLayoutOverrides;
+    // Media (server paths only — blob URLs don't survive refresh)
+    backgroundImage: string | null;
+    backgroundVideo: string | null;
+    audioSrc: string | null;
+    audioFileName: string | null;
+    // Video settings
+    showVideoCta: boolean;
+    videoBackgroundMode: 'full' | 'hook-only';
+    backgroundFallbackColor: string;
+    hookDurationSec: number;
+    beatIntervalSec: number;
+    // Per-item edits
+    itemEdits: Record<string, ItemEdits>;
+    itemImageEdits: Record<string, ItemImageEdits>;
+    // Mockup
+    mockupImages: Record<string, string>;
+    selectedGsTemplate: string | null;
+    mockupBasePath: string | null;
+    mockupBasePreview: string | null;
+    mockupTemplateUrl: string | null;
+    mockupCorners: number[][] | null;
+    mockupAdjustments: Record<string, number>;
+    // Navigation
+    selectedItems: string[];
+    currentSlide: number;
+}
 
 interface Item {
     name: string;
@@ -57,7 +95,7 @@ function getDomainKey(url?: string): string | null {
         const hostname = parsed.hostname.replace(/^www\./, '');
         const domain = hostname.replace(/\./g, '-');
         const pathSegments = parsed.pathname.split('/').filter(Boolean);
-        if (pathSegments.length >= 2) {
+        if (pathSegments.length >= 1) {
             return `${domain}-${pathSegments.join('-')}`;
         }
         return domain;
@@ -87,6 +125,43 @@ const VIRAL_HOOKS = [
     'things I wish I knew before my first tech interview',
 ];
 
+const CATEGORY_DEFAULT_HOOKS: Record<string, string> = {
+    'products': 'purchases I made that actually changed my life',
+    'software': 'apps I can\'t live without as a developer',
+    'games': 'games that are actual masterpieces',
+    'anime': 'anime that will ruin your sleep schedule',
+    'nonfiction-books': 'books that changed how I think about everything',
+    'novels': 'novels I think about years after reading',
+    'webnovels': 'web novels that are better than most published books',
+    'concepts': 'mental models that made me think differently',
+    'kl-ai-communities': 'AI communities in KL you need to join',
+    'kl-tech-communities': 'tech communities in KL every developer should know',
+    'student-ambassador-programs': 'ambassador programs that look insane on your resume',
+    'developer-ambassador-programs': 'developer programs that pay you to learn',
+    'student-free-perks': 'free stuff you\'re missing out on as a student',
+    'startup-accelerators': 'accelerators that actually launch startups',
+    'malaysia-gov-grants': 'government grants most Malaysian founders don\'t know about',
+    'global-student-competitions': 'competitions that can change your career as a student',
+    'malaysia-student-competitions': 'competitions every Malaysian student should enter',
+    'malaysia-open-competitions': 'competitions in Malaysia with massive prizes',
+    'startup-learning-resources': 'resources I used to learn how to build a startup from zero',
+    'startup-ideation': 'tools that help you find startup ideas that actually work',
+    'startup-building-mvp': 'tools to go from idea to MVP in a weekend',
+    'startup-fundraising': 'resources that helped me understand startup fundraising',
+    'startup-marketing-growth': 'growth tools every early-stage founder needs',
+    'startup-ai-tech-stack': 'the AI stack I\'d use to build a startup in 2025',
+    'my-startup-tools': 'every tool my startup uses to run everything',
+    'ai-writing-tools': 'AI writing tools that replaced my entire content workflow',
+    'ai-image-tools': 'AI image tools that make Photoshop feel outdated',
+    'ai-audio-tools': 'AI audio tools most people don\'t know exist',
+    'ai-video-tools': 'AI video tools that feel like they\'re from the future',
+    'ai-research-tools': 'AI tools that do 10 hours of research in 10 minutes',
+    'ai-design-tools': 'AI design tools every creator needs to know about',
+    'ai-avatar-tools': 'AI avatar tools that are honestly scary good',
+    'learn-programming': 'free resources I wish I had when learning to code',
+    'paid-open-source-programs': 'programs that pay you to contribute to open source',
+};
+
 export default function ContentGenerator() {
     const [mode, setMode] = useState<Mode>('carousel');
     const [itemTemplate, setItemTemplate] = useState<ItemSlideTemplate>('card');
@@ -107,12 +182,16 @@ export default function ContentGenerator() {
     const [mockupAdjustmentsOpen, setMockupAdjustmentsOpen] = useState(false);
     const mockupBaseInputRef = useRef<HTMLInputElement>(null);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(() => {
+        try { return localStorage.getItem('cg-active-category'); } catch { return null; }
+    });
     const [imageManifest, setImageManifest] = useState<ImageManifest>({ images: {} });
     const [hookText, setHookText] = useState('');
     const [subtitle, setSubtitle] = useState('');
     const [brandName, setBrandName] = useState('@rashadcodes');
     const [ctaText, setCtaText] = useState('Comment links to get all links sent to you');
+    const [ctaSubtitle, setCtaSubtitle] = useState('');
+    const [ctaImage, setCtaImage] = useState('');
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [bgPreview, setBgPreview] = useState<string | null>(null);
     const [backgroundVideo, setBackgroundVideo] = useState<string | null>(null);
@@ -122,14 +201,19 @@ export default function ContentGenerator() {
     const [audioFileName, setAudioFileName] = useState<string | null>(null);
     const [videoBackgroundMode, setVideoBackgroundMode] = useState<'full' | 'hook-only'>('full');
     const [backgroundFallbackColor, setBackgroundFallbackColor] = useState('#0f172a');
+    const [showVideoCta, setShowVideoCta] = useState(true);
+    const [showHookOverlay, setShowHookOverlay] = useState(true);
     // Beat-synced timing
     const [hookDurationSec, setHookDurationSec] = useState(VIDEO.hookDurationSec);
     const [beatIntervalSec, setBeatIntervalSec] = useState(VIDEO.itemDurationSec);
     const [detectingBeats, setDetectingBeats] = useState(false);
     const [beatAnalysis, setBeatAnalysis] = useState<BeatAnalysis | null>(null);
-    const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    const dragItemRef = useRef<string | null>(null);
+    const dragOverItemRef = useRef<string | null>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [rendering, setRendering] = useState(false);
+    const [forceRebundle, setForceRebundle] = useState(false);
     const [renderProgress, setRenderProgress] = useState('');
     const [outputPaths, setOutputPaths] = useState<string[]>([]);
     const [videoOutputPath, setVideoOutputPath] = useState<string | null>(null);
@@ -141,12 +225,57 @@ export default function ContentGenerator() {
     // Design editor
     const editor = useDesignEditor();
 
+    // Mobile detection
+    const [isMobile, setIsMobile] = useState(false);
+    const [mobilePanel, setMobilePanel] = useState<'preview' | 'settings'>('preview');
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
+
+    // Per-category state cache (persisted to localStorage)
+    const prevCategoryRef = useRef<string | null>(null);
+    const saveCacheTimer = useRef<ReturnType<typeof setTimeout>>();
+
+    // Persistent content descriptions (saved to disk, separate from website descriptions)
+    const [contentDescriptions, setContentDescriptions] = useState<Record<string, string>>({});
+    // Persistent list notes (saved to disk, per category)
+    const [listNotes, setListNotes] = useState<Record<string, string>>({});
+    const [listNotesOpen, setListNotesOpen] = useState(false);
     // Per-item edits (text overrides)
     const [itemEdits, setItemEdits] = useState<Record<string, ItemEdits>>({});
     // Per-item image overrides (server paths for render)
     const [itemImageEdits, setItemImageEdits] = useState<Record<string, ItemImageEdits>>({});
     // Per-item image previews (blob URLs for instant preview)
     const [itemImagePreviews, setItemImagePreviews] = useState<Record<string, { favicon?: string; screenshot?: string }>>({});
+
+    const listNoteSaveTimer = useRef<ReturnType<typeof setTimeout>>();
+    const updateListNote = useCallback((category: string, value: string) => {
+        setListNotes((prev) => ({ ...prev, [category]: value }));
+        clearTimeout(listNoteSaveTimer.current);
+        listNoteSaveTimer.current = setTimeout(() => {
+            fetch('/api/admin/list-notes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, note: value || null }),
+            });
+        }, 500);
+    }, []);
+
+    const contentDescSaveTimer = useRef<ReturnType<typeof setTimeout>>();
+    const updateContentDescription = useCallback((itemName: string, value: string) => {
+        setContentDescriptions((prev) => ({ ...prev, [itemName]: value }));
+        clearTimeout(contentDescSaveTimer.current);
+        contentDescSaveTimer.current = setTimeout(() => {
+            fetch('/api/admin/content-descriptions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ itemName, description: value || null }),
+            });
+        }, 500);
+    }, []);
 
     const updateItemEdit = useCallback((itemName: string, field: 'name' | 'description' | 'url', value: string) => {
         setItemEdits((prev) => ({
@@ -236,12 +365,14 @@ export default function ContentGenerator() {
         });
     }, [itemImagePreviews]);
 
-    // Get edited item data (merges edits with original)
+    // Get edited item data (merges edits with original, content description as base)
     function getEditedItem(item: Item) {
         const edits = itemEdits[item.name];
-        if (!edits) return item;
+        const contentDesc = contentDescriptions[item.name];
+        const base = contentDesc ? { ...item, description: contentDesc } : item;
+        if (!edits) return base;
         return {
-            ...item,
+            ...base,
             ...(edits.name !== undefined && { name: edits.name }),
             ...(edits.description !== undefined && { description: edits.description }),
             ...(edits.url !== undefined && { url: edits.url }),
@@ -276,31 +407,163 @@ export default function ContentGenerator() {
         };
     }
 
-    // Load categories + image manifest
+    // Load categories + image manifest + media defaults + content descriptions + list notes
     useEffect(() => {
         Promise.all([
             fetch('/api/admin/lists').then((r) => r.json()),
             fetch('/src/data/resource-images.json').then((r) => r.json()),
-        ]).then(([cats, manifest]) => {
+            fetch('/api/admin/media-defaults').then((r) => r.json()).catch(() => ({})),
+            fetch('/api/admin/content-descriptions').then((r) => r.json()).catch(() => ({})),
+            fetch('/api/admin/list-notes').then((r) => r.json()).catch(() => ({})),
+        ]).then(([cats, manifest, defaults, descriptions, notes]) => {
             setCategories(cats);
             setImageManifest(manifest);
+            setContentDescriptions(descriptions);
+            setListNotes(notes);
+            if (defaults.backgroundImage && !backgroundImage) setBackgroundImage(defaults.backgroundImage);
+            if (defaults.backgroundVideo && !backgroundVideo) setBackgroundVideo(defaults.backgroundVideo);
+            if (defaults.audioSrc && !audioSrc) setAudioSrc(defaults.audioSrc);
+            if (defaults.ctaImage && !ctaImage) setCtaImage(defaults.ctaImage);
         });
     }, []);
 
     const currentCategory = categories.find((c) => c.category === selectedCategory);
     const items = currentCategory?.items || [];
-    const activeItems = items.filter((item) => selectedItems.has(item.name));
+    const selectedArr = Array.isArray(selectedItems) ? selectedItems : [...selectedItems as any];
+    const activeItems = selectedArr.map((name: string) => items.find((i) => i.name === name)).filter(Boolean) as Item[];
     const totalSlides = activeItems.length + 2; // hook slide + item slides + CTA slide
 
-    // Auto-set hook text when category changes
+    // --- localStorage helpers for per-category cache ---
+    function saveCategoryCache(category: string, cache: CategoryCache) {
+        try { localStorage.setItem(`cg-cache-${category}`, JSON.stringify(cache)); } catch {}
+    }
+    function loadCategoryCache(category: string): CategoryCache | null {
+        try {
+            const raw = localStorage.getItem(`cg-cache-${category}`);
+            return raw ? JSON.parse(raw) : null;
+        } catch { return null; }
+    }
+    function deleteCategoryCache(category: string) {
+        try { localStorage.removeItem(`cg-cache-${category}`); } catch {}
+    }
+
+    function snapshotCurrentState(): CategoryCache {
+        return {
+            hookText, subtitle, itemTemplate, mode,
+            hookLayout: editor.hookLayout,
+            mockupLayout: editor.mockupLayout,
+            itemOverrides: editor.itemOverrides,
+            videoOverrides: editor.videoOverrides,
+            backgroundImage, backgroundVideo, audioSrc, audioFileName,
+            showVideoCta, videoBackgroundMode, backgroundFallbackColor,
+            hookDurationSec, beatIntervalSec,
+            itemEdits, itemImageEdits,
+            mockupImages, selectedGsTemplate,
+            mockupBasePath, mockupBasePreview, mockupTemplateUrl, mockupCorners, mockupAdjustments,
+            selectedItems, currentSlide,
+        };
+    }
+
+    function restoreFromCache(cached: CategoryCache) {
+        setHookText(cached.hookText);
+        setSubtitle(cached.subtitle);
+        setItemTemplate(cached.itemTemplate);
+        if (cached.mode) setMode(cached.mode);
+        editor.setHookLayout(cached.hookLayout);
+        editor.setMockupLayout(cached.mockupLayout);
+        editor.setItemOverrides(cached.itemOverrides);
+        editor.setVideoOverrides(cached.videoOverrides);
+        setBackgroundImage(cached.backgroundImage);
+        setBgPreview(cached.backgroundImage); // use server path as preview
+        setBackgroundVideo(cached.backgroundVideo);
+        setBgVideoPreview(cached.backgroundVideo); // use server path as preview
+        setAudioSrc(cached.audioSrc);
+        setAudioPreview(cached.audioSrc); // use server path as preview
+        setAudioFileName(cached.audioFileName);
+        setShowVideoCta(cached.showVideoCta ?? true);
+        setVideoBackgroundMode(cached.videoBackgroundMode);
+        setBackgroundFallbackColor(cached.backgroundFallbackColor);
+        setHookDurationSec(cached.hookDurationSec);
+        setBeatIntervalSec(cached.beatIntervalSec);
+        setBeatAnalysis(null); // not serializable, re-detect if needed
+        setItemEdits(cached.itemEdits);
+        setItemImageEdits(cached.itemImageEdits);
+        setItemImagePreviews({}); // blob URLs don't survive refresh
+        setMockupImages(cached.mockupImages);
+        setSelectedGsTemplate(cached.selectedGsTemplate);
+        setMockupBasePath(cached.mockupBasePath);
+        setMockupBasePreview(cached.mockupBasePreview);
+        setMockupTemplateUrl(cached.mockupTemplateUrl);
+        setMockupCorners(cached.mockupCorners);
+        setMockupAdjustments(cached.mockupAdjustments);
+        setSelectedItems(cached.selectedItems);
+        setCurrentSlide(cached.currentSlide);
+    }
+
+    // Restore or initialize state when switching categories
     useEffect(() => {
-        if (currentCategory) {
-            setHookText(`Top ${items.length} ${currentCategory.title}`);
+        if (!currentCategory) return;
+
+        // Save previous category before switching
+        const prev = prevCategoryRef.current;
+        if (prev) {
+            saveCategoryCache(prev, snapshotCurrentState());
+        }
+        prevCategoryRef.current = selectedCategory;
+
+        // Persist active category
+        try { localStorage.setItem('cg-active-category', selectedCategory!); } catch {}
+
+        // Restore cached state or use defaults
+        const cached = loadCategoryCache(selectedCategory!);
+        if (cached) {
+            restoreFromCache(cached);
+        } else {
+            // Defaults for a fresh category
+            setHookText(CATEGORY_DEFAULT_HOOKS[selectedCategory!] || `Top ${items.length} ${currentCategory.title}`);
             setSubtitle('');
-            setSelectedItems(new Set(items.map((i) => i.name)));
+            setItemTemplate('card');
+            editor.setHookLayout(getDefaultHookSlideLayout());
+            editor.setMockupLayout(getDefaultMockupSlideLayout());
+            editor.setItemOverrides(getDefaultItemSlideOverrides());
+            editor.setVideoOverrides({});
+            setItemEdits({});
+            setItemImageEdits({});
+            setItemImagePreviews({});
+            setMockupImages({});
+            setSelectedGsTemplate(null);
+            setMockupBasePath(null);
+            setMockupBasePreview(null);
+            setMockupTemplateUrl(null);
+            setMockupCorners(null);
+            setMockupAdjustments({ blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0 });
+            setShowVideoCta(true);
+            setHookDurationSec(VIDEO.hookDurationSec);
+            setBeatIntervalSec(VIDEO.itemDurationSec);
+            setBeatAnalysis(null);
+            setSelectedItems(items.map((i) => i.name));
             setCurrentSlide(0);
         }
     }, [selectedCategory]);
+
+    // Auto-save current category state to localStorage (debounced)
+    useEffect(() => {
+        if (!selectedCategory) return;
+        clearTimeout(saveCacheTimer.current);
+        saveCacheTimer.current = setTimeout(() => {
+            saveCategoryCache(selectedCategory, snapshotCurrentState());
+        }, 500);
+    }, [
+        selectedCategory, hookText, subtitle, itemTemplate, mode,
+        editor.hookLayout, editor.mockupLayout, editor.itemOverrides, editor.videoOverrides,
+        backgroundImage, backgroundVideo, audioSrc, audioFileName,
+        showVideoCta, videoBackgroundMode, backgroundFallbackColor,
+        hookDurationSec, beatIntervalSec,
+        itemEdits, itemImageEdits,
+        mockupImages, selectedGsTemplate,
+        mockupBasePath, mockupBasePreview, mockupTemplateUrl, mockupCorners, mockupAdjustments,
+        selectedItems, currentSlide,
+    ]);
 
     // Sync editing slide type with current slide
     useEffect(() => {
@@ -612,11 +875,15 @@ export default function ContentGenerator() {
                     subtitle,
                     brandName,
                     ctaText,
+                    ctaSubtitle: ctaSubtitle || undefined,
+                    ctaImage: ctaImage || undefined,
                     template: itemTemplate,
                     logoUrls: showLogos ? logoUrlsForRender : [],
                     hookLayout: editor.hookLayout,
                     mockupLayout: editor.mockupLayout,
                     itemOverrides: editor.itemOverrides,
+                    showHookOverlay,
+                    rebundle: forceRebundle,
                     items: activeItems.map((item) => {
                         const edited = getEditedItem(item);
                         return {
@@ -632,12 +899,14 @@ export default function ContentGenerator() {
             setOutputPaths(data.paths);
             setRenderProgress(`Done! ${data.paths.length} slides rendered.`);
             showToast('Carousel rendered successfully!');
+            if (forceRebundle) setForceRebundle(false);
+            downloadAll(data.paths);
         } catch (err: any) {
             setRenderProgress(`Error: ${err.message}`);
         } finally {
             setRendering(false);
         }
-    }, [backgroundImage, hookText, subtitle, brandName, ctaText, activeItems, editor.hookLayout, editor.mockupLayout, editor.itemOverrides, itemEdits, itemImageEdits, itemTemplate, mockupImages]);
+    }, [backgroundImage, hookText, subtitle, brandName, ctaText, ctaSubtitle, ctaImage, activeItems, editor.hookLayout, editor.mockupLayout, editor.itemOverrides, itemEdits, itemImageEdits, itemTemplate, mockupImages]);
 
     // Render video
     const handleRenderVideo = useCallback(async () => {
@@ -675,6 +944,7 @@ export default function ContentGenerator() {
                     hookLayout: editor.hookLayout,
                     mockupLayout: editor.mockupLayout,
                     logoUrls: logoUrlsForRender,
+                    rebundle: forceRebundle,
                     items: activeItems.map((item) => {
                         const edited = getEditedItem(item);
                         return {
@@ -690,12 +960,32 @@ export default function ContentGenerator() {
             setVideoOutputPath(data.path);
             setRenderProgress('Video rendered!');
             showToast('Video rendered successfully!');
+            if (forceRebundle) setForceRebundle(false);
+            triggerDownload(data.path, data.path.split('/').pop() || 'reel.mp4');
         } catch (err: any) {
             setRenderProgress(`Error: ${err.message}`);
         } finally {
             setRendering(false);
         }
     }, [backgroundVideo, backgroundImage, hookText, subtitle, brandName, activeItems, editor.videoOverrides, editor.hookLayout, editor.mockupLayout, itemEdits, itemImageEdits, hookDurationSec, beatIntervalSec, itemTemplate, mockupImages]);
+
+    function triggerDownload(url: string, filename: string) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function downloadAll(paths: string[]) {
+        paths.forEach((p, i) => {
+            setTimeout(() => {
+                const filename = p.split('/').pop() || `slide-${i}.png`;
+                triggerDownload(p, filename);
+            }, i * 300);
+        });
+    }
 
     function showToast(msg: string) {
         setToast(msg);
@@ -704,20 +994,47 @@ export default function ContentGenerator() {
 
     function toggleItem(name: string) {
         setSelectedItems((prev) => {
-            const next = new Set(prev);
-            if (next.has(name)) next.delete(name);
-            else next.add(name);
-            return next;
+            if (prev.includes(name)) return prev.filter((n) => n !== name);
+            return [...prev, name];
         });
     }
 
     function selectAll() {
-        setSelectedItems(new Set(items.map((i) => i.name)));
+        setSelectedItems(items.map((i) => i.name));
     }
 
     function selectNone() {
-        setSelectedItems(new Set());
+        setSelectedItems([]);
     }
+
+    const handleResetCategoryState = useCallback(() => {
+        if (!selectedCategory || !currentCategory) return;
+        deleteCategoryCache(selectedCategory);
+        setHookText(CATEGORY_DEFAULT_HOOKS[selectedCategory] || `Top ${items.length} ${currentCategory.title}`);
+        setSubtitle('');
+        setItemTemplate('card');
+        editor.resetHookLayout();
+        editor.resetMockupLayout();
+        editor.resetItemOverrides();
+        editor.resetVideoOverrides();
+        setItemEdits({});
+        setItemImageEdits({});
+        setItemImagePreviews({});
+        setMockupImages({});
+        setSelectedGsTemplate(null);
+        setMockupBasePath(null);
+        setMockupBasePreview(null);
+        setMockupTemplateUrl(null);
+        setMockupCorners(null);
+        setMockupAdjustments({ blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0 });
+        setShowVideoCta(true);
+        setHookDurationSec(VIDEO.hookDurationSec);
+        setBeatIntervalSec(VIDEO.itemDurationSec);
+        setBeatAnalysis(null);
+        setSelectedItems(items.map((i) => i.name));
+        setCurrentSlide(0);
+        showToast('List state reset');
+    }, [selectedCategory, currentCategory, items]);
 
     // Build preview URL for background
     const previewBg =
@@ -737,61 +1054,130 @@ export default function ContentGenerator() {
     // Video timing (frame counts from seconds)
     const hookDurationFrames = Math.round(hookDurationSec * VIDEO.fps);
     const itemDurationFrames = Math.round(beatIntervalSec * VIDEO.fps);
-    const ctaDurationFrames = Math.round(VIDEO.ctaDurationSec * VIDEO.fps);
+    const ctaDurationFrames = showVideoCta ? Math.round(VIDEO.ctaDurationSec * VIDEO.fps) : 0;
     const videoDuration = getVideoDuration(activeItems.length, hookDurationFrames, itemDurationFrames, ctaDurationFrames);
 
     return (
-        <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-            {/* Sidebar */}
-            <div
-                style={{
-                    width: 260,
-                    borderRight: '1px solid #e2e8f0',
-                    background: '#fff',
-                    overflowY: 'auto',
-                    flexShrink: 0,
-                }}
-            >
-                <div style={{ padding: '16px', borderBottom: '1px solid #e2e8f0' }}>
-                    <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Content Generator</h2>
-                    <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>Select a category</p>
-                </div>
-                {categories.map((cat) => (
-                    <button
-                        key={cat.category}
-                        onClick={() => setSelectedCategory(cat.category)}
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100vh', overflow: 'hidden' }}>
+            {/* Sidebar - desktop: fixed column, mobile: compact header bar */}
+            {isMobile ? (
+                <div
+                    style={{
+                        borderBottom: '1px solid #e2e8f0',
+                        background: '#fff',
+                        padding: '10px 16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        flexShrink: 0,
+                    }}
+                >
+                    <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, whiteSpace: 'nowrap' }}>Content</h2>
+                    <select
+                        value={selectedCategory || ''}
+                        onChange={(e) => setSelectedCategory(e.target.value || null)}
                         style={{
-                            display: 'block',
-                            width: '100%',
-                            padding: '10px 16px',
-                            border: 'none',
-                            borderBottom: '1px solid #f1f5f9',
-                            background: selectedCategory === cat.category ? '#eef2ff' : 'transparent',
-                            cursor: 'pointer',
-                            textAlign: 'left',
+                            flex: 1,
+                            padding: '8px 12px',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: 8,
                             fontSize: 14,
-                            fontWeight: selectedCategory === cat.category ? 600 : 400,
-                            color: selectedCategory === cat.category ? '#4f46e5' : '#334155',
+                            background: '#fff',
+                            minWidth: 0,
                         }}
                     >
-                        {cat.title}
-                        <span style={{ marginLeft: 8, color: '#94a3b8', fontSize: 12 }}>
-                            ({cat.items.length})
-                        </span>
-                    </button>
-                ))}
-            </div>
+                        <option value="">Select category...</option>
+                        {categories.map((cat) => (
+                            <option key={cat.category} value={cat.category}>
+                                {cat.title} ({cat.items.length})
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ) : (
+                <div
+                    style={{
+                        width: 260,
+                        borderRight: '1px solid #e2e8f0',
+                        background: '#fff',
+                        overflowY: 'auto',
+                        flexShrink: 0,
+                    }}
+                >
+                    <div style={{ padding: '16px', borderBottom: '1px solid #e2e8f0' }}>
+                        <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>Content Generator</h2>
+                        <p style={{ margin: '4px 0 0', fontSize: 13, color: '#64748b' }}>Select a category</p>
+                    </div>
+                    {categories.map((cat) => (
+                        <button
+                            key={cat.category}
+                            onClick={() => setSelectedCategory(cat.category)}
+                            style={{
+                                display: 'block',
+                                width: '100%',
+                                padding: '10px 16px',
+                                border: 'none',
+                                borderBottom: '1px solid #f1f5f9',
+                                background: selectedCategory === cat.category ? '#eef2ff' : 'transparent',
+                                cursor: 'pointer',
+                                textAlign: 'left',
+                                fontSize: 14,
+                                fontWeight: selectedCategory === cat.category ? 600 : 400,
+                                color: selectedCategory === cat.category ? '#4f46e5' : '#334155',
+                            }}
+                        >
+                            {cat.title}
+                            <span style={{ marginLeft: 8, color: '#94a3b8', fontSize: 12 }}>
+                                ({cat.items.length})
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
+
+            {/* Mobile tab bar */}
+            {isMobile && selectedCategory && (
+                <div
+                    style={{
+                        display: 'flex',
+                        borderBottom: '1px solid #e2e8f0',
+                        background: '#fff',
+                        flexShrink: 0,
+                    }}
+                >
+                    {(['preview', 'settings'] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => setMobilePanel(tab)}
+                            style={{
+                                flex: 1,
+                                padding: '10px 0',
+                                border: 'none',
+                                borderBottom: mobilePanel === tab ? '2px solid #4f46e5' : '2px solid transparent',
+                                background: 'transparent',
+                                cursor: 'pointer',
+                                fontSize: 13,
+                                fontWeight: mobilePanel === tab ? 600 : 400,
+                                color: mobilePanel === tab ? '#4f46e5' : '#64748b',
+                                textTransform: 'capitalize',
+                            }}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {/* Main panel */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: 32 }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? 0 : 32 }}>
                 {!selectedCategory ? (
                     <div style={{ textAlign: 'center', marginTop: 120, color: '#94a3b8', fontSize: 18 }}>
                         Select a category to start
                     </div>
                 ) : (
-                    <div style={{ display: 'flex', gap: 32 }}>
+                    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 0 : 32 }}>
                         {/* Left: Settings */}
-                        <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ flex: 1, minWidth: 0, display: isMobile && mobilePanel !== 'settings' ? 'none' : undefined, padding: isMobile ? 16 : undefined }}>
                             {/* Mode toggle */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
                                 <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, flex: 1 }}>
@@ -829,6 +1215,18 @@ export default function ContentGenerator() {
                                         Video
                                     </button>
                                 </div>
+                                <button
+                                    onClick={handleResetCategoryState}
+                                    style={{
+                                        ...smallBtnStyle,
+                                        color: '#ef4444',
+                                        borderColor: '#fecaca',
+                                        fontSize: 11,
+                                    }}
+                                    title="Reset all edits for this list"
+                                >
+                                    Reset List
+                                </button>
                             </div>
 
                             {/* Template toggle */}
@@ -1166,16 +1564,51 @@ export default function ContentGenerator() {
                                     />
                                 </label>
                                 {mode === 'carousel' && (
-                                    <label style={labelStyle}>
-                                        CTA Text (last slide)
-                                        <input
-                                            type="text"
-                                            value={ctaText}
-                                            onChange={(e) => setCtaText(e.target.value)}
-                                            style={inputStyle}
-                                            placeholder="Comment links to get all links sent to you"
-                                        />
-                                    </label>
+                                    <>
+                                        <label style={labelStyle}>
+                                            CTA Text (last slide)
+                                            <input
+                                                type="text"
+                                                value={ctaText}
+                                                onChange={(e) => setCtaText(e.target.value)}
+                                                style={inputStyle}
+                                                placeholder="Comment links to get all links sent to you"
+                                            />
+                                        </label>
+                                        <label style={labelStyle}>
+                                            CTA Subtitle
+                                            <input
+                                                type="text"
+                                                value={ctaSubtitle}
+                                                onChange={(e) => setCtaSubtitle(e.target.value)}
+                                                style={inputStyle}
+                                                placeholder="Optional subtitle for CTA slide"
+                                            />
+                                        </label>
+                                        <label style={labelStyle}>
+                                            CTA Background Image
+                                            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                                <MediaPicker
+                                                    type="image"
+                                                    currentPath={ctaImage}
+                                                    onSelect={(path) => setCtaImage(path)}
+                                                    label={ctaImage ? 'Change' : 'Pick image'}
+                                                    defaultKey="ctaImage"
+                                                />
+                                                {ctaImage && (
+                                                    <>
+                                                        <img src={ctaImage} style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }} />
+                                                        <button
+                                                            onClick={() => setCtaImage('')}
+                                                            style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </label>
+                                    </>
                                 )}
                                 {mode === 'carousel' && (
                                     <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#475569', cursor: 'pointer' }}>
@@ -1204,6 +1637,7 @@ export default function ContentGenerator() {
                                             setBackgroundImage(path);
                                             setBgPreview(path);
                                         }}
+                                        defaultKey="backgroundImage"
                                     />
                                 </div>
                                 <div
@@ -1271,6 +1705,7 @@ export default function ContentGenerator() {
                                                 setBackgroundVideo(path);
                                                 setBgVideoPreview(path);
                                             }}
+                                            defaultKey="backgroundVideo"
                                         />
                                     </div>
                                     <div
@@ -1409,6 +1844,7 @@ export default function ContentGenerator() {
                                                 setAudioFileName(name);
                                                 setBeatAnalysis(null);
                                             }}
+                                            defaultKey="audioSrc"
                                         />
                                     </div>
                                     <div
@@ -1557,6 +1993,14 @@ export default function ContentGenerator() {
                                                 style={{ width: '100%' }}
                                             />
                                         </div>
+                                        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#475569', cursor: 'pointer' }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={showVideoCta}
+                                                onChange={(e) => setShowVideoCta(e.target.checked)}
+                                            />
+                                            Include CTA slide
+                                        </label>
                                         <div
                                             style={{
                                                 fontSize: 11,
@@ -1566,9 +2010,79 @@ export default function ContentGenerator() {
                                             }}
                                         >
                                             Total: {(videoDuration / VIDEO.fps).toFixed(1)}s
-                                            ({hookDurationSec.toFixed(2)}s hook + {activeItems.length} × {beatIntervalSec.toFixed(2)}s + {VIDEO.ctaDurationSec}s CTA)
+                                            ({hookDurationSec.toFixed(2)}s hook + {activeItems.length} × {beatIntervalSec.toFixed(2)}s{showVideoCta ? ` + ${VIDEO.ctaDurationSec}s CTA` : ''})
                                         </div>
                                     </div>
+                                </div>
+                            )}
+
+                            {/* List Notes */}
+                            {selectedCategory && (
+                                <div style={{ marginBottom: 16 }}>
+                                    <div
+                                        onClick={() => setListNotesOpen(!listNotesOpen)}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            cursor: 'pointer',
+                                            marginBottom: listNotesOpen ? 8 : 0,
+                                        }}
+                                    >
+                                        <div style={{ fontSize: 14, fontWeight: 600, color: '#334155' }}>
+                                            Internal Notes {listNotesOpen ? '▾' : '▸'}
+                                        </div>
+                                        <div style={{ display: 'flex', gap: 6 }}>
+                                            {listNotesOpen && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigator.clipboard.writeText(listNotes[selectedCategory!] || '');
+                                                    }}
+                                                    style={{ ...smallBtnStyle, fontSize: 11 }}
+                                                >
+                                                    Copy
+                                                </button>
+                                            )}
+                                            {listNotesOpen && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        const defaultNote = `${currentCategory?.title || selectedCategory}\n${items.map((item, i) => `${i + 1}. ${item.name}`).join('\n')}`;
+                                                        updateListNote(selectedCategory!, defaultNote);
+                                                    }}
+                                                    style={{ ...smallBtnStyle, fontSize: 11 }}
+                                                >
+                                                    Reset
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                    {listNotesOpen && (
+                                        <textarea
+                                            value={listNotes[selectedCategory!] ?? `${currentCategory?.title || selectedCategory}\n${items.map((item, i) => `${i + 1}. ${item.name}`).join('\n')}`}
+                                            onChange={(e) => updateListNote(selectedCategory!, e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                minHeight: 200,
+                                                padding: '8px 10px',
+                                                border: '1px solid #e2e8f0',
+                                                borderRadius: 8,
+                                                fontSize: 12,
+                                                fontFamily: 'ui-monospace, monospace',
+                                                lineHeight: 1.5,
+                                                resize: 'vertical',
+                                                outline: 'none',
+                                                boxSizing: 'border-box',
+                                            }}
+                                            placeholder="Add notes per item for AI content generation..."
+                                        />
+                                    )}
+                                    {listNotesOpen && (
+                                        <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>
+                                            Add notes next to items, then copy into AI to generate content descriptions.
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
@@ -1583,7 +2097,7 @@ export default function ContentGenerator() {
                                     }}
                                 >
                                     <div style={{ fontSize: 14, fontWeight: 600, color: '#334155' }}>
-                                        Items ({selectedItems.size}/{items.length})
+                                        Items ({selectedArr.length}/{items.length})
                                     </div>
                                     <div style={{ display: 'flex', gap: 8 }}>
                                         <button onClick={selectAll} style={smallBtnStyle}>
@@ -1596,40 +2110,82 @@ export default function ContentGenerator() {
                                 </div>
                                 <div
                                     style={{
-                                        maxHeight: 300,
+                                        maxHeight: 400,
                                         overflowY: 'auto',
                                         border: '1px solid #e2e8f0',
                                         borderRadius: 8,
                                     }}
                                 >
-                                    {items.map((item) => (
-                                        <label
-                                            key={item.name}
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: 10,
-                                                padding: '8px 12px',
-                                                borderBottom: '1px solid #f1f5f9',
-                                                cursor: 'pointer',
-                                                fontSize: 14,
-                                                background: selectedItems.has(item.name)
-                                                    ? '#f0fdf4'
-                                                    : 'transparent',
-                                            }}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedItems.has(item.name)}
-                                                onChange={() => toggleItem(item.name)}
-                                            />
-                                            <span>{item.name}</span>
-                                        </label>
-                                    ))}
+                                    {/* Selected items first (draggable to reorder), then unselected */}
+                                    {[...activeItems, ...items.filter((i) => !selectedArr.includes(i.name))].map((item) => {
+                                        const isSelected = selectedArr.includes(item.name);
+                                        const selectedIdx = selectedArr.indexOf(item.name);
+                                        return (
+                                            <div
+                                                key={item.name}
+                                                draggable={isSelected}
+                                                onDragStart={(e) => {
+                                                    dragItemRef.current = item.name;
+                                                    e.currentTarget.style.opacity = '0.4';
+                                                }}
+                                                onDragEnd={(e) => {
+                                                    e.currentTarget.style.opacity = '1';
+                                                    dragItemRef.current = null;
+                                                    dragOverItemRef.current = null;
+                                                }}
+                                                onDragOver={(e) => {
+                                                    e.preventDefault();
+                                                    if (isSelected) dragOverItemRef.current = item.name;
+                                                }}
+                                                onDrop={(e) => {
+                                                    e.preventDefault();
+                                                    const from = dragItemRef.current;
+                                                    const to = dragOverItemRef.current;
+                                                    if (!from || !to || from === to) return;
+                                                    setSelectedItems((prev) => {
+                                                        const arr = Array.isArray(prev) ? [...prev] : [...prev as any];
+                                                        const fromIdx = arr.indexOf(from);
+                                                        const toIdx = arr.indexOf(to);
+                                                        if (fromIdx === -1 || toIdx === -1) return prev;
+                                                        arr.splice(fromIdx, 1);
+                                                        arr.splice(toIdx, 0, from);
+                                                        return arr;
+                                                    });
+                                                }}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 10,
+                                                    padding: '8px 12px',
+                                                    borderBottom: '1px solid #f1f5f9',
+                                                    cursor: isSelected ? 'grab' : 'pointer',
+                                                    fontSize: 14,
+                                                    background: isSelected ? '#f0fdf4' : 'transparent',
+                                                }}
+                                            >
+                                                {isSelected && (
+                                                    <span style={{ color: '#9ca3af', fontSize: 12, cursor: 'grab', userSelect: 'none' }}>⠿</span>
+                                                )}
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isSelected}
+                                                    onChange={() => toggleItem(item.name)}
+                                                />
+                                                {isSelected && (
+                                                    <span style={{ color: '#6b7280', fontSize: 11, minWidth: 14 }}>{selectedIdx + 1}.</span>
+                                                )}
+                                                <span style={{ flex: 1 }}>{item.name}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
                             {/* Export */}
+                            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#64748b', cursor: 'pointer' }}>
+                                <input type="checkbox" checked={forceRebundle} onChange={(e) => setForceRebundle(e.target.checked)} />
+                                Force rebundle (use after code changes)
+                            </label>
                             <button
                                 onClick={mode === 'carousel' ? handleRenderCarousel : handleRenderVideo}
                                 disabled={rendering}
@@ -1709,7 +2265,11 @@ export default function ContentGenerator() {
                         </div>
 
                         {/* Center: Preview with editor overlay */}
-                        <div style={{ width: 420, flexShrink: 0 }}>
+                        <div style={{
+                            width: isMobile ? '100%' : 420,
+                            flexShrink: 0,
+                            display: isMobile && mobilePanel !== 'preview' ? 'none' : undefined,
+                        }}>
                             {mode === 'carousel' ? (
                                 /* Carousel preview */
                                 <>
@@ -1718,11 +2278,12 @@ export default function ContentGenerator() {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
-                                            marginBottom: 12,
+                                            marginBottom: isMobile ? 0 : 12,
+                                            padding: isMobile ? '8px 12px' : undefined,
                                         }}
                                     >
                                         <div style={{ fontSize: 14, fontWeight: 600, color: '#334155' }}>
-                                            Preview — Slide {currentSlide + 1}/{totalSlides}
+                                            Slide {currentSlide + 1}/{totalSlides}
                                         </div>
                                         <div style={{ display: 'flex', gap: 6 }}>
                                             <button
@@ -1745,9 +2306,9 @@ export default function ContentGenerator() {
                                     </div>
                                     <div
                                         style={{
-                                            borderRadius: 12,
+                                            borderRadius: isMobile ? 0 : 12,
                                             overflow: 'hidden',
-                                            boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+                                            boxShadow: isMobile ? 'none' : '0 4px 24px rgba(0,0,0,0.12)',
                                             aspectRatio: `${CAROUSEL.width}/${CAROUSEL.height}`,
                                             background: '#1a1a2e',
                                         }}
@@ -1776,6 +2337,7 @@ export default function ContentGenerator() {
                                                         brandName,
                                                         layout: editor.hookLayout,
                                                         logoUrls: showLogos ? logoUrls : [],
+                                                        showOverlay: showHookOverlay,
                                                     }}
                                                 />
                                             </EditorOverlay>
@@ -1790,6 +2352,8 @@ export default function ContentGenerator() {
                                                 inputProps={{
                                                     backgroundImage: previewBg,
                                                     ctaText,
+                                                    ctaSubtitle: ctaSubtitle || undefined,
+                                                    ctaImage: ctaImage || undefined,
                                                     brandName,
                                                 }}
                                             />
@@ -1827,6 +2391,7 @@ export default function ContentGenerator() {
                                                             brandName,
                                                             favicon: getEditedImages(currentItem)?.favicon,
                                                             layout: editor.mockupLayout,
+                                                            showOverlay: editor.itemOverrides.showOverlay ?? true,
                                                         }}
                                                     />
                                                 </EditorOverlay>
@@ -1892,14 +2457,14 @@ export default function ContentGenerator() {
                             ) : (
                                 /* Video preview */
                                 <>
-                                    <div style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: 12 }}>
+                                    <div style={{ fontSize: 14, fontWeight: 600, color: '#334155', marginBottom: isMobile ? 0 : 12, padding: isMobile ? '8px 12px' : undefined }}>
                                         Video Preview ({(videoDuration / VIDEO.fps).toFixed(1)}s)
                                     </div>
                                     <div
                                         style={{
-                                            borderRadius: 12,
+                                            borderRadius: isMobile ? 0 : 12,
                                             overflow: 'hidden',
-                                            boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
+                                            boxShadow: isMobile ? 'none' : '0 4px 24px rgba(0,0,0,0.12)',
                                             aspectRatio: '1080/1920',
                                             background: '#1a1a2e',
                                         }}
@@ -1964,17 +2529,48 @@ export default function ContentGenerator() {
                                     </div>
                                 </>
                             )}
+                            {/* Mobile export button */}
+                            {isMobile && (
+                                <div style={{ padding: 12 }}>
+                                    <button
+                                        onClick={mode === 'carousel' ? handleRenderCarousel : handleRenderVideo}
+                                        disabled={rendering}
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px 20px',
+                                            background: rendering ? '#94a3b8' : mode === 'video' ? '#7c3aed' : '#4f46e5',
+                                            color: '#fff',
+                                            border: 'none',
+                                            borderRadius: 10,
+                                            fontSize: 15,
+                                            fontWeight: 600,
+                                            cursor: rendering ? 'default' : 'pointer',
+                                        }}
+                                    >
+                                        {rendering
+                                            ? 'Rendering...'
+                                            : mode === 'carousel'
+                                              ? 'Export PNGs'
+                                              : 'Export MP4'}
+                                    </button>
+                                    {renderProgress && (
+                                        <div style={{ marginTop: 6, fontSize: 12, color: '#64748b' }}>{renderProgress}</div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {/* Right: Design Editor Panel */}
                         <div
                             style={{
-                                width: 240,
+                                width: isMobile ? undefined : 240,
                                 flexShrink: 0,
-                                borderLeft: '1px solid #e2e8f0',
-                                paddingLeft: 24,
+                                borderLeft: isMobile ? 'none' : '1px solid #e2e8f0',
+                                padding: isMobile ? 16 : undefined,
+                                paddingLeft: isMobile ? undefined : 24,
                                 overflowY: 'auto',
-                                maxHeight: 'calc(100vh - 64px)',
+                                maxHeight: isMobile ? undefined : 'calc(100vh - 64px)',
+                                display: isMobile && mobilePanel !== 'preview' ? 'none' : undefined,
                             }}
                         >
                             {mode === 'carousel' ? (
@@ -1992,6 +2588,7 @@ export default function ContentGenerator() {
                                                 onAddText={editor.addTextElement}
                                                 onSelectElement={editor.setSelectedElementId}
                                                 onDeleteElement={editor.deleteElement}
+                                                onUpdateElement={editor.updateElement}
                                                 onResetLayout={isHookSlide ? editor.resetHookLayout : editor.resetMockupLayout}
                                             />
                                         </div>
@@ -2003,6 +2600,8 @@ export default function ContentGenerator() {
                                         itemOverrides={editor.itemOverrides}
                                         onUpdateElement={editor.updateElement}
                                         onUpdateItemOverride={editor.updateItemOverride}
+                                        showHookOverlay={showHookOverlay}
+                                        onSetShowHookOverlay={setShowHookOverlay}
                                     />
 
                                     {/* Per-item editor (carousel item slides) */}
@@ -2016,6 +2615,8 @@ export default function ContentGenerator() {
                                                 edits={itemEdits[currentItem.name] || {}}
                                                 imageEdits={itemImageEdits[currentItem.name] || {}}
                                                 imagePreviews={itemImagePreviews[currentItem.name] || {}}
+                                                contentDescription={contentDescriptions[currentItem.name] || ''}
+                                                onUpdateContentDescription={(value) => updateContentDescription(currentItem.name, value)}
                                                 onUpdateEdit={(field, value) => updateItemEdit(currentItem.name, field, value)}
                                                 onUploadImage={(type, file) => uploadItemImage(currentItem.name, type, file)}
                                                 onResetImage={(type) => resetItemImage(currentItem.name, type)}
