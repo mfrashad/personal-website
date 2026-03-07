@@ -474,7 +474,7 @@ export default function ScatteredPolaroids() {
 
                 // Apply offset to polaroids positioned below the hero section
                 const shouldOffset = polaroid.initialY > HERO_THRESHOLD;
-                const adjustedY = shouldOffset ? polaroid.initialY + bioOffset : polaroid.initialY;
+                const adjustedY = shouldOffset ? polaroid.initialY + bioOffset + 400 : polaroid.initialY;
 
                 // Scale X position based on viewport width
                 // Push outward for polaroids below hero to avoid obscuring content on smaller screens
