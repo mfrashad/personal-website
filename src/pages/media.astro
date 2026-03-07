@@ -22,9 +22,12 @@ const bioLevels = {
     long: { index: 19, label: 'Long' }
 };
 
+// Strip custom markup like {highlight:text}, {underline:text}, {circle:text}, {box:text}
+const stripCustomMarkup = (text: string) => text.replace(/\{(?:highlight|underline|circle|box):([^}]+)\}/g, '$1');
+
 // Convert markdown bios to HTML
 const biosHTML = Object.entries(bioLevels).reduce((acc, [key, { index }]) => {
-    acc[key] = marked.parse(brandKit.bios[index]);
+    acc[key] = marked.parse(stripCustomMarkup(brandKit.bios[index]));
     return acc;
 }, {} as Record<string, string>);
 
