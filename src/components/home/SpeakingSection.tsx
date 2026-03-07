@@ -1,171 +1,155 @@
-import { useState } from 'react';
-import type { SpeakingEngagement } from '@data/speaking';
+import { useState, useMemo } from 'react';
 
-interface SpeakingSectionProps {
-    engagements: SpeakingEngagement[];
+interface SerializedEngagement {
+    id: string;
+    date: string;
+    title: string;
+    event: string;
+    organizer: string;
+    description?: string;
+    location?: string;
+    audience?: string;
+    type: string;
+    topics?: string[];
+    logos?: string[];
 }
 
-export default function SpeakingSection({ engagements }: SpeakingSectionProps) {
-    const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
-    const [hoveredEngagement, setHoveredEngagement] = useState<string | null>(null);
-    const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+interface SpeakingSectionProps {
+    engagements: SerializedEngagement[];
+    imageManifest: Record<string, string[]>;
+}
 
-    // Sort engagements by date (newest first)
-    const sortedEngagements = [...engagements].sort((a, b) =>
-        b.date.getTime() - a.date.getTime()
+export default function SpeakingSection({ engagements, imageManifest }: SpeakingSectionProps) {
+    const [hoveredId, setHoveredId] = useState<string | null>(null);
+    const [hoveredThumb, setHoveredThumb] = useState<string | null>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+    const sortedEngagements = [...engagements].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    const handleMouseEnter = (engagementId: string, event: React.MouseEvent) => {
-        const engagement = sortedEngagements.find(e => e.id === engagementId);
-        if (!engagement?.images || engagement.images.length === 0) return;
+    const getImages = (id: string) => imageManifest[id] || [];
+    const getThumbs = (id: string) =>
+        getImages(id).map(img => img.replace(`/${id}/`, `/${id}/thumbs/`));
 
-        setHoveredEngagement(engagementId);
-        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-        setImagePosition({ x: rect.right + 10, y: rect.top });
+    const allLogos = useMemo(() => {
+        const seen = new Set<string>();
+        const logos: { src: string; name: string }[] = [];
+        for (const eng of sortedEngagements) {
+            if (eng.logos) {
+                for (const logo of eng.logos) {
+                    if (!seen.has(logo)) {
+                        seen.add(logo);
+                        logos.push({ src: logo, name: eng.organizer });
+                    }
+                }
+            }
+        }
+        return logos;
+    }, [sortedEngagements]);
+
+    const duplicatedLogos = [...allLogos, ...allLogos];
+
+    const formatDate = (iso: string) => {
+        const d = new Date(iso);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     };
 
-    const handleMouseLeave = () => {
-        setHoveredEngagement(null);
+    const handleMouseEnter = (id: string, e: React.MouseEvent) => {
+        if (getImages(id).length === 0) return;
+        setHoveredId(id);
+        setHoveredThumb(null);
+        setMousePos({ x: e.clientX + 16, y: e.clientY - 100 });
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (hoveredId) setMousePos({ x: e.clientX + 16, y: e.clientY - 100 });
     };
 
     return (
-        <div className="speaking-section relative">
-            {/* View Mode Toggle */}
-            <div className="flex items-center justify-end mb-6">
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => setViewMode('grid')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                            viewMode === 'grid'
-                                ? 'bg-neutral-900 text-white'
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                        }`}
-                        aria-label="Grid view"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                        </svg>
-                    </button>
-                    <button
-                        onClick={() => setViewMode('list')}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                            viewMode === 'list'
-                                ? 'bg-neutral-900 text-white'
-                                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                        }`}
-                        aria-label="List view"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+        <div className="relative">
+            {/* Logo marquee */}
+            {allLogos.length > 0 && (
+                <div className="relative overflow-hidden py-6 mb-6 border-b border-neutral-200">
+                    <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10" />
+                    <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10" />
+                    <div className="flex w-max animate-infinite-scroll hover:[animation-play-state:paused]">
+                        {duplicatedLogos.map((logo, i) => (
+                            <div
+                                key={`${logo.src}-${i}`}
+                                className="flex-shrink-0 mx-6 flex items-center justify-center w-[100px]"
+                            >
+                                <img
+                                    src={logo.src}
+                                    alt={logo.name}
+                                    className="h-8 md:h-10 w-auto max-w-[80px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
-            {/* Speaking Engagements Display */}
-            {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {sortedEngagements.map((engagement) => (
-                        <div key={engagement.id} className="engagement-card border border-border rounded-lg p-6 bg-surface-secondary hover:shadow-md transition-all duration-300">
-                            <div className="flex items-start justify-between mb-2">
-                                <div className="text-xs font-mono text-content-subtle">
-                                    {engagement.date.toLocaleDateString('en-US', {
-                                        year: 'numeric',
-                                        month: 'short',
-                                        day: 'numeric'
-                                    })}
-                                </div>
-                                <span className="text-xs px-2 py-1 bg-surface-tertiary text-content-muted rounded-full capitalize">
-                                    {engagement.type}
-                                </span>
-                            </div>
-                            <h3 className="font-semibold text-lg text-content-headings mb-2">
-                                {engagement.title}
-                            </h3>
-                            <div className="text-sm text-content-body mb-1">
-                                {engagement.event}
-                            </div>
-                            <div className="text-xs text-content-muted mb-3">
-                                by {engagement.organizer}
-                                {engagement.location && <> • 📍 {engagement.location}</>}
-                            </div>
-                            {engagement.description && (
-                                <p className="text-sm text-content-muted mb-3 line-clamp-2">
-                                    {engagement.description}
-                                </p>
-                            )}
-                            {engagement.audience && (
-                                <div className="text-xs text-content-subtle mb-3">
-                                    👥 {engagement.audience}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="space-y-1">
-                    {sortedEngagements.map((engagement) => (
-                        <div
-                            key={engagement.id}
-                            className="engagement-item border-b border-neutral-200 py-3 hover:bg-neutral-50 transition-all duration-200 group cursor-default"
+            {/* Engagement list */}
+            <ul className="space-y-1 font-mono text-xs mb-8">
+                {sortedEngagements.map((engagement) => (
+                    <li
+                        key={engagement.id}
+                        className={`border-b border-neutral-200 hover:bg-neutral-50 transition-all duration-200 ${
+                            hoveredId && hoveredId !== engagement.id ? 'opacity-20' : ''
+                        }`}
+                    >
+                        <a
+                            href={`/speaking/${engagement.id}`}
+                            className="block py-2 px-2 group"
                             onMouseEnter={(e) => handleMouseEnter(engagement.id, e)}
-                            onMouseLeave={handleMouseLeave}
+                            onMouseMove={handleMouseMove}
+                            onMouseLeave={() => setHoveredId(null)}
                         >
                             <div className="flex items-center justify-between gap-4">
                                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                                    <div className="text-xs font-mono text-neutral-500 shrink-0 whitespace-nowrap">
-                                        {engagement.date.toLocaleDateString('en-US', {
-                                            month: '2-digit',
-                                            day: '2-digit',
-                                            year: '2-digit'
-                                        })}
-                                    </div>
-                                    <h3 className="font-semibold text-sm text-neutral-900 group-hover:text-blue-600 transition-colors truncate">
+                                    <div className="font-semibold text-neutral-900 group-hover:text-blue-600 transition-colors truncate sm:whitespace-normal sm:overflow-visible">
                                         {engagement.title}
-                                    </h3>
-                                    <span className="text-xs text-neutral-500 truncate hidden sm:inline">
-                                        {engagement.event}
-                                    </span>
-                                    <span className="text-xs text-neutral-400 truncate hidden md:inline">
-                                        • {engagement.organizer}
-                                    </span>
+                                    </div>
+                                    <div className="text-neutral-500 truncate hidden sm:block">
+                                        {engagement.event} &middot; {engagement.organizer}
+                                    </div>
+                                    {getThumbs(engagement.id).length > 0 && (
+                                        <div className="hidden sm:flex items-center -space-x-2 shrink-0">
+                                            {getThumbs(engagement.id).slice(0, 3).map((thumb, i) => (
+                                                <img
+                                                    key={i}
+                                                    src={thumb}
+                                                    alt=""
+                                                    className={`w-8 h-8 rounded-full object-cover border-2 border-white transition-transform ${hoveredThumb === getImages(engagement.id)[i] ? 'scale-125 z-10' : ''}`}
+                                                    loading="lazy"
+                                                    onMouseEnter={() => setHoveredThumb(getImages(engagement.id)[i])}
+                                                    onMouseLeave={() => setHoveredThumb(null)}
+                                                />
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
-                                <span className="text-xs px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded-full capitalize shrink-0">
-                                    {engagement.type}
-                                </span>
+                                <div className="text-neutral-400 flex-shrink-0">
+                                    {formatDate(engagement.date)}
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                        </a>
+                    </li>
+                ))}
+            </ul>
 
-            {/* Image Preview on Hover */}
-            {hoveredEngagement && (
-                (() => {
-                    const engagement = sortedEngagements.find(e => e.id === hoveredEngagement);
-                    if (!engagement?.images || engagement.images.length === 0) return null;
-
-                    return (
-                        <div
-                            className="fixed z-50 pointer-events-none"
-                            style={{
-                                left: `${imagePosition.x}px`,
-                                top: `${imagePosition.y}px`,
-                            }}
-                        >
-                            <img
-                                src={engagement.images[0]}
-                                alt={engagement.title}
-                                className="w-64 h-auto rounded-lg shadow-2xl border-2 border-white"
-                            />
-                        </div>
-                    );
-                })()
-            )}
-
-            {engagements.length === 0 && (
-                <div className="text-center py-12 text-neutral-500">
-                    <p>No speaking engagements yet. Check back later!</p>
+            {/* Hover preview */}
+            {hoveredId && (
+                <div
+                    className="fixed z-40 pointer-events-none"
+                    style={{ left: mousePos.x, top: mousePos.y }}
+                >
+                    <img
+                        src={hoveredThumb || getThumbs(hoveredId)[0]}
+                        alt=""
+                        className="w-48 h-auto rounded-lg shadow-2xl border-2 border-white"
+                    />
                 </div>
             )}
         </div>
