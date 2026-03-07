@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     listItem.forEach((item: Element) => {
         const cover = item.querySelectorAll('.cover-image')[0] as HTMLImageElement;
+        if (!cover) return;
         item.addEventListener('mouseover', (event: any) => {
             positionCover(event, item, cover);
             listItem.forEach((otherItem) => {
