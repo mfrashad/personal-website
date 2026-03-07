@@ -109,28 +109,6 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                 </div>
             )}
 
-            {/* Invite CTA */}
-            <div className="mb-10 p-5 sm:p-6 bg-neutral-900 text-white rounded-xl">
-                <h2 className="text-base sm:text-lg font-bold mb-2">Invite me to speak at your event</h2>
-                <p className="text-sm text-neutral-300 mb-4 leading-relaxed">
-                    I speak about AI, career development, entrepreneurship & startups, hackathons, and tech. Available for keynotes, panels, workshops, and fireside chats at conferences, universities, and corporate events.
-                </p>
-                <div className="flex flex-wrap items-center gap-2.5">
-                    <a
-                        href="mailto:m.fathyrashad@gmail.com"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-neutral-900 text-xs sm:text-sm font-medium rounded-lg hover:bg-neutral-200 transition-colors"
-                    >
-                        Get in touch
-                    </a>
-                    <a
-                        href="/media"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 border border-neutral-600 text-neutral-300 text-xs sm:text-sm font-medium rounded-lg hover:bg-neutral-800 transition-colors"
-                    >
-                        Speaker kit & media assets →
-                    </a>
-                </div>
-            </div>
-
             {yearGroups.map(({ year, engagements }) => (
                 <div key={year} className="mb-12">
                     <h3 className="text-base font-bold mb-3 text-neutral-700 border-b border-neutral-200 pb-2">
