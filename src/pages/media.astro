@@ -276,7 +276,7 @@ const speakerProfilesHTML = brandKit.speakerProfiles.map(profile => ({
 
 <script>
     // Tab switching functionality
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('astro:page-load', function() {
         // Bio tab switching
         const bioTabs = document.querySelectorAll('.bio-tab');
         const bioContents = document.querySelectorAll('.bio-content');
