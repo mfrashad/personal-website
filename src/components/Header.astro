@@ -3,40 +3,44 @@ import Grid from './Grid.astro';
 import GridBox from './GridBox.astro';
 import { Icon } from 'astro-icon/components';
 
+interface DropdownItem {
+    name: string;
+    path: string;
+}
+
 interface NavItem {
     name: string;
     path: string;
     external?: boolean;
+    dropdown?: DropdownItem[];
 }
 
 export const navData: NavItem[] = [
-    {
-        name: 'Blog',
-        path: '/blog'
-    },
-    {
-        name: 'Books',
-        path: '/books'
-    },
-    {
-        name: 'Achievements',
-        path: '/achievements'
-    },
     {
         name: 'Speaking',
         path: '/speaking'
     },
     {
+        name: 'Create',
+        path: '/create'
+    },
+    {
         name: 'Resources',
-        path: '/resources'
+        path: '/resources',
+        dropdown: [
+            { name: 'Books', path: '/books' },
+            { name: 'Movies', path: '/movies' },
+            { name: 'Bookmarks', path: '/bookmarks' },
+        ]
     },
     {
         name: 'About',
-        path: '/about'
-    },
-    {
-        name: 'Media',
-        path: '/media'
+        path: '/about',
+        dropdown: [
+            { name: 'Achievements', path: '/achievements' },
+            { name: 'Blog', path: '/blog' },
+            { name: 'Hackathons', path: '/hackathons' },
+        ]
     }
 ];
 ---
@@ -48,8 +52,9 @@ export const navData: NavItem[] = [
                 <a
                     href="/"
                     id="header-logo"
-                    class="flex -rotate-6 font-bold italic tracking-wider text-content-muted transition-all duration-300 ease-out-cubic hover:text-content-body"
+                    class="flex items-center gap-2 -rotate-6 font-bold italic tracking-wider text-content-muted transition-all duration-300 ease-out-cubic hover:text-content-body"
                 >
+                    <img src="/rashadcodes-logo.png" alt="Rashad Codes" class="h-10 w-auto" />
                     <span id="header-text" class="text-lg transition-all duration-300 ease-out-cubic">
                         rashad
                     </span>
@@ -60,19 +65,43 @@ export const navData: NavItem[] = [
             <nav class="flex items-center justify-end gap-8">
                 {
                     navData.map((item) => (
-                        <a
-                            data-navLink
-                            href={item.path}
-                            class="nav-item group relative flex items-center gap-1 font-mono text-xs uppercase tracking-widest hover:text-blue"
-                            target={item.external ? '_blank' : undefined}
-                            rel={item.external ? 'noopener noreferrer' : undefined}
-                        >
-                            {item.name}
-                            {item.external && (
-                                <Icon name="ph:arrow-up-right-bold" width={12} class="inline-block" />
-                            )}
-                            <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
-                        </a>
+                        item.dropdown ? (
+                            <div class="nav-dropdown relative" data-dropdown>
+                                <a
+                                    data-navLink
+                                    href={item.path}
+                                    class="nav-item group relative flex items-center gap-1 font-mono text-xs uppercase tracking-widest hover:text-blue"
+                                >
+                                    {item.name}
+                                    <Icon name="ph:caret-down" width={10} class="inline-block transition-transform duration-200" />
+                                    <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                                </a>
+                                <div class="dropdown-menu absolute top-full right-0 mt-2 min-w-[140px] rounded-lg border border-neutral-200 bg-white py-1.5 shadow-lg opacity-0 invisible transition-all duration-150 z-50">
+                                    {item.dropdown.map((sub) => (
+                                        <a
+                                            href={sub.path}
+                                            class="block px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-neutral-600 hover:text-blue hover:bg-neutral-50 transition-colors"
+                                        >
+                                            {sub.name}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <a
+                                data-navLink
+                                href={item.path}
+                                class="nav-item group relative flex items-center gap-1 font-mono text-xs uppercase tracking-widest hover:text-blue"
+                                target={item.external ? '_blank' : undefined}
+                                rel={item.external ? 'noopener noreferrer' : undefined}
+                            >
+                                {item.name}
+                                {item.external && (
+                                    <Icon name="ph:arrow-up-right-bold" width={12} class="inline-block" />
+                                )}
+                                <span class="pointer-events-none absolute -left-3 top-[6px] mx-auto h-[6px] w-[6px] rounded-full bg-blue opacity-0 transition-all duration-300" />
+                            </a>
+                        )
                     ))
                 }
             </nav>
@@ -86,6 +115,11 @@ export const navData: NavItem[] = [
     }
     .nav-item.active span {
         opacity: 0;
+    }
+
+    .nav-dropdown:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
     }
 </style>
 
