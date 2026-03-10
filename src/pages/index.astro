@@ -22,6 +22,7 @@ import CompactBlogPostItem from '@components/blog/CompactBlogPostItem.astro';
 import ScatteredPolaroids from '@components/ScatteredPolaroids';
 import ScatteredDecorations from '@components/ScatteredDecorations';
 import StatsGrid from '@components/home/StatsGrid';
+import ContentPreview from '@components/home/ContentPreview';
 
 // Animation components
 import AnimationProvider from '@components/animations/AnimationProvider';
@@ -145,6 +146,24 @@ const serializedSpeaking = latestSpeaking.map(e => ({ ...e, date: e.date.toISOSt
 const allBookmarks: Bookmark[] = await fetchBookmarks(0);
 const latestBookmarks = allBookmarks.slice(0, 6);
 
+// Content creation data
+import { contentPieces, contentCategories } from '@data/content-creation';
+import contentImageManifest from '@data/content-images.json';
+
+const contentByCategory: Record<string, any[]> = {};
+for (const piece of contentPieces) {
+    if (!contentByCategory[piece.type]) contentByCategory[piece.type] = [];
+    contentByCategory[piece.type].push({
+        id: piece.id,
+        title: piece.title,
+        type: piece.type,
+        metrics: piece.metrics,
+    });
+}
+const categoryLabels = Object.fromEntries(
+    Object.entries(contentCategories).map(([k, v]) => [k, v.label])
+);
+
 // Books section component
 import BookSection from '@components/books/BookSection.astro';
 ---
@@ -240,6 +259,15 @@ import BookSection from '@components/books/BookSection.astro';
                     <div class="relative z-[120]">
                         <MinimalBioSlider bios={brandKit.bios} client:load />
                     </div>
+
+                    <!-- Learn More About Me CTA -->
+                    <a
+                        href="/about"
+                        class="inline-flex items-center gap-2 mt-4 px-5 py-2.5 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-200 relative z-[120]"
+                    >
+                        Learn more about me
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
                 </div>
             </GridBox>
         </Grid>
@@ -252,7 +280,6 @@ import BookSection from '@components/books/BookSection.astro';
                 <h2 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 text-center">Work With Me</h2>
                 <p class="text-sm text-neutral-500 text-center mb-6 sm:mb-8">Here's what I can do for you</p>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- Tech -->
                     <a href="mailto:m.fathyrashad@gmail.com" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
                             <img src={talkImg.src} alt="Tech talk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -262,20 +289,16 @@ import BookSection from '@components/books/BookSection.astro';
                             <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">Consultancy, AI/ML projects, and technical development for your product or team.</p>
                         </div>
                     </a>
-
-                    <!-- Content Creation -->
                     <a href="/create" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
                             <img src={contentImg.src} alt="Shooting interview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Content Creation</h3>
-                            <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">5M+ views, 17K followers. Worked with multiple brands on café, tech, and lifestyle content.</p>
-                            <span class="inline-block text-xs text-blue-600 mt-2 group-hover:underline">See my work →</span>
+                            <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">5M+ views, 17K followers. Worked with multiple brands on cafe, tech, and lifestyle content.</p>
+                            <span class="inline-block text-xs text-blue-600 mt-2 group-hover:underline">See my work &rarr;</span>
                         </div>
                     </a>
-
-                    <!-- Speaking -->
                     <a href="/speaking" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
                             <img src={speaking4Img.src} alt="Sharing knowledge" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -283,7 +306,7 @@ import BookSection from '@components/books/BookSection.astro';
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Speaking</h3>
                             <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">Talks and panels on AI, startups, and tech at conferences, universities, and corporate events.</p>
-                            <span class="inline-block text-xs text-blue-600 mt-2 group-hover:underline">View past talks →</span>
+                            <span class="inline-block text-xs text-blue-600 mt-2 group-hover:underline">View past talks &rarr;</span>
                         </div>
                     </a>
                 </div>
@@ -348,49 +371,30 @@ import BookSection from '@components/books/BookSection.astro';
 
         <AnimatedDivider variant="gradient" client:visible />
 
-        <!-- Writings Section -->
+        <!-- Content Creation Section -->
         <section>
-            <SectionContent title="Writings">
-                <div class="flex flex-col gap-2">
-                    <p>From quick notes to long-form essays. I write about machine learning, software engineering, and personal growth.</p>
-                    <div class="text-sm text-neutral-500">
-                        <WritingsUpdater
-                            client:load
-                            initialWritings={cleveWritings}
-                        />
-                    </div>
-                </div>
+            <SectionContent title="Content Creation">
+                5M+ views and 17K followers across TikTok and Instagram. Here's a preview of my content.
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-
-                    <!-- Contribution Graph (hidden on mobile for compactness) -->
-                    <div class="mb-6 hidden md:block">
-                        <ContributionGraph
-                            posts={allPosts.map(post => ({
-                                date: post.data.date.toISOString ? post.data.date.toISOString() : post.data.date,
-                                title: post.data.title
-                            }))}
-                            client:load
-                        />
-                    </div>
-
-                    <!-- Posts List (Compact) -->
-                    <div class="compact-writing-list" data-homepage-posts>
-                        {latestPosts.map((post) => <CompactBlogPostItem post={post} />)}
-                    </div>
+                    <ContentPreview
+                        piecesByCategory={contentByCategory}
+                        categoryLabels={categoryLabels}
+                        imageManifest={contentImageManifest}
+                        client:visible
+                    />
 
                     <!-- View All Button -->
                     <div class="mt-8 text-center">
                         <a
-                            href="/blog"
+                            href="/create"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
                         >
-                            <span>View all writings</span>
+                            <span>View all content</span>
                             <Icon name="ph:arrow-right" width={16} height={16} />
                         </a>
                     </div>
-
                 </GridBox>
             </Grid>
         </section>
