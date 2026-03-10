@@ -6,11 +6,7 @@ import SectionContent from '@components/SectionContent.astro';
 import ResourcesFilter from '@components/resources/ResourcesFilter';
 import { favoriteProducts } from '@data/lists/favorite-products';
 import { favoriteSoftware } from '@data/lists/favorite-software';
-import { favoritePodcasts } from '@data/lists/favorite-podcasts';
-import { favoriteBlogs } from '@data/lists/favorite-blogs';
 import { favoriteGames } from '@data/lists/favorite-games';
-import { favoriteMusic } from '@data/lists/favorite-music';
-import { favoritePeople } from '@data/lists/favorite-people';
 import { favoriteAnime } from '@data/lists/favorite-anime';
 import { favoriteNonfictionBooks } from '@data/lists/favorite-nonfiction-books';
 import { favoriteNovels } from '@data/lists/favorite-novels';
@@ -53,10 +49,6 @@ const lists = [
     { title: 'Favorite Novels', items: favoriteNovels, href: '/resources/novels', icon: 'ph:book', tags: ['books', 'favorites'] },
     { title: 'Favorite Web Novels', items: favoriteWebnovels, href: '/resources/webnovels', icon: 'ph:scroll', tags: ['books', 'favorites'] },
     { title: 'Favorite Concepts', items: favoriteConcepts, href: '/resources/concepts', icon: 'ph:lightbulb', tags: ['learning', 'favorites'] },
-    { title: 'Favorite Podcasts', items: favoritePodcasts, href: '/resources/podcasts', icon: 'ph:microphone', tags: ['learning', 'favorites'] },
-    { title: 'Favorite Blogs', items: favoriteBlogs, href: '/resources/blogs', icon: 'ph:article', tags: ['learning', 'favorites'] },
-    { title: 'Favorite Music', items: favoriteMusic, href: '/resources/music', icon: 'ph:music-notes', tags: ['favorites'] },
-    { title: 'People Who Inspire Me', items: favoritePeople, href: '/resources/people', icon: 'ph:users', tags: ['favorites'] },
     { title: 'KL AI Communities', items: klAiCommunities, href: '/resources/kl-ai-communities', icon: 'ph:users-three', tags: ['communities', 'malaysia'] },
     { title: 'KL Tech Communities', items: klTechCommunities, href: '/resources/kl-tech-communities', icon: 'ph:code', tags: ['communities', 'malaysia'] },
     { title: 'Student Tech Ambassador Programs', items: studentAmbassadorPrograms, href: '/resources/student-ambassador-programs', icon: 'ph:student', tags: ['student', 'freebies', 'opportunities'] },
@@ -99,6 +91,7 @@ const allTags = [...new Set(lists.flatMap(list => list.tags))].sort();
                 <p>
                     Curated resources and recommendations - from startup tools to learning materials.
                     Based on personal experience and genuine appreciation.
+                    Also check out my <a href="/books" class="text-blue-600 hover:text-blue-800 underline">books</a>, <a href="/movies" class="text-blue-600 hover:text-blue-800 underline">movies</a>, and <a href="/bookmarks" class="text-blue-600 hover:text-blue-800 underline">bookmarks</a>.
                 </p>
             </SectionContent>
 
