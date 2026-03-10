@@ -31,6 +31,15 @@ const metricIconMap: Record<string, { Icon: React.ComponentType<any>; color: str
     'content-views': { Icon: Eye, color: 'text-indigo-600' },
 };
 
+// Link mapping for clickable metrics
+const metricLinkMap: Record<string, string> = {
+    'hackathons-won': '/hackathons',
+    'hackathons-judged': '/hackathons',
+    'talks-given': '/speaking',
+    'social-followers': '/create',
+    'content-views': '/create',
+};
+
 // Format large numbers with abbreviations
 function formatNumber(num: number): string {
     if (num >= 1000000) {
@@ -46,7 +55,13 @@ export default function StatsGrid({ metrics }: StatsGridProps) {
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
     const handleCardClick = (e: React.MouseEvent, metricId: string) => {
-        // Confetti effect
+        const link = metricLinkMap[metricId];
+        if (link) {
+            window.location.href = link;
+            return;
+        }
+
+        // Confetti effect for non-linked cards
         const rect = e.currentTarget.getBoundingClientRect();
         const x = (rect.left + rect.width / 2) / window.innerWidth;
         const y = (rect.top + rect.height / 2) / window.innerHeight;
