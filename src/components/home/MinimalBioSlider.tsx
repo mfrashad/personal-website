@@ -84,7 +84,7 @@ export default function MinimalBioSlider({ bios }: MinimalBioSliderProps) {
             </div>
 
             {/* Bio Text - min-height matches level 14 to prevent layout shift */}
-            <div className="text-content-body leading-relaxed text-center min-h-[24rem]">
+            <div className="text-content-body leading-relaxed text-center">
                 {renderBio(bios[level])}
             </div>
 
