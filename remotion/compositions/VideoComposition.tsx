@@ -13,7 +13,8 @@ import {
 import type { VideoReelProps, VideoLayoutOverrides } from '../lib/types';
 import type { SlideLayout } from '../lib/design-types';
 import { LayoutRenderer } from './LayoutRenderer';
-import { VIDEO, colors, fonts, spacing } from '../lib/theme';
+import { VIDEO, CAROUSEL, colors, fonts, spacing, getOverlayStyle, DEFAULT_ITEM_OVERLAY } from '../lib/theme';
+import { resolveAsset } from '../lib/resolve-asset';
 
 const DEFAULT_HOOK_FRAMES = VIDEO.hookDurationSec * VIDEO.fps;
 const DEFAULT_ITEM_FRAMES = VIDEO.itemDurationSec * VIDEO.fps;
@@ -37,7 +38,7 @@ const HookSection: React.FC<{
         };
         return (
             <AbsoluteFill>
-                <LayoutRenderer layout={hookLayout} data={data} logoUrls={logoUrls} />
+                <LayoutRenderer layout={hookLayout} data={data} logoUrls={logoUrls} yScale={VIDEO.height / CAROUSEL.height} />
             </AbsoluteFill>
         );
     }
@@ -120,12 +121,14 @@ const HookSection: React.FC<{
                     {visibleLogos.map((url, i) => (
                         <Img
                             key={i}
-                            src={url}
+                            src={resolveAsset(url)}
                             style={{
                                 width: 64,
                                 height: 64,
                                 borderRadius: 14,
-                                objectFit: 'cover',
+                                objectFit: 'contain',
+                                background: 'rgba(255,255,255,0.12)',
+                                padding: 4,
                             }}
                         />
                     ))}
@@ -148,11 +151,6 @@ const ItemSection: React.FC<{
 
     const favicon = images?.favicon;
     const screenshot = images?.screenshot || images?.ogImage;
-    const description = item.description
-        ? item.description.length > 100
-            ? item.description.slice(0, 97) + '...'
-            : item.description
-        : '';
 
     const nameFontSize = overrides?.itemNameFontSize ?? 44;
     const descFontSize = overrides?.itemDescFontSize ?? 28;
@@ -161,6 +159,14 @@ const ItemSection: React.FC<{
     const brandFontSize = overrides?.brandFontSize ?? 28;
     const brandPos = overrides?.brandPosition ?? { x: spacing.pagePadding, y: 80 };
     const showLinks = overrides?.showLinks ?? false;
+    const showDescription = overrides?.showDescription ?? true;
+    const maxDescLen = overrides?.maxDescriptionLength ?? 100;
+
+    const description = item.description
+        ? item.description.length > maxDescLen
+            ? item.description.slice(0, maxDescLen - 3) + '...'
+            : item.description
+        : '';
     const noTransition = overrides?.disableItemTransition ?? false;
     // speed 0 = slow (damping 8, mass 1.2), speed 1 = snappy (damping 30, mass 0.3)
     const speed = overrides?.transitionSpeed ?? 0.5;
@@ -220,14 +226,16 @@ const ItemSection: React.FC<{
                     }}
                 >
                     {favicon && (
-                        <img
-                            src={favicon}
+                        <Img
+                            src={resolveAsset(favicon)}
                             style={{
                                 width: 56,
                                 height: 56,
                                 borderRadius: 14,
-                                objectFit: 'cover',
+                                objectFit: 'contain',
                                 flexShrink: 0,
+                                background: 'rgba(255,255,255,0.12)',
+                                padding: 6,
                             }}
                         />
                     )}
@@ -245,7 +253,7 @@ const ItemSection: React.FC<{
                 </div>
 
                 {/* Description */}
-                {description && (
+                {showDescription && description && (
                     <div
                         style={{
                             fontFamily: fonts.body,
@@ -267,8 +275,8 @@ const ItemSection: React.FC<{
                             border: '1px solid rgba(0,0,0,0.08)',
                         }}
                     >
-                        <img
-                            src={screenshot}
+                        <Img
+                            src={resolveAsset(screenshot)}
                             style={{
                                 width: '100%',
                                 height: screenshotHeight,
@@ -335,22 +343,6 @@ const ItemSection: React.FC<{
                 </div>
             )}
 
-            {/* Slide counter */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: 80,
-                    right: spacing.pagePadding,
-                    fontFamily: fonts.body,
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: 'rgba(255,255,255,0.7)',
-                    opacity: combinedOpacity,
-                }}
-            >
-                {slideNumber}/{totalSlides}
-            </div>
-
             {/* Brand */}
             <div
                 style={{
@@ -373,17 +365,21 @@ const ItemSection: React.FC<{
 const MockupImageTrack: React.FC<{
     items: VideoReelProps['items'];
     itemFrames: number;
-}> = ({ items, itemFrames }) => {
+    showOverlay?: boolean;
+    overlayConfig?: import('../lib/types').OverlayConfig;
+}> = ({ items, itemFrames, showOverlay = true, overlayConfig }) => {
     const frame = useCurrentFrame();
     const currentIndex = Math.min(Math.floor(frame / itemFrames), items.length - 1);
     const mockupImage = items[currentIndex]?.images?.mockup;
 
     if (!mockupImage) return null;
 
+    const ov = overlayConfig ?? { ...DEFAULT_ITEM_OVERLAY, enabled: showOverlay };
+
     return (
         <AbsoluteFill>
-            <img
-                src={mockupImage}
+            <Img
+                src={resolveAsset(mockupImage)}
                 style={{
                     width: VIDEO.width,
                     height: VIDEO.height,
@@ -391,16 +387,7 @@ const MockupImageTrack: React.FC<{
                 }}
             />
             {/* Bottom gradient */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 400,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
-                }}
-            />
+            {ov.enabled && <div style={getOverlayStyle(ov)} />}
         </AbsoluteFill>
     );
 };
@@ -437,21 +424,29 @@ const MockupItemSection: React.FC<{
     const combinedOpacity = cardIn * cardOut;
 
     const domain = item.url
-        ? (() => { try { return new URL(item.url).hostname.replace(/^www\./, ''); } catch { return undefined; } })()
+        ? (() => {
+              try {
+                  const u = new URL(item.url);
+                  const host = u.hostname.replace(/^www\./, '');
+                  const p = u.pathname.replace(/\/$/, '');
+                  return p ? `${host}${p}` : host;
+              } catch { return undefined; }
+          })()
         : undefined;
 
     // If a mockup layout is provided, use LayoutRenderer for positioning
     if (mockupLayout) {
         const data: Record<string, string> = {
             itemName: item.name,
+            itemDescription: item.description || '',
             itemDomain: domain || '',
             brandName,
-            counter: `${slideNumber}/${totalSlides}`,
+            counter: '',
             itemFavicon: images?.favicon || '',
         };
         return (
             <AbsoluteFill style={{ opacity: combinedOpacity }}>
-                <LayoutRenderer layout={mockupLayout} data={data} />
+                <LayoutRenderer layout={mockupLayout} data={data} yScale={VIDEO.height / CAROUSEL.height} />
             </AbsoluteFill>
         );
     }
@@ -497,22 +492,6 @@ const MockupItemSection: React.FC<{
                     {domain}
                 </div>
             )}
-
-            {/* Slide counter */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: 80,
-                    right: spacing.pagePadding,
-                    fontFamily: fonts.body,
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: 'rgba(255,255,255,0.7)',
-                    opacity: combinedOpacity,
-                }}
-            >
-                {slideNumber}/{totalSlides}
-            </div>
 
             {/* Brand */}
             <div
@@ -618,7 +597,7 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
     const bgStyle = { width: VIDEO.width, height: VIDEO.height, objectFit: 'cover' as const };
 
     const staticBg = backgroundImage ? (
-        <Img src={backgroundImage} style={bgStyle} />
+        <Img src={resolveAsset(backgroundImage)} style={bgStyle} />
     ) : (
         <AbsoluteFill style={{ backgroundColor: backgroundFallbackColor }} />
     );
@@ -634,28 +613,30 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
                     {/* Video only during hook */}
                     <Sequence from={0} durationInFrames={HOOK_FRAMES}>
                         <AbsoluteFill>
-                            <Video src={backgroundVideo!} style={bgStyle} muted />
+                            <Video src={resolveAsset(backgroundVideo!)} style={bgStyle} muted loop />
                         </AbsoluteFill>
                     </Sequence>
                 </>
             ) : backgroundVideo ? (
-                <Video src={backgroundVideo} style={bgStyle} muted />
+                <Video src={resolveAsset(backgroundVideo)} style={bgStyle} muted loop />
             ) : backgroundImage ? (
-                <Img src={backgroundImage || bgFallback} style={bgStyle} />
+                <Img src={resolveAsset(backgroundImage) || bgFallback} style={bgStyle} />
             ) : (
                 <AbsoluteFill style={{ backgroundColor: backgroundFallbackColor }} />
             )}
 
             {/* Dark overlay */}
-            <AbsoluteFill
-                style={{
-                    background:
-                        'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 100%)',
-                }}
-            />
+            {(() => {
+                const ov = layoutOverrides?.overlayConfig ?? (
+                    layoutOverrides?.showOverlay !== false
+                        ? { enabled: true, direction: 'both' as const, opacity: 0.5, color: '#000000', offset: 0 }
+                        : { enabled: false, direction: 'both' as const, opacity: 0.5, color: '#000000', offset: 0 }
+                );
+                return ov.enabled ? <div style={getOverlayStyle(ov)} /> : null;
+            })()}
 
             {/* Audio track */}
-            {audioSrc && <Audio src={audioSrc} />}
+            {audioSrc && <Audio src={resolveAsset(audioSrc)} />}
 
             {/* Hook */}
             <Sequence from={0} durationInFrames={HOOK_FRAMES}>
@@ -672,7 +653,7 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
             {/* Continuous mockup image track — single sequence, no gaps */}
             {template === 'mockup' && items.length > 0 && (
                 <Sequence from={HOOK_FRAMES} durationInFrames={items.length * ITEM_FRAMES}>
-                    <MockupImageTrack items={items} itemFrames={ITEM_FRAMES} />
+                    <MockupImageTrack items={items} itemFrames={ITEM_FRAMES} showOverlay={layoutOverrides?.showOverlay !== false} overlayConfig={layoutOverrides?.overlayConfig} />
                 </Sequence>
             )}
 
@@ -705,12 +686,14 @@ export const VideoComposition: React.FC<VideoReelProps> = ({
             ))}
 
             {/* CTA */}
-            <Sequence
-                from={HOOK_FRAMES + items.length * ITEM_FRAMES}
-                durationInFrames={CTA_FRAMES}
-            >
-                <CtaSection brandName={brandName} overrides={layoutOverrides} />
-            </Sequence>
+            {CTA_FRAMES > 0 && (
+                <Sequence
+                    from={HOOK_FRAMES + items.length * ITEM_FRAMES}
+                    durationInFrames={CTA_FRAMES}
+                >
+                    <CtaSection brandName={brandName} overrides={layoutOverrides} />
+                </Sequence>
+            )}
         </AbsoluteFill>
     );
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import { AbsoluteFill, Img } from 'remotion';
 import type { CarouselHookSlideProps } from '../lib/types';
-import { CAROUSEL, colors, fonts, spacing } from '../lib/theme';
+import { CAROUSEL, colors, fonts, spacing, getOverlayStyle, DEFAULT_HOOK_OVERLAY } from '../lib/theme';
 import { LayoutRenderer } from './LayoutRenderer';
+import { resolveAsset } from '../lib/resolve-asset';
 
 export const CarouselHookSlide: React.FC<CarouselHookSlideProps> = ({
     backgroundImage,
@@ -11,12 +12,15 @@ export const CarouselHookSlide: React.FC<CarouselHookSlideProps> = ({
     brandName,
     layout,
     logoUrls,
+    showOverlay = true,
+    overlayConfig,
 }) => {
+    const effectiveOverlay = overlayConfig ?? { ...DEFAULT_HOOK_OVERLAY, enabled: showOverlay };
     return (
         <AbsoluteFill>
             {/* Background */}
             <Img
-                src={backgroundImage}
+                src={resolveAsset(backgroundImage)}
                 style={{
                     width: CAROUSEL.width,
                     height: CAROUSEL.height,
@@ -25,12 +29,9 @@ export const CarouselHookSlide: React.FC<CarouselHookSlideProps> = ({
             />
 
             {/* Dark gradient overlay */}
-            <AbsoluteFill
-                style={{
-                    background:
-                        'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.75) 100%)',
-                }}
-            />
+            {effectiveOverlay.enabled && (
+                <div style={getOverlayStyle(effectiveOverlay)} />
+            )}
 
             {layout ? (
                 /* Layout-driven rendering */

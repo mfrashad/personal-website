@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { SlideLayout, DesignElement, TextElement, ItemSlideOverrides } from '../../../../remotion/lib/design-types';
 import type { VideoLayoutOverrides } from '../../../../remotion/lib/types';
 import { getDefaultHookSlideLayout, getDefaultItemSlideOverrides, getDefaultMockupSlideLayout } from '../../../../remotion/lib/default-layouts';
@@ -15,6 +15,20 @@ export function useDesignEditor() {
     const [itemOverrides, setItemOverrides] = useState<ItemSlideOverrides>(getDefaultItemSlideOverrides);
     const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
     const [editingSlideType, setEditingSlideType] = useState<'hook' | 'item' | 'mockup'>('hook');
+
+    // Ensure mockup layout has all expected default elements (migration for existing sessions)
+    useEffect(() => {
+        const defaults = getDefaultMockupSlideLayout();
+        const missingEls = defaults.elements.filter(
+            (def) => !mockupLayout.elements.some((el) => el.id === def.id),
+        );
+        if (missingEls.length > 0) {
+            setMockupLayout((prev) => ({
+                ...prev,
+                elements: [...prev.elements, ...missingEls],
+            }));
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const selectedElement = editingSlideType === 'hook'
         ? hookLayout.elements.find((el) => el.id === selectedElementId) ?? null
@@ -161,6 +175,10 @@ export function useDesignEditor() {
         editingSlideType,
         setEditingSlideType,
         setSelectedElementId,
+        setHookLayout,
+        setMockupLayout,
+        setItemOverrides,
+        setVideoOverrides,
         updateElement,
         addTextElement,
         deleteElement,

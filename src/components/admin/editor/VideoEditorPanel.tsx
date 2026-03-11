@@ -37,11 +37,39 @@ export const VideoEditorPanel: React.FC<VideoEditorPanelProps> = ({
             <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
                 <input
                     type="checkbox"
+                    checked={overrides.showOverlay ?? true}
+                    onChange={(e) => onUpdate('showOverlay', e.target.checked)}
+                />
+                Show Overlay
+            </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
+                <input
+                    type="checkbox"
                     checked={overrides.showLinks ?? false}
                     onChange={(e) => onUpdate('showLinks', e.target.checked)}
                 />
                 Show Links
             </label>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
+                <input
+                    type="checkbox"
+                    checked={overrides.showDescription ?? true}
+                    onChange={(e) => onUpdate('showDescription', e.target.checked)}
+                />
+                Show Description
+            </label>
+
+            {(overrides.showDescription ?? true) && (
+                <SliderField
+                    label="Max Description Length"
+                    value={overrides.maxDescriptionLength ?? 100}
+                    min={30}
+                    max={300}
+                    onChange={(v) => onUpdate('maxDescriptionLength', v)}
+                />
+            )}
 
             <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
                 <input

@@ -17,12 +17,12 @@ export interface CachedCleveData {
  */
 export async function fetchAndCacheCleveWritings(): Promise<CachedCleveData> {
     console.log('Fetching fresh Cleve writings...');
-    const writings = await fetchCleveWritings();
+    const { writings } = await fetchCleveWritings();
 
     const data: CachedCleveData = {
         updated_at: new Date().toISOString(),
         count: writings.length,
-        writings
+        writings,
     };
 
     // Ensure directory exists

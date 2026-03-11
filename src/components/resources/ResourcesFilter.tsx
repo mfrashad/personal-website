@@ -106,7 +106,7 @@ function getImageKey(url?: string): string | null {
         const hostname = parsed.hostname.replace(/^www\./, '');
         const domain = hostname.replace(/\./g, '-');
         const pathSegments = parsed.pathname.split('/').filter(Boolean);
-        if (pathSegments.length >= 2) {
+        if (pathSegments.length >= 1) {
             return `${domain}-${pathSegments.join('-')}`;
         }
         return domain;
@@ -552,10 +552,11 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
 
                             <ul className="space-y-1">
                                 {list.items.map((item: any, index: number) => {
-                                    const hasDetails = item.description || (item.tags && item.tags.length > 0);
                                     const imageKey = getImageKey(item.url);
                                     const manifestEntry = imageKey ? resourceImages[imageKey] : null;
                                     const faviconSrc = item.image || manifestEntry?.favicon;
+                                    const tooltipImage = manifestEntry?.screenshot || manifestEntry?.ogImage;
+                                    const hasDetails = item.description || (item.tags && item.tags.length > 0) || tooltipImage;
                                     const FallbackIcon = iconMap[list.icon];
                                     return (
                                         <li key={index} className="group/item relative">
@@ -588,6 +589,14 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                                                 )}
                                                 {hasDetails && (
                                                     <div className="item-tooltip">
+                                                        {tooltipImage && (
+                                                            <img
+                                                                src={tooltipImage}
+                                                                alt={`${item.name} preview`}
+                                                                className="tooltip-preview-img"
+                                                                loading="lazy"
+                                                            />
+                                                        )}
                                                         {item.description && (
                                                             <div className="text-xs text-content-muted whitespace-pre-line" dangerouslySetInnerHTML={{ __html: item.description }} />
                                                         )}
@@ -705,7 +714,6 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                     z-index: 50;
                     width: max-content;
                     max-width: 280px;
-                    padding: 0.5rem 0.75rem;
                     background: var(--color-bg-overlay, #fff);
                     border: 1px solid var(--color-border-default, #e5e5e5);
                     border-radius: 0.5rem;
@@ -714,6 +722,37 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                     opacity: 0;
                     transition: opacity 0.15s ease, transform 0.15s ease;
                     margin-left: 0.25rem;
+                    overflow: hidden;
+                }
+
+                .item-tooltip:has(.tooltip-preview-img) {
+                    width: 260px;
+                    padding: 0;
+                }
+
+                .item-tooltip:not(:has(.tooltip-preview-img)) {
+                    padding: 0.5rem 0.75rem;
+                }
+
+                .tooltip-preview-img {
+                    display: block;
+                    width: 100%;
+                    max-height: 180px;
+                    object-fit: cover;
+                    border-bottom: 1px solid var(--color-border-default, #e5e5e5);
+                }
+
+                .item-tooltip:has(.tooltip-preview-img) > :not(.tooltip-preview-img) {
+                    padding-left: 0.75rem;
+                    padding-right: 0.75rem;
+                }
+
+                .item-tooltip:has(.tooltip-preview-img) > :nth-child(2) {
+                    padding-top: 0.5rem;
+                }
+
+                .item-tooltip:has(.tooltip-preview-img) > :last-child {
+                    padding-bottom: 0.5rem;
                 }
 
                 .group\\/item:hover .item-tooltip {

@@ -21,9 +21,10 @@ export const klAiCommunities: CommunityItem[] = [
     {
         name: 'AI Tinkerers',
         description: 'A global community of AI engineers and researchers building real systems and sharing unfinished work. It runs local meetups centered on demos, code, and technical insights while connecting builders through a global network.',
-        url: 'https://aitinkerers.org/',
+        url: 'https://kuala-lumpur.aitinkerers.org/',
         image: '/communities/ai_tinkerers_logo.png',
     },
+
     {
         name: 'AI Hackerdorm',
         description: 'A student-first community that hosts regular builder sessions with project showcases, co-building time, and mentorship. It welcomes coders, designers, entrepreneurs, and curious makers who want to build and learn together.',

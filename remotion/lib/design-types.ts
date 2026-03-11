@@ -21,6 +21,9 @@ export interface TextElement extends BaseElement {
     textAlign: 'left' | 'center' | 'right';
     textShadow?: string;
     textTransform?: 'none' | 'uppercase' | 'lowercase';
+    backgroundColor?: string;
+    backgroundPadding?: number;
+    backgroundBorderRadius?: number;
 }
 
 export interface ImageElement extends BaseElement {
@@ -54,7 +57,11 @@ export interface ItemSlideOverrides {
     cardMaxWidth?: number;
     cardPadding?: number;
     showLinks?: boolean;
+    showDescription?: boolean;
+    maxDescriptionLength?: number;
     brandPosition?: { x: number; y: number };
     counterPosition?: { x: number; y: number };
     customElements?: DesignElement[];
+    showOverlay?: boolean;
+    overlayConfig?: import('./types').OverlayConfig;
 }

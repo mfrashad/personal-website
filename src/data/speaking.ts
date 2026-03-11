@@ -11,6 +11,7 @@ export interface SpeakingEngagement {
     type: 'talk' | 'panel' | 'interview' | 'workshop' | 'fireside';
     topics?: string[];
     images?: string[];
+    logos?: string[];
     featured?: boolean;
 }
 
@@ -25,6 +26,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         type: 'panel',
         audience: '200-250 tech professionals',
         topics: ['Entrepreneurship', 'AI'],
+        logos: ['/speaking-logos/yayasanpeneraju.png'],
         featured: true,
     },
     {
@@ -37,6 +39,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         type: 'talk',
         audience: '50-100 diplomats',
         topics: ['AI', 'Future of Work'],
+        logos: ['/speaking-logos/idfr.png', '/speaking-logos/ministry-of-foreign-affairs-malaysia.png'],
     },
     {
         id: 'utp-nexoria-star-2025',
@@ -48,6 +51,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         audience: '100-200 students',
         fee: 'RM400',
         topics: ['Career', 'Technology'],
+        logos: ['/speaking-logos/utp.png'],
     },
     {
         id: 'tech-trove-hackathon-2025',
@@ -58,6 +62,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         audience: '50-100 students',
         type: 'talk',
         topics: ['Technology', 'Hackathon'],
+        logos: ['/speaking-logos/taylors.svg'],
     },
     {
         id: 'utp-expert-panel-2025',
@@ -67,6 +72,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'UTP',
         location: 'Ipoh',
         type: 'panel',
+        logos: ['/speaking-logos/utp.png'],
     },
     {
         id: 'rtm-tv1-interview-2025',
@@ -76,6 +82,17 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'RTM',
         location: '500 Global office',
         type: 'interview',
+        logos: ['/speaking-logos/rtm-tv1.png'],
+    },
+    {
+        id: 'itrain-nextgen-ai-2025',
+        date: new Date('2025-08-16'),
+        title: 'Next-Gen AI: How Emerging Founders are Building the Future',
+        event: 'iTrain Asia Talk',
+        organizer: 'iTrain Asia',
+        type: 'talk',
+        topics: ['AI', 'Entrepreneurship'],
+        logos: ['/speaking-logos/itrainasia.png'],
     },
     {
         id: 'friends-of-figma-2025',
@@ -85,7 +102,18 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Friends of Figma',
         type: 'talk',
         topics: ['Entrepreneurship', 'AI'],
+        logos: ['/speaking-logos/figma_malaysia_logo.jpeg'],
         featured: true,
+    },
+    {
+        id: 'techitorleaveit-podcast-2025',
+        date: new Date('2025-07-01'),
+        title: 'Tech It or Leave It Podcast',
+        event: 'Tech It or Leave It',
+        organizer: 'Tech It or Leave It',
+        type: 'interview',
+        topics: ['Technology', 'Entrepreneurship'],
+        logos: ['/speaking-logos/techitorleaveit.jpg'],
     },
     {
         id: 'cradle-interview-2025',
@@ -94,6 +122,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         event: 'Cradle Interview',
         organizer: 'Cradle',
         type: 'interview',
+        logos: ['/speaking-logos/cradle.png'],
     },
     {
         id: 'um-data-science-2025',
@@ -103,6 +132,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'University of Malaya',
         type: 'talk',
         topics: ['Data Science'],
+        logos: ['/speaking-logos/um.png'],
     },
     {
         id: 'apu-hiring-tech-2025',
@@ -112,6 +142,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Asia Pacific University',
         type: 'talk',
         topics: ['Career', 'Technology'],
+        logos: ['/speaking-logos/apu.png'],
     },
     {
         id: 'ai-tinkerers-paynet-2025',
@@ -122,7 +153,18 @@ export const speakingEngagements: SpeakingEngagement[] = [
         location: 'Paynet',
         type: 'talk',
         topics: ['AI', 'Prototyping'],
+        logos: ['/speaking-logos/aitinkererskl-logo.jpeg'],
         featured: true,
+    },
+    {
+        id: 'bernama-tv-interview-2025',
+        date: new Date('2025-01-16'),
+        title: 'Bernama TV Interview',
+        event: 'Bernama TV',
+        organizer: 'Bernama',
+        type: 'interview',
+        topics: ['AI', 'Technology'],
+        logos: ['/speaking-logos/bernama.png'],
     },
 
     // 2024
@@ -134,6 +176,17 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Universiti Putra Malaysia',
         type: 'talk',
         topics: ['AI', 'Technology'],
+        logos: ['/speaking-logos/upm.png'],
+    },
+    {
+        id: 'antler-ai-ml-llm-2024',
+        date: new Date('2024-06-25'),
+        title: 'Lessons Learned from Building LLM App in Production',
+        event: 'AI ML Malaysia User Group Meetup',
+        organizer: 'Antler / AI ML Malaysia User Group',
+        type: 'talk',
+        topics: ['AI', 'Machine Learning', 'LLM'],
+        logos: ['/speaking-logos/antler.svg'],
     },
     {
         id: 'apac-llm-production-2024',
@@ -143,6 +196,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Asia Pacific Analytics Club',
         type: 'talk',
         topics: ['AI', 'Machine Learning', 'LLM'],
+        logos: ['/speaking-logos/apu.png'],
         featured: true,
     },
     {
@@ -153,6 +207,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'AMEU',
         type: 'fireside',
         topics: ['Entrepreneurship', 'Startups'],
+        logos: ['/speaking-logos/ameu.png'],
     },
     {
         id: 'leds-studio-exploration-2024',
@@ -162,6 +217,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'LEDS Studio',
         type: 'talk',
         topics: ['Career', 'Technology'],
+        logos: ['/speaking-logos/leds-studio.png'],
     },
     {
         id: 'spillthetea-mytech-2024',
@@ -171,6 +227,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'UM Data Analytics Club',
         type: 'panel',
         topics: ['Data Science', 'Career'],
+        logos: ['/speaking-logos/um.png'],
     },
 
     // 2022
@@ -182,6 +239,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Sunway Tech Club',
         type: 'talk',
         topics: ['AI', 'Creativity'],
+        logos: ['/speaking-logos/ieee.svg', '/speaking-logos/sunway-uni.avif'],
     },
     {
         id: 'iem-utp-expo-2022',
@@ -191,6 +249,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'UTP',
         type: 'talk',
         topics: ['AI', 'Creativity'],
+        logos: ['/speaking-logos/utp.png'],
     },
 
     // 2021
@@ -202,6 +261,17 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'DSC UTP',
         type: 'workshop',
         topics: ['Flutter', 'Mobile Development'],
+        logos: ['/speaking-logos/utp.png'],
+    },
+    {
+        id: 'dsc-utp-git-workshop-2021',
+        date: new Date('2021-04-15'),
+        title: 'Git Workshop',
+        event: 'DSC UTP Git Workshop',
+        organizer: 'DSC UTP',
+        type: 'workshop',
+        topics: ['Git', 'Developer Tools'],
+        logos: ['/speaking-logos/utp.png'],
     },
     {
         id: 'taces-overcome-fear-2021',
@@ -211,6 +281,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'Telkom University',
         type: 'talk',
         topics: ['Personal Development'],
+        logos: ['/speaking-logos/telkomuni.png'],
     },
     {
         id: 'voice-of-intern-2021',
@@ -220,6 +291,7 @@ export const speakingEngagements: SpeakingEngagement[] = [
         organizer: 'UTP',
         type: 'panel',
         topics: ['Career', 'Internship'],
+        logos: ['/speaking-logos/utp.png'],
     },
 ];
 

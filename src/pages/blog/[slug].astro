@@ -14,71 +14,60 @@ import Webmentions from '@components/Webmentions.astro';
 import { getCleveWritings } from '@utils/cleveCache';
 import { slugify, removeFirstH1 } from '@utils/slugify';
 import { marked } from 'marked';
-import { fetchCleveWritings } from '@/api/cleve';
 
-// Disable prerendering to allow dynamic fetching of new posts
-export const prerender = false;
+export const prerender = true;
 
-// Get the slug from the URL
-const { slug } = Astro.params;
-
-// Try to find the post from various sources
-let entry: any = null;
-let cleveWriting: any = null;
-let headings: any[] = [];
-let isClevePost = false;
-
-// 1. First check local blog posts
-const blogEntries = await getCollection('blog');
-const localEntry = blogEntries.find(e => e.slug === slug);
-
-if (localEntry) {
-    entry = localEntry;
-    headings = await extractHeadings(entry.body);
-    isClevePost = false;
-} else {
-    // 2. Check cached Cleve writings
+export async function getStaticPaths() {
+    const blogEntries = await getCollection('blog');
     const cleveData = await getCleveWritings();
-    const cachedWritings = cleveData.writings || [];
-    const cachedWriting = cachedWritings.find((w: any) => slugify(w.title) === slug);
+    const cleveWritings = cleveData.writings || [];
 
-    if (cachedWriting) {
-        cleveWriting = cachedWriting;
-        isClevePost = true;
-    } else {
-        // 3. Fetch fresh from Cleve API (for newly published posts)
-        const freshWritings = await fetchCleveWritings();
-        const freshWriting = freshWritings.find(w => slugify(w.title) === slug);
+    const localPaths = blogEntries.map(entry => ({
+        params: { slug: entry.slug },
+        props: { type: 'local' as const, entrySlug: entry.slug }
+    }));
 
-        if (freshWriting) {
-            cleveWriting = freshWriting;
-            isClevePost = true;
-        } else {
-            // Post not found anywhere
-            return Astro.redirect('/404');
-        }
-    }
+    const clevePaths = cleveWritings.map((writing: any) => ({
+        params: { slug: slugify(writing.title) },
+        props: { type: 'cleve' as const, writing }
+    }));
+
+    return [...localPaths, ...clevePaths];
 }
 
-// Handle local vs Cleve posts
-let Content: any, title: string, formattedDate: string, description: string, category: string, subtitle: string | undefined, postSlug: string, htmlContent: string;
+const { type } = Astro.props;
+const isClevePost = type === 'cleve';
+
+let Content: any;
+let title: string;
+let formattedDate: string;
+let description: string;
+let category: string;
+let subtitle: string | undefined;
+let postSlug: string;
+let htmlContent: string = '';
+let headings: any[] = [];
+let entry: any = null;
+let allTags: string[] = [];
 
 if (isClevePost) {
-    // Cleve post
-    title = cleveWriting.title;
-    formattedDate = new Date(cleveWriting.created_at).toLocaleDateString('en-US', {
+    const { writing } = Astro.props;
+    title = writing.title;
+    formattedDate = new Date(writing.publishedAt || writing.created_at || Date.now()).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
     });
-    description = cleveWriting.content_markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...';
-    category = cleveWriting.category || 'articles';
-    postSlug = slugify(cleveWriting.title);
-    // Remove first H1 from markdown to avoid duplicate title
-    const cleanedMarkdown = removeFirstH1(cleveWriting.content_markdown);
+    const content = writing.markdown || writing.content_markdown || '';
+    description = content.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...';
+    category = writing.category || 'uncategorized';
+    allTags = [category, ...(writing.tags || [])];
+    postSlug = slugify(writing.title);
+    const cleanedMarkdown = removeFirstH1(content);
     htmlContent = marked(cleanedMarkdown);
 } else {
-    // Local blog post
+    const blogEntries = await getCollection('blog');
+    entry = blogEntries.find(e => e.slug === Astro.props.entrySlug);
     const rendered = await entry.render();
     Content = rendered.Content;
     title = entry.data.title;
@@ -91,6 +80,8 @@ if (isClevePost) {
     category = entry.data.category;
     subtitle = entry.data.subtitle;
     postSlug = entry.slug;
+    headings = await extractHeadings(entry.body);
+    allTags = [category, ...(entry.data.tags || [])].filter(Boolean);
 }
 
 // Full URL for webmentions
@@ -123,16 +114,14 @@ const fullUrl = `${siteUrl}/blog/${postSlug}`;
                 </h1>
                 <div class="mb-8 flex items-center gap-4 flex-wrap">
                     <span class="text-neutral-500">{formattedDate}</span>
-                    {
-                        category && (
-                            <a
-                                href={`/blog/category/${category}`}
-                                class="inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
-                            >
-                                #{category}
-                            </a>
-                        )
-                    }
+                    {allTags.map((tag: string) => (
+                        <a
+                            href={`/blog/tag/${tag}`}
+                            class="inline-block rounded bg-neutral-50 px-2 py-1 text-sm text-neutral-600 hover:bg-blue-light hover:text-blue"
+                        >
+                            #{tag}
+                        </a>
+                    ))}
                     {!isClevePost && entry?.data.growthStage && <GrowthStageIndicator stage={entry.data.growthStage} />}
                 </div>
 

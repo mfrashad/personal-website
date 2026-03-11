@@ -5,8 +5,8 @@ import { CarouselItemSlide } from '../../../remotion/compositions/CarouselItemSl
 import { CarouselCtaSlide } from '../../../remotion/compositions/CarouselCtaSlide';
 import { CarouselMockupSlide } from '../../../remotion/compositions/CarouselMockupSlide';
 import { VideoComposition } from '../../../remotion/compositions/VideoComposition';
-import { CAROUSEL, VIDEO, getVideoDuration } from '../../../remotion/lib/theme';
-import type { ResourceItem, ResourceImages, ItemSlideTemplate } from '../../../remotion/lib/types';
+import { CAROUSEL, VIDEO, getVideoDuration, DEFAULT_HOOK_OVERLAY } from '../../../remotion/lib/theme';
+import type { ResourceItem, ResourceImages, ItemSlideTemplate, OverlayConfig } from '../../../remotion/lib/types';
 import { useDesignEditor } from './editor/useDesignEditor';
 import { getDefaultHookSlideLayout, getDefaultItemSlideOverrides, getDefaultMockupSlideLayout } from '../../../remotion/lib/default-layouts';
 import { EditorOverlay } from './editor/EditorOverlay';
@@ -46,6 +46,8 @@ interface CategoryCache {
     backgroundVideo: string | null;
     audioSrc: string | null;
     audioFileName: string | null;
+    // Overlay
+    hookOverlayConfig: OverlayConfig;
     // Video settings
     showVideoCta: boolean;
     videoBackgroundMode: 'full' | 'hook-only';
@@ -182,9 +184,7 @@ export default function ContentGenerator() {
     const [mockupAdjustmentsOpen, setMockupAdjustmentsOpen] = useState(false);
     const mockupBaseInputRef = useRef<HTMLInputElement>(null);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(() => {
-        try { return localStorage.getItem('cg-active-category'); } catch { return null; }
-    });
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [imageManifest, setImageManifest] = useState<ImageManifest>({ images: {} });
     const [hookText, setHookText] = useState('');
     const [subtitle, setSubtitle] = useState('');
@@ -202,7 +202,7 @@ export default function ContentGenerator() {
     const [videoBackgroundMode, setVideoBackgroundMode] = useState<'full' | 'hook-only'>('full');
     const [backgroundFallbackColor, setBackgroundFallbackColor] = useState('#0f172a');
     const [showVideoCta, setShowVideoCta] = useState(true);
-    const [showHookOverlay, setShowHookOverlay] = useState(true);
+    const [hookOverlayConfig, setHookOverlayConfig] = useState<OverlayConfig>({ ...DEFAULT_HOOK_OVERLAY });
     // Beat-synced timing
     const [hookDurationSec, setHookDurationSec] = useState(VIDEO.hookDurationSec);
     const [beatIntervalSec, setBeatIntervalSec] = useState(VIDEO.itemDurationSec);
@@ -235,9 +235,10 @@ export default function ContentGenerator() {
         return () => window.removeEventListener('resize', check);
     }, []);
 
-    // Per-category state cache (persisted to localStorage)
+    // Per-category state cache (persisted to server)
     const prevCategoryRef = useRef<string | null>(null);
-    const saveCacheTimer = useRef<ReturnType<typeof setTimeout>>();
+    const [cacheDirty, setCacheDirty] = useState(false);
+    const [cacheSaving, setCacheSaving] = useState(false);
 
     // Persistent content descriptions (saved to disk, separate from website descriptions)
     const [contentDescriptions, setContentDescriptions] = useState<Record<string, string>>({});
@@ -407,7 +408,7 @@ export default function ContentGenerator() {
         };
     }
 
-    // Load categories + image manifest + media defaults + content descriptions + list notes
+    // Load categories + image manifest + media defaults + content descriptions + list notes + active category
     useEffect(() => {
         Promise.all([
             fetch('/api/admin/lists').then((r) => r.json()),
@@ -415,7 +416,8 @@ export default function ContentGenerator() {
             fetch('/api/admin/media-defaults').then((r) => r.json()).catch(() => ({})),
             fetch('/api/admin/content-descriptions').then((r) => r.json()).catch(() => ({})),
             fetch('/api/admin/list-notes').then((r) => r.json()).catch(() => ({})),
-        ]).then(([cats, manifest, defaults, descriptions, notes]) => {
+            fetch('/api/admin/category-cache?active=1').then((r) => r.json()).catch(() => ({})),
+        ]).then(([cats, manifest, defaults, descriptions, notes, activeData]) => {
             setCategories(cats);
             setImageManifest(manifest);
             setContentDescriptions(descriptions);
@@ -424,6 +426,8 @@ export default function ContentGenerator() {
             if (defaults.backgroundVideo && !backgroundVideo) setBackgroundVideo(defaults.backgroundVideo);
             if (defaults.audioSrc && !audioSrc) setAudioSrc(defaults.audioSrc);
             if (defaults.ctaImage && !ctaImage) setCtaImage(defaults.ctaImage);
+            // Set active category AFTER categories are loaded so the switch effect finds currentCategory
+            if (activeData?.category) setSelectedCategory(activeData.category);
         });
     }, []);
 
@@ -433,18 +437,30 @@ export default function ContentGenerator() {
     const activeItems = selectedArr.map((name: string) => items.find((i) => i.name === name)).filter(Boolean) as Item[];
     const totalSlides = activeItems.length + 2; // hook slide + item slides + CTA slide
 
-    // --- localStorage helpers for per-category cache ---
-    function saveCategoryCache(category: string, cache: CategoryCache) {
-        try { localStorage.setItem(`cg-cache-${category}`, JSON.stringify(cache)); } catch {}
-    }
-    function loadCategoryCache(category: string): CategoryCache | null {
+    // --- Server-side helpers for per-category cache ---
+    async function saveCategoryCache(category: string, cache: CategoryCache): Promise<boolean> {
         try {
-            const raw = localStorage.getItem(`cg-cache-${category}`);
-            return raw ? JSON.parse(raw) : null;
+            const res = await fetch('/api/admin/category-cache', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, cache }),
+            });
+            return res.ok;
+        } catch { return false; }
+    }
+    async function loadCategoryCache(category: string): Promise<CategoryCache | null> {
+        try {
+            const res = await fetch(`/api/admin/category-cache?category=${encodeURIComponent(category)}`);
+            const data = await res.json();
+            return data || null;
         } catch { return null; }
     }
-    function deleteCategoryCache(category: string) {
-        try { localStorage.removeItem(`cg-cache-${category}`); } catch {}
+    async function deleteCategoryCache(category: string): Promise<void> {
+        await fetch('/api/admin/category-cache', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category, cache: null }),
+        }).catch(() => {});
     }
 
     function snapshotCurrentState(): CategoryCache {
@@ -454,6 +470,7 @@ export default function ContentGenerator() {
             mockupLayout: editor.mockupLayout,
             itemOverrides: editor.itemOverrides,
             videoOverrides: editor.videoOverrides,
+            hookOverlayConfig,
             backgroundImage, backgroundVideo, audioSrc, audioFileName,
             showVideoCta, videoBackgroundMode, backgroundFallbackColor,
             hookDurationSec, beatIntervalSec,
@@ -473,6 +490,7 @@ export default function ContentGenerator() {
         editor.setMockupLayout(cached.mockupLayout);
         editor.setItemOverrides(cached.itemOverrides);
         editor.setVideoOverrides(cached.videoOverrides);
+        if (cached.hookOverlayConfig) setHookOverlayConfig(cached.hookOverlayConfig);
         setBackgroundImage(cached.backgroundImage);
         setBgPreview(cached.backgroundImage); // use server path as preview
         setBackgroundVideo(cached.backgroundVideo);
@@ -504,58 +522,72 @@ export default function ContentGenerator() {
     useEffect(() => {
         if (!currentCategory) return;
 
-        // Save previous category before switching
+        // Save previous category before switching (if dirty)
         const prev = prevCategoryRef.current;
-        if (prev) {
+        if (prev && cacheDirty) {
             saveCategoryCache(prev, snapshotCurrentState());
         }
         prevCategoryRef.current = selectedCategory;
 
-        // Persist active category
-        try { localStorage.setItem('cg-active-category', selectedCategory!); } catch {}
+        // Persist active category to server
+        fetch('/api/admin/category-cache', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ activeCategory: selectedCategory }),
+        }).catch(() => {});
 
-        // Restore cached state or use defaults
-        const cached = loadCategoryCache(selectedCategory!);
-        if (cached) {
-            restoreFromCache(cached);
-        } else {
-            // Defaults for a fresh category
-            setHookText(CATEGORY_DEFAULT_HOOKS[selectedCategory!] || `Top ${items.length} ${currentCategory.title}`);
-            setSubtitle('');
-            setItemTemplate('card');
-            editor.setHookLayout(getDefaultHookSlideLayout());
-            editor.setMockupLayout(getDefaultMockupSlideLayout());
-            editor.setItemOverrides(getDefaultItemSlideOverrides());
-            editor.setVideoOverrides({});
-            setItemEdits({});
-            setItemImageEdits({});
-            setItemImagePreviews({});
-            setMockupImages({});
-            setSelectedGsTemplate(null);
-            setMockupBasePath(null);
-            setMockupBasePreview(null);
-            setMockupTemplateUrl(null);
-            setMockupCorners(null);
-            setMockupAdjustments({ blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0 });
-            setShowVideoCta(true);
-            setHookDurationSec(VIDEO.hookDurationSec);
-            setBeatIntervalSec(VIDEO.itemDurationSec);
-            setBeatAnalysis(null);
-            setSelectedItems(items.map((i) => i.name));
-            setCurrentSlide(0);
-        }
+        // Suppress dirty-tracking during restore
+        initialLoadRef.current = true;
+
+        // Restore cached state or use defaults (async)
+        loadCategoryCache(selectedCategory!).then((cached) => {
+            if (cached) {
+                restoreFromCache(cached);
+            } else {
+                // Defaults for a fresh category
+                setHookText(CATEGORY_DEFAULT_HOOKS[selectedCategory!] || `Top ${items.length} ${currentCategory.title}`);
+                setSubtitle('');
+                setItemTemplate('card');
+                editor.setHookLayout(getDefaultHookSlideLayout());
+                editor.setMockupLayout(getDefaultMockupSlideLayout());
+                editor.setItemOverrides(getDefaultItemSlideOverrides());
+                editor.setVideoOverrides({});
+                setHookOverlayConfig({ ...DEFAULT_HOOK_OVERLAY });
+                setItemEdits({});
+                setItemImageEdits({});
+                setItemImagePreviews({});
+                setMockupImages({});
+                setSelectedGsTemplate(null);
+                setMockupBasePath(null);
+                setMockupBasePreview(null);
+                setMockupTemplateUrl(null);
+                setMockupCorners(null);
+                setMockupAdjustments({ blur: 0, brightness: 0, contrast: 0, temperature: 0, saturation: 0 });
+                setShowVideoCta(true);
+                setHookDurationSec(VIDEO.hookDurationSec);
+                setBeatIntervalSec(VIDEO.itemDurationSec);
+                setBeatAnalysis(null);
+                setSelectedItems(items.map((i) => i.name));
+                setCurrentSlide(0);
+            }
+            setCacheDirty(false);
+        });
     }, [selectedCategory]);
 
-    // Auto-save current category state to localStorage (debounced)
+    // Track dirty state when any cached field changes
+    const initialLoadRef = useRef(true);
     useEffect(() => {
         if (!selectedCategory) return;
-        clearTimeout(saveCacheTimer.current);
-        saveCacheTimer.current = setTimeout(() => {
-            saveCategoryCache(selectedCategory, snapshotCurrentState());
-        }, 500);
+        // Skip marking dirty during initial load/restore
+        if (initialLoadRef.current) {
+            initialLoadRef.current = false;
+            return;
+        }
+        setCacheDirty(true);
     }, [
-        selectedCategory, hookText, subtitle, itemTemplate, mode,
+        hookText, subtitle, itemTemplate, mode,
         editor.hookLayout, editor.mockupLayout, editor.itemOverrides, editor.videoOverrides,
+        hookOverlayConfig,
         backgroundImage, backgroundVideo, audioSrc, audioFileName,
         showVideoCta, videoBackgroundMode, backgroundFallbackColor,
         hookDurationSec, beatIntervalSec,
@@ -564,6 +596,20 @@ export default function ContentGenerator() {
         mockupBasePath, mockupBasePreview, mockupTemplateUrl, mockupCorners, mockupAdjustments,
         selectedItems, currentSlide,
     ]);
+
+    // Explicit save handler
+    async function handleSaveCache() {
+        if (!selectedCategory) return;
+        setCacheSaving(true);
+        const ok = await saveCategoryCache(selectedCategory, snapshotCurrentState());
+        setCacheSaving(false);
+        if (ok) {
+            setCacheDirty(false);
+            showToast('State saved');
+        } else {
+            showToast('Save failed');
+        }
+    }
 
     // Sync editing slide type with current slide
     useEffect(() => {
@@ -602,7 +648,8 @@ export default function ContentGenerator() {
 
     // Background image upload
     const handleBgUpload = useCallback(async (file: File) => {
-        if (!file.type.startsWith('image/')) {
+        const isImage = file.type.startsWith('image/') || /\.(heic|heif)$/i.test(file.name);
+        if (!isImage) {
             showToast('Not an image file');
             return;
         }
@@ -882,7 +929,7 @@ export default function ContentGenerator() {
                     hookLayout: editor.hookLayout,
                     mockupLayout: editor.mockupLayout,
                     itemOverrides: editor.itemOverrides,
-                    showHookOverlay,
+                    hookOverlayConfig,
                     rebundle: forceRebundle,
                     items: activeItems.map((item) => {
                         const edited = getEditedItem(item);
@@ -1017,6 +1064,7 @@ export default function ContentGenerator() {
         editor.resetMockupLayout();
         editor.resetItemOverrides();
         editor.resetVideoOverrides();
+        setHookOverlayConfig({ ...DEFAULT_HOOK_OVERLAY });
         setItemEdits({});
         setItemImageEdits({});
         setItemImagePreviews({});
@@ -1033,6 +1081,7 @@ export default function ContentGenerator() {
         setBeatAnalysis(null);
         setSelectedItems(items.map((i) => i.name));
         setCurrentSlide(0);
+        setCacheDirty(false);
         showToast('List state reset');
     }, [selectedCategory, currentCategory, items]);
 
@@ -1216,6 +1265,21 @@ export default function ContentGenerator() {
                                     </button>
                                 </div>
                                 <button
+                                    onClick={handleSaveCache}
+                                    disabled={!cacheDirty || cacheSaving}
+                                    style={{
+                                        ...smallBtnStyle,
+                                        background: cacheDirty ? '#4f46e5' : '#e2e8f0',
+                                        color: cacheDirty ? '#fff' : '#94a3b8',
+                                        borderColor: cacheDirty ? '#4f46e5' : '#e2e8f0',
+                                        fontSize: 11,
+                                        opacity: cacheSaving ? 0.7 : 1,
+                                    }}
+                                    title="Save state to server (syncs across devices)"
+                                >
+                                    {cacheSaving ? 'Saving...' : cacheDirty ? 'Save' : 'Saved'}
+                                </button>
+                                <button
                                     onClick={handleResetCategoryState}
                                     style={{
                                         ...smallBtnStyle,
@@ -1383,7 +1447,7 @@ export default function ContentGenerator() {
                                         <input
                                             ref={mockupBaseInputRef}
                                             type="file"
-                                            accept="image/*"
+                                            accept="image/*,.heic,.heif"
                                             style={{ display: 'none' }}
                                             onChange={(e) => {
                                                 const file = e.target.files?.[0];
@@ -1681,7 +1745,7 @@ export default function ContentGenerator() {
                                     <input
                                         ref={bgInputRef}
                                         type="file"
-                                        accept="image/*"
+                                        accept="image/*,.heic,.heif"
                                         style={{ display: 'none' }}
                                         onChange={(e) => {
                                             const file = e.target.files?.[0];
@@ -2337,7 +2401,7 @@ export default function ContentGenerator() {
                                                         brandName,
                                                         layout: editor.hookLayout,
                                                         logoUrls: showLogos ? logoUrls : [],
-                                                        showOverlay: showHookOverlay,
+                                                        overlayConfig: hookOverlayConfig,
                                                     }}
                                                 />
                                             </EditorOverlay>
@@ -2391,6 +2455,7 @@ export default function ContentGenerator() {
                                                             brandName,
                                                             favicon: getEditedImages(currentItem)?.favicon,
                                                             layout: editor.mockupLayout,
+                                                            overlayConfig: editor.itemOverrides.overlayConfig,
                                                             showOverlay: editor.itemOverrides.showOverlay ?? true,
                                                         }}
                                                     />
@@ -2600,8 +2665,8 @@ export default function ContentGenerator() {
                                         itemOverrides={editor.itemOverrides}
                                         onUpdateElement={editor.updateElement}
                                         onUpdateItemOverride={editor.updateItemOverride}
-                                        showHookOverlay={showHookOverlay}
-                                        onSetShowHookOverlay={setShowHookOverlay}
+                                        hookOverlayConfig={hookOverlayConfig}
+                                        onUpdateHookOverlay={setHookOverlayConfig}
                                     />
 
                                     {/* Per-item editor (carousel item slides) */}

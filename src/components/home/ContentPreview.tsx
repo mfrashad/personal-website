@@ -8,10 +8,16 @@ interface SerializedContentPiece {
     metrics: { views: number; likes: number; comments: number };
 }
 
+interface BrandLogo {
+    name: string;
+    src: string;
+}
+
 interface ContentPreviewProps {
     piecesByCategory: Record<string, SerializedContentPiece[]>;
     categoryLabels: Record<string, string>;
     imageManifest: Record<string, { content: string; analytics: string }>;
+    brandLogos: BrandLogo[];
 }
 
 function formatNumber(n: number): string {
@@ -20,7 +26,7 @@ function formatNumber(n: number): string {
     return n.toLocaleString();
 }
 
-export default function ContentPreview({ piecesByCategory, categoryLabels, imageManifest }: ContentPreviewProps) {
+export default function ContentPreview({ piecesByCategory, categoryLabels, imageManifest, brandLogos }: ContentPreviewProps) {
     const categoryOrder = ['personal-brand', 'cafe-hopping', 'experience', 'educational', 'products'];
     const availableCategories = categoryOrder.filter(c => piecesByCategory[c]?.length > 0);
     const [activeTab, setActiveTab] = useState('personal-brand');
@@ -84,6 +90,34 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
 
     return (
         <div>
+            {/* Brand logos marquee */}
+            {brandLogos.length > 0 && (
+                <div className="mb-4">
+                    <p className="text-xs font-medium uppercase tracking-widest text-neutral-400 mb-4">
+                        Brands I've partnered with
+                    </p>
+                    <div className="relative overflow-hidden py-5 border-y border-neutral-200">
+                        <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-white to-transparent z-10" />
+                        <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-white to-transparent z-10" />
+                        <div className="flex w-max animate-infinite-scroll hover:[animation-play-state:paused]">
+                            {[...brandLogos, ...brandLogos].map((logo, i) => (
+                                <div
+                                    key={`${logo.name}-${i}`}
+                                    className="flex-shrink-0 mx-8 flex items-center justify-center w-[120px]"
+                                >
+                                    <img
+                                        src={logo.src}
+                                        alt={logo.name}
+                                        title={logo.name}
+                                        className="h-8 md:h-10 w-auto max-w-[100px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Tabs */}
             <div className="flex flex-wrap gap-2 mb-5">
                 {availableCategories.map(cat => (

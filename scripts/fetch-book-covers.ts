@@ -16,6 +16,7 @@ const HARDCOVER_API_KEY = process.env.HARDCOVER_API_KEY;
 const API_URL = 'https://api.hardcover.app/v1/graphql';
 const OG_DIR = path.resolve(process.cwd(), 'public/resource-images/og');
 const FAVICONS_DIR = path.resolve(process.cwd(), 'public/resource-images/favicons');
+const SCREENSHOTS_DIR = path.resolve(process.cwd(), 'public/resource-images/screenshots');
 
 interface BookResult {
     title: string;
@@ -180,6 +181,7 @@ async function main() {
     // Ensure directories exist
     fs.mkdirSync(OG_DIR, { recursive: true });
     fs.mkdirSync(FAVICONS_DIR, { recursive: true });
+    fs.mkdirSync(SCREENSHOTS_DIR, { recursive: true });
 
     const manifest = loadManifest();
     let found = 0;
@@ -210,9 +212,9 @@ async function main() {
 
         const key = resourceKey(hardcoverUrl);
 
-        // Skip if images already exist in the manifest
+        // Skip if all images already exist in the manifest
         const existing = manifest.images[key];
-        if (existing?.favicon && existing?.ogImage) {
+        if (existing?.favicon && existing?.ogImage && existing?.screenshot) {
             console.log(`SKIPPED (already has images) [${key}]`);
             skipped++;
             found++;
@@ -221,6 +223,7 @@ async function main() {
 
         let ogPath: string | null = null;
         let faviconPath: string | null = null;
+        let screenshotPath: string | null = null;
 
         if (result.coverUrl) {
             // Only download what's missing
@@ -230,12 +233,16 @@ async function main() {
             if (!existing?.favicon) {
                 faviconPath = await downloadCover(result.coverUrl, key, FAVICONS_DIR);
             }
+            if (!existing?.screenshot) {
+                screenshotPath = await downloadCover(result.coverUrl, key, SCREENSHOTS_DIR);
+            }
         }
 
-        if (ogPath || faviconPath) {
-            const entry: { favicon?: string; ogImage?: string } = {};
+        if (ogPath || faviconPath || screenshotPath) {
+            const entry: { favicon?: string; ogImage?: string; screenshot?: string } = {};
             if (faviconPath) entry.favicon = faviconPath;
             if (ogPath) entry.ogImage = ogPath;
+            if (screenshotPath) entry.screenshot = screenshotPath;
             manifest.images[key] = { ...manifest.images[key], ...entry };
         }
 

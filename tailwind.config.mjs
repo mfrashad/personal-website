@@ -162,10 +162,15 @@ export default {
                 'infinite-scroll': {
                     '0%': { transform: 'translateX(0)' },
                     '100%': { transform: 'translateX(-50%)' }
+                },
+                'infinite-scroll-reverse': {
+                    '0%': { transform: 'translateX(-50%)' },
+                    '100%': { transform: 'translateX(0)' }
                 }
             },
             animation: {
-                'infinite-scroll': 'infinite-scroll 30s linear infinite'
+                'infinite-scroll': 'infinite-scroll 30s linear infinite',
+                'infinite-scroll-reverse': 'infinite-scroll-reverse 30s linear infinite'
             },
             boxShadow: {
                 'theme': '0 1em 0.5em var(--color-shadow)',

@@ -1,0 +1,95 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import DetailGallery from '@components/speaking/DetailGallery';
+import { speakingEngagements } from '@data/speaking';
+import imageManifest from '@data/speaking-images.json';
+
+export function getStaticPaths() {
+    return speakingEngagements.map((engagement) => ({
+        params: { id: engagement.id },
+    }));
+}
+
+const { id } = Astro.params;
+const engagement = speakingEngagements.find((e) => e.id === id)!;
+const images = (imageManifest as Record<string, string[]>)[id] || [];
+
+const formattedDate = engagement.date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+});
+
+const description = engagement.description
+    || `${engagement.title} at ${engagement.event} by ${engagement.organizer}`;
+---
+
+<Layout
+    title={`${engagement.title} - ${engagement.event} | Speaking | Rashad`}
+    description={description}
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
+            <div class="mx-auto w-full max-w-[960px]">
+                <a
+                    href="/speaking"
+                    class="text-sm text-neutral-500 hover:text-neutral-800 mb-6 inline-flex items-center gap-1"
+                >
+                    &larr; Back to Speaking
+                </a>
+
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-2">
+                        <h1 class="text-2xl font-bold md:text-3xl">{engagement.title}</h1>
+                        <span class="text-xs px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full capitalize shrink-0">
+                            {engagement.type}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1 text-neutral-600">
+                        <p class="text-lg">{engagement.event}</p>
+                        <p class="text-sm">
+                            Organized by <span class="font-medium">{engagement.organizer}</span>
+                        </p>
+                        <p class="text-sm">{formattedDate}</p>
+                        {engagement.location && (
+                            <p class="text-sm">{engagement.location}</p>
+                        )}
+                        {engagement.audience && (
+                            <p class="text-sm">{engagement.audience}</p>
+                        )}
+                    </div>
+
+                    {engagement.topics && engagement.topics.length > 0 && (
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            {engagement.topics.map((topic) => (
+                                <span class="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full">
+                                    {topic}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
+                    {engagement.description && (
+                        <p class="mt-4 text-neutral-700">{engagement.description}</p>
+                    )}
+                </div>
+
+                {images.length > 0 && (
+                    <section>
+                        <h2 class="text-lg font-bold mb-4 text-neutral-800">
+                            Photos ({images.length})
+                        </h2>
+                        <DetailGallery
+                            client:load
+                            images={images}
+                            title={engagement.title}
+                        />
+                    </section>
+                )}
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

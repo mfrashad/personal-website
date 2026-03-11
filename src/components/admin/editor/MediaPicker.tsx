@@ -17,6 +17,8 @@ interface MediaPickerProps {
     label?: string;
     /** Current selected path (for highlighting) */
     currentPath?: string | null;
+    /** Key for persisting a default (e.g. 'backgroundImage', 'ctaImage'). Enables "set as default" on items. */
+    defaultKey?: string;
 }
 
 export const MediaPicker: React.FC<MediaPickerProps> = ({
@@ -24,15 +26,17 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
     onSelect,
     label,
     currentPath,
+    defaultKey,
 }) => {
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState<MediaItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [defaultPath, setDefaultPath] = useState<string | null>(null);
     const fileRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const accept = type === 'image' ? 'image/*' : type === 'video' ? 'video/*' : 'audio/*';
+    const accept = type === 'image' ? 'image/*,.heic,.heif' : type === 'video' ? 'video/*' : 'audio/*';
 
     const fetchItems = useCallback(async () => {
         setLoading(true);
@@ -47,9 +51,35 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
         }
     }, [type]);
 
+    const fetchDefault = useCallback(async () => {
+        if (!defaultKey) return;
+        try {
+            const res = await fetch('/api/admin/media-defaults');
+            const data = await res.json();
+            setDefaultPath(data[defaultKey] || null);
+        } catch {}
+    }, [defaultKey]);
+
+    const toggleDefault = useCallback(async (e: React.MouseEvent, itemPath: string) => {
+        e.stopPropagation();
+        if (!defaultKey) return;
+        const isDefault = defaultPath === itemPath;
+        try {
+            await fetch('/api/admin/media-defaults', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: defaultKey, path: isDefault ? null : itemPath }),
+            });
+            setDefaultPath(isDefault ? null : itemPath);
+        } catch {}
+    }, [defaultKey, defaultPath]);
+
     useEffect(() => {
-        if (open) fetchItems();
-    }, [open, fetchItems]);
+        if (open) {
+            fetchItems();
+            fetchDefault();
+        }
+    }, [open, fetchItems, fetchDefault]);
 
     // Close on click outside
     useEffect(() => {
@@ -246,6 +276,19 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
                                                 }}
                                             />
                                         )}
+                                        {defaultKey && (
+                                            <button
+                                                onClick={(e) => toggleDefault(e, item.path)}
+                                                style={{
+                                                    ...defaultBtnStyle,
+                                                    color: defaultPath === item.path ? '#facc15' : '#fff',
+                                                    opacity: defaultPath === item.path ? 1 : 0.6,
+                                                }}
+                                                title={defaultPath === item.path ? 'Remove default' : 'Set as default'}
+                                            >
+                                                ★
+                                            </button>
+                                        )}
                                         <button
                                             onClick={(e) => handleDelete(e, item)}
                                             style={deleteBtnStyle}
@@ -313,6 +356,20 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({
                                                 {formatSize(item.size)}
                                             </div>
                                         </div>
+                                        {defaultKey && (
+                                            <button
+                                                onClick={(e) => toggleDefault(e, item.path)}
+                                                style={{
+                                                    ...defaultBtnStyle,
+                                                    position: 'static',
+                                                    color: defaultPath === item.path ? '#facc15' : '#94a3b8',
+                                                    background: 'none',
+                                                }}
+                                                title={defaultPath === item.path ? 'Remove default' : 'Set as default'}
+                                            >
+                                                ★
+                                            </button>
+                                        )}
                                         <button
                                             onClick={(e) => handleDelete(e, item)}
                                             style={{ ...deleteBtnStyle, position: 'static' }}
@@ -347,4 +404,20 @@ const deleteBtnStyle: React.CSSProperties = {
     padding: 0,
     cursor: 'pointer',
     opacity: 0.7,
+};
+
+const defaultBtnStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 2,
+    left: 2,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    border: 'none',
+    background: 'rgba(0,0,0,0.5)',
+    fontSize: 11,
+    lineHeight: '18px',
+    textAlign: 'center',
+    padding: 0,
+    cursor: 'pointer',
 };

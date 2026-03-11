@@ -82,6 +82,14 @@ export const EditorOverlay: React.FC<EditorOverlayProps> = ({
                 aspectRatio: `${compositionWidth}/${compositionHeight}`,
             }}
         >
+            <style>{`
+                .moveable-control {
+                    width: 5px !important;
+                    height: 5px !important;
+                    margin-top: -2.5px !important;
+                    margin-left: -2.5px !important;
+                }
+            `}</style>
             {/* Remotion Player */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>{children}</div>
 

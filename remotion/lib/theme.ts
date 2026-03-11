@@ -24,6 +24,76 @@ export function getVideoDuration(
     return hookFrames + itemCount * itemFrames + ctaFrames;
 }
 
+// --- Overlay helpers ---
+
+import type { OverlayConfig } from './types';
+
+export const DEFAULT_HOOK_OVERLAY: OverlayConfig = {
+    enabled: true,
+    direction: 'bottom',
+    opacity: 0.75,
+    color: '#000000',
+    offset: 0,
+};
+
+export const DEFAULT_ITEM_OVERLAY: OverlayConfig = {
+    enabled: true,
+    direction: 'bottom',
+    opacity: 0.8,
+    color: '#000000',
+    offset: 70,
+};
+
+function hexToRgb(hex: string): [number, number, number] {
+    const h = hex.replace('#', '');
+    return [
+        parseInt(h.slice(0, 2), 16) || 0,
+        parseInt(h.slice(2, 4), 16) || 0,
+        parseInt(h.slice(4, 6), 16) || 0,
+    ];
+}
+
+/** Generate inline style for an overlay gradient from an OverlayConfig */
+export function getOverlayStyle(config: OverlayConfig): React.CSSProperties {
+    if (!config.enabled) return { display: 'none' };
+    const [r, g, b] = hexToRgb(config.color);
+    const a = config.opacity;
+    const off = config.offset;
+
+    const base: React.CSSProperties = { position: 'absolute', left: 0, right: 0 };
+
+    switch (config.direction) {
+        case 'bottom':
+            return {
+                ...base,
+                top: `${off}%`,
+                bottom: 0,
+                background: `linear-gradient(to bottom, rgba(${r},${g},${b},0) 0%, rgba(${r},${g},${b},${a}) 100%)`,
+            };
+        case 'top':
+            return {
+                ...base,
+                top: 0,
+                bottom: `${off}%`,
+                background: `linear-gradient(to top, rgba(${r},${g},${b},0) 0%, rgba(${r},${g},${b},${a}) 100%)`,
+            };
+        case 'both':
+            return {
+                ...base,
+                top: 0,
+                bottom: 0,
+                background: `linear-gradient(to bottom, rgba(${r},${g},${b},${a}) 0%, rgba(${r},${g},${b},${a * 0.15}) 40%, rgba(${r},${g},${b},${a * 0.15}) 60%, rgba(${r},${g},${b},${a}) 100%)`,
+            };
+        case 'solid':
+            return {
+                ...base,
+                top: 0,
+                bottom: 0,
+                background: `rgba(${r},${g},${b},${a})`,
+            };
+    }
+}
+
 export const colors = {
     white: '#FFFFFF',
     black: '#000000',

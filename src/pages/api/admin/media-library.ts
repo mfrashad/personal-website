@@ -1,15 +1,17 @@
 import type { APIRoute } from 'astro';
 import * as fs from 'fs';
 import * as path from 'path';
+import { execSync } from 'child_process';
 
 export const prerender = false;
 
 const ROOT = path.resolve(process.cwd());
 const LIBRARY_DIR = path.join(ROOT, 'public/content-generator/library');
 
-const IMAGE_EXTS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
+const IMAGE_EXTS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.heic', '.heif']);
 const VIDEO_EXTS = new Set(['.mp4', '.webm', '.mov']);
 const AUDIO_EXTS = new Set(['.mp3', '.wav', '.ogg', '.aac', '.m4a']);
+const HEIC_EXTS = new Set(['.heic', '.heif']);
 
 function getMediaType(ext: string): 'image' | 'video' | 'audio' | null {
     if (IMAGE_EXTS.has(ext)) return 'image';
@@ -25,6 +27,8 @@ function getExtFromMime(mime: string): string {
         'image/jpg': '.jpg',
         'image/webp': '.webp',
         'image/gif': '.gif',
+        'image/heic': '.heic',
+        'image/heif': '.heif',
         'video/mp4': '.mp4',
         'video/webm': '.webm',
         'video/quicktime': '.mov',
@@ -37,6 +41,10 @@ function getExtFromMime(mime: string): string {
         'audio/mp4': '.m4a',
     };
     return map[mime] || '.bin';
+}
+
+function isHeic(ext: string): boolean {
+    return HEIC_EXTS.has(ext.toLowerCase());
 }
 
 export interface MediaItem {
@@ -126,12 +134,33 @@ export const POST: APIRoute = async ({ request }) => {
 
         fs.mkdirSync(LIBRARY_DIR, { recursive: true });
 
-        const ext = getExtFromMime(file.type);
-        const filename = `${label}-${Date.now()}${ext}`;
-        const filePath = path.join(LIBRARY_DIR, filename);
-
+        let ext = getExtFromMime(file.type);
+        // Also detect HEIC by filename if MIME type is missing/generic
+        if (ext === '.bin' && /\.(heic|heif)$/i.test(file.name)) {
+            ext = '.' + file.name.split('.').pop()!.toLowerCase();
+        }
         const buffer = Buffer.from(await file.arrayBuffer());
-        fs.writeFileSync(filePath, buffer);
+
+        let filename: string;
+        let filePath: string;
+
+        // Convert HEIC/HEIF to JPEG since browsers can't render them
+        if (isHeic(ext)) {
+            const tmpIn = path.join(LIBRARY_DIR, `_tmp_${Date.now()}${ext}`);
+            filename = `${label}-${Date.now()}.jpg`;
+            filePath = path.join(LIBRARY_DIR, filename);
+            fs.writeFileSync(tmpIn, buffer);
+            try {
+                execSync(`sips -s format jpeg "${tmpIn}" --out "${filePath}"`, { stdio: 'pipe' });
+            } finally {
+                if (fs.existsSync(tmpIn)) fs.unlinkSync(tmpIn);
+            }
+            ext = '.jpg';
+        } else {
+            filename = `${label}-${Date.now()}${ext}`;
+            filePath = path.join(LIBRARY_DIR, filename);
+            fs.writeFileSync(filePath, buffer);
+        }
 
         const relativePath = `/content-generator/library/${filename}`;
         const mediaType = getMediaType(ext);

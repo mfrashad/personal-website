@@ -4,9 +4,11 @@ export interface CleveWriting {
     id: string;
     title: string;
     category: string;
-    created_at: string;
-    updated_at: string;
-    content_markdown: string;
+    tags: string[];
+    publishedAt: number;
+    updatedAt: number;
+    markdown: string;
+    folderId?: string;
 }
 
 interface UseCleveWritingsOptions {
@@ -57,10 +59,10 @@ export function useCleveWritings({
             const currentIds = new Set(writings.map(w => w.id));
             const freshNew = freshWritings.filter(w => !currentIds.has(w.id));
 
-            // Find updated writings (same id, different updated_at)
+            // Find updated writings (same id, different updatedAt)
             const freshUpdated = freshWritings.filter(fresh => {
                 const existing = writings.find(w => w.id === fresh.id);
-                return existing && existing.updated_at !== fresh.updated_at;
+                return existing && existing.updatedAt !== fresh.updatedAt;
             });
 
             if (freshNew.length > 0 || freshUpdated.length > 0) {
@@ -112,8 +114,8 @@ export function slugify(title: string): string {
 }
 
 // Helper to format dates
-export function formatDate(dateStr: string): string {
-    return new Date(dateStr).toLocaleDateString('en-US', {
+export function formatDate(timestamp: number): string {
+    return new Date(timestamp).toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit'
     });

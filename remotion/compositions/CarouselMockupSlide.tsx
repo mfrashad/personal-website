@@ -3,7 +3,8 @@ import { AbsoluteFill, Img } from 'remotion';
 import type { CarouselMockupSlideProps } from '../lib/types';
 import { getDefaultMockupSlideLayout } from '../lib/default-layouts';
 import { LayoutRenderer } from './LayoutRenderer';
-import { CAROUSEL } from '../lib/theme';
+import { CAROUSEL, getOverlayStyle, DEFAULT_ITEM_OVERLAY } from '../lib/theme';
+import { resolveAsset } from '../lib/resolve-asset';
 
 export const CarouselMockupSlide: React.FC<CarouselMockupSlideProps> = ({
     item,
@@ -13,18 +14,26 @@ export const CarouselMockupSlide: React.FC<CarouselMockupSlideProps> = ({
     brandName,
     favicon,
     layout,
+    showOverlay = true,
+    overlayConfig,
 }) => {
     const resolvedLayout = layout ?? getDefaultMockupSlideLayout();
 
     const domain = item.url
-        ? new URL(item.url).hostname.replace(/^www\./, '')
+        ? (() => {
+              const u = new URL(item.url);
+              const host = u.hostname.replace(/^www\./, '');
+              const p = u.pathname.replace(/\/$/, '');
+              return p ? `${host}${p}` : host;
+          })()
         : '';
 
     const data: Record<string, string> = {
         itemName: item.name,
+        itemDescription: item.description || '',
         itemDomain: domain,
         brandName,
-        counter: `${slideNumber}/${totalSlides}`,
+        counter: '',
         itemFavicon: favicon || '',
     };
 
@@ -32,7 +41,7 @@ export const CarouselMockupSlide: React.FC<CarouselMockupSlideProps> = ({
         <AbsoluteFill>
             {/* Mockup image - full screen */}
             <Img
-                src={mockupImage}
+                src={resolveAsset(mockupImage)}
                 style={{
                     width: CAROUSEL.width,
                     height: CAROUSEL.height,
@@ -41,16 +50,10 @@ export const CarouselMockupSlide: React.FC<CarouselMockupSlideProps> = ({
             />
 
             {/* Bottom gradient overlay */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 350,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
-                }}
-            />
+            {(() => {
+                const ov = overlayConfig ?? { ...DEFAULT_ITEM_OVERLAY, enabled: showOverlay };
+                return ov.enabled ? <div style={getOverlayStyle(ov)} /> : null;
+            })()}
 
             {/* Layout-driven text elements */}
             <LayoutRenderer layout={resolvedLayout} data={data} />

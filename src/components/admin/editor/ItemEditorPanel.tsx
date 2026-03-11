@@ -25,6 +25,9 @@ interface ItemEditorPanelProps {
     edits: ItemEdits;
     imageEdits: ItemImageEdits;
     imagePreviews: { favicon?: string; screenshot?: string };
+    /** Persistent content description (saved to disk, used for carousel/video) */
+    contentDescription?: string;
+    onUpdateContentDescription?: (value: string) => void;
     onUpdateEdit: (field: 'name' | 'description' | 'url', value: string) => void;
     onUploadImage: (type: 'favicon' | 'screenshot', file: File) => void;
     onResetImage: (type: 'favicon' | 'screenshot') => void;
@@ -39,6 +42,8 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
     edits,
     imageEdits,
     imagePreviews,
+    contentDescription,
+    onUpdateContentDescription,
     onUpdateEdit,
     onUploadImage,
     onResetImage,
@@ -88,14 +93,36 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
                 />
             </div>
 
-            {/* Description */}
+            {/* Content Description (persistent, for carousel/video) */}
             <div>
-                <div style={labelStyle}>Description</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={labelStyle}>Content Description</div>
+                    {contentDescription && (
+                        <span style={{ fontSize: 10, color: '#059669', fontWeight: 500 }}>Saved</span>
+                    )}
+                </div>
+                <textarea
+                    value={contentDescription ?? ''}
+                    onChange={(e) => onUpdateContentDescription?.(e.target.value)}
+                    placeholder="Short description for carousel/video content (auto-saved)"
+                    style={{ ...inputStyle, minHeight: 60, resize: 'vertical' }}
+                />
+                <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>
+                    Persists across sessions. Used for content generation instead of the website description.
+                </div>
+            </div>
+
+            {/* Website Description (ephemeral override) */}
+            <div>
+                <div style={labelStyle}>Website Description</div>
                 <textarea
                     value={currentDesc}
                     onChange={(e) => onUpdateEdit('description', e.target.value)}
-                    style={{ ...inputStyle, minHeight: 60, resize: 'vertical' }}
+                    style={{ ...inputStyle, minHeight: 60, resize: 'vertical', color: '#94a3b8' }}
                 />
+                <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 2 }}>
+                    Original from /resources page. Session-only edits.
+                </div>
             </div>
 
             {/* URL */}
@@ -147,7 +174,7 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
                 <input
                     ref={faviconRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.heic,.heif"
                     style={{ display: 'none' }}
                     onChange={handleFileChange('favicon')}
                 />
@@ -190,7 +217,7 @@ export const ItemEditorPanel: React.FC<ItemEditorPanelProps> = ({
                 <input
                     ref={screenshotRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.heic,.heif"
                     style={{ display: 'none' }}
                     onChange={handleFileChange('screenshot')}
                 />

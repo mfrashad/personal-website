@@ -8,6 +8,7 @@ interface AddElementToolbarProps {
     onAddText: () => void;
     onSelectElement: (id: string | null) => void;
     onDeleteElement: (id: string) => void;
+    onUpdateElement: (id: string, updates: Record<string, any>) => void;
     onResetLayout: () => void;
 }
 
@@ -18,9 +19,10 @@ export const AddElementToolbar: React.FC<AddElementToolbarProps> = ({
     onAddText,
     onSelectElement,
     onDeleteElement,
+    onUpdateElement,
     onResetLayout,
 }) => {
-    const elements = editingSlideType === 'hook' ? layout.elements : [];
+    const elements = layout.elements;
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -79,6 +81,24 @@ export const AddElementToolbar: React.FC<AddElementToolbarProps> = ({
                                 <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                     {getElementLabel(el)}
                                 </span>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onUpdateElement(el.id, { visible: !el.visible });
+                                    }}
+                                    title={el.visible ? 'Hide' : 'Show'}
+                                    style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        color: el.visible ? '#64748b' : '#cbd5e1',
+                                        fontSize: 13,
+                                        padding: '0 2px',
+                                        lineHeight: 1,
+                                    }}
+                                >
+                                    {el.visible ? '◉' : '◯'}
+                                </button>
                                 {el.locked && (
                                     <span style={{ fontSize: 10, color: '#94a3b8' }}>locked</span>
                                 )}

@@ -1,5 +1,7 @@
 import React from 'react';
 import type { DesignElement, TextElement, ImageElement, LogoGridElement, ItemSlideOverrides } from '../../../../remotion/lib/design-types';
+import type { OverlayConfig, OverlayDirection } from '../../../../remotion/lib/types';
+import { DEFAULT_HOOK_OVERLAY, DEFAULT_ITEM_OVERLAY } from '../../../../remotion/lib/theme';
 
 interface PropertiesPanelProps {
     element: DesignElement | null;
@@ -10,7 +12,87 @@ interface PropertiesPanelProps {
         key: K,
         value: ItemSlideOverrides[K],
     ) => void;
+    hookOverlayConfig?: OverlayConfig;
+    onUpdateHookOverlay?: (config: OverlayConfig) => void;
 }
+
+const DIRECTION_OPTIONS: { value: OverlayDirection; label: string }[] = [
+    { value: 'bottom', label: 'Bottom' },
+    { value: 'top', label: 'Top' },
+    { value: 'both', label: 'Both Edges' },
+    { value: 'solid', label: 'Solid' },
+];
+
+const OverlayControls: React.FC<{
+    config: OverlayConfig;
+    onChange: (config: OverlayConfig) => void;
+}> = ({ config, onChange }) => {
+    const update = (patch: Partial<OverlayConfig>) => onChange({ ...config, ...patch });
+    return (
+        <div style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <div style={sectionTitleStyle}>Overlay</div>
+                <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748b', cursor: 'pointer' }}>
+                    <input
+                        type="checkbox"
+                        checked={config.enabled}
+                        onChange={(e) => update({ enabled: e.target.checked })}
+                    />
+                    On
+                </label>
+            </div>
+            {config.enabled && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div>
+                        <div style={fieldLabelStyle}>Direction</div>
+                        <select
+                            value={config.direction}
+                            onChange={(e) => update({ direction: e.target.value as OverlayDirection })}
+                            style={textInputStyle}
+                        >
+                            {DIRECTION_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <SliderField
+                        label="Opacity"
+                        value={Math.round(config.opacity * 100)}
+                        min={0}
+                        max={100}
+                        onChange={(v) => update({ opacity: v / 100 })}
+                    />
+                    {(config.direction === 'bottom' || config.direction === 'top') && (
+                        <SliderField
+                            label="Offset"
+                            value={config.offset}
+                            min={0}
+                            max={90}
+                            onChange={(v) => update({ offset: v })}
+                        />
+                    )}
+                    <div>
+                        <div style={fieldLabelStyle}>Color</div>
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                            <input
+                                type="color"
+                                value={config.color}
+                                onChange={(e) => update({ color: e.target.value })}
+                                style={{ width: 32, height: 32, border: 'none', cursor: 'pointer' }}
+                            />
+                            <input
+                                type="text"
+                                value={config.color}
+                                onChange={(e) => update({ color: e.target.value })}
+                                style={{ ...textInputStyle, flex: 1 }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     element,
@@ -18,9 +100,28 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     itemOverrides,
     onUpdateElement,
     onUpdateItemOverride,
+    hookOverlayConfig,
+    onUpdateHookOverlay,
 }) => {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Overlay controls */}
+            {editingSlideType === 'hook' && onUpdateHookOverlay && (
+                <OverlayControls
+                    config={hookOverlayConfig ?? DEFAULT_HOOK_OVERLAY}
+                    onChange={onUpdateHookOverlay}
+                />
+            )}
+            {(editingSlideType === 'item' || editingSlideType === 'mockup') && (
+                <OverlayControls
+                    config={itemOverrides.overlayConfig ?? { ...DEFAULT_ITEM_OVERLAY, enabled: itemOverrides.showOverlay ?? true }}
+                    onChange={(config) => {
+                        onUpdateItemOverride('overlayConfig', config);
+                        onUpdateItemOverride('showOverlay', config.enabled);
+                    }}
+                />
+            )}
+
             {/* Item slide overrides (always shown on item slides) */}
             {editingSlideType === 'item' && (
                 <div style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: 16 }}>
@@ -69,6 +170,23 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                             />
                             Show Links
                         </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, marginTop: 4 }}>
+                            <input
+                                type="checkbox"
+                                checked={itemOverrides.showDescription ?? true}
+                                onChange={(e) => onUpdateItemOverride('showDescription', e.target.checked)}
+                            />
+                            Show Description
+                        </label>
+                        {(itemOverrides.showDescription ?? true) && (
+                            <SliderField
+                                label="Max Description Length"
+                                value={itemOverrides.maxDescriptionLength ?? 120}
+                                min={30}
+                                max={300}
+                                onChange={(v) => onUpdateItemOverride('maxDescriptionLength', v)}
+                            />
+                        )}
                     </div>
                 </div>
             )}
@@ -76,11 +194,21 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             {/* Element properties */}
             {element ? (
                 <>
-                    <div style={sectionTitleStyle}>
-                        {element.type === 'text' ? 'Text' : element.type === 'logo-grid' ? 'Logo Grid' : 'Image'} Properties
-                        <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 400, marginLeft: 8 }}>
-                            {element.id}
-                        </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={sectionTitleStyle}>
+                            {element.type === 'text' ? 'Text' : element.type === 'logo-grid' ? 'Logo Grid' : 'Image'} Properties
+                            <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 400, marginLeft: 8 }}>
+                                {element.id}
+                            </span>
+                        </div>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748b', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                checked={element.visible}
+                                onChange={(e) => onUpdateElement(element.id, { visible: e.target.checked })}
+                            />
+                            Visible
+                        </label>
                     </div>
 
                     {/* Position */}
@@ -153,19 +281,27 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                                 </div>
                                 <div style={{ flex: 1 }}>
                                     <div style={fieldLabelStyle}>Align</div>
-                                    <select
-                                        value={(element as TextElement).textAlign}
-                                        onChange={(e) =>
-                                            onUpdateElement(element.id, {
-                                                textAlign: e.target.value as 'left' | 'center' | 'right',
-                                            })
-                                        }
-                                        style={textInputStyle}
-                                    >
-                                        <option value="left">Left</option>
-                                        <option value="center">Center</option>
-                                        <option value="right">Right</option>
-                                    </select>
+                                    <div style={{ display: 'flex', gap: 2 }}>
+                                        {(['left', 'center', 'right'] as const).map((align) => (
+                                            <button
+                                                key={align}
+                                                onClick={() => onUpdateElement(element.id, { textAlign: align })}
+                                                style={{
+                                                    flex: 1,
+                                                    padding: '4px 0',
+                                                    fontSize: 13,
+                                                    border: '1px solid #e2e8f0',
+                                                    borderRadius: 4,
+                                                    cursor: 'pointer',
+                                                    background: (element as TextElement).textAlign === align ? '#4f46e5' : '#fff',
+                                                    color: (element as TextElement).textAlign === align ? '#fff' : '#334155',
+                                                    fontWeight: (element as TextElement).textAlign === align ? 600 : 400,
+                                                }}
+                                            >
+                                                {align[0].toUpperCase()}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -192,6 +328,56 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                                         style={{ ...textInputStyle, flex: 1 }}
                                     />
                                 </div>
+                            </div>
+                            <div>
+                                <div style={fieldLabelStyle}>Background Color</div>
+                                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: '#64748b' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={!!(element as TextElement).backgroundColor}
+                                            onChange={(e) =>
+                                                onUpdateElement(element.id, {
+                                                    backgroundColor: e.target.checked ? 'rgba(0,0,0,0.6)' : undefined,
+                                                    backgroundPadding: e.target.checked ? 12 : undefined,
+                                                    backgroundBorderRadius: e.target.checked ? 8 : undefined,
+                                                })
+                                            }
+                                        />
+                                        On
+                                    </label>
+                                    {(element as TextElement).backgroundColor && (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={(element as TextElement).backgroundColor || ''}
+                                                onChange={(e) =>
+                                                    onUpdateElement(element.id, { backgroundColor: e.target.value })
+                                                }
+                                                style={{ ...textInputStyle, flex: 1 }}
+                                                placeholder="rgba(0,0,0,0.6)"
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                                {(element as TextElement).backgroundColor && (
+                                    <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+                                        <SliderField
+                                            label="Padding"
+                                            value={(element as TextElement).backgroundPadding ?? 12}
+                                            min={0}
+                                            max={40}
+                                            onChange={(v) => onUpdateElement(element.id, { backgroundPadding: v })}
+                                        />
+                                        <SliderField
+                                            label="Radius"
+                                            value={(element as TextElement).backgroundBorderRadius ?? 8}
+                                            min={0}
+                                            max={30}
+                                            onChange={(v) => onUpdateElement(element.id, { backgroundBorderRadius: v })}
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </>
                     )}

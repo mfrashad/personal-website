@@ -15,6 +15,20 @@ export interface ResourceImages {
 
 export type ItemSlideTemplate = 'card' | 'mockup';
 
+export type OverlayDirection = 'bottom' | 'top' | 'both' | 'solid';
+
+export interface OverlayConfig {
+    enabled: boolean;
+    /** Gradient direction: bottom=dark at bottom, top=dark at top, both=dark edges, solid=flat */
+    direction: OverlayDirection;
+    /** Max opacity of the overlay, 0–1 */
+    opacity: number;
+    /** Hex color, e.g. '#000000' */
+    color: string;
+    /** For bottom/top: percentage of slide from the edge where gradient starts (0=full slide, 70=edge 30% only) */
+    offset: number;
+}
+
 export interface CarouselHookSlideProps {
     backgroundImage: string;
     hookText: string;
@@ -23,11 +37,15 @@ export interface CarouselHookSlideProps {
     layout?: import('./design-types').SlideLayout;
     /** Favicon URLs for the logo grid on the hook slide */
     logoUrls?: string[];
+    showOverlay?: boolean;
+    overlayConfig?: OverlayConfig;
 }
 
 export interface CarouselCtaSlideProps {
     backgroundImage: string;
     ctaText: string;
+    ctaSubtitle?: string;
+    ctaImage?: string;
     brandName: string;
 }
 
@@ -49,6 +67,8 @@ export interface CarouselMockupSlideProps {
     brandName: string;
     favicon?: string;
     layout?: import('./design-types').SlideLayout;
+    showOverlay?: boolean;
+    overlayConfig?: OverlayConfig;
 }
 
 export interface VideoLayoutOverrides {
@@ -65,10 +85,14 @@ export interface VideoLayoutOverrides {
     ctaTextFontSize?: number;
     ctaBrandFontSize?: number;
     showLinks?: boolean;
+    showDescription?: boolean;
+    maxDescriptionLength?: number;
     disableItemTransition?: boolean;
     /** 0 = slowest, 1 = fastest. Default 0.5 */
     transitionSpeed?: number;
     showLogos?: boolean;
+    showOverlay?: boolean;
+    overlayConfig?: OverlayConfig;
 }
 
 export interface VideoReelProps {

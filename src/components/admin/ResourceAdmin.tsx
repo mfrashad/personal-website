@@ -28,7 +28,7 @@ function getDomainKey(url?: string): string | null {
         const hostname = parsed.hostname.replace(/^www\./, '');
         const domain = hostname.replace(/\./g, '-');
         const pathSegments = parsed.pathname.split('/').filter(Boolean);
-        if (pathSegments.length >= 2) {
+        if (pathSegments.length >= 1) {
             return `${domain}-${pathSegments.join('-')}`;
         }
         return domain;
@@ -188,10 +188,28 @@ function ImageDropZone({
     );
 }
 
+// Read/write URL search params for state persistence across HMR reloads
+function getUrlParam(key: string): string | null {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get(key);
+}
+
+function setUrlParams(params: Record<string, string | null>) {
+    if (typeof window === 'undefined') return;
+    const sp = new URLSearchParams(window.location.search);
+    for (const [k, v] of Object.entries(params)) {
+        if (v === null) sp.delete(k);
+        else sp.set(k, v);
+    }
+    const qs = sp.toString();
+    const newUrl = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+}
+
 export default function ResourceAdmin() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selected, setSelected] = useState<string | null>(null);
-    const [expandedItem, setExpandedItem] = useState<string | null>(null);
+    const [selected, setSelected] = useState<string | null>(() => getUrlParam('cat'));
+    const [expandedItem, setExpandedItem] = useState<string | null>(() => getUrlParam('item'));
     const [editState, setEditState] = useState<Record<string, Item>>({});
     const [saving, setSaving] = useState<string | null>(null);
     const [fetching, setFetching] = useState<string | null>(null);
@@ -201,11 +219,39 @@ export default function ResourceAdmin() {
     const [error, setError] = useState<string | null>(null);
     const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
     const [search, setSearch] = useState('');
+    const [pasteFile, setPasteFile] = useState<File | null>(null);
 
     const showToast = useCallback((msg: string, type: 'success' | 'error') => {
         setToast({ msg, type });
         setTimeout(() => setToast(null), 3000);
     }, []);
+
+    // Persist selected category + expanded item in URL
+    useEffect(() => {
+        setUrlParams({ cat: selected, item: expandedItem });
+    }, [selected, expandedItem]);
+
+    // Global paste handler: capture pasted image, show type picker
+    useEffect(() => {
+        if (!expandedItem) return;
+        const handlePaste = (e: ClipboardEvent) => {
+            // Don't intercept if pasting into an input/textarea
+            const tag = (e.target as HTMLElement)?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const file = item.getAsFile();
+                    if (file) setPasteFile(file);
+                    return;
+                }
+            }
+        };
+        document.addEventListener('paste', handlePaste);
+        return () => document.removeEventListener('paste', handlePaste);
+    }, [expandedItem]);
 
     useEffect(() => {
         Promise.all([
@@ -215,7 +261,8 @@ export default function ResourceAdmin() {
             .then(([listData, imageData]) => {
                 if (listData.error) throw new Error(listData.error);
                 setCategories(listData);
-                if (listData.length > 0) setSelected(listData[0].category);
+                // Only set default category if none persisted in URL
+                if (!selected && listData.length > 0) setSelected(listData[0].category);
                 setResourceImages(imageData.images || {});
                 setLoading(false);
             })
@@ -240,13 +287,9 @@ export default function ResourceAdmin() {
 
     function getManifestImages(url?: string): { favicon?: string; ogImage?: string; screenshot?: string } {
         if (!url) return {};
-        try {
-            const hostname = new URL(url).hostname.replace(/^www\./, '');
-            const key = hostname.replace(/\./g, '-');
-            return resourceImages[key] || {};
-        } catch {
-            return {};
-        }
+        const key = getDomainKey(url);
+        if (!key) return {};
+        return resourceImages[key] || {};
     }
 
     function handleImageUploaded(url: string | undefined, uploadedPath: string, imageType: string) {
@@ -256,6 +299,34 @@ export default function ResourceAdmin() {
             ...s,
             [key]: { ...s[key], [imageType]: uploadedPath },
         }));
+    }
+
+    // Handle paste picker: upload the captured paste file to the chosen image type
+    async function handlePasteToType(imageType: 'favicon' | 'ogImage' | 'screenshot') {
+        if (!pasteFile || !expandedItem) return;
+        const item = selectedCategory?.items.find((i) => i.name === expandedItem);
+        if (!item) return;
+        const edit = getEditItem(item.name, item);
+        const key = getDomainKey(edit.url || item.url);
+        if (!key) {
+            showToast('No URL set - add a URL first', 'error');
+            setPasteFile(null);
+            return;
+        }
+        try {
+            const formData = new FormData();
+            formData.append('file', pasteFile);
+            formData.append('domainKey', key);
+            formData.append('imageType', imageType);
+            const res = await fetch('/api/admin/upload-image', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Upload failed');
+            handleImageUploaded(edit.url || item.url, data.path, imageType);
+            showToast(`Pasted as ${imageType}`, 'success');
+        } catch (err: any) {
+            showToast(err.message, 'error');
+        }
+        setPasteFile(null);
     }
 
     function getEditItem(name: string, original: Item): Item {
@@ -328,11 +399,10 @@ export default function ResourceAdmin() {
             setFetchedImages((s) => ({ ...s, [name]: data }));
             // Also update manifest cache so images persist across tab switches
             if (data.favicon || data.ogImage || data.screenshot) {
-                try {
-                    const hostname = new URL(url).hostname.replace(/^www\./, '');
-                    const key = hostname.replace(/\./g, '-');
+                const key = getDomainKey(url);
+                if (key) {
                     setResourceImages((s) => ({ ...s, [key]: { ...s[key], ...data } }));
-                } catch {}
+                }
             }
             showToast('Images fetched', 'success');
         } catch (err: any) {
@@ -369,6 +439,34 @@ export default function ResourceAdmin() {
                     }}
                 >
                     {toast.msg}
+                </div>
+            )}
+
+            {/* Paste type picker modal */}
+            {pasteFile && (
+                <div style={styles.pasteOverlay} onClick={() => setPasteFile(null)}>
+                    <div style={styles.pasteModal} onClick={(e) => e.stopPropagation()}>
+                        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>
+                            Paste image as:
+                        </div>
+                        <div style={{ display: 'flex', gap: 8 }}>
+                            <button style={styles.pasteBtn} onClick={() => handlePasteToType('favicon')}>
+                                Favicon
+                            </button>
+                            <button style={styles.pasteBtn} onClick={() => handlePasteToType('ogImage')}>
+                                OG Image
+                            </button>
+                            <button style={styles.pasteBtn} onClick={() => handlePasteToType('screenshot')}>
+                                Screenshot
+                            </button>
+                        </div>
+                        <button
+                            style={{ ...styles.btnGhost, marginTop: 8, fontSize: 12 }}
+                            onClick={() => setPasteFile(null)}
+                        >
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -917,6 +1015,37 @@ const styles: Record<string, React.CSSProperties> = {
         border: '1px solid #ddd',
         borderRadius: 6,
         fontSize: 13,
+        cursor: 'pointer',
+    },
+    pasteOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0,0,0,0.4)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 2000,
+    },
+    pasteModal: {
+        background: '#fff',
+        borderRadius: 12,
+        padding: '20px 24px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    pasteBtn: {
+        padding: '10px 20px',
+        background: '#4361ee',
+        color: '#fff',
+        border: 'none',
+        borderRadius: 8,
+        fontSize: 13,
+        fontWeight: 600,
         cursor: 'pointer',
     },
 };

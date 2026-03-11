@@ -3,6 +3,7 @@ import { AbsoluteFill, Img } from 'remotion';
 import type { CarouselItemSlideProps } from '../lib/types';
 import { CAROUSEL, colors, fonts, spacing } from '../lib/theme';
 import { LayoutRenderer } from './LayoutRenderer';
+import { resolveAsset } from '../lib/resolve-asset';
 
 export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
     backgroundImage,
@@ -15,11 +16,6 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
 }) => {
     const favicon = images?.favicon;
     const screenshot = images?.screenshot || images?.ogImage;
-    const description = item.description
-        ? item.description.length > 120
-            ? item.description.slice(0, 117) + '...'
-            : item.description
-        : '';
 
     // Apply overrides with defaults
     const nameFontSize = overrides?.nameFontSize ?? 44;
@@ -29,17 +25,26 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
     const cardPadding = overrides?.cardPadding ?? spacing.cardPadding;
     const brandPos = overrides?.brandPosition ?? { x: spacing.pagePadding, y: spacing.pagePadding };
     const showLinks = overrides?.showLinks ?? false;
+    const showDescription = overrides?.showDescription ?? true;
+    const maxDescLen = overrides?.maxDescriptionLength ?? 120;
+    const showOverlay = overrides?.showOverlay ?? true;
+
+    const description = item.description
+        ? item.description.length > maxDescLen
+            ? item.description.slice(0, maxDescLen - 3) + '...'
+            : item.description
+        : '';
 
     return (
         <AbsoluteFill>
             {/* Background - blurred + darkened */}
             <Img
-                src={backgroundImage}
+                src={resolveAsset(backgroundImage)}
                 style={{
                     width: CAROUSEL.width,
                     height: CAROUSEL.height,
                     objectFit: 'cover',
-                    filter: 'blur(20px) brightness(0.4)',
+                    filter: showOverlay ? 'blur(20px) brightness(0.4)' : 'blur(20px)',
                     transform: 'scale(1.1)',
                 }}
             />
@@ -78,13 +83,15 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                     >
                         {favicon && (
                             <Img
-                                src={favicon}
+                                src={resolveAsset(favicon)}
                                 style={{
                                     width: 56,
                                     height: 56,
                                     borderRadius: 14,
-                                    objectFit: 'cover',
+                                    objectFit: 'contain',
                                     flexShrink: 0,
+                                    background: 'rgba(255,255,255,0.12)',
+                                    padding: 6,
                                 }}
                             />
                         )}
@@ -103,7 +110,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                     </div>
 
                     {/* Description */}
-                    {description && (
+                    {showDescription && description && (
                         <div
                             style={{
                                 fontFamily: fonts.body,
@@ -127,7 +134,7 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                             }}
                         >
                             <Img
-                                src={screenshot}
+                                src={resolveAsset(screenshot)}
                                 style={{
                                     width: '100%',
                                     height: screenshotHeight,
@@ -222,20 +229,6 @@ export const CarouselItemSlide: React.FC<CarouselItemSlideProps> = ({
                 {brandName}
             </div>
 
-            {/* Slide counter - bottom right */}
-            <div
-                style={{
-                    position: 'absolute',
-                    bottom: spacing.pagePadding,
-                    right: spacing.pagePadding,
-                    fontFamily: fonts.body,
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: 'rgba(255,255,255,0.7)',
-                }}
-            >
-                {slideNumber}/{totalSlides}
-            </div>
         </AbsoluteFill>
     );
 };
