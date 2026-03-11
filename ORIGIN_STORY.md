@@ -1,0 +1,75 @@
+On paper, my journey looks like a perfect, upward trajectory. But when you only see the wins, it’s easy to compare yourself and feel behind. The reality is that no one's starting line is the same, and those milestones hide a lot of invisible struggles. I share mine not to claim my path was the hardest, but to illustrate exactly why I have made it my mission to democratize access to knowledge and opportunity. 
+
+As the first in my family to study STEM, I had to figure out how to navigate the tech industry completely blind. That isolation was compounded by my background. My parents were immigrants who had to build every basic asset from scratch: careers, cars, a home. 
+
+My non-citizen status meant I was ineligible for scholarships or student loans, leaving me dependent on luck and welfare programs for my education. Growing up in a B40 household (the bottom 40% of income earners), we had absolutely no financial safety net. I started working by 17 to support myself, and when my dad suffered a stroke and lost his capability to work, the pressure only multiplied. I had to step up to help shoulder his medical bills and my sister’s university tuition. 
+
+> *Financial independence wasn't an entrepreneurial flex; it was pure survival.*
+
+This scarcity permeated every decision. I quietly passed on exchange programs and countless other opportunities simply because the financial barriers were too high. I ignored my other interests and hyper-focused on computers, knowing a screen and a Wi-Fi connection were the most accessible tickets out of my situation. Even at home, I never had my own room. That complete lack of personal space meant I never had the privacy to take calls or speak freely, fueling a paralyzing social anxiety growing up.
+
+## 2. The Myth of Meritocracy
+
+Surviving these hurdles made me realize that the biggest barriers to success are often a lack of **"invisible privileges"**, the quiet financial, social, and structural advantages that traditional systems assume you have. This realization shattered the myth of meritocracy for me. 
+
+Historically, meritocracy and education were supposed to be the ultimate equalizers, designed to give everyone an equal opportunity regardless of their background. But today, the system doesn't just reward raw talent or hard work; it disproportionately rewards those who already have a head start. Potential is universally distributed, but the resources to cultivate it are not.
+
+This systemic bias is the engine behind global wealth inequality. It is why the rich persistently get richer while the poor get poorer. It’s why we live in a paradox where billionaires and immense food waste exist alongside crippling poverty, starvation, and homelessness. These aren't isolated issues; they are downstream symptoms of a world where opportunity is hoarded.
+
+I managed to break through, but I also recognized how much luck played a role in my survival. There are countless other brilliant kids out there facing their own invisible barriers who never get the opportunity to shine simply because the system isn't built for them. Knowing that raw human potential is constantly lost to structural inequality compelled me to make this my life's mission: **democratizing access to knowledge and opportunity.** Because if we can level the playing field at the root, we don't just unlock individual potential, we begin to dismantle the foundation of those broader societal crises.
+
+## 3. The Frog in the Well
+
+My understanding of this inequality first hit me in the sixth grade at a national math olympiad camp. Up until then, I genuinely believed I was at the top of the world. Coming from a small school with barely any competition, I was consecutively ranked first and considered the best student without breaking a sweat. I had reached the Top 10 in the country coasting entirely on raw intuition. 
+
+There, sitting beside kids whose parents fed them complex equations daily and paid for specialized academies, I realized I was just a frog in a well. I saw the stark disparity in privilege and wondered what I could achieve with those same resources.
+
+Shortly after that camp, I finally got access to the internet, and I realized exactly how far behind I truly was. But the web also gave me hope. I devoured the mythology of the internet: stories of teenage hackers, Mark Zuckerberg, and prodigies who built empires with nothing but a computer and a Wi-Fi connection. 
+
+I tried to teach myself to code and failed repeatedly. Yet, through sheer resourcefulness, I managed to hack half of my classmates FB account at 11 years old without even knowing how to write proper code. That gave me an incredible surge of power. I realized that having the world's largest library at my fingertips made anything possible.
+
+## 4. Bypassing the System
+
+I began applying this intense thirst for learning to the rest of my life. I realized my traditional classroom was moving agonizingly slow, and I wanted to learn faster than my environment would allow. When I finally discovered the IGCSE system at 14, I decided to bypass traditional schooling entirely to skip grades. 
+
+It was a chaotic, desperate sprint. I couldn't afford tutors, so I borrowed textbooks and leaned heavily on Khan Academy and downloaded past papers. I crammed two years of syllabus into four to six months of self-study, all while still balancing my regular public school during the day. But the hardest part wasn't the science or the math. It was the language. My school was in Indonesian, and I barely spoke a word of English. Suddenly, I had to relearn every single subject, every technical term, and every complex equation completely in English from scratch.
+
+I somehow passed and made it into university, but that grueling period of self-study changed my entire worldview. Relying so heavily on free online resources made me realize the profound impact of accessible education. Sal Khan’s mission to provide free education for everyone deeply inspired me. I wanted to be like him, but I knew I had to build my "career capital" first. You can’t give what you don’t have. 
+
+## 5. The "Wrong" Degree
+
+So, I put my head down to become undeniably skilled. I entered university at 15 as the youngest in my cohort, but since I was the first in my family to study STEM, I had absolutely no guidance. When it came time to pick a major, I literally just googled images of "Iron Man" and "robotics" and chose the degree that had the closest pictures. That’s how I ended up in Mechanical Engineering.
+
+It didn't take long to realize that mechanical engineering was mostly thermodynamics and fluid mechanics, not exactly Iron Man. I loved the code, but I hated the hardware. I had been trying to teach myself to code since I was 11, failing and giving up every single year. But at 16, I tried game development, and because it was actually fun, it finally stuck. I taught myself to code and successfully published mobile games with thousands of downloads. 
+
+Armed with that self-taught portfolio, I landed my first tech internship at 17, despite still being a mechanical engineering student. That job cemented everything. I finally admitted I was in the wrong field and switched my major to Computer Engineering. Switching late meant I had to overload my credits every single semester just to catch up on missed classes, juggling intense academic pressure with part-time work. 
+
+But that internship also showed me something else. There was a massive gap between academic curriculums and industry reality. I realized my practical, self-taught experience could help other students bridge that gap. I finally felt skilled enough to share something of value, and that’s when I started my mission.
+
+## 6. Building My Own Stage
+
+I wanted to start sharing, but my social anxiety remained a massive internal roadblock. I knew nobody was going to hand a microphone to a terrified, unproven kid. I had to build my own stage. Despite the fear, I hosted free workshops, founded a tech club to create a platform for myself, and started writing a blog. 
+
+> *That simple act of facing my fears and learning in public changed everything.* 
+
+Because I was writing detailed technical tutorials on my blog that didn't exist anywhere else, an MIT professor eventually found my work. This led to a formal research collaboration, and at 19, I co-authored a generative AI paper with MIT. 
+
+That visibility kickstarted my global career. By the time I graduated as valedictorian at 20, I had built a six-figure remote consulting business, with **90% of my clients coming directly from those free tutorials.** I never pitched once. It proved to me that sharing what you know is the highest-leverage thing you can do.
+
+## 7. Scaling The Impact
+
+To fulfill my mission of democratizing access to knowledge, I realized I had to scale my impact step by step. I started by hosting a single workshop to share what I knew; today, that has evolved into delivering over 20 talks. But a talk only reaches the people in the room. I wanted to reach the world, so I started writing a blog and creating digital content. Today, content I made has amassed over 5 million views.
+
+Yet, relying on myself as a solo creator still had a ceiling. I didn't just want to share my own knowledge, I wanted to scale the ability for others to do it, too. That’s why we built Cleve. We grew it to 100,000 users within six months because the core thesis resonated: real scale is empowering others to teach. 
+
+But building a tool wasn't enough; you have to build a community around the idea and actively push people to share what they know. That realization led me to start the social initiative **AIforGood.my**.
+
+## 8. Rebuilding Education
+
+My ultimate mission is to fundamentally change the education system. Historically, education was supposed to be the great equalizer: the single path to solving inequality and making true meritocracy a reality. But while technology and AI have shaken the world, our traditional education system remains deeply archaic. 
+
+This belief wasn't just shaped by my own struggles; it was modeled by my parents. I watched my mother, who had spent her life as a housewife, go back to school and earn her degree in education n her fifties. And despite our financial barriers, they fundraised from donors and relatives to build a school for underprivileged children in rural Aceh, sponsoring their education and teaching them life skills. 
+
+> *They taught me that you do not need permission, or even wealth, to build the world you want to see.*
+
+I have dedicated my career to dismantling these barriers and democratizing opportunity through technology. Building on the internet was the first step. The next frontier is doing it through AI. We are no longer waiting for the system to fix itself. We are building the architecture that lets anyone, regardless of their background, finally thrive.

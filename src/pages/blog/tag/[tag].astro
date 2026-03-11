@@ -1,0 +1,125 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import YearContainer from '@components/blog/YearContainer.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import TagCloud from '@components/TagCloud.astro';
+import { getCleveWritings } from '@utils/cleveCache';
+import { slugify } from '@utils/slugify';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+    const blogPosts = await getCollection('blog');
+    const cleveData = await getCleveWritings();
+    const cleveWritings = cleveData.writings || [];
+
+    // Collect all unique tags (including categories) from both sources
+    const localTags = blogPosts.flatMap((post) => [
+        ...(post.data.category ? [post.data.category] : []),
+        ...(post.data.tags || [])
+    ]);
+    const cleveTags = cleveWritings.flatMap((w: any) => [
+        ...(w.category ? [w.category] : []),
+        ...(w.tags || [])
+    ]);
+    const tags = [...new Set([...localTags, ...cleveTags])];
+
+    return tags.map((tag) => ({
+        params: { tag },
+        props: { tag }
+    }));
+}
+
+const { tag } = Astro.params;
+
+// Get local blog posts
+const allLocalPosts = await getCollection('blog');
+
+// Get Cleve writings
+const cleveData = await getCleveWritings();
+const cleveWritings = cleveData.writings || [];
+
+// Transform Cleve writings to match blog post format
+const cleveAsPosts = cleveWritings.map((writing: any) => {
+    const content = writing.markdown || writing.content_markdown || '';
+    const date = new Date(writing.publishedAt || writing.created_at || Date.now());
+    return {
+        data: {
+            title: writing.title,
+            date,
+            category: writing.category || 'uncategorized',
+            tags: writing.tags || [],
+            description: content.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...',
+            source: 'cleve'
+        },
+        slug: slugify(writing.title),
+        body: content,
+        id: writing.id,
+        collection: 'blog' as const
+    };
+});
+
+const allBlogPosts = [...allLocalPosts, ...cleveAsPosts];
+const filteredPosts = allBlogPosts.filter((post) =>
+    post.data.category === tag || (post.data.tags || []).includes(tag)
+);
+const sortedPosts = filteredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const postsByYear = sortedPosts.reduce(
+    (acc, post) => {
+        const year = post.data.date.getFullYear();
+        if (!acc[year]) {
+            acc[year] = [];
+        }
+        acc[year].push(post);
+        return acc;
+    },
+    {} as Record<number, typeof sortedPosts>
+);
+
+const years = Object.keys(postsByYear)
+    .map(Number)
+    .sort((a, b) => b - a);
+
+// Build tag cloud from all posts (categories + tags combined)
+const allTags = allBlogPosts.flatMap((post) => [
+    ...(post.data.category ? [post.data.category] : []),
+    ...(post.data.tags || [])
+]);
+const tagCounts = allTags.reduce(
+    (acc, t) => {
+        acc[t] = (acc[t] || 0) + 1;
+        return acc;
+    },
+    {} as Record<string, number>
+);
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+---
+
+<Layout title={`Blog | #${tag}`}>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Blog">
+                Posts tagged with <strong>#{tag}</strong>.
+            </SectionContent>
+
+            <TagCloud
+                tags={tagCloudData}
+                basePath="/blog"
+                selectedTag={tag}
+                filterPath="tag"
+                filterLabel="tag"
+                total={allBlogPosts.length}
+            />
+
+            <div>
+                {years.map((year) => <YearContainer posts={postsByYear[year]} year={year} />)}
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>
+
+<script src="../../../scripts/listItemImageHoverEffect.js"></script>

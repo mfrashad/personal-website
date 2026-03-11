@@ -8,7 +8,7 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "node -v && npm -v && astro build",
+        "build": "node -v && npm -v && astro build && node scripts/trim-vercel-functions.mjs",
         "prebuild": "npm run build:all-data",
         "preview": "astro preview",
         "astro": "astro",
@@ -17,6 +17,7 @@
         "fetch:resource-images": "tsx scripts/fetch-resource-images.ts",
         "fetch:resource-screenshots": "tsx scripts/fetch-resource-screenshots.ts",
         "fetch:book-covers": "tsx scripts/fetch-book-covers.ts",
+        "fetch:game-anime-images": "tsx scripts/fetch-game-anime-images.ts",
         "migrate:blog": "tsx scripts/migrate-blog-frontmatter.ts",
         "build:links": "tsx scripts/generate-links.ts",
         "build:topics": "tsx scripts/generate-topics.ts",
@@ -24,7 +25,10 @@
         "build:all-data": "npm run fetch:cleve && npm run build:links && npm run build:topics && npm run build:webmentions",
         "update:hashtags": "tsx scripts/update-hashtags.ts",
         "update:hashtags:dry": "tsx scripts/update-hashtags.ts --dry-run",
-        "remotion:studio": "npx remotion studio remotion/index.ts"
+        "remotion:studio": "npx remotion studio remotion/index.ts",
+        "chrome:debug": "open -a 'Google Chrome' --args --remote-debugging-port=9222",
+        "process:speaking-images": "tsx scripts/process-speaking-images.ts",
+        "process:content-images": "tsx scripts/process-content-images.ts"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
@@ -53,6 +57,7 @@
         "astro-seo": "^0.8.4",
         "canvas-confetti": "^1.9.4",
         "clsx": "^2.1.1",
+        "convex": "^1.32.0",
         "dotenv": "^17.2.3",
         "exifreader": "^4.31.2",
         "fast-glob": "^3.3.3",
@@ -66,6 +71,7 @@
         "node-html-parser": "^7.0.1",
         "p5": "^1.11.7",
         "p5.js-svg": "^1.6.0",
+        "playwright": "^1.58.2",
         "puppeteer-extra": "^3.3.6",
         "puppeteer-extra-plugin-stealth": "^2.11.2",
         "react": "^18.3.1",
@@ -85,6 +91,7 @@
         "remotion": "^4.0.421",
         "resend": "^6.0.1",
         "sanitize-html": "^2.14.0",
+        "sharp": "^0.34.5",
         "tailwind-merge": "^3.4.0",
         "tailwind-scrollbar-hide": "^2.0.0",
         "tailwindcss": "^3.3.5",

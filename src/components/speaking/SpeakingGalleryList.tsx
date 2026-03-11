@@ -96,12 +96,12 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                         {duplicatedLogos.map((logo, i) => (
                             <div
                                 key={`${logo.src}-${i}`}
-                                className="flex-shrink-0 mx-6 flex items-center justify-center w-[100px]"
+                                className="flex-shrink-0 mx-8 flex items-center justify-center w-[120px]"
                             >
                                 <img
                                     src={logo.src}
                                     alt={logo.name}
-                                    className="h-8 md:h-10 w-auto max-w-[80px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                                    className="max-h-12 md:max-h-14 max-w-[120px] w-auto h-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                 />
                             </div>
                         ))}

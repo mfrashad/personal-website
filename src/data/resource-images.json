@@ -29,8 +29,8 @@
       "screenshot": "/resource-images/screenshots/docs-anthropic-com.png"
     },
     "buildclub-ai": {
-      "favicon": "/resource-images/favicons/buildclub-ai.webp",
-      "ogImage": "/resource-images/og/buildclub-ai.webp",
+      "favicon": "/resource-images/favicons/buildclub-ai.png",
+      "ogImage": "/resource-images/og/buildclub-ai.jpg",
       "screenshot": "/resource-images/screenshots/buildclub-ai.png"
     },
     "buildwithai-my": {
@@ -417,7 +417,7 @@
       "screenshot": "/resource-images/screenshots/convex-dev.png"
     },
     "supabase-com": {
-      "favicon": "/resource-images/favicons/supabase-com.ico",
+      "favicon": "/resource-images/favicons/supabase-com.png",
       "ogImage": "/resource-images/og/supabase-com.png",
       "screenshot": "/resource-images/screenshots/supabase-com.png"
     },
@@ -1376,6 +1376,29 @@
       "favicon": "/resource-images/favicons/claude-com-product-claude-code.png",
       "ogImage": "/resource-images/og/claude-com-product-claude-code.jpg",
       "screenshot": "/resource-images/screenshots/claude-com-product-claude-code.png"
+    },
+    "deepmind-google-technologies-veo": {
+      "favicon": "/resource-images/favicons/deepmind-google-technologies-veo.png",
+      "ogImage": "/resource-images/og/deepmind-google-technologies-veo.webp",
+      "screenshot": "/resource-images/screenshots/deepmind-google-technologies-veo.png"
+    },
+    "aws-amazon-com-developer-community-community-builders": {
+      "favicon": "/resource-images/favicons/aws-amazon-com-developer-community-community-builders.svg",
+      "ogImage": "/resource-images/og/aws-amazon-com-developer-community-community-builders.png",
+      "screenshot": "/resource-images/screenshots/aws-amazon-com-developer-community-community-builders.png"
+    },
+    "kuala-lumpur-aitinkerers-org": {
+      "favicon": "/resource-images/favicons/kuala-lumpur-aitinkerers-org.png",
+      "screenshot": "/resource-images/screenshots/kuala-lumpur-aitinkerers-org.png"
+    },
+    "igalia-com-coding-experience": {
+      "favicon": "/resource-images/favicons/igalia-com-coding-experience.png",
+      "ogImage": "/resource-images/og/igalia-com-coding-experience.png",
+      "screenshot": "/resource-images/screenshots/igalia-com-coding-experience.png"
+    },
+    "mf2-dev": {
+      "favicon": "/resource-images/favicons/mf2-dev.png",
+      "screenshot": "/resource-images/screenshots/mf2-dev.png"
     }
   }
 }

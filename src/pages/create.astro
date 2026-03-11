@@ -1,0 +1,46 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import ContentPage from '@components/content/ContentPage';
+import { contentPieces, contentCategories, brandLogos, getContentByType, getTotalMetrics } from '@data/content-creation';
+import imageManifest from '@data/content-images.json';
+
+const contentByType = getContentByType();
+const totalMetrics = getTotalMetrics();
+
+// Serialize for React (convert Date to ISO string)
+const serializedByType: Record<string, any[]> = {};
+for (const [type, pieces] of Object.entries(contentByType)) {
+    serializedByType[type] = pieces.map(p => ({
+        ...p,
+        date: p.date.toISOString(),
+    }));
+}
+---
+
+<Layout
+    title="Content Creation | Rashad"
+    description="Content creation portfolio - cafe hopping, educational content, brand collaborations, and experience reviews"
+>
+    <Grid>
+        <GridBox desktopFull classes="pt-20 sm:pt-40 lg:pt-28 pb-32">
+            <div class="mx-auto w-full max-w-[960px]">
+                <h1 class="mb-2 text-xl font-bold md:text-3xl">Content Creation</h1>
+                <p class="mb-6 text-sm text-neutral-600 md:text-lg md:mb-8">
+                    Cafe hopping, educational content, brand collaborations, and experience reviews.
+                </p>
+
+                <ContentPage
+                    client:visible
+                    brandLogos={brandLogos}
+                    contentByType={serializedByType}
+                    categories={contentCategories}
+                    imageManifest={imageManifest}
+                    totalMetrics={totalMetrics}
+                />
+
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

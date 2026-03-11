@@ -19,19 +19,24 @@ const cleveData = await getCleveWritings();
 const cleveWritings = cleveData.writings || [];
 
 // Transform Cleve writings to match blog post format
-const cleveAsPosts = cleveWritings.map((writing: any) => ({
-    data: {
-        title: writing.title,
-        date: new Date(writing.created_at),
-        category: writing.category || 'articles',
-        description: writing.content_markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...',
-        source: 'cleve'
-    },
-    slug: slugify(writing.title),
-    body: writing.content_markdown,
-    id: writing.id,
-    collection: 'blog' as const
-}));
+const cleveAsPosts = cleveWritings.map((writing: any) => {
+    const content = writing.markdown || writing.content_markdown || '';
+    const date = new Date(writing.publishedAt || writing.created_at || Date.now());
+    return {
+        data: {
+            title: writing.title,
+            date,
+            category: writing.category || 'uncategorized',
+            tags: writing.tags || [],
+            description: content.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...',
+            source: 'cleve'
+        },
+        slug: slugify(writing.title),
+        body: content,
+        id: writing.id,
+        collection: 'blog' as const
+    };
+});
 
 // Combine all posts
 const allBlogPosts = [...localBlogPosts, ...cleveAsPosts];
@@ -54,17 +59,19 @@ const years = Object.keys(postsByYear)
     .map(Number)
     .sort((a, b) => b - a);
 
-// Generate tag counts for the tag cloud
-const allCategories = allBlogPosts.flatMap((post) => post.data.category || []);
-const categoryCounts = allCategories.reduce(
+// Combine categories and tags into one cloud — all link to /blog/tag/
+const allTags = allBlogPosts.flatMap((post) => [
+    ...(post.data.category ? [post.data.category] : []),
+    ...(post.data.tags || [])
+]);
+const tagCounts = allTags.reduce(
     (acc, tag) => {
         acc[tag] = (acc[tag] || 0) + 1;
         return acc;
     },
     {} as Record<string, number>
 );
-
-const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => ({ name, count }));
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 ---
 
 <Layout title="Blog | Rashad">
@@ -103,10 +110,10 @@ const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => 
             </div>
 
             <TagCloud
-                tags={categoryCloudData}
+                tags={tagCloudData}
                 basePath="/blog"
-                filterPath="category"
-                filterLabel="category"
+                filterPath="tag"
+                filterLabel="tag"
                 total={allBlogPosts.length}
             />
 

@@ -147,7 +147,7 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 3687,
         rotation: 7,
         zIndex: 109,
-        enabled: true
+        enabled: false
     },
     {
         src: codeImg.src,

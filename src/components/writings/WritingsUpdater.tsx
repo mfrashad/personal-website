@@ -42,7 +42,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
 
                 // Dispatch event to update ContributionGraph
                 const postsForGraph = newWritings.map(w => ({
-                    date: new Date(w.created_at),
+                    date: new Date(w.publishedAt),
                     title: w.title
                 }));
                 const event = new CustomEvent<NewWritingsEventDetail>(NEW_WRITINGS_EVENT, {
@@ -75,7 +75,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
 
         const maxPosts = 6; // Maximum number of posts to display
 
-        posts.forEach(post => {
+        for (const post of posts) {
             const postElement = createCompactPostElement(post, true);
             // Insert at the beginning (newest first)
             homepageContainer.insertBefore(postElement, homepageContainer.firstChild);
@@ -84,7 +84,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
             requestAnimationFrame(() => {
                 postElement.classList.remove('opacity-0', 'translate-y-2');
             });
-        });
+        }
 
         // Remove oldest posts to maintain max limit
         const allPosts = homepageContainer.children;
@@ -100,7 +100,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
         div.setAttribute('data-new-post', 'true');
 
         const slug = slugify(post.title);
-        const date = new Date(post.created_at);
+        const date = new Date(post.publishedAt);
         const month = date.getMonth() + 1;
         const day = date.getDate();
         const formattedDate = `${month}/${day}`;
@@ -140,8 +140,8 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
 
     // Insert new posts into the existing DOM structure (blog page with year containers)
     const insertNewPosts = (posts: CleveWriting[]) => {
-        posts.forEach(post => {
-            const postYear = new Date(post.created_at).getFullYear();
+        for (const post of posts) {
+            const postYear = new Date(post.publishedAt).getFullYear();
             const yearContainer = document.querySelector(`[data-year="${postYear}"]`);
 
             if (yearContainer) {
@@ -150,7 +150,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
                     // Insert at the correct position based on date
                     const postElement = createPostElement(post, true);
                     const existingPosts = postsContainer.querySelectorAll('[data-post-date]');
-                    const postDate = new Date(post.created_at).getTime();
+                    const postDate = post.publishedAt;
 
                     let inserted = false;
                     for (const existing of existingPosts) {
@@ -172,24 +172,24 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
                     });
                 }
             }
-        });
+        }
     };
 
     // Create a post element that matches the BlogPostItem structure
     const createPostElement = (post: CleveWriting, isNew: boolean): HTMLElement => {
         const div = document.createElement('div');
         div.className = 'list-item-image-hover-effect group relative flex flex-col justify-between gap-3 border-b border-neutral-300 py-3 md:flex-row md:gap-8 md:py-4 transition-all duration-500 opacity-0 translate-y-2';
-        div.setAttribute('data-post-date', new Date(post.created_at).getTime().toString());
+        div.setAttribute('data-post-date', post.publishedAt.toString());
         div.setAttribute('data-new-post', 'true');
 
         const slug = slugify(post.title);
-        const formattedDate = formatDate(post.created_at);
-        const excerpt = post.content_markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim();
+        const formattedDateStr = formatDate(post.publishedAt);
+        const excerpt = post.markdown.substring(0, 200).replace(/[#*\n]/g, ' ').trim();
 
         div.innerHTML = `
             <div class="flex items-start justify-between gap-10 md:items-center">
                 <div class="hidden font-mono md:block shrink-0">
-                    ${formattedDate}
+                    ${formattedDateStr}
                 </div>
                 <p class="text-base flex flex-col">
                     <span class="font-bold flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function WritingsUpdater({ initialWritings, onNewWritings }: Writ
                 </div>
             </div>
             <div class="flex items-center gap-3 md:gap-6">
-                <div class="font-mono text-neutral-400 md:hidden">${formattedDate}</div>
+                <div class="font-mono text-neutral-400 md:hidden">${formattedDateStr}</div>
                 <div class="font-mono text-neutral-400 md:hidden">|</div>
                 <div class="text-neutral-400">
                     <div class="flex items-center gap-2">

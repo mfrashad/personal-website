@@ -137,17 +137,32 @@ const allPosts = [...localPosts, ...allCleveAsPosts].sort(
 const latestPosts = allPosts.slice(0, 6);
 
 // Get speaking engagements
-import { getLatestSpeaking } from '@data/speaking';
+import { getLatestSpeaking, speakingEngagements } from '@data/speaking';
 import speakingImageManifest from '@data/speaking-images.json';
 const latestSpeaking = getLatestSpeaking(8);
 const serializedSpeaking = latestSpeaking.map(e => ({ ...e, date: e.date.toISOString() }));
+const allSpeakingLogos = (() => {
+    const seen = new Set<string>();
+    const logos: { src: string; name: string }[] = [];
+    for (const eng of speakingEngagements) {
+        if (eng.logos) {
+            for (const logo of eng.logos) {
+                if (!seen.has(logo)) {
+                    seen.add(logo);
+                    logos.push({ src: logo, name: eng.organizer });
+                }
+            }
+        }
+    }
+    return logos;
+})();
 
 // Get bookmarks
 const allBookmarks: Bookmark[] = await fetchBookmarks(0);
 const latestBookmarks = allBookmarks.slice(0, 6);
 
 // Content creation data
-import { contentPieces, contentCategories } from '@data/content-creation';
+import { contentPieces, contentCategories, brandLogos } from '@data/content-creation';
 import contentImageManifest from '@data/content-images.json';
 
 const contentByCategory: Record<string, any[]> = {};
@@ -353,7 +368,7 @@ import BookSection from '@components/books/BookSection.astro';
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-                    <SpeakingSection engagements={serializedSpeaking} imageManifest={speakingImageManifest} client:visible />
+                    <SpeakingSection engagements={serializedSpeaking} imageManifest={speakingImageManifest} allLogos={allSpeakingLogos} client:visible />
 
                     <!-- View All Button -->
                     <div class="mt-8 text-center">
@@ -373,7 +388,7 @@ import BookSection from '@components/books/BookSection.astro';
 
         <!-- Content Creation Section -->
         <section>
-            <SectionContent title="Content Creation">
+            <SectionContent title="Content Creation" classes="!mb-3 sm:!mb-4 lg:!mb-6">
                 5M+ views and 17K followers across TikTok and Instagram. Here's a preview of my content.
             </SectionContent>
             <Grid>
@@ -382,6 +397,7 @@ import BookSection from '@components/books/BookSection.astro';
                         piecesByCategory={contentByCategory}
                         categoryLabels={categoryLabels}
                         imageManifest={contentImageManifest}
+                        brandLogos={brandLogos}
                         client:visible
                     />
 

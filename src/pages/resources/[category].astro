@@ -6,11 +6,7 @@ import SectionContent from '@components/SectionContent.astro';
 import { Icon } from 'astro-icon/components';
 import { favoriteProducts } from '@data/lists/favorite-products';
 import { favoriteSoftware } from '@data/lists/favorite-software';
-import { favoritePodcasts } from '@data/lists/favorite-podcasts';
-import { favoriteBlogs } from '@data/lists/favorite-blogs';
 import { favoriteGames } from '@data/lists/favorite-games';
-import { favoriteMusic } from '@data/lists/favorite-music';
-import { favoritePeople } from '@data/lists/favorite-people';
 import { favoriteAnime } from '@data/lists/favorite-anime';
 import { favoriteNonfictionBooks } from '@data/lists/favorite-nonfiction-books';
 import { favoriteNovels } from '@data/lists/favorite-novels';
@@ -49,11 +45,7 @@ export async function getStaticPaths() {
     return [
         { params: { category: 'products' } },
         { params: { category: 'software' } },
-        { params: { category: 'podcasts' } },
-        { params: { category: 'blogs' } },
         { params: { category: 'games' } },
-        { params: { category: 'music' } },
-        { params: { category: 'people' } },
         { params: { category: 'anime' } },
         { params: { category: 'nonfiction-books' } },
         { params: { category: 'novels' } },
@@ -93,11 +85,7 @@ const { category } = Astro.params;
 const listData: Record<string, any> = {
     products: { items: favoriteProducts, title: 'Best Purchases', icon: 'ph:shopping-bag' },
     software: { items: favoriteSoftware, title: 'Favorite Software', icon: 'ph:app-window' },
-    podcasts: { items: favoritePodcasts, title: 'Favorite Podcasts', icon: 'ph:microphone' },
-    blogs: { items: favoriteBlogs, title: 'Favorite Blogs', icon: 'ph:article' },
     games: { items: favoriteGames, title: 'Favorite Games', icon: 'ph:game-controller' },
-    music: { items: favoriteMusic, title: 'Favorite Music', icon: 'ph:music-notes' },
-    people: { items: favoritePeople, title: 'People Who Inspire Me', icon: 'ph:users' },
     anime: { items: favoriteAnime, title: 'Favorite Anime', icon: 'ph:television' },
     'nonfiction-books': { items: favoriteNonfictionBooks, title: 'Favorite Nonfiction Books', icon: 'ph:book-open' },
     novels: { items: favoriteNovels, title: 'Favorite Novels', icon: 'ph:book' },

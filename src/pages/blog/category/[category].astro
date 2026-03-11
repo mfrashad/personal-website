@@ -6,26 +6,58 @@ import YearContainer from '@components/blog/YearContainer.astro';
 import GridBox from '@components/GridBox.astro';
 import SectionContent from '@components/SectionContent.astro';
 import TagCloud from '@components/TagCloud.astro';
+import { getCleveWritings } from '@utils/cleveCache';
+import { slugify } from '@utils/slugify';
 
-// Generate a path for each unique category
+export const prerender = true;
+
+// Generate a path for each unique category (local + Cleve)
 export async function getStaticPaths() {
     const blogPosts = await getCollection('blog');
+    const cleveData = await getCleveWritings();
+    const cleveWritings = cleveData.writings || [];
 
-    // Get unique categories
-    const categories = [...new Set(blogPosts.map((post) => post.data.category))];
+    // Get unique categories from both sources
+    const localCategories = blogPosts.map((post) => post.data.category);
+    const cleveCategories = cleveWritings.map((w: any) => w.category || 'uncategorized');
+    const categories = [...new Set([...localCategories, ...cleveCategories])];
 
-    // Create a path for each category
-    return categories.map((category) => {
-        return {
-            params: { category },
-            props: { category }
-        };
-    });
+    return categories.map((category) => ({
+        params: { category },
+        props: { category }
+    }));
 }
 
 const { category } = Astro.params;
 
-const allBlogPosts = await getCollection('blog');
+// Get local blog posts
+const allLocalPosts = await getCollection('blog');
+
+// Get Cleve writings
+const cleveData = await getCleveWritings();
+const cleveWritings = cleveData.writings || [];
+
+// Transform Cleve writings to match blog post format
+const cleveAsPosts = cleveWritings.map((writing: any) => {
+    const content = writing.markdown || writing.content_markdown || '';
+    const date = new Date(writing.publishedAt || writing.created_at || Date.now());
+    return {
+        data: {
+            title: writing.title,
+            date,
+            category: writing.category || 'uncategorized',
+            tags: writing.tags || [],
+            description: content.substring(0, 200).replace(/[#*\n]/g, ' ').trim() + '...',
+            source: 'cleve'
+        },
+        slug: slugify(writing.title),
+        body: content,
+        id: writing.id,
+        collection: 'blog' as const
+    };
+});
+
+const allBlogPosts = [...allLocalPosts, ...cleveAsPosts];
 const filteredPosts = allBlogPosts.filter((post) => post.data.category === category);
 const sortedPosts = filteredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
@@ -45,15 +77,18 @@ const years = Object.keys(postsByYear)
     .map(Number)
     .sort((a, b) => b - a);
 
-const allCategories = allBlogPosts.flatMap((post) => post.data.category || []);
-const categoryCounts = allCategories.reduce(
+const allTags = allBlogPosts.flatMap((post) => [
+    ...(post.data.category ? [post.data.category] : []),
+    ...(post.data.tags || [])
+]);
+const tagCounts = allTags.reduce(
     (acc, tag) => {
         acc[tag] = (acc[tag] || 0) + 1;
         return acc;
     },
     {} as Record<string, number>
 );
-const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => ({ name, count }));
+const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 ---
 
 <Layout title={`Blog | ${category}`}>
@@ -61,18 +96,18 @@ const categoryCloudData = Object.entries(categoryCounts).map(([name, count]) => 
         <GridBox desktopFull>
             <SectionContent title="Blog">
                 After years of wanting to have a blog, I am finally putting pen to paper (or fingers
-                to keyboard). It took me some time to build the courage, but now I’m excited to dive
+                to keyboard). It took me some time to build the courage, but now I'm excited to dive
                 into a variety of topics that interest me. Your feedback and perspectives are always
                 welcome and I'm looking forward to the conversations that will come from these
                 posts.
             </SectionContent>
 
             <TagCloud
-                tags={categoryCloudData}
+                tags={tagCloudData}
                 basePath="/blog"
                 selectedTag={category}
-                filterPath="category"
-                filterLabel="category"
+                filterPath="tag"
+                filterLabel="tag"
                 total={allBlogPosts.length}
             />
 

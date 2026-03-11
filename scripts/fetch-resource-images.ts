@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {
-    domainKey,
+    resourceKey,
     fetchWithTimeout,
     extractFaviconUrl,
     extractOgImageUrl,
@@ -94,23 +94,23 @@ async function main() {
     const manifest = loadManifest();
     const items = collectItems();
 
-    // Deduplicate by domain
-    const domainMap = new Map<string, { name: string; url: string }>();
+    // Deduplicate by resource key (domain + path)
+    const resourceMap = new Map<string, { name: string; url: string }>();
     for (const item of items) {
-        const key = domainKey(item.url);
-        if (key && !domainMap.has(key)) {
-            domainMap.set(key, item);
+        const key = resourceKey(item.url);
+        if (key && !resourceMap.has(key)) {
+            resourceMap.set(key, item);
         }
     }
 
-    console.log(`Found ${domainMap.size} unique domains from ${items.length} items`);
+    console.log(`Found ${resourceMap.size} unique resources from ${items.length} items`);
 
     let processed = 0;
     let skipped = 0;
     let fetched = 0;
     let failed = 0;
 
-    for (const [key, item] of domainMap) {
+    for (const [key, item] of resourceMap) {
         processed++;
 
         // Skip if already in manifest and files exist
@@ -124,7 +124,7 @@ async function main() {
             }
         }
 
-        console.log(`[${processed}/${domainMap.size}] Fetching ${item.name} (${key})...`);
+        console.log(`[${processed}/${resourceMap.size}] Fetching ${item.name} (${key})...`);
 
         try {
             const res = await fetchWithTimeout(item.url);
@@ -180,7 +180,7 @@ async function main() {
     saveManifest(manifest);
 
     console.log('\n--- Summary ---');
-    console.log(`Total domains: ${domainMap.size}`);
+    console.log(`Total domains: ${resourceMap.size}`);
     console.log(`Skipped (cached): ${skipped}`);
     console.log(`Fetched: ${fetched}`);
     console.log(`Failed: ${failed}`);

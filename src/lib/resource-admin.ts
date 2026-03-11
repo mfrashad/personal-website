@@ -3,11 +3,7 @@ import * as path from 'path';
 export const listFileMap: Record<string, { file: string; varName: string; title: string; icon: string }> = {
     'products': { file: 'favorite-products.ts', varName: 'favoriteProducts', title: 'Best Purchases', icon: 'ph:shopping-bag' },
     'software': { file: 'favorite-software.ts', varName: 'favoriteSoftware', title: 'Favorite Software', icon: 'ph:app-window' },
-    'podcasts': { file: 'favorite-podcasts.ts', varName: 'favoritePodcasts', title: 'Favorite Podcasts', icon: 'ph:microphone' },
-    'blogs': { file: 'favorite-blogs.ts', varName: 'favoriteBlogs', title: 'Favorite Blogs', icon: 'ph:article' },
     'games': { file: 'favorite-games.ts', varName: 'favoriteGames', title: 'Favorite Games', icon: 'ph:game-controller' },
-    'music': { file: 'favorite-music.ts', varName: 'favoriteMusic', title: 'Favorite Music', icon: 'ph:music-notes' },
-    'people': { file: 'favorite-people.ts', varName: 'favoritePeople', title: 'People Who Inspire Me', icon: 'ph:users' },
     'anime': { file: 'favorite-anime.ts', varName: 'favoriteAnime', title: 'Favorite Anime', icon: 'ph:television' },
     'nonfiction-books': { file: 'favorite-nonfiction-books.ts', varName: 'favoriteNonfictionBooks', title: 'Favorite Nonfiction Books', icon: 'ph:book-open' },
     'novels': { file: 'favorite-novels.ts', varName: 'favoriteNovels', title: 'Favorite Novels', icon: 'ph:book' },
