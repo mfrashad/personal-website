@@ -135,12 +135,13 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                 setTimeout(() => {
                     if (overlay) {
                         overlay.classList.remove('active');
-                        // Reset progress bar after fade out
+                        // Fire event after overlay fade-out completes (0.3s CSS transition)
                         setTimeout(() => {
                             if (progressBar) {
                                 progressBar.style.width = '0';
                             }
-                        }, 200);
+                            window.dispatchEvent(new CustomEvent('page-revealed'));
+                        }, 300);
                     }
                 }, remainingTime);
             });

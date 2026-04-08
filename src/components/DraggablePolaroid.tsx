@@ -10,6 +10,10 @@ interface DraggablePolaroidProps {
     rotation?: number;
     zIndex?: number;
     onPositionChange?: (x: number, y: number) => void;
+    stackX?: number;
+    stackY?: number;
+    onStackPositionChange?: (x: number, y: number) => void;
+    animationDelay?: number;
 }
 
 export default function DraggablePolaroid({
@@ -20,20 +24,60 @@ export default function DraggablePolaroid({
     initialY = 100,
     rotation = 0,
     zIndex = 100,
-    onPositionChange
+    onPositionChange,
+    stackX,
+    stackY,
+    onStackPositionChange,
+    animationDelay = 0
 }: DraggablePolaroidProps) {
-    const [position, setPosition] = useState({ x: initialX, y: initialY });
+    const hasStackMode = stackX !== undefined && stackY !== undefined;
+    const [spreadPos, setSpreadPos] = useState({ x: initialX, y: initialY });
+    const [stackPos, setStackPos] = useState({ x: stackX ?? initialX, y: stackY ?? initialY });
+    const [isSpread, setIsSpread] = useState(!hasStackMode);
+    const [hasEntered, setHasEntered] = useState(!hasStackMode);
+    const [manualOverride, setManualOverride] = useState<boolean | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const polaroidRef = useRef<HTMLDivElement>(null);
     const prevInitialY = useRef(initialY);
 
-    // Update position when initialY changes (e.g., from bio slider offset)
+    // Determine current mode
+    const spread = manualOverride !== null ? manualOverride : hasEntered;
+
+    // Trigger spread animation after page overlay fades out
+    useEffect(() => {
+        if (!hasStackMode) return;
+        let timer: ReturnType<typeof setTimeout>;
+        const trigger = () => {
+            timer = setTimeout(() => {
+                setHasEntered(true);
+                setIsSpread(true);
+            }, animationDelay * 1000);
+        };
+        window.addEventListener('page-revealed', trigger, { once: true });
+        return () => {
+            window.removeEventListener('page-revealed', trigger);
+            clearTimeout(timer);
+        };
+    }, []);
+
+    // Listen for debug toggle
+    useEffect(() => {
+        if (!hasStackMode) return;
+        const handler = (e: CustomEvent) => {
+            setManualOverride(e.detail.spread);
+            setIsSpread(e.detail.spread);
+        };
+        window.addEventListener('toggle-spread', handler as EventListener);
+        return () => window.removeEventListener('toggle-spread', handler as EventListener);
+    }, []);
+
+    // Update spread position when initialY changes (e.g., from bio slider offset)
     useEffect(() => {
         if (prevInitialY.current !== initialY) {
             const delta = initialY - prevInitialY.current;
-            setPosition(prev => ({ ...prev, y: prev.y + delta }));
+            setSpreadPos(prev => ({ ...prev, y: prev.y + delta }));
             prevInitialY.current = initialY;
         }
     }, [initialY]);
@@ -58,16 +102,20 @@ export default function DraggablePolaroid({
             const deltaX = e.clientX - dragStart.x;
             const deltaY = e.clientY - dragStart.y;
 
-            const newX = position.x + deltaX;
-            const newY = position.y + deltaY;
-
-            setPosition({ x: newX, y: newY });
-            setDragStart({ x: e.clientX, y: e.clientY });
-
-            // Notify parent of position change
-            if (onPositionChange) {
-                onPositionChange(newX, newY);
+            if (isSpread) {
+                setSpreadPos(prev => {
+                    const next = { x: prev.x + deltaX, y: prev.y + deltaY };
+                    onPositionChange?.(next.x, next.y);
+                    return next;
+                });
+            } else {
+                setStackPos(prev => {
+                    const next = { x: prev.x + deltaX, y: prev.y + deltaY };
+                    onStackPositionChange?.(next.x, next.y);
+                    return next;
+                });
             }
+            setDragStart({ x: e.clientX, y: e.clientY });
         };
 
         const handleMouseUp = () => {
@@ -83,7 +131,7 @@ export default function DraggablePolaroid({
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [isDragging, dragStart, position, onPositionChange]);
+    }, [isDragging, dragStart, isSpread, onPositionChange, onStackPositionChange]);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
@@ -109,24 +157,23 @@ export default function DraggablePolaroid({
                 userSelect: 'none',
                 zIndex: isDragging ? 500 : zIndex,
             }}
-            initial={{
-                opacity: 0,
-                scale: 0,
-                rotate: rotation,
-                x: position.x,
-                y: position.y
-            }}
-            animate={{
+            animate={spread ? {
                 opacity: 1,
                 scale: isHovered ? 1.1 : 1,
                 rotate: isHovered ? rotation + 2 : rotation,
-                x: position.x,
-                y: position.y + (isHovered ? -10 : 0),
+                x: spreadPos.x,
+                y: spreadPos.y + (isHovered ? -10 : 0),
+            } : {
+                opacity: 0.8,
+                scale: 0.35,
+                rotate: 0,
+                x: stackPos.x,
+                y: stackPos.y,
             }}
             transition={{
                 type: "spring",
-                stiffness: 300,
-                damping: 20
+                stiffness: 80,
+                damping: 18,
             }}
             whileHover={{
                 boxShadow: "0 20px 40px rgba(0,0,0,0.2)"
