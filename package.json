@@ -72,6 +72,7 @@
         "p5": "^1.11.7",
         "p5.js-svg": "^1.6.0",
         "playwright": "^1.58.2",
+        "posthog-js": "^1.365.2",
         "puppeteer-extra": "^3.3.6",
         "puppeteer-extra-plugin-stealth": "^2.11.2",
         "react": "^18.3.1",

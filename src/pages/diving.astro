@@ -1,0 +1,120 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import MarineLifeCollection from '@components/diving/MarineLifeCollection';
+import {
+  diveStats,
+  diveLocations,
+  diveAccomplishments,
+  divingWishlist,
+} from '@data/diving';
+---
+
+<Layout
+  title="Diving | Rashad"
+  description="A tribute to my diving adventures — marine life encountered, dive locations, accomplishments, and bucket list"
+>
+  <Grid classes="py-40">
+    <GridBox desktopFull>
+      <!-- Header -->
+      <SectionContent title="Diving Notes" classes="!px-0">
+        <p>
+          A collection of my underwater adventures across Southeast Asia.
+          From coral reefs to open ocean encounters — documenting every dive,
+          every creature, and every unforgettable moment beneath the surface.
+        </p>
+      </SectionContent>
+
+      <!-- Dive Accomplishments & Stats -->
+      <div class="my-12">
+        <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-content-muted">
+          Dive Accomplishments
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          <div class="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-4 py-2.5 font-mono text-sm text-cyan-400">
+            Scuba Dives <span class="ml-1.5 font-bold">{diveStats.scubaDives}</span>
+          </div>
+          <div class="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-4 py-2.5 font-mono text-sm text-cyan-400">
+            Total Dives <span class="ml-1.5 font-bold">{diveStats.totalDives}</span>
+            <span class="ml-1 text-xs text-cyan-400/60">incl. free diving</span>
+          </div>
+          {diveAccomplishments.map((item) => {
+            const colors = {
+              certification: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+              experience: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+              record: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+            };
+            return (
+              <div
+                class={`rounded-lg border px-4 py-2.5 font-mono text-sm ${colors[item.category]}`}
+              >
+                {item.label}
+                {item.detail && (
+                  <span class="ml-1.5 font-bold">{item.detail}</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Marine Life Collection -->
+      <div class="my-12">
+        <MarineLifeCollection client:visible />
+      </div>
+
+      <!-- Places I've Dived -->
+      <div class="my-16">
+        <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-content-muted">
+          Places I've Dived
+        </h2>
+        <div class="grid gap-6 sm:grid-cols-2">
+          {diveLocations.map((loc) => (
+            <div class="rounded-xl border border-border-default bg-surface-secondary p-5">
+              <h3 class="mb-3 flex items-center gap-2 text-lg font-semibold text-content-headings">
+                <span>{loc.flag}</span>
+                {loc.country}
+              </h3>
+              <ul class="space-y-1.5">
+                {loc.spots.map((spot) => (
+                  <li class="flex items-center gap-2 text-sm text-content-body">
+                    <span class="h-1 w-1 flex-shrink-0 rounded-full bg-content-muted" />
+                    {spot.name}
+                    {spot.note && (
+                      <span class="rounded-full bg-surface-tertiary px-2 py-0.5 font-mono text-[10px] text-content-subtle">
+                        {spot.note}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Wishlist -->
+      <div class="my-16">
+        <h2 class="mb-6 font-mono text-xs uppercase tracking-widest text-content-muted">
+          Diving Wishlist
+        </h2>
+        <div class="grid gap-2 sm:grid-cols-2">
+          {divingWishlist.map((item) => (
+            <div class="flex items-center justify-between rounded-lg border border-border-subtle bg-surface-secondary px-4 py-3">
+              <span class="text-sm font-medium text-content-body">
+                {item.target}
+              </span>
+              {item.location && (
+                <span class="font-mono text-xs text-content-subtle">
+                  {item.location}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </GridBox>
+  </Grid>
+</Layout>
