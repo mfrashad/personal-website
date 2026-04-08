@@ -22,6 +22,7 @@ interface DecorationData {
     srcVar?: string; // Variable name for saving
     enabled?: boolean; // Whether this decoration is visible
     shadow?: boolean; // Whether to show shadow
+    href?: string; // Optional link on click
 }
 
 // Define decoration positions scattered across the page
@@ -105,7 +106,8 @@ const decorationsConfig: DecorationData[] = [
             scale: 0.6,
             zIndex: 95,
             enabled: true,
-            shadow: true
+            shadow: true,
+            href: '/diving'
         }
     ];
 
@@ -308,6 +310,7 @@ export default function ScatteredDecorations() {
                         scale={props.scale}
                         zIndex={props.zIndex}
                         shadow={decoration.shadow}
+                        href={decoration.href}
                         onPositionChange={(x, y) => handlePositionChange(index, x, y)}
                         stackX={itemStackX}
                         stackY={itemStackY}

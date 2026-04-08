@@ -18,6 +18,7 @@ interface DraggableImageProps {
     stackY?: number;
     onStackPositionChange?: (x: number, y: number) => void;
     animationDelay?: number;
+    href?: string;
 }
 
 export default function DraggableImage({
@@ -36,7 +37,8 @@ export default function DraggableImage({
     stackX,
     stackY,
     onStackPositionChange,
-    animationDelay = 0
+    animationDelay = 0,
+    href
 }: DraggableImageProps) {
     const hasStackMode = stackX !== undefined && stackY !== undefined;
     // DraggableImage uses CSS left/top for base position + motion x/y as offsets
@@ -52,6 +54,7 @@ export default function DraggableImage({
     const [isDragging, setIsDragging] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const dragStartPos = useRef({ x: 0, y: 0 });
     const imageRef = useRef<HTMLDivElement>(null);
 
     // Determine current mode
@@ -126,6 +129,17 @@ export default function DraggableImage({
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
         setDragStart({ x: e.clientX, y: e.clientY });
+        dragStartPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (!href) return;
+        const dx = e.clientX - dragStartPos.current.x;
+        const dy = e.clientY - dragStartPos.current.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 5) {
+            window.location.href = href;
+        }
     };
 
     return (
@@ -163,6 +177,7 @@ export default function DraggableImage({
                 boxShadow: shadow ? "0 20px 40px rgba(0,0,0,0.3)" : "none"
             }}
             onMouseDown={handleMouseDown}
+            onClick={handleClick}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >

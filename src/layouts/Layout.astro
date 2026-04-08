@@ -66,6 +66,19 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
             }}
         />
         <ViewTransitions />
+        <script>
+            import posthog from 'posthog-js';
+
+            posthog.init('phc_CFAN7pwGZs2nJmusjUy376PyCfuaSV5pB3VzBNoXDpXu', {
+                api_host: 'https://us.i.posthog.com',
+                defaults: '2026-01-30'
+            });
+
+            // Re-capture pageview on Astro client-side navigation
+            document.addEventListener('astro:page-load', () => {
+                posthog.capture('$pageview');
+            });
+        </script>
         <style is:global>
             /* Full-screen loading overlay */
             .page-loading-overlay {
