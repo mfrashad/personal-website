@@ -13,7 +13,7 @@ const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
  */
 export async function fetchAndCacheLetterboxdData(username: string, maxPages: number = 5): Promise<LetterboxdData> {
     console.log('Fetching fresh Letterboxd data...');
-    const data = await scrapeLetterboxdFilms(username, maxPages);
+    const freshData = await scrapeLetterboxdFilms(username, maxPages);
 
     // Only write to cache in local development (not serverless)
     if (!isServerless) {
@@ -24,15 +24,42 @@ export async function fetchAndCacheLetterboxdData(username: string, maxPages: nu
                 fs.mkdirSync(dir, { recursive: true });
             }
 
-            // Save to cache
-            fs.writeFileSync(CACHE_FILE, JSON.stringify(data, null, 2));
-            console.log(`Letterboxd data cached successfully! (${data.films.length} films)`);
+            // Merge with existing cache to preserve older films
+            let existingFilms: LetterboxdFilm[] = [];
+            if (fs.existsSync(CACHE_FILE)) {
+                try {
+                    const cached: LetterboxdData = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
+                    existingFilms = cached.films || [];
+                    console.log(`Existing cache has ${existingFilms.length} films`);
+                } catch {
+                    console.warn('Could not parse existing cache, starting fresh');
+                }
+            }
+
+            // Use fresh films as primary, add older films that aren't duplicates
+            const freshKeys = new Set(freshData.films.map(f => `${f.title}::${f.watched_on}`));
+            const mergedFilms = [
+                ...freshData.films,
+                ...existingFilms.filter(f => !freshKeys.has(`${f.title}::${f.watched_on}`))
+            ];
+
+            const mergedData: LetterboxdData = {
+                updated_at: new Date().toISOString(),
+                count: mergedFilms.length,
+                films: mergedFilms,
+            };
+
+            // Save merged data to cache
+            fs.writeFileSync(CACHE_FILE, JSON.stringify(mergedData, null, 2));
+            console.log(`Letterboxd data cached successfully! (${mergedFilms.length} films total, ${freshData.films.length} from RSS, ${mergedFilms.length - freshData.films.length} preserved from cache)`);
+
+            return mergedData;
         } catch (error) {
             console.warn('Could not write cache file:', error);
         }
     }
 
-    return data;
+    return freshData;
 }
 
 /**
