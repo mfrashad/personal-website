@@ -290,6 +290,9 @@ export default function ScatteredPolaroids() {
     const [showDevPanel, setShowDevPanel] = useState(false);
     const [enabledPolaroids, setEnabledPolaroids] = useState<Map<number, boolean>>(new Map());
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
+    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
+    const stackPositionsRef = useRef(stackPositions);
+    stackPositionsRef.current = stackPositions;
 
     // Y position threshold - polaroids below this should be affected by bio slider
     const HERO_THRESHOLD = 700;
@@ -354,6 +357,17 @@ export default function ScatteredPolaroids() {
         // Check if we're in development
         setIsDev(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
+        // Load saved stack positions
+        const saved = localStorage.getItem('polaroidStackPositions');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                const map = new Map<number, { x: number; y: number }>();
+                Object.entries(parsed).forEach(([k, v]) => map.set(Number(k), v as { x: number; y: number }));
+                setStackPositions(map);
+            } catch {}
+        }
+
         // Update on resize
         const handleResize = () => setScreenWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -364,11 +378,20 @@ export default function ScatteredPolaroids() {
             setBioOffset(newOffset);
         };
 
+        // Listen for save-stack-positions event from decorations
+        const handleSaveStack = () => {
+            const obj: Record<string, { x: number; y: number }> = {};
+            stackPositionsRef.current.forEach((v, k) => { obj[k] = v; });
+            localStorage.setItem('polaroidStackPositions', JSON.stringify(obj));
+        };
+
         window.addEventListener('bioLevelChange', handleBioLevelChange as EventListener);
+        window.addEventListener('save-stack-positions', handleSaveStack);
 
         return () => {
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('bioLevelChange', handleBioLevelChange as EventListener);
+            window.removeEventListener('save-stack-positions', handleSaveStack);
         };
     }, []);
 
@@ -466,6 +489,10 @@ export default function ScatteredPolaroids() {
     // Don't render until we have screen width
     if (screenWidth === 0) return null;
 
+    // Default stack center for items without a saved position
+    const defaultStackX = screenWidth / 2 - 100;
+    const defaultStackY = 150;
+
     return (
         <>
             {polaroids.map((polaroid, index) => {
@@ -477,8 +504,13 @@ export default function ScatteredPolaroids() {
                 const adjustedY = shouldOffset ? polaroid.initialY + bioOffset + 400 : polaroid.initialY;
 
                 // Scale X position based on viewport width
-                // Push outward for polaroids below hero to avoid obscuring content on smaller screens
                 const scaledX = scaleXPosition(polaroid.initialX || 100, shouldOffset);
+
+                // Only animate from center stack for hero-area polaroids
+                const isHeroArea = polaroid.initialY <= HERO_THRESHOLD;
+                const savedStack = stackPositions.get(index);
+                const itemStackX = savedStack?.x ?? defaultStackX;
+                const itemStackY = savedStack?.y ?? defaultStackY;
 
                 return (
                     <DraggablePolaroid
@@ -491,6 +523,18 @@ export default function ScatteredPolaroids() {
                         rotation={polaroid.rotation}
                         zIndex={polaroid.zIndex}
                         onPositionChange={(x, y) => handlePositionChange(index, x, y)}
+                        {...(isHeroArea ? {
+                            stackX: itemStackX,
+                            stackY: itemStackY,
+                            onStackPositionChange: (x: number, y: number) => {
+                                setStackPositions(prev => {
+                                    const next = new Map(prev);
+                                    next.set(index, { x, y });
+                                    return next;
+                                });
+                            },
+                            animationDelay: 0,
+                        } : {})}
                     />
                 );
             })}

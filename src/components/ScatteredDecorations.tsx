@@ -8,6 +8,7 @@ import kindleImg from '@assets/decorations/kindle.webp';
 import newspaperImg from '@assets/decorations/newspaper.webp';
 import openNotebookImg from '@assets/decorations/open-notebook.png';
 import penImg from '@assets/decorations/pen.png';
+import rescueDiverImg from '@assets/decorations/rescuediver.png';
 
 interface DecorationData {
     src: string;
@@ -92,6 +93,19 @@ const decorationsConfig: DecorationData[] = [
             scale: 1.1,
             zIndex: 80,
             enabled: true
+        },
+        {
+            src: rescueDiverImg.src,
+            srcVar: 'rescueDiverImg.src',
+            alt: 'PADI Rescue Diver card',
+            initialX: 7,
+            initialY: 432,
+            width: 280,
+            rotation: -34,
+            scale: 0.6,
+            zIndex: 95,
+            enabled: true,
+            shadow: true
         }
     ];
 
@@ -100,10 +114,12 @@ export default function ScatteredDecorations() {
     const [isSaving, setIsSaving] = useState(false);
     const [isDev, setIsDev] = useState(false);
     const [showDevPanel, setShowDevPanel] = useState(false);
+    const [isSpread, setIsSpread] = useState(true);
     const [selectedDecoration, setSelectedDecoration] = useState<number | null>(null);
     const [enabledDecorations, setEnabledDecorations] = useState<Map<number, boolean>>(new Map());
     const [decorationProps, setDecorationProps] = useState<Map<number, { rotation: number; scale: number; zIndex: number }>>(new Map());
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
+    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
 
     // Reference viewport width that positions were designed for
     const REFERENCE_WIDTH = 1692;
@@ -121,6 +137,17 @@ export default function ScatteredDecorations() {
 
         // Check if we're in development
         setIsDev(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+        // Load saved stack positions
+        const saved = localStorage.getItem('decorationStackPositions');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                const map = new Map<number, { x: number; y: number }>();
+                Object.entries(parsed).forEach(([k, v]) => map.set(Number(k), v as { x: number; y: number }));
+                setStackPositions(map);
+            } catch {}
+        }
 
         // Update on resize
         const handleResize = () => setScreenWidth(window.innerWidth);
@@ -250,6 +277,10 @@ export default function ScatteredDecorations() {
     // Don't render until we have screen width
     if (screenWidth === 0) return null;
 
+    // Default stack position for items without a saved one
+    const defaultStackX = screenWidth / 2;
+    const defaultStackY = 150;
+
     return (
         <>
             {decorations.map((decoration, index) => {
@@ -260,6 +291,10 @@ export default function ScatteredDecorations() {
 
                 // Scale X position based on viewport width
                 const scaledX = scaleXPosition(decoration.initialX || 100);
+
+                const savedStack = stackPositions.get(index);
+                const itemStackX = savedStack?.x ?? defaultStackX;
+                const itemStackY = savedStack?.y ?? defaultStackY;
 
                 return (
                     <DraggableImage
@@ -274,6 +309,16 @@ export default function ScatteredDecorations() {
                         zIndex={props.zIndex}
                         shadow={decoration.shadow}
                         onPositionChange={(x, y) => handlePositionChange(index, x, y)}
+                        stackX={itemStackX}
+                        stackY={itemStackY}
+                        onStackPositionChange={(x: number, y: number) => {
+                            setStackPositions(prev => {
+                                const next = new Map(prev);
+                                next.set(index, { x, y });
+                                return next;
+                            });
+                        }}
+                        animationDelay={0}
                     />
                 );
             })}
@@ -281,6 +326,38 @@ export default function ScatteredDecorations() {
             {/* Dev Tools - only in development */}
             {isDev && (
                 <>
+                    {/* Toggle Spread Button */}
+                    <button
+                        onClick={() => {
+                            const next = !isSpread;
+                            setIsSpread(next);
+                            window.dispatchEvent(new CustomEvent('toggle-spread', { detail: { spread: next } }));
+                        }}
+                        className="fixed bottom-4 left-48 z-[1000] bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-lg font-medium transition-colors"
+                        style={{ pointerEvents: 'auto' }}
+                    >
+                        {isSpread ? 'Stack Center' : 'Spread Out'}
+                    </button>
+
+                    {/* Save Stack Positions Button */}
+                    {!isSpread && (
+                        <button
+                            onClick={() => {
+                                // Save decoration stack positions
+                                const decObj: Record<string, { x: number; y: number }> = {};
+                                stackPositions.forEach((v, k) => { decObj[k] = v; });
+                                localStorage.setItem('decorationStackPositions', JSON.stringify(decObj));
+                                // Trigger polaroids to save too
+                                window.dispatchEvent(new CustomEvent('save-stack-positions'));
+                                alert('Stack positions saved!');
+                            }}
+                            className="fixed bottom-4 left-[370px] z-[1000] bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg shadow-lg font-medium transition-colors"
+                            style={{ pointerEvents: 'auto' }}
+                        >
+                            Save Stack Positions
+                        </button>
+                    )}
+
                     {/* Toggle Dev Panel Button */}
                     <button
                         onClick={() => setShowDevPanel(!showDevPanel)}

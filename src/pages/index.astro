@@ -190,8 +190,8 @@ import BookSection from '@components/books/BookSection.astro';
     <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
     <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
         <div class="pointer-events-auto">
-            <ScatteredPolaroids client:idle />
-            <ScatteredDecorations client:idle />
+            <ScatteredPolaroids client:load />
+            <ScatteredDecorations client:load />
         </div>
     </div>
 
@@ -213,9 +213,10 @@ import BookSection from '@components/books/BookSection.astro';
                 <div class="text-center max-w-3xl mx-auto">
                     <Headline level={2} classes="cursor-default mb-8 relative z-[120]">
                         Hello, I'm Rashad<span class="group inline-block relative"><img
+                                id="hero-logo-toggle"
                                 src="/rashadcodes-white.png"
                                 alt="Rashad Codes logo"
-                                class="inline -translate-y-1 rotate-12 w-[46px] h-[46px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:w-[56px] sm:h-[56px] md:-translate-y-2 md:w-[64px] md:h-[64px] animate-wave relative z-[1]"
+                                class="inline -translate-y-1 rotate-12 w-[46px] h-[46px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:w-[56px] sm:h-[56px] md:-translate-y-2 md:w-[64px] md:h-[64px] animate-wave relative z-[1] cursor-pointer"
                             /></span>
                     </Headline>
 
@@ -583,3 +584,13 @@ import BookSection from '@components/books/BookSection.astro';
 </style>
 
 <script src="../scripts/listItemImageHoverEffect.js"></script>
+<script>
+    let heroSpread = true;
+    const logo = document.getElementById('hero-logo-toggle');
+    if (logo) {
+        logo.addEventListener('click', () => {
+            heroSpread = !heroSpread;
+            window.dispatchEvent(new CustomEvent('toggle-spread', { detail: { spread: heroSpread } }));
+        });
+    }
+</script>
