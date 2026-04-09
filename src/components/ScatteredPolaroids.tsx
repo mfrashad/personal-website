@@ -290,7 +290,11 @@ export default function ScatteredPolaroids() {
     const [showDevPanel, setShowDevPanel] = useState(false);
     const [enabledPolaroids, setEnabledPolaroids] = useState<Map<number, boolean>>(new Map());
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
-    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
+    const defaultPolaroidStackPositions = new Map<number, { x: number; y: number }>([
+        [0, { x: 788, y: 206 }],
+        [1, { x: 450, y: 72 }],
+    ]);
+    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(defaultPolaroidStackPositions);
     const stackPositionsRef = useRef(stackPositions);
     stackPositionsRef.current = stackPositions;
 
