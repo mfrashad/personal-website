@@ -33,18 +33,18 @@ import {
           Dive Accomplishments
         </h2>
         <div class="flex flex-wrap gap-3">
-          <div class="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-4 py-2.5 font-mono text-sm text-cyan-400">
+          <div class="rounded-lg border border-border-default bg-surface-secondary px-4 py-2.5 font-mono text-sm text-content-body">
             Scuba Dives <span class="ml-1.5 font-bold">{diveStats.scubaDives}</span>
           </div>
-          <div class="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-4 py-2.5 font-mono text-sm text-cyan-400">
+          <div class="rounded-lg border border-border-default bg-surface-secondary px-4 py-2.5 font-mono text-sm text-content-body">
             Total Dives <span class="ml-1.5 font-bold">{diveStats.totalDives}</span>
-            <span class="ml-1 text-xs text-cyan-400/60">incl. free diving</span>
+            <span class="ml-1 text-xs text-content-muted">incl. free diving</span>
           </div>
           {diveAccomplishments.map((item) => {
             const colors = {
-              certification: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-              experience: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-              record: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+              certification: 'bg-surface-secondary text-content-body border-border-default',
+              experience: 'bg-surface-secondary text-content-body border-border-default',
+              record: 'bg-surface-secondary text-content-body border-border-default',
             };
             return (
               <div
