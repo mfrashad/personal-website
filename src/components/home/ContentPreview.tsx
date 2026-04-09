@@ -31,8 +31,10 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
     const availableCategories = categoryOrder.filter(c => piecesByCategory[c]?.length > 0);
     const [activeTab, setActiveTab] = useState('personal-brand');
     const [isUserInteracting, setIsUserInteracting] = useState(false);
+    const [showAnalytics, setShowAnalytics] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
     const resumeTimer = useRef<ReturnType<typeof setTimeout>>();
+    const hasDragged = useRef(false);
 
     const pieces = piecesByCategory[activeTab] || [];
     const duplicated = [...pieces, ...pieces];
@@ -74,6 +76,7 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
     const handleMouseDown = useCallback((e: React.MouseEvent) => {
         if (!scrollRef.current) return;
         isDragging.current = true;
+        hasDragged.current = false;
         dragStart.current = { x: e.clientX, scrollLeft: scrollRef.current.scrollLeft };
         pauseAutoScroll();
     }, [pauseAutoScroll]);
@@ -81,6 +84,7 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
     const handleMouseMove = useCallback((e: React.MouseEvent) => {
         if (!isDragging.current || !scrollRef.current) return;
         const dx = e.clientX - dragStart.current.x;
+        if (Math.abs(dx) > 5) hasDragged.current = true;
         scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
     }, []);
 
@@ -152,13 +156,20 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
                     {duplicated.map((piece, i) => {
                         const images = imageManifest[piece.id];
                         const key = `${piece.id}-${i}`;
+                        const isShowingAnalytics = showAnalytics === key;
 
                         return (
                             <div key={key} className="flex-shrink-0 mx-3 w-[180px] sm:w-[200px]">
-                                <div className="transition-transform duration-300 hover:scale-[1.03]">
+                                <div
+                                    className="cursor-pointer transition-transform duration-300 hover:scale-[1.03]"
+                                    onClick={() => {
+                                        if (hasDragged.current) return;
+                                        setShowAnalytics(isShowingAnalytics ? null : key);
+                                    }}
+                                >
                                     {images ? (
                                         <PhoneMockup
-                                            src={images.content}
+                                            src={isShowingAnalytics ? images.analytics : images.content}
                                             alt={piece.title}
                                             className="w-full"
                                         />
