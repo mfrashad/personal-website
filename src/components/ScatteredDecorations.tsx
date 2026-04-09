@@ -121,7 +121,16 @@ export default function ScatteredDecorations() {
     const [enabledDecorations, setEnabledDecorations] = useState<Map<number, boolean>>(new Map());
     const [decorationProps, setDecorationProps] = useState<Map<number, { rotation: number; scale: number; zIndex: number }>>(new Map());
     const currentPositions = useRef<Map<number, { x: number; y: number }>>(new Map());
-    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
+    const defaultStackPositions = new Map<number, { x: number; y: number }>([
+        [0, { x: 776, y: -32 }],
+        [1, { x: 885, y: 180 }],
+        [2, { x: 813, y: 16 }],
+        [3, { x: 600, y: -34 }],
+        [4, { x: 468, y: 96 }],
+        [5, { x: 441, y: -24 }],
+        [6, { x: 700, y: 120 }],
+    ]);
+    const [stackPositions, setStackPositions] = useState<Map<number, { x: number; y: number }>>(defaultStackPositions);
 
     // Reference viewport width that positions were designed for
     const REFERENCE_WIDTH = 1692;
