@@ -19,11 +19,35 @@ interface Props {
 
 const { title, description, ogimageName, showLoader = false } = Astro.props;
 const adjustedTitle = title ? 'Rashad' + ' – ' + title : 'Rashad';
-const adjustedDescription = description ? description : 'AI engineer, entrepreneur, and speaker. Co-founder & CTO at Cleve, building AI-powered tools for 100K+ users. Delivered 20+ talks on AI, technology, and career development.';
+const adjustedDescription = description ? description : 'Fathy Rashad (Rashadventure) — AI engineer, entrepreneur, and speaker. Co-founder & CTO at Cleve, building AI-powered tools for 100K+ users. Delivered 20+ talks on AI, technology, and career development.';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph.png';
 const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
+
+const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Fathy Rashad",
+    "alternateName": ["Rashad", "Rashadventure", "mfrashad"],
+    "url": "https://www.mfrashad.com",
+    "image": "https://www.mfrashad.com/opengraph.png",
+    "sameAs": [
+        "https://www.rashadventure.com",
+        "https://tiktok.com/@rashadventure",
+        "https://instagram.com/rashadventure",
+        "https://github.com/mfrashad",
+        "https://linkedin.com/in/mfrashad"
+    ],
+    "jobTitle": "AI Engineer",
+    "description": adjustedDescription,
+    "worksFor": {
+        "@type": "Organization",
+        "name": "Cleve",
+        "url": "https://cleve.ai"
+    },
+    "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Web Development", "Public Speaking", "Entrepreneurship"]
+};
 ---
 
 <!doctype html>
@@ -61,11 +85,12 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                     image: resolvedImageWithDomain
                 },
                 image: {
-                    alt: 'Rashad - AI engineer, entrepreneur, and speaker'
+                    alt: 'Fathy Rashad (Rashadventure) - AI engineer, entrepreneur, and speaker'
                 }
             }}
         />
         <ViewTransitions />
+        <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
         <script>
             import posthog from 'posthog-js';
 

@@ -35,6 +35,7 @@
         "@astrojs/db": "^0.14.14",
         "@astrojs/mdx": "^4.3.13",
         "@astrojs/react": "^4.2.1",
+        "@astrojs/sitemap": "^3.7.2",
         "@astrojs/tailwind": "^6.0.0",
         "@astrojs/vercel": "^9.0.2",
         "@floating-ui/react": "^0.27.16",

@@ -225,7 +225,7 @@ export default function HackathonGalleryList({ yearGroups, imageManifest }: Hack
                                                 <img
                                                     key={i}
                                                     src={thumb}
-                                                    alt={`${engagement.title} photo ${i + 1}`}
+                                                    alt={`Fathy Rashad at ${engagement.title} - photo ${i + 1}`}
                                                     className="h-40 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity shrink-0 object-cover"
                                                     onClick={(e) => {
                                                         e.stopPropagation();

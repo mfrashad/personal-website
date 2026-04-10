@@ -83,7 +83,7 @@ export default function SpeakingSection({ engagements, imageManifest, allLogos: 
                             >
                                 <img
                                     src={logo.src}
-                                    alt={logo.name}
+                                    alt={`Fathy Rashad speaking at ${logo.name}`}
                                     loading="lazy"
                                     className="max-h-12 md:max-h-14 max-w-[120px] w-auto h-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                 />
