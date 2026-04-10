@@ -125,6 +125,67 @@ const title = data?.title || 'List';
 const icon = data?.icon || 'ph:list-bullets';
 const sourceUrl = data?.sourceUrl;
 
+const categoryDescriptions: Record<string, string> = {
+    products: 'Best products and purchases recommended by Fathy Rashad',
+    software: 'Favorite software tools curated by Fathy Rashad',
+    games: 'Favorite video games picked by Fathy Rashad',
+    anime: 'Favorite anime series recommended by Fathy Rashad',
+    'nonfiction-books': 'Best nonfiction books recommended by Fathy Rashad',
+    novels: 'Favorite novels and fiction books by Fathy Rashad',
+    webnovels: 'Favorite web novels and light novels curated by Fathy Rashad',
+    concepts: 'Favorite mental models and concepts by Fathy Rashad',
+    'kl-ai-communities': 'AI communities and meetups in Kuala Lumpur, curated by Fathy Rashad',
+    'kl-tech-communities': 'Tech communities and meetups in Kuala Lumpur, curated by Fathy Rashad',
+    'student-ambassador-programs': 'Student tech ambassador programs - comprehensive list by Fathy Rashad',
+    'developer-ambassador-programs': 'Developer ambassador and advocate programs - list by Fathy Rashad',
+    'student-free-perks': 'Free perks, tools, and resources for students - curated by Fathy Rashad',
+    'startup-accelerators': 'Best startup accelerators and incubators - guide by Fathy Rashad',
+    'malaysia-gov-grants': 'Malaysian government grants for startups and businesses - compiled by Fathy Rashad',
+    'global-student-competitions': 'Global student competitions and hackathons - list by Fathy Rashad',
+    'malaysia-student-competitions': 'Malaysian student competitions and challenges - curated by Fathy Rashad',
+    'malaysia-open-competitions': 'Open competitions in Malaysia for all ages - list by Fathy Rashad',
+    'startup-learning-resources': 'Best resources to learn about startups - curated by Fathy Rashad',
+    'startup-ideation': 'Startup ideation tools and frameworks - guide by Fathy Rashad',
+    'startup-building-mvp': 'Tools and resources for building MVPs - curated by Fathy Rashad',
+    'startup-fundraising': 'Startup fundraising resources and guides - by Fathy Rashad',
+    'startup-marketing-growth': 'Startup marketing and growth tools - curated by Fathy Rashad',
+    'startup-ai-tech-stack': 'AI tech stack for startups - recommended by Fathy Rashad',
+    'my-startup-tools': 'Tools and software used by Fathy Rashad\'s startup Cleve',
+    'ai-writing-tools': 'Best AI writing tools and assistants - curated by Fathy Rashad',
+    'ai-image-tools': 'Best AI image generation tools - curated by Fathy Rashad',
+    'ai-audio-tools': 'Best AI audio and music tools - curated by Fathy Rashad',
+    'ai-video-tools': 'Best AI video generation tools - curated by Fathy Rashad',
+    'ai-research-tools': 'Best AI research and analysis tools - curated by Fathy Rashad',
+    'ai-design-tools': 'Best AI design tools - curated by Fathy Rashad',
+    'ai-avatar-tools': 'Best AI avatar and character tools - curated by Fathy Rashad',
+    'learn-programming': 'Best resources to learn programming - curated by Fathy Rashad',
+    'paid-open-source-programs': 'Programs that pay you to contribute to open source - list by Fathy Rashad',
+};
+
+const pageDescription = categoryDescriptions[category || ''] || `${title} - curated by Fathy Rashad`;
+
+const listSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": title,
+    "description": pageDescription,
+    "url": `https://www.mfrashad.com/resources/${category}`,
+    "numberOfItems": items.length,
+    "author": {
+        "@type": "Person",
+        "name": "Fathy Rashad",
+        "alternateName": "Rashadventure",
+        "url": "https://www.mfrashad.com"
+    },
+    "itemListElement": items.slice(0, 30).map((item: any, i: number) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": item.name,
+        ...(item.url ? { "url": item.url } : {}),
+        ...(item.description ? { "description": item.description } : {}),
+    })),
+};
+
 const resourceImages = (resourceImagesData as any).images || {};
 
 function getImageKey(url?: string): string | null {
@@ -146,7 +207,8 @@ function getItemImages(item: any) {
 }
 ---
 
-<Layout title={`${title} | Rashad`} description={title}>
+<Layout title={`${title} | Fathy Rashad Resources`} description={pageDescription}>
+    <script type="application/ld+json" set:html={JSON.stringify(listSchema)} />
     <Grid classes="py-40">
         <GridBox desktopFull>
             <div class="mb-6">
