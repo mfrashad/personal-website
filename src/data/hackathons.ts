@@ -23,7 +23,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         organizer: "Taylor's University",
         role: 'judge',
         topics: ['Game Development'],
-        logos: ['/speaking-logos/kiyokocon.png', '/speaking-logos/taylors.svg'],
+        logos: ['/speaking-logos/kiyokocon.webp', '/speaking-logos/taylors.svg'],
     },
     {
         id: 'tech-trove-hackathon-judge-2025',
@@ -55,7 +55,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         organizer: 'University of Malaya',
         role: 'judge',
         topics: ['Entrepreneurship', 'Startups'],
-        logos: ['/speaking-logos/um.png'],
+        logos: ['/speaking-logos/um.webp'],
         featured: true,
     },
     {
@@ -66,7 +66,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         organizer: 'University of Malaya',
         role: 'mentor',
         topics: ['Technology', 'AI'],
-        logos: ['/speaking-logos/um.png'],
+        logos: ['/speaking-logos/um.webp'],
     },
     {
         id: 'usm-varsity-hack-2025',
@@ -116,7 +116,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         organizer: 'University of Malaya',
         role: 'mentor',
         topics: ['Technology'],
-        logos: ['/speaking-logos/um.png'],
+        logos: ['/speaking-logos/um.webp'],
     },
 
     // 2021
@@ -178,7 +178,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         result: 'First Runner Up',
         description: 'Developed a COVID-19 app with risk assessment, medical appointment system, and e-medical record.',
         topics: ['Healthcare', 'Technology'],
-        logos: ['/speaking-logos/um.png'],
+        logos: ['/speaking-logos/um.webp'],
     },
 
     // 2019
@@ -192,7 +192,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         result: "Chairman's Award Winner",
         description: 'Aide Glass: Transcribing Smart Glasses for the Deaf won the Chairman\'s Award out of 170 teams.',
         topics: ['Hardware', 'IoT', 'Accessibility'],
-        logos: ['/speaking-logos/utp.png'],
+        logos: ['/speaking-logos/utp.webp'],
         featured: true,
     },
     {
@@ -205,7 +205,7 @@ export const hackathonEngagements: HackathonEngagement[] = [
         result: 'Rank 9, Finalist',
         description: 'Led and mentored 2 students in an intervarsity cybersecurity CTF competition as a UTP representative. Ranked 9 out of 50+ teams in Malaysia.',
         topics: ['Cybersecurity', 'CTF'],
-        logos: ['/speaking-logos/apu.png'],
+        logos: ['/speaking-logos/apu.webp'],
     },
     {
         id: 'reboot-the-earth-2019',

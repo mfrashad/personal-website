@@ -29,7 +29,8 @@ const domain = url.hostname;
     <a href={bookmark.link} class="flex items-center justify-between gap-4 py-2">
         <img
             class="cover-image max-w-64 pointer-events-none absolute z-10 hidden max-h-40 shadow-lg md:group-hover:block"
-            src={bookmark.cover}
+            data-src={bookmark.cover}
+            loading="lazy"
         />
         <div class="flex max-w-[80%] shrink-0 items-center gap-2">
             <div
@@ -69,6 +70,23 @@ const domain = url.hostname;
         </div>
     </a>
 </li>
+
+<script is:inline>
+// Lazy load bookmark cover images on hover only
+if (!window.__bookmarkHoverInit) {
+    window.__bookmarkHoverInit = true;
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.list-item-image-hover-effect').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                const img = el.querySelector('img[data-src]');
+                if (img && !img.src) {
+                    img.src = img.dataset.src;
+                }
+            }, { once: true });
+        });
+    });
+}
+</script>
 
 <!-- MOBILE VERSION -->
 <li class="md:hidden">

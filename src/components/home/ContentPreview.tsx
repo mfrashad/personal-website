@@ -113,6 +113,7 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
                                         src={logo.src}
                                         alt={logo.name}
                                         title={logo.name}
+                                        loading="lazy"
                                         className="h-8 md:h-10 w-auto max-w-[100px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                     />
                                 </div>

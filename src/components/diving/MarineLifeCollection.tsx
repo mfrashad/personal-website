@@ -18,7 +18,7 @@ function AnimalCard({ animal, onClick }: { animal: MarineAnimal; onClick: () => 
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <img
-          src={`/dive-animals/diveanimals_${animal.slug}.png`}
+          src={`/dive-animals/diveanimals_${animal.slug}.webp`}
           alt={animal.name}
           width={px}
           height={px}
@@ -39,7 +39,7 @@ function AnimalCard({ animal, onClick }: { animal: MarineAnimal; onClick: () => 
 
 function AnimalModal({ animal, onClose }: { animal: MarineAnimal; onClose: () => void }) {
   const { px } = sizeConfig[animal.size];
-  const displaySize = Math.min(Math.max(px * 2, 120), 220);
+  const displaySize = Math.max(px * 3, 180);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -75,7 +75,7 @@ function AnimalModal({ animal, onClose }: { animal: MarineAnimal; onClose: () =>
           <div className="flex flex-col items-center justify-center border-b border-white-50 bg-white-50 p-8 sm:border-b-0 sm:border-r">
             <div className="drop-shadow-[0_0_24px_rgba(100,200,255,0.3)]">
               <img
-                src={`/dive-animals/diveanimals_${animal.slug}.png`}
+                src={`/dive-animals/diveanimals_${animal.slug}.webp`}
                 alt={animal.name}
                 width={Math.min(displaySize, 180)}
                 height={Math.min(displaySize, 180)}
@@ -83,7 +83,7 @@ function AnimalModal({ animal, onClose }: { animal: MarineAnimal; onClose: () =>
               />
             </div>
 
-            <h3 className="mt-5 text-center text-2xl font-bold text-white">
+            <h3 className="mt-5 text-center text-lg sm:text-xl font-bold text-white">
               {animal.name}
             </h3>
             {animal.scientificName && (
@@ -251,7 +251,7 @@ function ScubaDiver({ containerRef }: { containerRef: React.RefObject<HTMLDivEle
       }}
     >
       <img
-        src="/dive-animals/scuba-diver.png"
+        src="/dive-animals/scuba-diver.webp"
         alt="Scuba diver"
         width={64}
         height={64}

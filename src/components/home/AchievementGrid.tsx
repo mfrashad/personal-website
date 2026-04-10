@@ -31,6 +31,7 @@ interface AchievementGridProps {
     achievements: Achievement[];
     metrics?: Metric[];
     showMetrics?: boolean;
+    skillImages?: Record<string, string>;
 }
 
 // Icon mapping for metrics
@@ -56,7 +57,7 @@ function formatNumber(num: number): string {
     return num.toString();
 }
 
-export default function AchievementGrid({ achievements, metrics = [], showMetrics = true }: AchievementGridProps) {
+export default function AchievementGrid({ achievements, metrics = [], showMetrics = true, skillImages = {} }: AchievementGridProps) {
     const [filter, setFilter] = useState<string>('all');
     const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -181,11 +182,12 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
     };
 
     // Achievement Card Component with Floating UI Tooltip
-    function AchievementCard({ achievement, index, gradientColor, hasImage, isBottomRow }: {
+    function AchievementCard({ achievement, index, gradientColor, hasImage, resolvedImage, isBottomRow }: {
         achievement: Achievement;
         index: number;
         gradientColor: string;
         hasImage: boolean;
+        resolvedImage: string;
         isBottomRow: boolean;
     }) {
         const [isOpen, setIsOpen] = useState(false);
@@ -291,7 +293,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                                 <div className="polaroid-frame h-full flex flex-col">
                                     <div className="polaroid-image flex-1 bg-neutral-200 rounded overflow-hidden mb-1.5">
                                         <img
-                                            src={achievement.image}
+                                            src={resolvedImage}
                                             alt={achievement.title}
                                             className="w-full h-full object-cover"
                                         />
@@ -306,7 +308,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                 </motion.div>
 
                 {/* Floating UI Tooltip */}
-                {!hasImage && isOpen && (
+                {isOpen && (
                     <FloatingPortal>
                         <div
                             ref={refs.setFloating}
@@ -411,13 +413,19 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                                 skill: 'from-pink-500 to-pink-600'
                             };
 
+                            // Resolve image: own image first, then linked skill image
+                            const resolvedImage = achievement.image
+                                || (achievement.skills?.map(sid => skillImages[sid]).find(Boolean))
+                                || '';
+
                             return (
                                 <AchievementCard
                                     key={`${achievement.id}-${index}`}
                                     achievement={achievement}
                                     index={index}
                                     gradientColor={gradientColors[achievement.category]}
-                                    hasImage={!!achievement.image}
+                                    hasImage={!!resolvedImage}
+                                    resolvedImage={resolvedImage}
                                     isBottomRow={index % 3 === 2}
                                 />
                             );
@@ -452,7 +460,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                     transform-style: preserve-3d;
                 }
 
-                .flip-card.has-image:hover {
+                .flip-card-container:hover .flip-card.has-image {
                     transform: rotateY(180deg);
                 }
 

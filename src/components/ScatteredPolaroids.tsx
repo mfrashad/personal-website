@@ -2,28 +2,21 @@ import { useEffect, useState, useRef } from 'react';
 import DraggablePolaroid from './DraggablePolaroid';
 
 // Import polaroid images (WebP optimized)
-import camelImg from '@assets/polaroids/camel.webp';
-import codeImg from '@assets/polaroids/code.webp';
-import coding2Img from '@assets/polaroids/coding2.webp';
-import coding3Img from '@assets/polaroids/coding3.webp';
+// Only import enabled polaroid images
 import contentImg from '@assets/polaroids/content.webp';
-import cookingImg from '@assets/polaroids/cooking.webp';
-import divingImg from '@assets/polaroids/diving.webp';
+import coding2Img from '@assets/polaroids/coding2.webp';
 import judgingImg from '@assets/polaroids/judging.webp';
 import ontvImg from '@assets/polaroids/ontv.webp';
 import polaroidImg from '@assets/polaroids/polaroid.webp';
 import profileImg from '@assets/polaroids/profile.webp';
 import readingImg from '@assets/polaroids/reading.webp';
 import selfieImg from '@assets/polaroids/selfie.webp';
-import skydivingImg from '@assets/polaroids/skydiving.webp';
-import snowboardingImg from '@assets/polaroids/snowboarding.webp';
 import speakingImg from '@assets/polaroids/speaking.webp';
-import speaking2Img from '@assets/polaroids/speaking2.webp';
-import speaking3Img from '@assets/polaroids/speaking3.webp';
 import speaking4Img from '@assets/polaroids/speaking4.webp';
-import surfingImg from '@assets/polaroids/surfing.webp';
 import talkImg from '@assets/polaroids/talk.webp';
-import writingImg from '@assets/polaroids/writing.webp';
+
+// Placeholder for disabled polaroids (not downloaded)
+const DISABLED = { src: '' };
 
 interface PolaroidData {
     src: string;
@@ -106,7 +99,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: true
     },
     {
-        src: speaking2Img.src,
+        src: DISABLED.src,
         srcVar: 'speaking2Img.src',
         alt: 'Speaking',
         caption: 'On stage',
@@ -128,7 +121,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: true
     },
     {
-        src: speaking3Img.src,
+        src: DISABLED.src,
         srcVar: 'speaking3Img.src',
         alt: 'Conference talk',
         caption: 'Tech conference',
@@ -139,7 +132,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: false
     },
     {
-        src: writingImg.src,
+        src: DISABLED.src,
         srcVar: 'writingImg.src',
         alt: 'Writing',
         caption: 'Sharing my thoughts',
@@ -150,7 +143,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: false
     },
     {
-        src: codeImg.src,
+        src: DISABLED.src,
         srcVar: 'codeImg.src',
         alt: 'Coding',
         caption: 'Writing code',
@@ -172,7 +165,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: true
     },
     {
-        src: coding3Img.src,
+        src: DISABLED.src,
         srcVar: 'coding3Img.src',
         alt: 'Coding time',
         caption: 'Hacking away',
@@ -183,7 +176,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: false
     },
     {
-        src: skydivingImg.src,
+        src: DISABLED.src,
         srcVar: 'skydivingImg.src',
         alt: 'Skydiving',
         caption: 'First skydive!',
@@ -191,10 +184,10 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 6183,
         rotation: 4,
         zIndex: 113,
-        enabled: true
+        enabled: false
     },
     {
-        src: surfingImg.src,
+        src: DISABLED.src,
         srcVar: 'surfingImg.src',
         alt: 'Surfing',
         caption: 'Learning to surf',
@@ -202,10 +195,10 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 6201,
         rotation: -6,
         zIndex: 114,
-        enabled: true
+        enabled: false
     },
     {
-        src: snowboardingImg.src,
+        src: DISABLED.src,
         srcVar: 'snowboardingImg.src',
         alt: 'Snowboarding',
         caption: 'Winter adventures',
@@ -213,10 +206,10 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 6313,
         rotation: 5,
         zIndex: 115,
-        enabled: true
+        enabled: false
     },
     {
-        src: divingImg.src,
+        src: DISABLED.src,
         srcVar: 'divingImg.src',
         alt: 'Diving',
         caption: 'Underwater exploration',
@@ -224,10 +217,10 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 6228,
         rotation: -4,
         zIndex: 116,
-        enabled: true
+        enabled: false
     },
     {
-        src: camelImg.src,
+        src: DISABLED.src,
         srcVar: 'camelImg.src',
         alt: 'Camel riding',
         caption: 'Desert adventures',
@@ -235,7 +228,7 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 6220,
         rotation: 7,
         zIndex: 117,
-        enabled: true
+        enabled: false
     },
     {
         src: readingImg.src,
@@ -249,7 +242,7 @@ const polaroidsConfig: PolaroidData[] = [
         enabled: true
     },
     {
-        src: cookingImg.src,
+        src: DISABLED.src,
         srcVar: 'cookingImg.src',
         alt: 'Cooking',
         caption: 'Culinary adventures',
