@@ -21,14 +21,119 @@ for (const skill of skills) {
         <GridBox desktopFull>
             <SectionContent title="Achievements" classes="!px-0">
                 <p>
-                    A collection of Fun AI-generated achievement badges based on milestones and achievements throughout my journey in tech,
-                    academia, and community building. From starting to code at 11 to co-founding
-                    venture-backed startups, here's a visual representation of my progress.
+                    Milestones, awards, and achievements throughout my journey in tech, academia, and community building.
                 </p>
             </SectionContent>
 
-            <div class="my-12">
-                <AchievementGrid achievements={achievements} metrics={metrics} skillImages={skillImages} client:load />
+            <!-- Stats (metrics only) -->
+            <div class="mb-12">
+                <AchievementGrid achievements={achievements} metrics={metrics} showBadges={false} skillImages={skillImages} client:load />
+            </div>
+
+            <!-- Awards & Honors -->
+            <h3 class="text-lg font-bold text-content-headings mb-4">Awards & Honors</h3>
+            <div class="mb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Academic -->
+                <div class="rounded-xl border border-border bg-surface-secondary p-5">
+                    <h4 class="text-sm font-bold text-content-headings mb-4 uppercase tracking-wider">Academic & Institutional</h4>
+                    <ul class="space-y-3 text-sm text-content-body">
+                        <li>
+                            <span class="font-semibold text-content-headings">Gold Vice Chancellor Award</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">Overall excellence in grades, leadership, and achievements. Valedictorian.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Gold Final Year Project Award</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">Best final year research project in faculty.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Gold Capstone Project Award</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">Best capstone project within faculty.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Best International Undergraduate Student</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">Top performance among international students.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">UTP Brand Advocate Silver Award</span>
+                            <span class="text-content-muted text-xs ml-1">2020</span>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Dean's List</span>
+                            <span class="text-content-muted text-xs ml-1">All Semesters</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Hackathons & Innovation -->
+                <div class="rounded-xl border border-border bg-surface-secondary p-5">
+                    <h4 class="text-sm font-bold text-content-headings mb-4 uppercase tracking-wider">Hackathons & Innovation</h4>
+                    <ul class="space-y-3 text-sm text-content-body">
+                        <li>
+                            <span class="font-semibold text-content-headings">Prize of Advanced AI ($2,000)</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">SAAI Factory Hackathon — International Art & AI hackathon.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Gold & Diamond Award</span>
+                            <span class="text-content-muted text-xs ml-1">InDeLib</span>
+                            <p class="text-xs text-content-muted mt-0.5">4th Int'l Innovation & Design in Library & Information Science — iOASIS library app.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Chairman's Award</span>
+                            <span class="text-content-muted text-xs ml-1">SEDEX 42</span>
+                            <p class="text-xs text-content-muted mt-0.5">Won out of 170 teams — Aide Glass, smart glasses for the deaf.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Best Open Source Project</span>
+                            <span class="text-content-muted text-xs ml-1">MLH 2020</span>
+                            <p class="text-xs text-content-muted mt-0.5">Major League Hacking Local Hack Day — PhotoSketch.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Winner — DSC Kita Hack</span>
+                            <span class="text-content-muted text-xs ml-1">2020</span>
+                            <p class="text-xs text-content-muted mt-0.5">Google Developers — Food aid management system.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">1st Runner Up — iUM Disrupt</span>
+                            <span class="text-content-muted text-xs ml-1">2020</span>
+                            <p class="text-xs text-content-muted mt-0.5">University of Malaya — COVID-19 risk assessment app.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Top 5 — University Open Virtual Hackathon</span>
+                            <span class="text-content-muted text-xs ml-1">2020</span>
+                            <p class="text-xs text-content-muted mt-0.5">Defect detection app.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Recognition -->
+                <div class="rounded-xl border border-border bg-surface-secondary p-5">
+                    <h4 class="text-sm font-bold text-content-headings mb-4 uppercase tracking-wider">Recognition & Research</h4>
+                    <ul class="space-y-3 text-sm text-content-body">
+                        <li>
+                            <span class="font-semibold text-content-headings">Top 10 Young Talent in Asia</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">MonStar Awards — Recognized among top young talents across Asia.</p>
+                        </li>
+                        <li>
+                            <span class="font-semibold text-content-headings">Published Research with MIT</span>
+                            <span class="text-content-muted text-xs ml-1">2021</span>
+                            <p class="text-xs text-content-muted mt-0.5">CreativeGAN: Editing GANs for Creative Design Synthesis — ASME-IDETC 2021, co-authored with MIT DeCoDE Lab.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Achievement Badges Wall -->
+            <h3 class="text-lg font-bold text-content-headings mb-2">Achievement Badges</h3>
+            <p class="text-sm text-content-muted mb-6">Fun AI-generated badges based on milestones throughout my journey.</p>
+
+            <div class="mb-12">
+                <AchievementGrid achievements={achievements} showMetrics={false} skillImages={skillImages} client:load />
             </div>
         </GridBox>
     </Grid>
