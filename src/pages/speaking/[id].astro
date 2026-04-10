@@ -24,12 +24,32 @@ const formattedDate = engagement.date.toLocaleDateString('en-US', {
 
 const description = engagement.description
     || `${engagement.title} at ${engagement.event} by ${engagement.organizer}`;
+
+const pageDescription = `Fathy Rashad (Rashadventure) speaking at ${engagement.title} - ${engagement.event}. ${description}`;
+
+const eventImages = images.map((img, i) => ({
+    "@type": "ImageObject",
+    "url": `https://www.mfrashad.com${img}`,
+    "name": `Fathy Rashad at ${engagement.title} - photo ${i + 1}`,
+}));
+
+const eventSchema = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": engagement.title,
+    "description": pageDescription,
+    "url": `https://www.mfrashad.com/speaking/${id}`,
+    "organizer": { "@type": "Organization", "name": engagement.organizer },
+    "performer": { "@type": "Person", "name": "Fathy Rashad", "alternateName": "Rashadventure", "url": "https://www.mfrashad.com" },
+    "image": eventImages,
+};
 ---
 
 <Layout
-    title={`${engagement.title} - ${engagement.event} | Speaking | Rashad`}
-    description={description}
+    title={`${engagement.title} - ${engagement.event} | Fathy Rashad Speaking`}
+    description={pageDescription}
 >
+    <script type="application/ld+json" set:html={JSON.stringify(eventSchema)} />
     <Grid>
         <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
             <div class="mx-auto w-full max-w-[960px]">
