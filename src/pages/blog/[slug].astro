@@ -87,12 +87,34 @@ if (isClevePost) {
 // Full URL for webmentions
 const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://www.mfrashad.com';
 const fullUrl = `${siteUrl}/blog/${postSlug}`;
+
+const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "url": fullUrl,
+    "datePublished": isClevePost ? undefined : entry?.data?.date?.toISOString(),
+    "author": {
+        "@type": "Person",
+        "name": "Fathy Rashad",
+        "alternateName": "Rashadventure",
+        "url": "https://www.mfrashad.com"
+    },
+    "publisher": {
+        "@type": "Person",
+        "name": "Fathy Rashad",
+        "url": "https://www.mfrashad.com"
+    },
+    "keywords": allTags,
+};
 ---
 
 <Layout
-    title={`${title} | Rashad`}
+    title={`${title} | Fathy Rashad`}
     description={description}
 >
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
     <Grid>
         <GridBox desktopFull classes="pt-40 lg:pt-28 pb-32">
             <article
