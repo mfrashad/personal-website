@@ -1,0 +1,18 @@
+---
+import SkillsAdmin from '@components/admin/SkillsAdmin';
+
+if (import.meta.env.PROD) {
+    return Astro.redirect('/');
+}
+---
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills & Achievements Admin</title>
+</head>
+<body style="margin:0; font-family:system-ui,sans-serif; background:#f8f9fa; color:#1a1a2e;">
+    <SkillsAdmin client:load />
+</body>
+</html>

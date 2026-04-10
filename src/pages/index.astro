@@ -16,6 +16,7 @@ import MinimalBioSlider from '@components/home/MinimalBioSlider';
 import ContributionGraph from '@components/writings/ContributionGraph';
 import MediaMentionList from '@components/MediaMentionList';
 import AchievementGrid from '@components/home/AchievementGrid';
+import SkillGrid from '@components/home/SkillGrid';
 import ListPreview from '@components/lists/ListPreview.astro';
 import SpeakingSection from '@components/home/SpeakingSection';
 import CompactBlogPostItem from '@components/blog/CompactBlogPostItem.astro';
@@ -38,7 +39,14 @@ import speaking4Img from '@assets/polaroids/speaking4.webp';
 
 // Data imports
 import { achievements, metrics } from '@data/achievements';
+import { skills } from '@data/skills';
 import { brandKit } from '@data/brand-kit';
+
+const skillImages: Record<string, string> = {};
+for (const skill of skills) {
+    if (skill.image) skillImages[skill.id] = skill.image;
+}
+const visibleSkills = skills.filter(s => !s.hidden);
 import { mediaMentions } from '@data/media-mentions';
 // All lists imports
 import { favoriteProducts } from '@data/lists/favorite-products';
@@ -183,15 +191,15 @@ const categoryLabels = Object.fromEntries(
 import BookSection from '@components/books/BookSection.astro';
 ---
 
-<Layout title="Rashad | AI Engineer, Entrepreneur, Speaker" showLoader={true}>
+<Layout title="Rashad | AI Engineer, Entrepreneur, Speaker" showLoader={false}>
     <!-- Global Animation Provider (cursor, particles, easter eggs) -->
-    <AnimationProvider client:load />
+    <AnimationProvider client:idle />
 
     <!-- Scattered Polaroid Images (Hidden on mobile/tablet) -->
     <div class="polaroid-container pointer-events-none hidden lg:block" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 100;">
         <div class="pointer-events-auto">
-            <ScatteredPolaroids client:load />
-            <ScatteredDecorations client:load />
+            <ScatteredPolaroids client:idle />
+            <ScatteredDecorations client:idle />
         </div>
     </div>
 
@@ -273,7 +281,7 @@ import BookSection from '@components/books/BookSection.astro';
 
                     <!-- Minimal Bio Slider -->
                     <div class="relative z-[120]">
-                        <MinimalBioSlider bios={brandKit.bios} client:load />
+                        <MinimalBioSlider bios={brandKit.bios} client:idle />
                     </div>
 
                     <!-- Learn More About Me CTA -->
@@ -298,7 +306,7 @@ import BookSection from '@components/books/BookSection.astro';
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <a href="mailto:m.fathyrashad@gmail.com" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
-                            <img src={talkImg.src} alt="Tech talk" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            <img src={talkImg.src} alt="Tech talk" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Tech & AI</h3>
@@ -307,7 +315,7 @@ import BookSection from '@components/books/BookSection.astro';
                     </a>
                     <a href="/create" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
-                            <img src={contentImg.src} alt="Shooting interview" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            <img src={contentImg.src} alt="Shooting interview" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Content Creation</h3>
@@ -317,7 +325,7 @@ import BookSection from '@components/books/BookSection.astro';
                     </a>
                     <a href="/speaking" class="group rounded-xl border border-neutral-200 hover:border-neutral-400 hover:shadow-md transition-all duration-200 overflow-hidden">
                         <div class="h-44 sm:h-52 overflow-hidden">
-                            <img src={speaking4Img.src} alt="Sharing knowledge" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            <img src={speaking4Img.src} alt="Sharing knowledge" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Speaking</h3>
@@ -423,26 +431,25 @@ import BookSection from '@components/books/BookSection.astro';
 
         <AnimatedDivider variant="dots" client:visible />
 
-        <!-- Achievements Section -->
+        <!-- Hobbies Section -->
         <section>
-            <SectionContent title="Achievements">
-                Fun AI-generated achievement badges based on my milestones, adventures, and goals I'm tracking throughout my life and career. <em class="text-sm text-neutral-600">Note: As these are AI-generated, some descriptions may be exaggerated or less accurate.</em>
+            <SectionContent title="Hobbies">
+                A collection of everything I've tried, learned, and obsessed over. Read more about why I like to try many things and my <a href="/blog/2024_01_15-bucket-list-phase" class="underline hover:text-content-body transition-colors">bucket list phase</a>.
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
-                    <AchievementGrid
-                        achievements={achievements}
-                        showMetrics={false}
+                    <SkillGrid
+                        skills={visibleSkills}
                         client:visible
                     />
 
                     <!-- View All Button -->
                     <div class="mt-8 text-center">
                         <a
-                            href="/achievements"
+                            href="/hobbies"
                             class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors font-medium"
                         >
-                            <span>View all achievements</span>
+                            <span>View all hobbies</span>
                             <Icon name="ph:arrow-right" width={16} height={16} />
                         </a>
                     </div>

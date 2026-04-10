@@ -106,6 +106,7 @@ export default function HackathonGalleryList({ yearGroups, imageManifest }: Hack
                                 <img
                                     src={logo.src}
                                     alt={logo.name}
+                                    loading="lazy"
                                     className="h-8 md:h-10 w-auto max-w-[80px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                 />
                             </div>

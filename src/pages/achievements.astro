@@ -5,6 +5,12 @@ import GridBox from '@components/GridBox.astro';
 import SectionContent from '@components/SectionContent.astro';
 import AchievementGrid from '@components/home/AchievementGrid';
 import { achievements, metrics } from '@data/achievements';
+import { skills } from '@data/skills';
+
+const skillImages: Record<string, string> = {};
+for (const skill of skills) {
+    if (skill.image) skillImages[skill.id] = skill.image;
+}
 ---
 
 <Layout
@@ -22,7 +28,7 @@ import { achievements, metrics } from '@data/achievements';
             </SectionContent>
 
             <div class="my-12">
-                <AchievementGrid achievements={achievements} metrics={metrics} client:load />
+                <AchievementGrid achievements={achievements} metrics={metrics} skillImages={skillImages} client:load />
             </div>
         </GridBox>
     </Grid>

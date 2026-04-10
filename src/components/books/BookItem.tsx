@@ -28,7 +28,7 @@ const BookItem: React.FC<BookItemProps> = ({
             href={
                 hasGardenEntry
                     ? `/garden/books/${title?.trimEnd()}%20%E2%80%93%20${authors?.[0]?.name?.trimEnd()}.md`
-                    : `https://literal.club/book/${link}`
+                    : link || '#'
             }
             className="h-full w-full"
         >
@@ -49,7 +49,8 @@ const BookItem: React.FC<BookItemProps> = ({
                     />
                 )}
                 <div className="book self-center">
-                    <div className="book-cover" style={{ backgroundImage: `url(${cover})` }}>
+                    <div className="book-cover">
+                        <img src={cover} alt={title || 'Book cover'} loading="lazy" className="book-cover-img" />
                         <div className="effect"></div>
                         <div className="light"></div>
                     </div>

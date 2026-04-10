@@ -1,0 +1,34 @@
+---
+import Layout from '@layouts/Layout.astro';
+import Grid from '@components/Grid.astro';
+import GridBox from '@components/GridBox.astro';
+import SectionContent from '@components/SectionContent.astro';
+import SkillGrid from '@components/home/SkillGrid';
+import { skills as allSkills } from '@data/skills';
+
+const skills = allSkills.filter(s => !s.hidden);
+---
+
+<Layout
+    title="Hobbies | Rashad"
+    description="My hobbies and interests — from coding to diving to 15 dance styles"
+>
+    <Grid classes="py-40">
+        <GridBox desktopFull>
+            <SectionContent title="Hobbies" classes="!px-0">
+                <p>
+                    A collection of everything I've tried, learned, and obsessed over.
+                    From coding and reading to diving, 15+ dance styles,
+                    glassblowing, and skydiving. Hover for details.
+                </p>
+                <p class="mt-2 text-sm text-content-muted">
+                    Read more about why I like to try many things and my <a href="/blog/2024_01_15-bucket-list-phase" class="underline hover:text-content-body transition-colors">bucket list phase</a>.
+                </p>
+            </SectionContent>
+
+            <div class="my-12">
+                <SkillGrid skills={skills} client:load />
+            </div>
+        </GridBox>
+    </Grid>
+</Layout>

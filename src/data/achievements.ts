@@ -9,6 +9,7 @@ export interface Achievement {
     unlocked: boolean;
     image?: string;
     caption?: string;
+    skills?: string[];
 }
 
 export interface Metric {
@@ -29,7 +30,8 @@ export const achievements: Achievement[] = [
         category: 'technical',
         tags: ['programming', 'early-start'],
         date: '2011',
-        unlocked: true
+        unlocked: true,
+        skills: ['hacking'],
     },
     {
         id: 'entered-uni-15',
@@ -49,7 +51,8 @@ export const achievements: Achievement[] = [
         category: 'professional',
         tags: ['game-dev', 'publishing'],
         date: '2016',
-        unlocked: true
+        unlocked: true,
+        skills: ['coding', 'gaming'],
     },
     {
         id: 'tech-intern-17',
@@ -69,8 +72,11 @@ export const achievements: Achievement[] = [
         category: 'community',
         tags: ['leadership', 'community'],
         date: '2018',
-        unlocked: true
+        unlocked: true,
+        skills: ['coding'],
     },
+
+
     {
         id: 'mit-paper-19',
         title: 'Research Contributor',
@@ -79,7 +85,8 @@ export const achievements: Achievement[] = [
         category: 'academic',
         tags: ['research', 'MIT', 'AI'],
         date: '2019',
-        unlocked: true
+        unlocked: true,
+        skills: ['ai'],
     },
     {
         id: 'valedictorian-20',
@@ -118,7 +125,8 @@ export const achievements: Achievement[] = [
         icon: '🎤',
         category: 'community',
         tags: ['speaking', 'education'],
-        unlocked: true
+        unlocked: true,
+        skills: ['public-speaking'],
     },
     {
         id: 'hackathon-winner',
@@ -127,7 +135,8 @@ export const achievements: Achievement[] = [
         icon: '🥇',
         category: 'technical',
         tags: ['hackathon', 'competition'],
-        unlocked: true
+        unlocked: true,
+        skills: ['coding'],
     },
     {
         id: 'content-creator',
@@ -136,7 +145,8 @@ export const achievements: Achievement[] = [
         icon: '📱',
         category: 'community',
         tags: ['content', 'social-media'],
-        unlocked: true
+        unlocked: true,
+        skills: ['content-creation'],
     },
     // Bucket List & Hobbies
     // --- 🌊 WATER (The "I Got Wet" Arc) ---
@@ -147,7 +157,8 @@ export const achievements: Achievement[] = [
         "icon": "🛟",
         "category": "adventure",
         "tags": ["diving", "certification"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["scuba-diving"],
     },
     {
         "id": "shark-diver",
@@ -156,7 +167,8 @@ export const achievements: Achievement[] = [
         "icon": "🦈",
         "category": "adventure",
         "tags": ["diving", "sharks"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["diving"],
     },
     {
         "id": "surfer-novice",
@@ -165,7 +177,8 @@ export const achievements: Achievement[] = [
         "icon": "🏄",
         "category": "sports",
         "tags": ["water", "surfing"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["surfing"],
     },
     {
         "id": "wind-surfer",
@@ -174,7 +187,8 @@ export const achievements: Achievement[] = [
         "icon": "🌬️",
         "category": "sports",
         "tags": ["water", "wind"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["windsurfing"],
     },
     {
         "id": "freediver",
@@ -183,7 +197,8 @@ export const achievements: Achievement[] = [
         "icon": "🤿",
         "category": "adventure",
         "tags": ["diving", "breath"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["freediving"],
     },
 
     // --- ⚡ ADRENALINE (The "I Survived" Arc) ---
@@ -194,17 +209,20 @@ export const achievements: Achievement[] = [
         "icon": "🪂",
         "category": "adventure",
         "tags": ["flying", "adrenaline"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["skydiving-tandem"],
     },
     {
-        "id": "pilot-student",
-        "title": "One-Day Pilot",
-        "description": "Flew a plane once for a day program. Didn't crash.",
-        "icon": "✈️",
-        "category": "skill",
-        "tags": ["flying", "aviation"],
-        "unlocked": true
+        id: 'pilot-student',
+        title: 'One-Day Pilot',
+        description: 'Flew a plane once for a day program. Didn\'t crash.',
+        icon: '✈️',
+        category: 'skill',
+        tags: ['flying', 'aviation'],
+        unlocked: true,
+        skills: ['flying'],
     },
+
     {
         "id": "climber",
         "title": "Rock Climber",
@@ -212,7 +230,8 @@ export const achievements: Achievement[] = [
         "icon": "🧗",
         "category": "sports",
         "tags": ["climbing", "strength"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["climbing"],
     },
         // --- 🌋 ADVENTURE (The Adrenaline Arc) ---
     {
@@ -222,7 +241,8 @@ export const achievements: Achievement[] = [
         "icon": "⛏️",
         "category": "adventure",
         "tags": ["nature", "extreme"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["climbing"],
     },
     {
         "id": "aquaman-hunter",
@@ -231,7 +251,8 @@ export const achievements: Achievement[] = [
         "icon": "🔱",
         "category": "adventure",
         "tags": ["ocean", "survival"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["diving"],
     },
     {
         "id": "volcano-witness",
@@ -250,7 +271,8 @@ export const achievements: Achievement[] = [
         "icon": "🏺",
         "category": "creative",
         "tags": ["art", "fire"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["glassblowing"],
     },
     {
         "id": "welder",
@@ -259,7 +281,8 @@ export const achievements: Achievement[] = [
         "icon": "👨‍🏭",
         "category": "creative",
         "tags": ["metal", "craft"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["welding"],
     },
     {
         "id": "arts-dabbler",
@@ -268,7 +291,8 @@ export const achievements: Achievement[] = [
         "icon": "🎨",
         "category": "creative",
         "tags": ["crafts", "hobby-collector"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["arts"],
     },
     {
         "id": "birthday-baker",
@@ -277,7 +301,8 @@ export const achievements: Achievement[] = [
         "icon": "🎂",
         "category": "skill",
         "tags": ["cooking", "baking", "adulting"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["cooking"],
     },
     {
         "id": "fashion-designer",
@@ -286,7 +311,8 @@ export const achievements: Achievement[] = [
         "icon": "🧵",
         "category": "creative",
         "tags": ["fashion", "sewing"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["fashion", "cosplay"],
     },
         {
         "id": "yc-founder",
@@ -332,7 +358,8 @@ export const achievements: Achievement[] = [
         "icon": "🔐",
         "category": "skill",
         "tags": ["stealth", "rogue"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["lockpicking"],
     },
 
     // --- 🕺 SKILLS (The "Beginner Class" Arc) ---
@@ -343,7 +370,8 @@ export const achievements: Achievement[] = [
         "icon": "💃",
         "category": "art",
         "tags": ["dance", "rhythm"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["dancing"],
     },
     {
         "id": "musician-producer",
@@ -352,7 +380,8 @@ export const achievements: Achievement[] = [
         "icon": "🎸",
         "category": "art",
         "tags": ["music", "audio"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["music"],
     },
     {
         "id": "martial-artist",
@@ -361,7 +390,8 @@ export const achievements: Achievement[] = [
         "icon": "🥋",
         "category": "sports",
         "tags": ["combat", "fighting"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["bjj", "fencing"],
     },
     {
         "id": "calisthenics-athlete",
@@ -370,7 +400,8 @@ export const achievements: Achievement[] = [
         "icon": "🤸",
         "category": "sports",
         "tags": ["fitness", "strength"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["calisthenics"],
     },
 
     // --- 🌍 TRAVEL (The "I Was There" Arc) ---
@@ -381,7 +412,8 @@ export const achievements: Achievement[] = [
         "icon": "🏂",
         "category": "sports",
         "tags": ["snow", "travel"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["snowboarding", "skiing"],
     },
     {
         "id": "volcano-hiker",
@@ -390,7 +422,8 @@ export const achievements: Achievement[] = [
         "icon": "🌋",
         "category": "adventure",
         "tags": ["hiking", "travel"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["hiking"],
     },
     {
         "id": "indonesia-hiker",
@@ -399,7 +432,8 @@ export const achievements: Achievement[] = [
         "icon": "⛰️",
         "category": "adventure",
         "tags": ["hiking", "volcano", "travel", "indonesia"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["hiking", "travel"],
     },
 
     // --- 💻 CAREER (Actually Expert) ---
@@ -411,7 +445,8 @@ export const achievements: Achievement[] = [
         "category": "technical",
         "tags": ["programming", "origins"],
         "date": "2011",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["hacking", "coding"],
     },
     {
         "id": "app-tycoon",
@@ -420,7 +455,8 @@ export const achievements: Achievement[] = [
         "icon": "📱",
         "category": "technical",
         "tags": ["startup", "coding"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["app-dev"],
     },
     {
         "id": "hackathon-champ",
@@ -429,7 +465,8 @@ export const achievements: Achievement[] = [
         "icon": "🏆",
         "category": "technical",
         "tags": ["competition", "coding"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["coding"],
     },
     {
         "id": "public-speaker",
@@ -438,7 +475,8 @@ export const achievements: Achievement[] = [
         "icon": "🎤",
         "category": "professional",
         "tags": ["speaking", "leadership"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["public-speaking"],
     },
 
     // --- 🔒 QUEST LOG (Goals) ---
@@ -458,7 +496,8 @@ export const achievements: Achievement[] = [
         "icon": "🔴",
         "category": "professional",
         "tags": ["bucket-list", "speaking"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["public-speaking"],
     },
     {
         "id": "whale-hunter",
@@ -467,7 +506,8 @@ export const achievements: Achievement[] = [
         "icon": "🐋",
         "category": "adventure",
         "tags": ["bucket-list", "diving"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["diving"],
     },
     {
         "id": "ironman-goal",
@@ -476,7 +516,8 @@ export const achievements: Achievement[] = [
         "icon": "🏃",
         "category": "sports",
         "tags": ["bucket-list", "fitness"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["running", "swimming"],
     },
     {
         "id": "book-author",
@@ -485,7 +526,8 @@ export const achievements: Achievement[] = [
         "icon": "📖",
         "category": "professional",
         "tags": ["bucket-list", "writing"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["writing"],
     },
     {
         "id": "everest-base",
@@ -494,7 +536,8 @@ export const achievements: Achievement[] = [
         "icon": "🏔️",
         "category": "adventure",
         "tags": ["bucket-list", "hiking"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["hiking"],
     },
     {
         "id": "aurora-hunter",
@@ -514,7 +557,8 @@ export const achievements: Achievement[] = [
         tags: ['speaking', 'goal', 'community'],
         unlocked: false,
         image: 'https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=800',
-        caption: 'Goal: 100 public talks'
+        caption: 'Goal: 100 public talks',
+        skills: ['public-speaking'],
     },
     {
         "id": "sand-boarder",
@@ -524,7 +568,8 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["japan", "sand"],
         "date": "2023-04",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["sandboarding"],
     },
     {
         "id": "sardine-swimmer",
@@ -534,7 +579,8 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["diving", "nature"],
         "date": "2023-04",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["scuba-diving"],
     },
     {
         "id": "volcano-diver",
@@ -544,7 +590,8 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["diving", "volcano"],
         "date": "2023-04",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["scuba-diving"],
     },
     {
         "id": "night-diver",
@@ -554,7 +601,8 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["diving", "night"],
         "date": "2023-05",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["scuba-diving"],
     },
     {
         "id": "freedive-injury",
@@ -564,18 +612,21 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["injury", "dedication"],
         "date": "2023-05",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["freediving"],
     },
     {
-        "id": "airport-sleeper",
-        "title": "Hobo Tourist",
-        "description": "Slept in a Japanese airport and got lost in a village. Embraced the 'walk of shame' photography.",
-        "icon": "🛄",
-        "category": "travel",
-        "tags": ["mishap", "resilience"],
-        "date": "2023-04",
-        "unlocked": true
+        id: 'airport-sleeper',
+        title: 'Hobo Tourist',
+        description: 'Slept in a Japanese airport and got lost in a village. Embraced the \'walk of shame\' photography.',
+        icon: '🛄',
+        category: 'travel',
+        tags: ['mishap', 'resilience'],
+        date: '2023-04',
+        unlocked: true,
+        skills: ['travel'],
     },
+
 
     // --- 🏋️ FITNESS & STATS (The "Rebuild Phase") ---
     {
@@ -585,7 +636,8 @@ export const achievements: Achievement[] = [
         "icon": "🏠",
         "category": "fitness",
         "tags": ["calisthenics", "setup"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["working-out", "calisthenics"],
     },
     {
         "id": "bulking-success",
@@ -595,7 +647,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["weight-gain", "gym"],
         "date": "2023-12",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["working-out"],
     },
     {
         "id": "deadlift-pr-2023",
@@ -605,7 +658,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["pr", "strength"],
         "date": "2023-12",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["weightlifting"],
     },
     {
         "id": "weighted-pullup-pr",
@@ -615,7 +669,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["pr", "calisthenics"],
         "date": "2023-12",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["calisthenics"],
     },
     {
         "id": "streak-runner",
@@ -625,7 +680,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["running", "discipline"],
         "date": "2023-12",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["running"],
     },
 
     // --- 📉 STRUGGLES & HABITS (The "Character Development") ---
@@ -647,7 +703,8 @@ export const achievements: Achievement[] = [
         "category": "professional",
         "tags": ["monetization", "business"],
         "date": "2025",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["content-creation"],
     },
     {
         "id": "media-personality-2025",
@@ -669,7 +726,8 @@ export const achievements: Achievement[] = [
         "category": "professional",
         "tags": ["speaking", "government"],
         "date": "2025-11",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["public-speaking", "ai"],
     },
     {
         "id": "expert-panelist",
@@ -688,7 +746,8 @@ export const achievements: Achievement[] = [
         "icon": "🗣️",
         "category": "professional",
         "tags": ["monetization", "speaking"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["public-speaking"],
     },
     {
         "id": "judge-dredd",
@@ -697,7 +756,8 @@ export const achievements: Achievement[] = [
         "icon": "⚖️",
         "category": "technical",
         "tags": ["community", "leadership"],
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["coding"],
     },
 
     // --- 🏠 LIFE & LOOKS (The "Glow Up" Arc) ---
@@ -775,18 +835,21 @@ export const achievements: Achievement[] = [
         "category": "adventure",
         "tags": ["water", "tech"],
         "date": "2025-01",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["flyboarding"],
     },
     {
-        "id": "cave-explorer-2025",
-        "title": "Spelunker",
-        "description": "Went caving. Darkness is your old friend.",
-        "icon": "🦇",
-        "category": "adventure",
-        "tags": ["nature", "exploration"],
-        "date": "2025-11",
-        "unlocked": true
+        id: 'cave-explorer-2025',
+        title: 'Spelunker',
+        description: 'Went caving. Darkness is your old friend.',
+        icon: '🦇',
+        category: 'adventure',
+        tags: ['nature', 'exploration'],
+        date: '2025-11',
+        unlocked: true,
+        skills: ['caving'],
     },
+
     {
         "id": "rug-maker",
         "title": "Tufter",
@@ -795,7 +858,8 @@ export const achievements: Achievement[] = [
         "category": "creative",
         "tags": ["craft", "art"],
         "date": "2025-01",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["tufting"],
     },
     {
         "id": "leather-crafter",
@@ -805,7 +869,8 @@ export const achievements: Achievement[] = [
         "category": "creative",
         "tags": ["craft", "art"],
         "date": "2025-04",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["leather-craft"],
     },
 
     // --- 🔒 QUEST LOG (2026 Goals) ---
@@ -843,7 +908,8 @@ export const achievements: Achievement[] = [
         "icon": "📝",
         "category": "habits",
         "tags": ["2026", "writing"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["writing", "blogging"],
     },
     {
         "id": "influencer-100k",
@@ -854,6 +920,26 @@ export const achievements: Achievement[] = [
         "tags": ["2026", "growth"],
         "unlocked": false
     },
+    {
+        id: 'split',
+        title: 'The Split',
+        description: 'Could do a full split once. Not anymore :(',
+        icon: '🤸',
+        category: 'fitness',
+        tags: ['flexibility', 'calisthenics'],
+        unlocked: true,
+        skills: ['calisthenics'],
+    },
+    {
+        id: 'backflip',
+        title: 'Backflip',
+        description: 'Assisted/trampoline backflip. Ground backflip still on the bucket list.',
+        icon: '🤸',
+        category: 'fitness',
+        tags: ['calisthenics', 'adrenaline'],
+        unlocked: true,
+        skills: ['calisthenics'],
+    },
     // --- 🏋️ STRENGTH & POWER (The 2024 Gains) ---
     {
         "id": "deadlift-150",
@@ -863,7 +949,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["strength", "pr"],
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["weightlifting"],
     },
     {
         "id": "bench-100",
@@ -873,7 +960,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["strength", "pr"],
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["weightlifting"],
     },
     {
         "id": "ohp-60",
@@ -883,7 +971,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["strength", "pr"],
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["weightlifting"],
     },
     {
         "id": "weighted-pullup-40",
@@ -893,7 +982,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["calisthenics", "strength"],
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["calisthenics"],
     },
     {
         "id": "hspu-freestanding",
@@ -903,7 +993,8 @@ export const achievements: Achievement[] = [
         "category": "fitness",
         "tags": ["calisthenics", "skill"],
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["calisthenics"],
     },
 
     // --- 🏃 ENDURANCE ---
@@ -916,7 +1007,8 @@ export const achievements: Achievement[] = [
         "tags": ["running", "cardio"],
         "progress": "100/366",
         "date": "2024",
-        "unlocked": true
+        "unlocked": true,
+        "skills": ["running"],
     },
 
     // --- 🔒 MORE QUEST LOG (Future Goals) ---
@@ -954,7 +1046,8 @@ export const achievements: Achievement[] = [
         "icon": "🦵",
         "category": "fitness",
         "tags": ["bucket-list", "running", "endurance"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["running"],
     },
     {
         "id": "run-100km",
@@ -963,7 +1056,8 @@ export const achievements: Achievement[] = [
         "icon": "🏃",
         "category": "fitness",
         "tags": ["bucket-list", "running", "endurance"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["running"],
     },
     {
         "id": "youtuber",
@@ -972,7 +1066,8 @@ export const achievements: Achievement[] = [
         "icon": "🎥",
         "category": "community",
         "tags": ["bucket-list", "content", "video"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["content-creation"],
     },
     {
         "id": "divemaster",
@@ -981,7 +1076,8 @@ export const achievements: Achievement[] = [
         "icon": "🤿",
         "category": "adventure",
         "tags": ["bucket-list", "diving", "certification"],
-        "unlocked": false
+        "unlocked": false,
+        "skills": ["scuba-diving"],
     },
     {
         "id": "movie-actor",
