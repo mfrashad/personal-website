@@ -55,7 +55,12 @@ export default function DraggablePolaroid({
                 setIsSpread(true);
             }, animationDelay * 1000);
         };
-        window.addEventListener('page-revealed', trigger, { once: true });
+        // If page-revealed already fired (component hydrated late), spread immediately
+        if ((window as any).__pageRevealed) {
+            trigger();
+        } else {
+            window.addEventListener('page-revealed', trigger, { once: true });
+        }
         return () => {
             window.removeEventListener('page-revealed', trigger);
             clearTimeout(timer);
@@ -156,6 +161,19 @@ export default function DraggablePolaroid({
             style={{
                 userSelect: 'none',
                 zIndex: isDragging ? 500 : zIndex,
+            }}
+            initial={hasStackMode ? {
+                opacity: 0.8,
+                scale: 0.35,
+                rotate: 0,
+                x: stackPos.x,
+                y: stackPos.y,
+            } : {
+                opacity: 1,
+                scale: 1,
+                rotate: rotation,
+                x: spreadPos.x,
+                y: spreadPos.y,
             }}
             animate={spread ? {
                 opacity: 1,

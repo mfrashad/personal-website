@@ -153,6 +153,7 @@ const resolvedImageWithDomain = new URL(imageFileName, Astro.site).toString();
                             if (progressBar) {
                                 progressBar.style.width = '0';
                             }
+                            window.__pageRevealed = true;
                             window.dispatchEvent(new CustomEvent('page-revealed'));
                         }, 300);
                     }
