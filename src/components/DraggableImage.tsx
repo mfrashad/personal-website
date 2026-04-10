@@ -108,7 +108,11 @@ export default function DraggableImage({
                 setIsSpread(true);
             }, animationDelay * 1000);
         };
-        window.addEventListener('page-revealed', trigger, { once: true });
+        if ((window as any).__pageRevealed) {
+            trigger();
+        } else {
+            window.addEventListener('page-revealed', trigger, { once: true });
+        }
         return () => {
             window.removeEventListener('page-revealed', trigger);
             clearTimeout(timer);
@@ -154,6 +158,19 @@ export default function DraggableImage({
                 userSelect: 'none',
                 zIndex: isDragging ? 500 : zIndex,
                 pointerEvents: zIndex < 0 && !isHovered ? 'none' : 'auto'
+            }}
+            initial={hasStackMode ? {
+                opacity: 0.8,
+                scale: 0.35 * scale,
+                rotate: 0,
+                x: stackOffset.x,
+                y: stackOffset.y,
+            } : {
+                opacity: 1,
+                scale: scale,
+                rotate: rotation,
+                x: 0,
+                y: 0,
             }}
             animate={spread ? {
                 opacity: 1,
