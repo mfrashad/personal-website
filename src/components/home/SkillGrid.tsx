@@ -91,7 +91,7 @@ function SkillCard({ skill, index, showImages, isBottomRow }: {
                         >
                             <img
                                 src={skill.image}
-                                alt={skill.title}
+                                alt={`Fathy Rashad hobby - ${skill.title}`}
                                 loading="lazy"
                                 className="w-full h-full object-cover"
                             />
@@ -150,7 +150,7 @@ function SkillCard({ skill, index, showImages, isBottomRow }: {
                                 <div className="flex-1 bg-neutral-200 rounded overflow-hidden mb-1.5">
                                     <img
                                         src={skill.image}
-                                        alt={skill.title}
+                                        alt={`Fathy Rashad hobby - ${skill.title}`}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>

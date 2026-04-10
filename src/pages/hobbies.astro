@@ -7,12 +7,38 @@ import SkillGrid from '@components/home/SkillGrid';
 import { skills as allSkills } from '@data/skills';
 
 const skills = allSkills.filter(s => !s.hidden);
+
+const hobbyImages = skills
+    .filter(s => s.image)
+    .map(s => ({
+        "@type": "ImageObject",
+        "url": `https://www.mfrashad.com${s.image}`,
+        "name": `Fathy Rashad hobby - ${s.title}`,
+        "description": s.description || `${s.title} - one of Fathy Rashad's hobbies`,
+    }));
+
+const hobbiesSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Fathy Rashad Hobbies",
+    "alternateName": "Rashadventure Hobbies",
+    "description": "A collection of hobbies and interests by Fathy Rashad (Rashadventure) — from coding to diving to 15 dance styles.",
+    "url": "https://www.mfrashad.com/hobbies",
+    "image": hobbyImages,
+    "author": {
+        "@type": "Person",
+        "name": "Fathy Rashad",
+        "alternateName": "Rashadventure",
+        "url": "https://www.mfrashad.com"
+    }
+};
 ---
 
 <Layout
     title="Hobbies | Rashad"
-    description="My hobbies and interests — from coding to diving to 15 dance styles"
+    description="Fathy Rashad's hobbies and interests — from coding to diving to 15 dance styles. Also known as Rashadventure."
 >
+    <script type="application/ld+json" set:html={JSON.stringify(hobbiesSchema)} />
     <Grid classes="py-40">
         <GridBox desktopFull>
             <SectionContent title="Hobbies" classes="!px-0">

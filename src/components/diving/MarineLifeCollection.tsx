@@ -19,7 +19,7 @@ function AnimalCard({ animal, onClick }: { animal: MarineAnimal; onClick: () => 
       >
         <img
           src={`/dive-animals/diveanimals_${animal.slug}.webp`}
-          alt={animal.name}
+          alt={`${animal.name} - marine life spotted by Fathy Rashad while diving`}
           width={px}
           height={px}
           style={{ imageRendering: 'pixelated' }}
@@ -76,7 +76,7 @@ function AnimalModal({ animal, onClose }: { animal: MarineAnimal; onClose: () =>
             <div className="drop-shadow-[0_0_24px_rgba(100,200,255,0.3)]">
               <img
                 src={`/dive-animals/diveanimals_${animal.slug}.webp`}
-                alt={animal.name}
+                alt={`${animal.name} - marine life spotted by Fathy Rashad while diving`}
                 width={Math.min(displaySize, 180)}
                 height={Math.min(displaySize, 180)}
                 style={{ imageRendering: 'pixelated' }}

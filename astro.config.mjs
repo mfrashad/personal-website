@@ -10,6 +10,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeExternalLinks from 'rehype-external-links';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'url';
 
 // https://astro.build/config
@@ -38,7 +39,10 @@ export default defineConfig({
         tailwind(),
         icon(),
         react(),
-        mdx()
+        mdx(),
+        sitemap({
+            filter: (page) => !page.includes('/admin/'),
+        }),
     ],
     markdown: {
         remarkPlugins: [
