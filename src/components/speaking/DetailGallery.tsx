@@ -20,7 +20,7 @@ export default function DetailGallery({ images, title }: DetailGalleryProps) {
                     >
                         <img
                             src={image}
-                            alt={`${title} photo ${i + 1}`}
+                            alt={`Fathy Rashad at ${title} - photo ${i + 1}`}
                             className="w-full h-auto object-cover aspect-[4/3]"
                             loading={i < 6 ? "eager" : "lazy"}
                         />
