@@ -23,14 +23,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const resolvedImageWithDomain = new URL('/opengraph/garden.jpg', Astro.site).toString();
 
 const { title, categories, path, slug } = Astro.props;
-const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
+const adjustedTitle = title ? 'Rashad' + ' | ' + title : 'Rashad';
 ---
 
 <!doctype html>
 <html lang="en" class="overscroll-none">
     <head>
         <meta charset="UTF-8" />
-        <meta name="description" content="a growing collection of thoughts, ideas, and knowledge" />
+        <meta name="description" content="Fathy Rashad's digital garden — a growing collection of thoughts, ideas, and knowledge" />
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" type="image/svg+xml" href="/favicon-garden.svg" />
         <meta name="generator" content={Astro.generator} />
@@ -49,7 +49,7 @@ const adjustedTitle = title ? 'iamrobin' + ' | ' + title : 'iamrobin';
                     image: resolvedImageWithDomain
                 },
                 image: {
-                    alt: 'iamrobin personal website screenshot'
+                    alt: 'Fathy Rashad personal website'
                 }
             }}
         />

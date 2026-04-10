@@ -91,7 +91,7 @@ const tagCounts = allTags.reduce(
 const tagCloudData = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
 ---
 
-<Layout title={`Blog | ${category}`}>
+<Layout title={`${category} Posts | Fathy Rashad Blog`} description={`${category} blog posts by Fathy Rashad — thoughts on AI, startups, tech, and life.`}>
     <Grid classes="py-40">
         <GridBox desktopFull>
             <SectionContent title="Blog">
