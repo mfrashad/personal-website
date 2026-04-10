@@ -31,6 +31,7 @@ interface AchievementGridProps {
     achievements: Achievement[];
     metrics?: Metric[];
     showMetrics?: boolean;
+    showBadges?: boolean;
     skillImages?: Record<string, string>;
 }
 
@@ -57,7 +58,7 @@ function formatNumber(num: number): string {
     return num.toString();
 }
 
-export default function AchievementGrid({ achievements, metrics = [], showMetrics = true, skillImages = {} }: AchievementGridProps) {
+export default function AchievementGrid({ achievements, metrics = [], showMetrics = true, showBadges = true, skillImages = {} }: AchievementGridProps) {
     const [filter, setFilter] = useState<string>('all');
     const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -378,6 +379,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                 </div>
             )}
 
+            {!showBadges ? null : <>
             {/* Category Filter */}
             <div className="flex flex-wrap gap-2 mb-6">
                 {categories.map((category) => (
@@ -444,6 +446,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                     </p>
                 </div>
             </div>
+            </>}
 
             <style>{`
                 .flip-card-container {
