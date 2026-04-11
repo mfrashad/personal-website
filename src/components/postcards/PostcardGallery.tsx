@@ -2,11 +2,19 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PostOfficeStamp from './PostOfficeStamp';
 
+interface PostcardModeration {
+    hidden?: boolean;
+    hideMessage?: boolean;
+    hideAuthor?: boolean;
+    censorWords?: string[];
+}
+
 interface Postcard {
     id: string;
     author: string;
     body: string;
     drawingDataUrl: string;
+    cardDrawingDataUrl?: string;
     country?: string;
     websiteUrl?: string;
     createdAt: number;
@@ -15,6 +23,29 @@ interface Postcard {
     notecardId?: number;
     stampX?: number;
     stampY?: number;
+    moderation?: PostcardModeration;
+}
+
+function censorText(text: string, words: string[]): string {
+    let result = text;
+    for (const word of words) {
+        const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        result = result.replace(regex, (m) => '\u2588'.repeat(m.length));
+    }
+    return result;
+}
+
+function getDisplayBody(postcard: Postcard, isDev: boolean): string {
+    if (isDev) return postcard.body; // admin sees original
+    if (postcard.moderation?.hideMessage) return '';
+    if (postcard.moderation?.censorWords?.length) return censorText(postcard.body, postcard.moderation.censorWords);
+    return postcard.body;
+}
+
+function getDisplayAuthor(postcard: Postcard, isDev: boolean): string {
+    if (isDev) return postcard.author; // admin sees original
+    if (postcard.moderation?.hideAuthor) return 'Anonymous';
+    return postcard.author;
 }
 
 interface PostcardGalleryProps {
@@ -57,7 +88,7 @@ function getCardFontSize(len: number) {
     return 'text-[10px] sm:text-[11px]';
 }
 
-function PostcardCard({ postcard, onClick }: { postcard: Postcard; onClick: () => void }) {
+function PostcardCard({ postcard, onClick, isDev }: { postcard: Postcard; onClick: () => void; isDev: boolean }) {
     const rotation = getRotation(postcard.id);
     const translateX = getTranslateX(postcard.id);
     const bg = getNotecardBg(postcard);
@@ -80,6 +111,15 @@ function PostcardCard({ postcard, onClick }: { postcard: Postcard; onClick: () =
                     padding: 'clamp(20px, 4vw, 36px)',
                 }}
             >
+                {/* Card drawing overlay */}
+                {postcard.cardDrawingDataUrl && (
+                    <img
+                        src={postcard.cardDrawingDataUrl}
+                        alt=""
+                        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+                    />
+                )}
+
                 {/* Top-right: drawn stamp */}
                 <div className="absolute top-4 right-4 sm:top-5 sm:right-5">
                     <div className="inline-block p-[4px] shrink-0" style={STAMP_BORDER}>
@@ -108,14 +148,14 @@ function PostcardCard({ postcard, onClick }: { postcard: Postcard; onClick: () =
                 </div>
 
                 {/* Message — left side, doesn't overlap stamp */}
-                <pre className={`${getCardFontSize(postcard.body.length)} leading-relaxed whitespace-pre-wrap font-script line-clamp-5 pr-[80px] sm:pr-[90px]`}>
-                    {postcard.body}
+                <pre className={`${getCardFontSize(postcard.body.length)} leading-relaxed whitespace-pre-wrap font-script line-clamp-5 pr-[80px] sm:pr-[90px] ${postcard.moderation?.hideMessage && !isDev ? 'blur-sm select-none' : ''}`}>
+                    {getDisplayBody(postcard, isDev)}
                 </pre>
 
                 {/* Bottom-right: author + date */}
                 <div className="absolute bottom-4 right-4 sm:bottom-5 sm:right-5 text-right">
-                    <p className="text-xs sm:text-sm font-semibold font-script">
-                        {postcard.author}
+                    <p className={`text-xs sm:text-sm font-semibold font-script ${postcard.moderation?.hideAuthor && !isDev ? 'blur-sm select-none' : ''}`}>
+                        {getDisplayAuthor(postcard, isDev)}
                     </p>
                     <p className="text-[9px] text-black/40 font-mono">{formatDate(postcard.createdAt)}</p>
                 </div>
@@ -128,6 +168,8 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
     const [postcards, setPostcards] = useState<Postcard[]>(initialPostcards || []);
     const [selected, setSelected] = useState<Postcard | null>(null);
     const [loading, setLoading] = useState(!initialPostcards);
+    const [textSelection, setTextSelection] = useState('');
+    const [previewPublic, setPreviewPublic] = useState(false);
     const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
     const handleDelete = async (id: string) => {
@@ -164,13 +206,40 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
 
     return (
         <>
+            {/* Stamp gallery */}
+            <p className="text-center font-mono text-xs text-neutral-400 mb-4">
+                {postcards.filter(p => isDev || !p.moderation?.hidden).length} stamp drawing{postcards.filter(p => isDev || !p.moderation?.hidden).length !== 1 ? 's' : ''} collected
+            </p>
+            <div className="flex flex-wrap justify-center gap-1.5 mb-10 px-4 max-w-lg mx-auto">
+                {postcards.filter(p => isDev || !p.moderation?.hidden).map((p) => (
+                    <button
+                        key={`stamp-${p.id}`}
+                        onClick={() => setSelected(p)}
+                        className={`group ${p.moderation?.hidden ? 'opacity-30' : ''}`}
+                        title={getDisplayAuthor(p, isDev)}
+                    >
+                        <div
+                            className="inline-block p-[3px] transition-transform hover:scale-110"
+                            style={STAMP_BORDER}
+                        >
+                            <img
+                                src={p.drawingDataUrl}
+                                alt={`Stamp by ${getDisplayAuthor(p, isDev)}`}
+                                className="w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] object-cover"
+                                style={{ imageRendering: 'pixelated' }}
+                            />
+                        </div>
+                    </button>
+                ))}
+            </div>
+
             <p className="text-center font-mono text-xs text-neutral-400 mb-6">
-                {postcards.length} postcard{postcards.length !== 1 ? 's' : ''} received
+                {postcards.filter(p => isDev || !p.moderation?.hidden).length} postcard{postcards.filter(p => isDev || !p.moderation?.hidden).length !== 1 ? 's' : ''} received
             </p>
 
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-8 overflow-hidden px-2">
-                {postcards.map((postcard) => (
-                    <PostcardCard key={postcard.id} postcard={postcard} onClick={() => setSelected(postcard)} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-14 sm:gap-x-16 lg:gap-x-20 gap-y-14 sm:gap-y-16 justify-items-center -mx-4 sm:-mx-8 lg:-mx-16">
+                {postcards.filter(p => isDev || !p.moderation?.hidden).map((postcard) => (
+                    <PostcardCard key={postcard.id} postcard={postcard} onClick={() => setSelected(postcard)} isDev={isDev} />
                 ))}
             </div>
 
@@ -182,7 +251,7 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setSelected(null)}
+                        onClick={() => { setSelected(null); setPreviewPublic(false); setTextSelection(''); }}
                     >
                         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
                         <motion.div
@@ -201,6 +270,15 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
                             onClick={(e) => e.stopPropagation()}
                         >
+                            {/* Card drawing overlay */}
+                            {selected.cardDrawingDataUrl && (
+                                <img
+                                    src={selected.cardDrawingDataUrl}
+                                    alt=""
+                                    className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+                                />
+                            )}
+
                             <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
                                 {isDev && (
                                     <button
@@ -212,7 +290,7 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
                                     </button>
                                 )}
                                 <button
-                                    onClick={() => setSelected(null)}
+                                    onClick={() => { setSelected(null); setPreviewPublic(false); setTextSelection(''); }}
                                     className="w-7 h-7 flex items-center justify-center rounded-full bg-black/5 hover:bg-black/10 text-black/50 font-mono text-sm"
                                 >
                                     x
@@ -247,19 +325,29 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
                             </div>
 
                             {/* Message — left side */}
-                            <pre className="text-lg leading-relaxed whitespace-pre-wrap font-script pr-[110px] overflow-y-auto max-h-[70%]">
-                                {selected.body}
+                            {(() => { const asAdmin = isDev && !previewPublic; return (
+                            <pre
+                                className={`text-lg leading-relaxed whitespace-pre-wrap font-script pr-[110px] overflow-y-auto max-h-[70%] ${selected.moderation?.hideMessage && !asAdmin ? 'blur-md select-none' : ''}`}
+                                onMouseUp={() => {
+                                    if (!isDev || previewPublic) return;
+                                    const sel = window.getSelection()?.toString().trim();
+                                    setTextSelection(sel || '');
+                                }}
+                            >
+                                {getDisplayBody(selected, asAdmin)}
                             </pre>
+                            ); })()}
 
                             {/* Bottom-right: author details */}
+                            {(() => { const asAdmin = isDev && !previewPublic; return (
                             <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8 text-right">
                                 <div className="font-mono text-[10px] text-black/40 mb-0.5">From:</div>
-                                <p className="text-lg font-semibold font-script">
-                                    {selected.websiteUrl ? (
+                                <p className={`text-lg font-semibold font-script ${selected.moderation?.hideAuthor && !asAdmin ? 'blur-md select-none' : ''}`}>
+                                    {selected.websiteUrl && !(selected.moderation?.hideAuthor && !asAdmin) ? (
                                         <a href={selected.websiteUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                                            {selected.author} &#x2197;
+                                            {getDisplayAuthor(selected, asAdmin)} &#x2197;
                                         </a>
-                                    ) : selected.author}
+                                    ) : getDisplayAuthor(selected, asAdmin)}
                                 </p>
                                 {selected.country && (
                                     <p className="text-[10px] text-black/40 font-mono mt-0.5">{selected.country}</p>
@@ -271,7 +359,107 @@ export default function PostcardGallery({ initialPostcards }: PostcardGalleryPro
                                     })}
                                 </p>
                             </div>
+                            ); })()}
                         </motion.div>
+
+                        {/* Admin moderation panel (dev only) */}
+                        {isDev && selected && (
+                            <motion.div
+                                className="relative mt-4 w-full max-w-[520px] bg-neutral-900 rounded-xl p-4 text-white"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Admin Moderation</p>
+                                    <button
+                                        onClick={() => setPreviewPublic(!previewPublic)}
+                                        className={`px-2.5 py-1 rounded-md font-mono text-[10px] transition-colors ${previewPublic ? 'bg-blue-500/30 text-blue-300' : 'bg-white/10 text-white/40 hover:text-white/60'}`}
+                                    >
+                                        {previewPublic ? '👁 Public View' : 'Preview as Public'}
+                                    </button>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        onClick={async () => {
+                                            const mod = { ...selected.moderation, hidden: !selected.moderation?.hidden };
+                                            await fetch('/api/postcards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selected.id, moderation: mod }) });
+                                            setSelected({ ...selected, moderation: mod });
+                                            refresh();
+                                        }}
+                                        className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-colors ${selected.moderation?.hidden ? 'bg-red-500/30 text-red-300' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+                                    >
+                                        {selected.moderation?.hidden ? 'Hidden' : 'Hide Card'}
+                                    </button>
+                                    <button
+                                        onClick={async () => {
+                                            const mod = { ...selected.moderation, hideMessage: !selected.moderation?.hideMessage };
+                                            await fetch('/api/postcards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selected.id, moderation: mod }) });
+                                            setSelected({ ...selected, moderation: mod });
+                                            refresh();
+                                        }}
+                                        className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-colors ${selected.moderation?.hideMessage ? 'bg-yellow-500/30 text-yellow-300' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+                                    >
+                                        {selected.moderation?.hideMessage ? 'Message Hidden' : 'Hide Message'}
+                                    </button>
+                                    <button
+                                        onClick={async () => {
+                                            const mod = { ...selected.moderation, hideAuthor: !selected.moderation?.hideAuthor };
+                                            await fetch('/api/postcards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selected.id, moderation: mod }) });
+                                            setSelected({ ...selected, moderation: mod });
+                                            refresh();
+                                        }}
+                                        className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-colors ${selected.moderation?.hideAuthor ? 'bg-yellow-500/30 text-yellow-300' : 'bg-white/10 text-white/60 hover:bg-white/20'}`}
+                                    >
+                                        {selected.moderation?.hideAuthor ? 'Author Hidden' : 'Hide Author'}
+                                    </button>
+                                    {textSelection && (
+                                        <button
+                                            onClick={async () => {
+                                                const existing = selected.moderation?.censorWords || [];
+                                                if (existing.includes(textSelection)) return;
+                                                const censorWords = [...existing, textSelection];
+                                                const mod = { ...selected.moderation, censorWords };
+                                                await fetch('/api/postcards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selected.id, moderation: mod }) });
+                                                setSelected({ ...selected, moderation: mod });
+                                                setTextSelection('');
+                                                window.getSelection()?.removeAllRanges();
+                                                refresh();
+                                            }}
+                                            className="px-3 py-1.5 rounded-lg font-mono text-xs bg-orange-500/30 text-orange-300 hover:bg-orange-500/40 transition-colors"
+                                        >
+                                            Censor "{textSelection.length > 20 ? textSelection.slice(0, 20) + '...' : textSelection}"
+                                        </button>
+                                    )}
+                                </div>
+                                {selected.moderation?.censorWords?.length ? (
+                                    <div className="mt-3">
+                                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-1.5">Censored phrases <span className="normal-case tracking-normal text-white/25">(click to remove)</span></p>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {selected.moderation.censorWords.map((word, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={async () => {
+                                                        const censorWords = selected.moderation!.censorWords!.filter((_, j) => j !== i);
+                                                        const mod = { ...selected.moderation, censorWords: censorWords.length ? censorWords : undefined };
+                                                        await fetch('/api/postcards', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selected.id, moderation: mod }) });
+                                                        setSelected({ ...selected, moderation: mod });
+                                                        refresh();
+                                                    }}
+                                                    className="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 font-mono text-[11px] hover:bg-red-500/30 hover:text-red-300 transition-colors"
+                                                >
+                                                    {word} &times;
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : null}
+                                {!textSelection && !selected.moderation?.censorWords?.length && (
+                                    <p className="mt-2 font-mono text-[10px] text-white/25">Highlight text in the message above to censor it</p>
+                                )}
+                            </motion.div>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
