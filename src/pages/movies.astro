@@ -4,6 +4,8 @@ import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import SectionContent from '@components/SectionContent.astro';
 import MovieGrid from '@components/movies/MovieGrid';
+import SpriteCharacter from '@components/animations/SpriteCharacter';
+import { SPRITES } from '@data/sprites';
 import { getLetterboxdData } from '@utils/letterboxdCache';
 
 // TODO: Update this to your Letterboxd username
@@ -28,6 +30,7 @@ const { films, count, updated_at } = movieData;
     <Grid classes="py-40">
         <GridBox desktopFull>
             <SectionContent title="Movies" classes="!px-0">
+                <SpriteCharacter config={SPRITES.watching_movies} scale={0.35} slot="icon" client:visible />
                 I keep track of the films I watch on Letterboxd, where I log and organize everything
                 I’ve seen. To make this collection easier to browse, the data is automatically
                 updated and displayed here on my website. It serves as a personal archive and a way

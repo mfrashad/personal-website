@@ -4,13 +4,14 @@ import ProjectItem from './ProjectItem.astro';
 import SectionContent from './SectionContent.astro';
 import NewSliderItem from './newSlider/NewSliderItem.astro';
 import NewSlider from './newSlider/NewSlider.astro';
+import SpriteCharacter from './animations/SpriteCharacter';
+import { SPRITES } from '../data/sprites';
 ---
 
 <div>
-    <SectionContent title="Side Projects">
-        Like most of us – I have lot of ideas and projects that I would like to implement. Many of
-        them get lost in my notes or as random thoughts on my computer. But can you believe it? Some
-        of them actually happen.
+    <SectionContent title="Projects">
+        <SpriteCharacter config={SPRITES.coding_at_computer} scale={0.35} slot="icon" client:visible />
+        A collection of things I've built, from side projects to full products.
     </SectionContent>
     <NewSlider>
         {

@@ -23,6 +23,7 @@ interface DecorationData {
     enabled?: boolean; // Whether this decoration is visible
     shadow?: boolean; // Whether to show shadow
     href?: string; // Optional link on click
+    hoverMessage?: string; // Message for waving sprite on hover
 }
 
 // Define decoration positions scattered across the page
@@ -37,7 +38,9 @@ const decorationsConfig: DecorationData[] = [
             rotation: 10,
             scale: 0.7,
             zIndex: 100,
-            enabled: true
+            enabled: true,
+            hoverMessage: 'Read my writings!',
+            href: '/blog'
         },
         {
             src: chipImg.src,
@@ -59,7 +62,9 @@ const decorationsConfig: DecorationData[] = [
             width: 250,
             scale: 0.8,
             zIndex: 92,
-            enabled: true
+            enabled: true,
+            hoverMessage: 'Check out my hobbies!',
+            href: '/hobbies'
         },
         {
             src: kindleImg.src,
@@ -69,7 +74,9 @@ const decorationsConfig: DecorationData[] = [
             initialY: 412,
             width: 500,
             zIndex: 93,
-            enabled: true
+            enabled: true,
+            hoverMessage: 'Wanna check my books?',
+            href: '/books'
         },
         {
             src: openNotebookImg.src,
@@ -81,7 +88,9 @@ const decorationsConfig: DecorationData[] = [
             rotation: -14,
             scale: 1.4,
             zIndex: 94,
-            enabled: true
+            enabled: true,
+            hoverMessage: 'Read my writings!',
+            href: '/blog'
         },
         {
             src: newspaperImg.src,
@@ -93,7 +102,9 @@ const decorationsConfig: DecorationData[] = [
             rotation: -20,
             scale: 1.1,
             zIndex: 80,
-            enabled: true
+            enabled: true,
+            hoverMessage: "Check what people say about me!",
+            href: '/#media-mentions'
         },
         {
             src: rescueDiverImg.src,
@@ -107,6 +118,7 @@ const decorationsConfig: DecorationData[] = [
             zIndex: 95,
             enabled: true,
             shadow: true,
+            hoverMessage: 'Wanna see my dive log?',
             href: '/diving'
         }
     ];
@@ -320,6 +332,7 @@ export default function ScatteredDecorations() {
                         zIndex={props.zIndex}
                         shadow={decoration.shadow}
                         href={decoration.href}
+                        hoverMessage={decoration.hoverMessage}
                         onPositionChange={(x, y) => handlePositionChange(index, x, y)}
                         stackX={itemStackX}
                         stackY={itemStackY}

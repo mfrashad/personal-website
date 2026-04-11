@@ -1,7 +1,27 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { marineAnimals, sizeConfig, type MarineAnimal, type SizeCategory } from '@data/diving';
 
 const sizeOrder: SizeCategory[] = ['mini', 'small', 'mid', 'big', 'giant'];
+
+function playPokeSfx() {
+  try {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.05);
+    osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.12);
+    osc.onended = () => ctx.close();
+  } catch {}
+}
 
 function AnimalCard({ animal, onClick }: { animal: MarineAnimal; onClick: () => void }) {
   const { px } = sizeConfig[animal.size];
@@ -140,9 +160,26 @@ interface Waypoint {
 
 const IDLE_TIMEOUT = 10_000; // 10s before wandering
 
+const DIVER_MESSAGES = [
+  'Blub blub!',
+  'See any sharks?',
+  'Going deeper...',
+  "Don't touch the coral!",
+  'Equalise!',
+  'Check your air!',
+  'Found Nemo yet?',
+  "It's cold down here.",
+  'Watch out for jellyfish!',
+  'Air check: 150 bar.',
+];
+
 function ScubaDiver({ containerRef }: { containerRef: React.RefObject<HTMLDivElement | null> }) {
   const [pos, setPos] = useState<Waypoint>({ x: 50, y: 50 });
   const [facingRight, setFacingRight] = useState(true);
+  const [bubble, setBubble] = useState<string | null>(null);
+  const [squished, setSquished] = useState(false);
+  const msgIndexRef = useRef(0);
+  const bubbleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const animRef = useRef<number>(0);
   const posRef = useRef({ x: 50, y: 50 });
   const targetRef = useRef<Waypoint>({ x: 200, y: 100 });
@@ -241,21 +278,60 @@ function ScubaDiver({ containerRef }: { containerRef: React.RefObject<HTMLDivEle
     return () => cancelAnimationFrame(animRef.current);
   }, []);
 
+  const handleClick = () => {
+    const msg = DIVER_MESSAGES[msgIndexRef.current % DIVER_MESSAGES.length];
+    msgIndexRef.current++;
+    setBubble(msg);
+    setSquished(true);
+    setTimeout(() => setSquished(false), 300);
+    playPokeSfx();
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(30);
+    }
+    if (bubbleTimeoutRef.current) clearTimeout(bubbleTimeoutRef.current);
+    bubbleTimeoutRef.current = setTimeout(() => setBubble(null), 1500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (bubbleTimeoutRef.current) clearTimeout(bubbleTimeoutRef.current);
+    };
+  }, []);
+
   return (
     <div
-      className="pointer-events-none absolute z-10 transition-none"
+      className="absolute z-10 transition-none cursor-pointer"
       style={{
         left: pos.x,
         top: pos.y,
-        transform: `scaleX(${facingRight ? 1 : -1})`,
       }}
+      onClick={handleClick}
     >
+      <AnimatePresence>
+        {bubble && (
+          <motion.div
+            key={bubble + msgIndexRef.current}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white/90 px-2 py-1 text-[10px] font-medium text-neutral-800 shadow-sm pointer-events-none"
+          >
+            {bubble}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <img
         src="/dive-animals/scuba-diver.webp"
         alt="Scuba diver"
         width={64}
         height={64}
-        style={{ imageRendering: 'pixelated' }}
+        style={{
+          imageRendering: 'pixelated',
+          transform: `scaleX(${facingRight ? 1 : -1}) ${squished ? 'scale(1.06, 0.94)' : 'scale(1, 1)'}`,
+          transformOrigin: 'center center',
+          transition: 'transform 150ms ease-out',
+        }}
         className="drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)]"
       />
     </div>

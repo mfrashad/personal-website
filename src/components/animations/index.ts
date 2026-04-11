@@ -36,3 +36,7 @@ export { default as FloatingEmoji, EmojiBurst } from './FloatingEmoji';
 
 // Counter
 export { default as AnimatedCounter } from './AnimatedCounter';
+
+// Sprite characters
+export { default as SpriteCharacter } from './SpriteCharacter';
+export { default as SpriteOnEdge } from './SpriteOnEdge';

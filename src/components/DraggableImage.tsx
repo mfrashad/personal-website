@@ -19,6 +19,7 @@ interface DraggableImageProps {
     onStackPositionChange?: (x: number, y: number) => void;
     animationDelay?: number;
     href?: string;
+    hoverMessage?: string;
 }
 
 export default function DraggableImage({
@@ -38,7 +39,8 @@ export default function DraggableImage({
     stackY,
     onStackPositionChange,
     animationDelay = 0,
-    href
+    href,
+    hoverMessage
 }: DraggableImageProps) {
     const hasStackMode = stackX !== undefined && stackY !== undefined;
     // DraggableImage uses CSS left/top for base position + motion x/y as offsets
@@ -195,8 +197,18 @@ export default function DraggableImage({
             }}
             onMouseDown={handleMouseDown}
             onClick={handleClick}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => {
+                setIsHovered(true);
+                if (hoverMessage) {
+                    window.dispatchEvent(new CustomEvent('sprite-speak', { detail: { message: hoverMessage } }));
+                }
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false);
+                if (hoverMessage) {
+                    window.dispatchEvent(new CustomEvent('sprite-speak', { detail: { message: null } }));
+                }
+            }}
         >
             <motion.img
                 src={src}

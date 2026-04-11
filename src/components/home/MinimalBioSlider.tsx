@@ -1,5 +1,25 @@
 import { useState } from 'react';
 
+const LINK_HOVER_MESSAGES: Record<string, string> = {
+    '/diving': 'Wanna see my dive log?',
+    '/books': 'Wanna check my books?',
+    '/blog': 'Read my writings!',
+    '/hobbies': 'Check out my hobbies!',
+    '/about': 'Learn more about me!',
+    '/achievements': 'Check out my achievements!',
+    '/speaking': 'See where I\'ve spoken!',
+    '/create': 'Check out my content!',
+    '/resources': 'Browse my curated lists!',
+    '/media': 'Check what people say about me!',
+};
+
+function dispatchSpriteSpeak(href: string, clear = false) {
+    const message = clear ? null : LINK_HOVER_MESSAGES[href];
+    if (message || clear) {
+        window.dispatchEvent(new CustomEvent('sprite-speak', { detail: { message } }));
+    }
+}
+
 interface MinimalBioSliderProps {
     bios: string[];
 }
@@ -53,6 +73,8 @@ function renderLine(text: string, keyPrefix: string) {
                     href={url}
                     className="text-blue-600 hover:text-blue-800 underline transition-colors"
                     {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+                    onMouseEnter={() => dispatchSpriteSpeak(url)}
+                    onMouseLeave={() => dispatchSpriteSpeak(url, true)}
                 >
                     {linkText}
                 </a>

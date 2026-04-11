@@ -1,8 +1,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { SPRITES } from '../../data/sprites';
+import SpriteCharacter from './SpriteCharacter';
+
+const SPRITE_KEYS = Object.keys(SPRITES);
 
 export default function PageLoader() {
     const [isLoading, setIsLoading] = useState(true);
+
+    // Pick a random sprite on mount
+    const spriteConfig = useMemo(() => {
+        const key = SPRITE_KEYS[Math.floor(Math.random() * SPRITE_KEYS.length)];
+        return SPRITES[key];
+    }, []);
 
     useEffect(() => {
         // Hide loader after page loads
@@ -23,6 +33,15 @@ export default function PageLoader() {
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                 >
                     <motion.div className="flex flex-col items-center gap-4">
+                        {/* Random sprite character */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 0.1, type: 'spring', stiffness: 200, damping: 15 }}
+                        >
+                            <SpriteCharacter config={spriteConfig} scale={0.6} interval={1200} />
+                        </motion.div>
+
                         {/* Animated logo/name */}
                         <motion.div
                             className="text-4xl font-bold"

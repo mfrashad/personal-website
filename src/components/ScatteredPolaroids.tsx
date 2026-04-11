@@ -28,6 +28,8 @@ interface PolaroidData {
     rotation: number;
     zIndex: number;
     enabled?: boolean;
+    hoverMessage?: string;
+    href?: string;
 }
 
 // Define polaroid positions scattered across the page
@@ -41,7 +43,9 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 227,
         rotation: -5,
         zIndex: 100,
-        enabled: true
+        enabled: true,
+        hoverMessage: 'Check out my achievements!',
+        href: '/achievements'
     },
     {
         src: selfieImg.src,
@@ -52,7 +56,9 @@ const polaroidsConfig: PolaroidData[] = [
         initialY: 567,
         rotation: 7,
         zIndex: 101,
-        enabled: true
+        enabled: true,
+        hoverMessage: 'Learn more about me!',
+        href: '/about'
     },
     {
         src: contentImg.src,
@@ -519,6 +525,8 @@ export default function ScatteredPolaroids() {
                         initialY={adjustedY}
                         rotation={polaroid.rotation}
                         zIndex={polaroid.zIndex}
+                        hoverMessage={polaroid.hoverMessage}
+                        href={polaroid.href}
                         onPositionChange={(x, y) => handlePositionChange(index, x, y)}
                         {...(isHeroArea ? {
                             stackX: itemStackX,
