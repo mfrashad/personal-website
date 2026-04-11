@@ -146,7 +146,7 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
             </div>
 
             {/* Chart with axes */}
-            <div className="relative h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px] ml-10 sm:ml-14 mr-16 sm:mr-24">
+            <div className="relative ml-8 sm:ml-14 mr-2 sm:mr-24 h-[280px] sm:h-[330px] md:h-[380px] lg:h-[430px]">
                 {/* Left axis: page count */}
                 {guideLines.map((pages) => {
                     const bottom = pages * pxPerPage;
@@ -161,14 +161,14 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                     );
                 })}
 
-                {/* Right axis: cm + real-world markers */}
+                {/* Right axis: cm + real-world markers (hidden on mobile) */}
                 {guideLines.map((pages) => {
                     const bottom = pages * pxPerPage;
                     const cm = Math.round(pages * CM_PER_PAGE);
                     return cm > 0 ? (
                         <span
                             key={`right-${pages}`}
-                            className="absolute text-[10px] text-neutral-400 font-mono pl-2 leading-none whitespace-nowrap"
+                            className="absolute text-[10px] text-neutral-400 font-mono pl-2 leading-none whitespace-nowrap hidden sm:block"
                             style={{ bottom, left: '100%', transform: 'translateY(50%)' }}
                         >
                             {cm}cm
@@ -180,7 +180,7 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                     return (
                         <span
                             key={`marker-${marker.label}`}
-                            className="absolute text-[10px] text-neutral-400 pl-2 leading-none whitespace-nowrap"
+                            className="absolute text-[10px] text-neutral-400 pl-2 leading-none whitespace-nowrap hidden sm:block"
                             style={{ bottom, left: '100%', transform: 'translateY(50%)' }}
                         >
                             {marker.emoji} {marker.label}
@@ -188,10 +188,10 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                     );
                 })}
 
-                {/* Scrollable chart area */}
-                <div className="absolute inset-0 overflow-x-auto overflow-y-hidden">
-                <div className="inline-block h-full" style={{ minWidth: '100%' }}>
-                    <div className="relative h-full overflow-hidden">
+                {/* Single scrollable container for chart + year labels */}
+                <div className="overflow-x-auto overflow-y-hidden">
+                <div className="inline-block" style={{ minWidth: sortedShelves.length * (BASE_WIDTH + STACK_GAP) + 20 }}>
+                    <div className="relative overflow-hidden h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
                         {/* Guide lines */}
                         {guideLines.map((pages) => {
                             const bottom = pages * pxPerPage;
@@ -437,12 +437,9 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                             })}
                         </div>
                     </div>
-                </div>
-                </div>
-
-                {/* Year labels below the chart */}
+                {/* Year labels — same scrollable container */}
                 <div
-                    className="flex items-start px-2 mt-2 pb-1"
+                    className="flex items-start px-2 mt-1 pb-1"
                     style={{ gap: STACK_GAP }}
                 >
                     {sortedShelves.map((shelf) => (
@@ -453,7 +450,9 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                         </div>
                     ))}
                 </div>
-            </div>
+                </div>{/* closes inline-block */}
+                </div>{/* closes scrollable */}
+            </div>{/* closes chart-with-axes */}
 
             {/* Tooltip */}
             {hoveredBook && (
