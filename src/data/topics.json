@@ -41,8 +41,44 @@
           "date": "2024-01-11"
         }
       ]
+    },
+    {
+      "name": "technology",
+      "count": 1,
+      "posts": [
+        {
+          "slug": "is-ai-why-our-water-is-running-out?-—-research-&-sources",
+          "title": "Is AI Why Our Water Is Running Out? — Research & Sources",
+          "collection": "blog",
+          "date": "2026-02-27"
+        }
+      ]
+    },
+    {
+      "name": "ai",
+      "count": 1,
+      "posts": [
+        {
+          "slug": "is-ai-why-our-water-is-running-out?-—-research-&-sources",
+          "title": "Is AI Why Our Water Is Running Out? — Research & Sources",
+          "collection": "blog",
+          "date": "2026-02-27"
+        }
+      ]
+    },
+    {
+      "name": "environment",
+      "count": 1,
+      "posts": [
+        {
+          "slug": "is-ai-why-our-water-is-running-out?-—-research-&-sources",
+          "title": "Is AI Why Our Water Is Running Out? — Research & Sources",
+          "collection": "blog",
+          "date": "2026-02-27"
+        }
+      ]
     }
   ],
-  "totalPosts": 6,
-  "lastUpdated": "2026-02-23T15:27:19.402Z"
+  "totalPosts": 7,
+  "lastUpdated": "2026-04-11T12:00:24.570Z"
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { capture, identify } from '../lib/analytics';
 
 export default function ContactForm() {
     const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -25,16 +26,20 @@ export default function ContactForm() {
 
             if (response.ok) {
                 setFormState('success');
+                capture('contact_form_submitted', { name, email });
+                identify(email, { name, contact_form_sent: true });
                 setName('');
                 setEmail('');
                 setMessage('');
                 setTimeout(() => setFormState('idle'), 5000);
             } else {
                 setFormState('error');
+                capture('contact_form_error');
                 setTimeout(() => setFormState('idle'), 5000);
             }
         } catch (error) {
             setFormState('error');
+            capture('contact_form_error');
             setTimeout(() => setFormState('idle'), 5000);
         }
     };

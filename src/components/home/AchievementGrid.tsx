@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { capture } from '../../lib/analytics';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
@@ -63,6 +64,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
     const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
     const handleAchievementClick = (e: React.MouseEvent, achievement: Achievement) => {
+        capture('achievement_clicked', { name: achievement.title, category: achievement.category, unlocked: achievement.unlocked });
         if (!achievement.unlocked) return;
 
         // Confetti effect
@@ -385,7 +387,7 @@ export default function AchievementGrid({ achievements, metrics = [], showMetric
                 {categories.map((category) => (
                     <button
                         key={category}
-                        onClick={() => setFilter(category)}
+                        onClick={() => { setFilter(category); capture('achievement_filter_selected', { category }); }}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                             filter === category
                                 ? category === 'all'

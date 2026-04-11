@@ -1,3 +1,4 @@
+import { capture } from '../../lib/analytics';
 import badge from '../../assets/shape-sticker-lilac.svg';
 import type { Author } from './BookSection.astro';
 import './book-item.css';
@@ -30,6 +31,7 @@ const BookItem: React.FC<BookItemProps> = ({
                     ? `/garden/books/${title?.trimEnd()}%20%E2%80%93%20${authors?.[0]?.name?.trimEnd()}.md`
                     : link || '#'
             }
+            onClick={() => capture('book_clicked', { title, author: authors?.[0]?.name, rating, currently_reading: currentlyReading })}
             className="h-full w-full"
         >
             <div className="book-item group relative flex w-full cursor-pointer flex-col items-center gap-5 rounded-lg bg-neutral-100 px-4 py-20">

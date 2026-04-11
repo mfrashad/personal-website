@@ -97,7 +97,33 @@ const personSchema = {
 
             posthog.init('phc_CFAN7pwGZs2nJmusjUy376PyCfuaSV5pB3VzBNoXDpXu', {
                 api_host: 'https://us.i.posthog.com',
-                defaults: '2026-01-30'
+                capture_pageview: false,
+                capture_pageleave: true,
+                persistence: 'localStorage+cookie',
+            });
+
+            // First-touch attribution
+            posthog.setPersonPropertiesForFlags({});
+            if (!sessionStorage.getItem('ph_landed')) {
+                sessionStorage.setItem('ph_landed', '1');
+                posthog.people.set_once({
+                    first_landing_page: window.location.pathname,
+                    first_referrer: document.referrer || '(direct)',
+                    first_utm_source: new URLSearchParams(window.location.search).get('utm_source') || undefined,
+                    first_utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || undefined,
+                    first_utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || undefined,
+                });
+            }
+
+            // Register super properties on every event
+            const params = new URLSearchParams(window.location.search);
+            posthog.register({
+                referrer: document.referrer || '(direct)',
+                utm_source: params.get('utm_source') || undefined,
+                utm_medium: params.get('utm_medium') || undefined,
+                utm_campaign: params.get('utm_campaign') || undefined,
+                utm_term: params.get('utm_term') || undefined,
+                utm_content: params.get('utm_content') || undefined,
             });
 
             // Re-capture pageview on Astro client-side navigation
