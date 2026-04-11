@@ -30,6 +30,8 @@ import AnimationProvider from '@components/animations/AnimationProvider';
 import { HeroBackground } from '@components/animations/MorphingBlob';
 import AnimatedDivider from '@components/animations/AnimatedDivider';
 import { DoodleArrow, DoodleSquiggle } from '@components/animations/Doodles';
+import SpriteCharacter from '@components/animations/SpriteCharacter';
+import { SPRITES } from '@data/sprites';
 
 // Import polaroid images (WebP optimized)
 import profileImg from '@assets/polaroids/profile.webp';
@@ -203,6 +205,7 @@ import BookSection from '@components/books/BookSection.astro';
         </div>
     </div>
 
+
     <!-- Hero Section with Bio Slider and Timeline (Compact) -->
     <div class="hero-section relative lg:-mt-28 overflow-hidden bg-surface-primary">
         <!-- Animated morphing blob background -->
@@ -216,21 +219,17 @@ import BookSection from '@components/books/BookSection.astro';
             <DoodleArrow className="opacity-15 rotate-[-20deg]" color="#64748b" client:visible />
         </div>
 
+
         <Grid classes="pt-32 pb-6 sm:pb-8 sm:pt-[160px] md:pt-[180px] md:pb-8 lg:pt-[220px] lg:pb-10 relative">
             <GridBox desktopStart={3} desktopEnd={11}>
                 <div class="text-center max-w-3xl mx-auto">
                     <Headline level={2} classes="cursor-default mb-8 relative z-[120]">
-                        Hello, I'm Rashad<span class="group inline-block relative"><img
-                                id="hero-logo-toggle"
-                                src="/rashadcodes-white.png"
-                                alt="Rashad Codes logo"
-                                class="inline -translate-y-1 rotate-12 w-[46px] h-[46px] transition-all ease-in-out-cubic group-hover:rotate-[32deg] group-hover:scale-[110%] sm:w-[56px] sm:h-[56px] md:-translate-y-2 md:w-[64px] md:h-[64px] animate-wave relative z-[1] cursor-pointer"
-                            /></span>
+                        Hello, I'm Rashad<img src="/rashadcodes-white.png" alt="Rashad Codes logo" class="inline-block lg:hidden w-8 h-8 ml-1 align-middle animate-wave" /><span class="hidden lg:inline-flex items-end relative ml-2" style="top: 5px;"><SpriteCharacter config={SPRITES.waving_hello} scale={0.35} canToggleSpread client:visible /></span>
                     </Headline>
 
                     <!-- Mobile Polaroid - Only visible on mobile/tablet -->
                     <div class="flex justify-center mb-6 lg:hidden">
-                        <div class="bg-surface-secondary p-3 rounded-lg shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                        <div class="relative bg-surface-secondary p-3 rounded-lg shadow-lg">
                             <div class="bg-neutral-200 rounded overflow-hidden mb-3 w-[160px] h-[160px]">
                                 <img
                                     src={profileImg.src}
@@ -240,6 +239,9 @@ import BookSection from '@components/books/BookSection.astro';
                             </div>
                             <div class="text-center text-xs font-mono text-neutral-700 px-1">
                                 That's me!
+                            </div>
+                            <div class="absolute -bottom-4 -right-2">
+                                <SpriteCharacter config={SPRITES.waving_hello} scale={0.35} canToggleSpread client:visible />
                             </div>
                         </div>
                     </div>
@@ -341,10 +343,10 @@ import BookSection from '@components/books/BookSection.astro';
     <div class="flex flex-col gap-16 py-12 lg:gap-24 lg:py-20">
 
         <!-- Media Mentions Section -->
-        <section>
+        <section id="media-mentions">
             <SectionContent title="Media Mentions">
-                Featured in publications and media outlets for my work in machine learning and software engineering.
-                <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Get press assets →</a>
+                <SpriteCharacter config={SPRITES.taking_photos} scale={0.35} slot="icon" client:visible />
+                Me featured in news and media. Want to feature me? <a href="/media" class="underline hover:text-content-body transition-colors">Get press assets →</a>
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
@@ -372,8 +374,8 @@ import BookSection from '@components/books/BookSection.astro';
         <!-- Speaking Section -->
         <section>
             <SectionContent title="Speaking">
-                I speak at conferences and meetups about AI, startups, entrepreneurship, and careers in tech.
-                <a href="/media" class="text-blue-600 hover:text-blue-800 text-sm ml-1">Speaker kit →</a>
+                <SpriteCharacter config={SPRITES.drinking_coffee} scale={0.35} slot="icon" client:visible />
+                I speak at conferences and meetups about AI, startups, entrepreneurship, and careers in tech. <a href="/media" class="underline hover:text-content-body transition-colors">Speaker kit →</a>
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
@@ -398,6 +400,7 @@ import BookSection from '@components/books/BookSection.astro';
         <!-- Content Creation Section -->
         <section>
             <SectionContent title="Content Creation" classes="!mb-3 sm:!mb-4 lg:!mb-6">
+                <SpriteCharacter config={SPRITES.content_creating} scale={0.35} slot="icon" client:visible />
                 5M+ views and 17K followers across TikTok and Instagram. Here's a preview of my content.
             </SectionContent>
             <Grid>
@@ -434,7 +437,8 @@ import BookSection from '@components/books/BookSection.astro';
         <!-- Hobbies Section -->
         <section>
             <SectionContent title="Hobbies">
-                A collection of everything I've tried, learned, and obsessed over. Read more about why I like to try many things and my <a href="/blog/2024_01_15-bucket-list-phase" class="underline hover:text-content-body transition-colors">bucket list phase</a>.
+                <SpriteCharacter config={SPRITES.watching_movies} scale={0.35} slot="icon" client:visible />
+                A collection of everything I've tried, learned, and obsessed over. Read more about my <a href="/blog/2024_01_15-bucket-list-phase" class="underline hover:text-content-body transition-colors">bucket list phase</a>.
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>
@@ -559,7 +563,7 @@ import BookSection from '@components/books/BookSection.astro';
     }
 
     .animate-wave {
-        animation: wave 2.5s ease-in-out infinite;
+        animation: wave 4s ease-in-out infinite;
         transform-origin: 70% 70%;
     }
 

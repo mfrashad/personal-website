@@ -8,6 +8,7 @@ import { SEO } from 'astro-seo';
 import MobileMenu from '@components/MobileMenu.astro';
 import DistortFilter from '@components/DistortFilter.astro';
 import PageLoader from '@components/animations/PageLoader';
+import TransitionSprite from '@components/animations/TransitionSprite';
 import { QuantumPulseLoader } from '@components/ui/quantum-pulse-loader';
 
 interface Props {
@@ -190,6 +191,7 @@ const personSchema = {
         <!-- Full-screen loading overlay for page transitions -->
         <div class="page-loading-overlay">
             <div class="loading-progress-bar"></div>
+            <TransitionSprite client:only="react" />
             <QuantumPulseLoader client:only="react" />
         </div>
 

@@ -1,6 +1,6 @@
 ---
 import Grid from './Grid.astro';
-import GridBox, { type DesktopColSpan } from './GridBox.astro';
+import GridBox from './GridBox.astro';
 import Headline from './Headline.astro';
 import Link from './Link.astro';
 
@@ -9,53 +9,44 @@ interface Props {
     title?: string;
     linkText?: string;
     linkUrl?: string;
-    contentStart?: DesktopColSpan;
+
     buttonStyle?: boolean;
     buttonIcon?: any;
 }
 
-const { title, linkText, linkUrl, classes, contentStart = 5, buttonStyle } = Astro.props;
+const { title, linkText, linkUrl, classes, buttonStyle } = Astro.props;
 ---
 
-<Grid classes={`mb-6 sm:mb-8 lg:mb-16 ${classes}`}>
-    <GridBox desktopStart={1} desktopEnd={4} tabletStart={1} tabletEnd={4} mobileFull>
-        <Headline level={3}>
-            {title ? title : <slot name="title" />}
-        </Headline>
+<Grid classes={`mb-4 sm:mb-6 lg:mb-8 ${classes}`}>
+    <GridBox desktopStart={1} desktopEnd={12} mobileFull>
+        <div class="flex items-end gap-2 mb-2 sm:mb-3">
+            <Headline level={3}>
+                {title ? title : <slot name="title" />}
+            </Headline>
+            <div class="relative" style="top: -5px;">
+                <slot name="icon" />
+            </div>
+        </div>
+        <div class="text-sm font-mono">
+            <slot />
+        </div>
+        {
+            linkText && linkUrl && (
+                <div class="mt-4">
+                    {buttonStyle ? (
+                        <a
+                            href={linkUrl}
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
+                        >
+                            {linkText}
+                        </a>
+                    ) : (
+                        <Link href={linkUrl} external>
+                            {linkText}
+                        </Link>
+                    )}
+                </div>
+            )
+        }
     </GridBox>
-    <GridBox
-        desktopStart={contentStart}
-        desktopEnd={linkText && linkUrl ? 9 : 12}
-        tabletStart={5}
-        tabletEnd={8}
-        mobileFull
-        classes="text-sm font-mono mt-3 sm:mt-0"
-    >
-        <slot />
-    </GridBox>
-    {
-        linkText && linkUrl && (
-            <GridBox
-                desktopStart={10}
-                desktopEnd={12}
-                tabletStart={5}
-                tabletEnd={8}
-                mobileFull
-                classes="flex lg:justify-end items-start mt-6 sm:mt-3 lg:mt-0"
-            >
-                {buttonStyle ? (
-                    <a
-                        href={linkUrl}
-                        class="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
-                    >
-                        {linkText}
-                    </a>
-                ) : (
-                    <Link href={linkUrl} external>
-                        {linkText}
-                    </Link>
-                )}
-            </GridBox>
-        )
-    }
 </Grid>

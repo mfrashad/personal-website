@@ -14,6 +14,8 @@ interface DraggablePolaroidProps {
     stackY?: number;
     onStackPositionChange?: (x: number, y: number) => void;
     animationDelay?: number;
+    hoverMessage?: string;
+    href?: string;
 }
 
 export default function DraggablePolaroid({
@@ -28,7 +30,9 @@ export default function DraggablePolaroid({
     stackX,
     stackY,
     onStackPositionChange,
-    animationDelay = 0
+    animationDelay = 0,
+    hoverMessage,
+    href
 }: DraggablePolaroidProps) {
     const hasStackMode = stackX !== undefined && stackY !== undefined;
     const [spreadPos, setSpreadPos] = useState({ x: initialX, y: initialY });
@@ -138,9 +142,21 @@ export default function DraggablePolaroid({
         };
     }, [isDragging, dragStart, isSpread, onPositionChange, onStackPositionChange]);
 
+    const dragStartPos = useRef({ x: 0, y: 0 });
+
     const handleMouseDown = (e: React.MouseEvent) => {
         setIsDragging(true);
         setDragStart({ x: e.clientX, y: e.clientY });
+        dragStartPos.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (!href) return;
+        const dx = e.clientX - dragStartPos.current.x;
+        const dy = e.clientY - dragStartPos.current.y;
+        if (Math.sqrt(dx * dx + dy * dy) < 5) {
+            window.location.href = href;
+        }
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -198,13 +214,20 @@ export default function DraggablePolaroid({
             }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
+            onClick={handleClick}
             onHoverStart={() => {
                 setIsHovered(true);
+                if (hoverMessage) {
+                    window.dispatchEvent(new CustomEvent('sprite-speak', { detail: { message: hoverMessage } }));
+                }
             }}
             onHoverEnd={() => {
                 setIsHovered(false);
                 mouseX.set(0);
                 mouseY.set(0);
+                if (hoverMessage) {
+                    window.dispatchEvent(new CustomEvent('sprite-speak', { detail: { message: null } }));
+                }
             }}
         >
             {/* Polaroid Frame */}

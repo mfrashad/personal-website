@@ -3,6 +3,8 @@ import SectionContent from '@components/SectionContent.astro';
 import { getReadBooks, getCurrentlyReading } from 'src/api/hardcover';
 import YearlyBookSlider from './YearlyBookSlider';
 import InlineLink from '@components/InlineLink.astro';
+import SpriteCharacter from '@components/animations/SpriteCharacter';
+import { SPRITES } from '../../data/sprites';
 
 export interface Author {
     name: string;
@@ -73,9 +75,8 @@ try {
 
 <div>
     <SectionContent title="Books">
-        I would like to read more books. Keeping a list of all the books I've read and enjoyed will
-        hopefully help me do that. Each book links to its corresponding page on the awesome book
-        platform <InlineLink external href="https://hardcover.app">Hardcover</InlineLink>.
+        <SpriteCharacter config={SPRITES.reading_a_book} scale={0.35} slot="icon" client:visible />
+        Books I've read, grouped by year. Each links to its page on <InlineLink external href="https://hardcover.app">Hardcover</InlineLink>.
     </SectionContent>
     <YearlyBookSlider
         shelfs={yearlyShelfData}
