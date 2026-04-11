@@ -123,7 +123,7 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
     }
 
     return (
-        <div className="relative w-full" ref={chartRef}>
+        <div className="relative w-full max-w-full overflow-hidden" ref={chartRef}>
             {/* Zoom controls */}
             <div className="flex items-center justify-end gap-1 mb-3 mr-2">
                 <span className="text-[10px] text-neutral-400 mr-1">Zoom</span>
