@@ -105,6 +105,19 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
         return lines;
     }, [maxPages, guideInterval]);
 
+    // Real-world scale: ~1cm per 125 pages (avg book spine ≈ 2.5cm for 300 pages)
+    const CM_PER_PAGE = 0.008;
+    const realScaleMarkers = useMemo(() => {
+        const markers: { pages: number; label: string; emoji: string }[] = [
+            { pages: Math.round(18 / CM_PER_PAGE), label: '1 banana', emoji: '🍌' },
+            { pages: Math.round(30 / CM_PER_PAGE), label: '1 ruler', emoji: '📏' },
+            { pages: Math.round(50 / CM_PER_PAGE), label: '1 sword', emoji: '⚔️' },
+            { pages: Math.round(100 / CM_PER_PAGE), label: '1 guitar', emoji: '🎸' },
+            { pages: Math.round(170 / CM_PER_PAGE), label: '1 person', emoji: '🧍' },
+        ];
+        return markers.filter(m => m.pages <= maxPages * 1.1);
+    }, [maxPages]);
+
     if (sortedShelves.length === 0) {
         return null;
     }
@@ -132,27 +145,77 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                 </button>
             </div>
 
-            {/* Scrollable chart container */}
-            <div className="overflow-x-auto overflow-y-hidden">
-                <div className="inline-block" style={{ minWidth: '100%' }}>
-                    {/* Chart area — fixed container, books scale inside it */}
-                    <div className="relative ml-10 sm:ml-14 overflow-hidden h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px]">
+            {/* Chart with axes */}
+            <div className="relative h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px] ml-10 sm:ml-14 mr-16 sm:mr-24">
+                {/* Left axis: page count */}
+                {guideLines.map((pages) => {
+                    const bottom = pages * pxPerPage;
+                    return (
+                        <span
+                            key={`left-${pages}`}
+                            className="absolute text-[10px] text-neutral-400 font-mono text-right pr-2 leading-none"
+                            style={{ bottom, right: '100%', width: '3.5rem', transform: 'translateY(50%)' }}
+                        >
+                            {pages.toLocaleString()}
+                        </span>
+                    );
+                })}
+
+                {/* Right axis: cm + real-world markers */}
+                {guideLines.map((pages) => {
+                    const bottom = pages * pxPerPage;
+                    const cm = Math.round(pages * CM_PER_PAGE);
+                    return cm > 0 ? (
+                        <span
+                            key={`right-${pages}`}
+                            className="absolute text-[10px] text-neutral-400 font-mono pl-2 leading-none whitespace-nowrap"
+                            style={{ bottom, left: '100%', transform: 'translateY(50%)' }}
+                        >
+                            {cm}cm
+                        </span>
+                    ) : null;
+                })}
+                {realScaleMarkers.map((marker) => {
+                    const bottom = marker.pages * pxPerPage;
+                    return (
+                        <span
+                            key={`marker-${marker.label}`}
+                            className="absolute text-[10px] text-neutral-400 pl-2 leading-none whitespace-nowrap"
+                            style={{ bottom, left: '100%', transform: 'translateY(50%)' }}
+                        >
+                            {marker.emoji} {marker.label}
+                        </span>
+                    );
+                })}
+
+                {/* Scrollable chart area */}
+                <div className="absolute inset-0 overflow-x-auto overflow-y-hidden">
+                <div className="inline-block h-full" style={{ minWidth: '100%' }}>
+                    <div className="relative h-full overflow-hidden">
                         {/* Guide lines */}
                         {guideLines.map((pages) => {
                             const bottom = pages * pxPerPage;
                             return (
                                 <div
                                     key={pages}
-                                    className="absolute left-0 right-0 flex items-center"
+                                    className="absolute left-0 right-0"
                                     style={{ bottom }}
                                 >
-                                    <span
-                                        className="absolute text-[10px] text-neutral-400 font-mono text-right pr-2"
-                                        style={{ right: '100%', width: '3.5rem' }}
-                                    >
-                                        {pages.toLocaleString()}
-                                    </span>
                                     <div className="w-full border-t border-neutral-200/70" />
+                                </div>
+                            );
+                        })}
+
+                        {/* Real-world scale marker lines (dashed) */}
+                        {realScaleMarkers.map((marker) => {
+                            const bottom = marker.pages * pxPerPage;
+                            return (
+                                <div
+                                    key={marker.label}
+                                    className="absolute left-0 right-0 pointer-events-none"
+                                    style={{ bottom }}
+                                >
+                                    <div className="w-full border-t border-dashed border-neutral-300/50" />
                                 </div>
                             );
                         })}
@@ -374,20 +437,21 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                             })}
                         </div>
                     </div>
+                </div>
+                </div>
 
-                    {/* Year labels below the chart */}
-                    <div
-                        className="flex items-start ml-10 sm:ml-14 px-2 mt-2 pb-1"
-                        style={{ gap: STACK_GAP }}
-                    >
-                        {sortedShelves.map((shelf) => (
-                            <div key={shelf.title} className="shrink-0 text-center" style={{ width: BASE_WIDTH }}>
-                                <span className="text-xs sm:text-sm font-bold text-neutral-700">
-                                    {shelf.title}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+                {/* Year labels below the chart */}
+                <div
+                    className="flex items-start px-2 mt-2 pb-1"
+                    style={{ gap: STACK_GAP }}
+                >
+                    {sortedShelves.map((shelf) => (
+                        <div key={shelf.title} className="shrink-0 text-center" style={{ width: BASE_WIDTH }}>
+                            <span className="text-xs sm:text-sm font-bold text-neutral-700">
+                                {shelf.title}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
