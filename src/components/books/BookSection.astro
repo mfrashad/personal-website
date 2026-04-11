@@ -2,6 +2,7 @@
 import SectionContent from '@components/SectionContent.astro';
 import { getReadBooks, getCurrentlyReading } from 'src/api/hardcover';
 import YearlyBookSlider from './YearlyBookSlider';
+import BookStackChart from './BookStackChart';
 import InlineLink from '@components/InlineLink.astro';
 import SpriteCharacter from '@components/animations/SpriteCharacter';
 import { SPRITES } from '../../data/sprites';
@@ -83,4 +84,9 @@ try {
         gardenBookEntries={[]}
         client:load
     />
+    <div class="mx-auto max-w-screen-lg px-4 sm:px-8 lg-with-padding:px-0">
+        <div class="mt-8 mb-16 rounded-xl bg-neutral-50 p-4 sm:p-6">
+            <BookStackChart shelves={yearlyShelfData} client:visible />
+        </div>
+    </div>
 </div>

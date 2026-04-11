@@ -1,10 +1,18 @@
 import { createClient } from '@libsql/client';
 
+export interface PostcardModeration {
+    hidden?: boolean;       // hide entire postcard from public
+    hideMessage?: boolean;  // blur/hide message text
+    hideAuthor?: boolean;   // hide sender name
+    censorWords?: string[]; // specific words to censor in message
+}
+
 export interface Postcard {
     id: string;
     author: string;
     body: string;
     drawingDataUrl: string;
+    cardDrawingDataUrl?: string;
     country?: string;
     websiteUrl?: string;
     createdAt: number;
@@ -14,6 +22,7 @@ export interface Postcard {
     notecardId?: number;
     stampX?: number;
     stampY?: number;
+    moderation?: PostcardModeration;
 }
 
 const PAPER_COLORS = [
@@ -48,15 +57,25 @@ export async function initDb() {
             email TEXT,
             notecard_id INTEGER,
             stamp_x REAL,
-            stamp_y REAL
+            stamp_y REAL,
+            card_drawing_data_url TEXT
         )
     `);
+    // Migrations: add columns if they don't exist
+    const migrations = [
+        `ALTER TABLE postcards ADD COLUMN card_drawing_data_url TEXT`,
+        `ALTER TABLE postcards ADD COLUMN moderation TEXT`,
+    ];
+    for (const sql of migrations) {
+        try { await db.execute(sql); } catch { /* column already exists */ }
+    }
 }
 
 export async function createPostcard(data: {
     author: string;
     body: string;
     drawingDataUrl: string;
+    cardDrawingDataUrl?: string;
     country?: string;
     websiteUrl?: string;
     email?: string;
@@ -71,9 +90,9 @@ export async function createPostcard(data: {
     const penColor = PEN_COLORS[Math.floor(Math.random() * PEN_COLORS.length)];
 
     await db.execute({
-        sql: `INSERT INTO postcards (id, author, body, drawing_data_url, country, website_url, email, created_at, paper_color, pen_color, notecard_id, stamp_x, stamp_y)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        args: [id, data.author, data.body, data.drawingDataUrl, data.country || null, data.websiteUrl || null, data.email || null, createdAt, paperColor, penColor, data.notecardId ?? null, data.stampX ?? null, data.stampY ?? null],
+        sql: `INSERT INTO postcards (id, author, body, drawing_data_url, card_drawing_data_url, country, website_url, email, created_at, paper_color, pen_color, notecard_id, stamp_x, stamp_y)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [id, data.author, data.body, data.drawingDataUrl, data.cardDrawingDataUrl || null, data.country || null, data.websiteUrl || null, data.email || null, createdAt, paperColor, penColor, data.notecardId ?? null, data.stampX ?? null, data.stampY ?? null],
     });
 
     return {
@@ -81,6 +100,7 @@ export async function createPostcard(data: {
         author: data.author,
         body: data.body,
         drawingDataUrl: data.drawingDataUrl,
+        cardDrawingDataUrl: data.cardDrawingDataUrl,
         country: data.country,
         websiteUrl: data.websiteUrl,
         createdAt,
@@ -99,20 +119,26 @@ export async function getPostcards(offset = 0, limit = 50): Promise<Postcard[]> 
         args: [limit, offset],
     });
 
-    return result.rows.map((row) => ({
-        id: row.id as string,
-        author: row.author as string,
-        body: row.body as string,
-        drawingDataUrl: row.drawing_data_url as string,
-        country: (row.country as string) || undefined,
-        websiteUrl: (row.website_url as string) || undefined,
-        createdAt: row.created_at as number,
-        paperColor: row.paper_color as string,
-        penColor: row.pen_color as string,
-        notecardId: (row.notecard_id as number) ?? undefined,
-        stampX: (row.stamp_x as number) ?? undefined,
-        stampY: (row.stamp_y as number) ?? undefined,
-    }));
+    return result.rows.map((row) => {
+        let moderation: PostcardModeration | undefined;
+        try { moderation = row.moderation ? JSON.parse(row.moderation as string) : undefined; } catch { /* invalid json */ }
+        return {
+            id: row.id as string,
+            author: row.author as string,
+            body: row.body as string,
+            drawingDataUrl: row.drawing_data_url as string,
+            cardDrawingDataUrl: (row.card_drawing_data_url as string) || undefined,
+            country: (row.country as string) || undefined,
+            websiteUrl: (row.website_url as string) || undefined,
+            createdAt: row.created_at as number,
+            paperColor: row.paper_color as string,
+            penColor: row.pen_color as string,
+            notecardId: (row.notecard_id as number) ?? undefined,
+            stampX: (row.stamp_x as number) ?? undefined,
+            stampY: (row.stamp_y as number) ?? undefined,
+            moderation,
+        };
+    });
 }
 
 export async function getPostcard(id: string): Promise<Postcard | null> {
@@ -142,6 +168,15 @@ export async function getPostcardCount(): Promise<number> {
     const db = getDb();
     const result = await db.execute('SELECT COUNT(*) as count FROM postcards');
     return result.rows[0].count as number;
+}
+
+export async function updateModeration(id: string, moderation: PostcardModeration): Promise<boolean> {
+    const db = getDb();
+    await db.execute({
+        sql: 'UPDATE postcards SET moderation = ? WHERE id = ?',
+        args: [JSON.stringify(moderation), id],
+    });
+    return true;
 }
 
 export async function deletePostcard(id: string): Promise<boolean> {

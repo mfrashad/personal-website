@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { createPostcard, getPostcards, deletePostcard, initDb } from '@lib/postcards-db';
+import { createPostcard, getPostcards, deletePostcard, updateModeration, initDb } from '@lib/postcards-db';
 import { sendPostcardNotification } from '@utils/email';
 
 let dbInitialized = false;
@@ -36,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         await ensureDb();
         const data = await request.json();
-        const { author, body, drawingDataUrl, country: clientCountry, websiteUrl, email, notecardId, stampX, stampY } = data;
+        const { author, body, drawingDataUrl, cardDrawingDataUrl, country: clientCountry, websiteUrl, email, notecardId, stampX, stampY } = data;
 
         // Auto-detect country from Vercel geo headers if not provided
         let country = clientCountry;
@@ -83,10 +83,19 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         // Sanitize inputs
+        // Validate card drawing if provided
+        if (cardDrawingDataUrl && (typeof cardDrawingDataUrl !== 'string' || !cardDrawingDataUrl.startsWith('data:image/') || cardDrawingDataUrl.length > 1_000_000)) {
+            return new Response(JSON.stringify({ error: 'Card drawing is too large or invalid' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
         const postcard = await createPostcard({
             author: author.trim().slice(0, 100),
             body: body.trim().slice(0, 500),
             drawingDataUrl,
+            cardDrawingDataUrl: cardDrawingDataUrl || undefined,
             country: country?.trim().slice(0, 100) || undefined,
             websiteUrl: websiteUrl?.trim().slice(0, 200) || undefined,
             email: email?.trim().slice(0, 200) || undefined,
@@ -111,6 +120,40 @@ export const POST: APIRoute = async ({ request }) => {
     } catch (error) {
         console.error('Failed to create postcard:', error);
         return new Response(JSON.stringify({ error: 'Failed to create postcard' }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+};
+
+export const PATCH: APIRoute = async ({ request }) => {
+    // Dev-only: moderate postcards
+    if (import.meta.env.PROD) {
+        return new Response(JSON.stringify({ error: 'Not allowed in production' }), {
+            status: 403,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
+
+    try {
+        await ensureDb();
+        const data = await request.json();
+        const { id, moderation } = data;
+
+        if (!id || typeof id !== 'string') {
+            return new Response(JSON.stringify({ error: 'Missing id' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        await updateModeration(id, moderation || {});
+        return new Response(JSON.stringify({ success: true }), {
+            headers: { 'Content-Type': 'application/json' },
+        });
+    } catch (error) {
+        console.error('Failed to update moderation:', error);
+        return new Response(JSON.stringify({ error: 'Failed to update moderation' }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });

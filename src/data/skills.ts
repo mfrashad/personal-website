@@ -132,8 +132,9 @@ export const skills: Skill[] = [
         duration: 126000,
         xp: 'hobbyist',
         image: '/skill-images/working-out.webp',
-        description: 'Started at 15. Gained 20kg (50→69kg). 2+ years consistent training.',
+        description: 'Started at 15. Gained 20kg (50→69kg). 2+ years consistent training. +40kg weighted pullup PR.',
     },
+
 
 
 
@@ -158,8 +159,9 @@ export const skills: Skill[] = [
         parentId: 'working-out',
         xp: 'hobbyist',
         image: '/skill-images/calisthenics.webp',
-        description: 'Handstand, HSPU, one arm pushup, back lever, +40kg weighted pullup.',
+        description: 'Handstand, HSPU, one arm pushup, back lever',
     },
+
 
     {
         id: 'running',
@@ -1006,10 +1008,11 @@ export const skills: Skill[] = [
         title: 'Photography',
         icon: '📷',
         tags: ['Creative'],
-        xp: 'beginner',
+        xp: 'hobbyist',
         image: '/skill-images/photography.webp',
         description: 'Bought a camera. Started shooting.',
     },
+
 
     {
         id: 'content-creation',
@@ -1053,10 +1056,11 @@ export const skills: Skill[] = [
         title: 'Public Speaking',
         icon: '🎤',
         tags: ['Social'],
-        xp: 'passionate',
+        xp: 'hobbyist',
         image: '/skill-images/public-speaking.webp',
         description: 'Valedictorian. 20+ talks. Paid speaker. Government, universities, conferences.',
     },
+
 
     {
         id: 'improv',
@@ -1224,11 +1228,12 @@ export const skills: Skill[] = [
         title: 'Cafe-hopping',
         icon: '☕',
         tags: ['Social'],
-        xp: 'beginner',
+        xp: 'hobbyist',
         amount: 20,
         image: '/skill-images/cafe-hopping.webp',
         description: '20+ documented cafe hops.',
     },
+
 
     {
         id: 'flying',

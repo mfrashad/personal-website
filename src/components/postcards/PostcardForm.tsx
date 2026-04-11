@@ -22,8 +22,17 @@ export default function PostcardForm() {
     const [stampVisible, setStampVisible] = useState(false);
     const [spriteMsg, setSpriteMsg] = useState('');
     const [globalMousePos, setGlobalMousePos] = useState<{ x: number; y: number } | null>(null);
+    const [drawingMode, setDrawingMode] = useState(false);
+    const [drawColor, setDrawColor] = useState('#2c3e6b');
+    const [drawSize, setDrawSize] = useState(4);
+    const [isCardDrawing, setIsCardDrawing] = useState(false);
+    const [cardDrawHistory, setCardDrawHistory] = useState<ImageData[]>([]);
+    const lastCardPoint = useRef<{ x: number; y: number } | null>(null);
+    const cardCanvasRef = useRef<HTMLCanvasElement>(null);
     const spriteMsgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const cardRef = useRef<HTMLDivElement>(null);
+
+    const CARD_DRAW_COLORS = ['#2c3e6b', '#1a1a1a', '#8b0000', '#006400', '#ff6347', '#4169e1', '#ff69b4', '#ffa500'];
 
     const notecardBg = `/images/notecards/notecard${NOTECARD_IDS[styleIndex % NOTECARD_IDS.length]}.webp`;
     const stampRotation = 12;
@@ -54,6 +63,115 @@ export default function PostcardForm() {
         window.addEventListener('mousemove', handleMove);
         return () => window.removeEventListener('mousemove', handleMove);
     }, [placingStamp]);
+
+    // Card drawing helpers
+    const getCardCanvasPos = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+        const canvas = cardCanvasRef.current;
+        if (!canvas) return null;
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        if ('touches' in e) {
+            const t = e.touches[0] || e.changedTouches[0];
+            return { x: (t.clientX - rect.left) * scaleX, y: (t.clientY - rect.top) * scaleY };
+        }
+        return { x: ((e as React.MouseEvent).clientX - rect.left) * scaleX, y: ((e as React.MouseEvent).clientY - rect.top) * scaleY };
+    }, []);
+
+    const saveCardDrawHistory = useCallback(() => {
+        const canvas = cardCanvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        setCardDrawHistory(prev => [...prev.slice(-20), ctx.getImageData(0, 0, canvas.width, canvas.height)]);
+    }, []);
+
+    // Scale brush size relative to canvas resolution (canvas is 2x display)
+    const scaledDrawSize = drawSize * 2;
+
+    const startCardDraw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+        if (!drawingMode) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const pos = getCardCanvasPos(e);
+        if (!pos) return;
+        lastCardPoint.current = pos;
+        setIsCardDrawing(true);
+        const ctx = cardCanvasRef.current?.getContext('2d');
+        if (ctx) {
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, scaledDrawSize / 2, 0, Math.PI * 2);
+            ctx.fillStyle = drawColor;
+            ctx.fill();
+        }
+    }, [drawingMode, drawColor, scaledDrawSize, getCardCanvasPos]);
+
+    const doCardDraw = useCallback((e: React.MouseEvent | React.TouchEvent) => {
+        if (!isCardDrawing || !lastCardPoint.current) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const pos = getCardCanvasPos(e);
+        if (!pos) return;
+        const ctx = cardCanvasRef.current?.getContext('2d');
+        if (ctx) {
+            ctx.beginPath();
+            ctx.moveTo(lastCardPoint.current.x, lastCardPoint.current.y);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = drawColor;
+            ctx.lineWidth = scaledDrawSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+        }
+        lastCardPoint.current = pos;
+    }, [isCardDrawing, drawColor, scaledDrawSize, getCardCanvasPos]);
+
+    const stopCardDraw = useCallback(() => {
+        if (isCardDrawing) {
+            setIsCardDrawing(false);
+            lastCardPoint.current = null;
+            saveCardDrawHistory();
+        }
+    }, [isCardDrawing, saveCardDrawHistory]);
+
+    const undoCardDraw = useCallback(() => {
+        const canvas = cardCanvasRef.current;
+        if (!canvas || cardDrawHistory.length <= 1) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        const newHist = [...cardDrawHistory];
+        newHist.pop();
+        ctx.putImageData(newHist[newHist.length - 1], 0, 0);
+        setCardDrawHistory(newHist);
+    }, [cardDrawHistory]);
+
+    const getCardDrawingDataUrl = useCallback(() => {
+        const canvas = cardCanvasRef.current;
+        if (!canvas) return undefined;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return undefined;
+        // Check if canvas has any non-transparent pixels
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let hasContent = false;
+        for (let i = 3; i < data.length; i += 4) {
+            if (data[i] > 0) { hasContent = true; break; }
+        }
+        return hasContent ? canvas.toDataURL('image/png') : undefined;
+    }, []);
+
+    // Init card canvas when drawing mode is first activated
+    useEffect(() => {
+        if (!drawingMode) return;
+        const canvas = cardCanvasRef.current;
+        if (!canvas) return;
+        if (cardDrawHistory.length === 0) {
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                saveCardDrawHistory();
+            }
+        }
+    }, [drawingMode]);
 
     const getCardPercent = useCallback((e: React.MouseEvent) => {
         if (!cardRef.current) return null;
@@ -90,7 +208,7 @@ export default function PostcardForm() {
     }, []);
 
     const handleCardClick = useCallback((e: React.MouseEvent) => {
-        if (!placingStamp) return;
+        if (!placingStamp || drawingMode) return;
         const pos = getCardPercent(e);
         if (pos) playStampAnimation(pos);
     }, [placingStamp, getCardPercent, playStampAnimation]);
@@ -109,6 +227,7 @@ export default function PostcardForm() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     author: author.trim(), body: message.trim(), drawingDataUrl: stampDataUrl,
+                    cardDrawingDataUrl: getCardDrawingDataUrl(),
                     websiteUrl: url.trim() || undefined, email: email.trim() || undefined,
                     notecardId: NOTECARD_IDS[styleIndex % NOTECARD_IDS.length],
                     stampX: stampPos?.x, stampY: stampPos?.y,
@@ -116,7 +235,9 @@ export default function PostcardForm() {
             });
             if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
             setStatus('success');
-            setMessage(''); setAuthor(''); setUrl(''); setEmail(''); setStampDataUrl(''); setStampPos(null); setStampVisible(false);
+            setMessage(''); setAuthor(''); setUrl(''); setEmail(''); setStampDataUrl(''); setStampPos(null); setStampVisible(false); setDrawingMode(false); setCardDrawHistory([]);
+            const ctx = cardCanvasRef.current?.getContext('2d');
+            if (ctx && cardCanvasRef.current) ctx.clearRect(0, 0, cardCanvasRef.current.width, cardCanvasRef.current.height);
             showSpriteMsg('Postcard sent! Thanks for stopping by.', 4000);
             window.dispatchEvent(new Event('postcards-refresh'));
             setTimeout(() => setStatus('idle'), 3000);
@@ -165,7 +286,7 @@ export default function PostcardForm() {
                     <div className="absolute -bottom-4 -left-4 z-30 sm:hidden">
                         <button
                             type="button"
-                            onClick={() => setPlacingStamp(!placingStamp)}
+                            onClick={() => { setPlacingStamp(!placingStamp); setDrawingMode(false); }}
                             className={`transition-transform ${placingStamp ? 'scale-90' : `hover:scale-110 ${!stampPos ? 'animate-stamper-bounce' : ''}`}`}
                         >
                             <img src="/images/stamper.png" alt="Stamp" className="w-16 h-auto drop-shadow-lg brightness-125" />
@@ -177,7 +298,7 @@ export default function PostcardForm() {
                         <div className="relative group">
                             <button
                                 type="button"
-                                onClick={() => setPlacingStamp(!placingStamp)}
+                                onClick={() => { setPlacingStamp(!placingStamp); setDrawingMode(false); }}
                                 className={`transition-transform ${placingStamp ? 'scale-90' : `hover:scale-110 hover:-translate-y-1 ${!stampPos ? 'animate-stamper-bounce' : ''}`}`}
                             >
                                 <img src="/images/stamper.png" alt="Stamp" className="w-24 sm:w-32 h-auto drop-shadow-xl brightness-125" />
@@ -204,6 +325,21 @@ export default function PostcardForm() {
                         }}
                         onClick={handleCardClick}
                     >
+                        {/* Card drawing canvas overlay */}
+                        <canvas
+                            ref={cardCanvasRef}
+                            width={960}
+                            height={720}
+                            className={`absolute inset-0 w-full h-full ${drawingMode ? 'z-30 cursor-crosshair touch-none' : 'z-5 pointer-events-none'}`}
+                            onMouseDown={startCardDraw}
+                            onMouseMove={doCardDraw}
+                            onMouseUp={stopCardDraw}
+                            onMouseLeave={stopCardDraw}
+                            onTouchStart={startCardDraw}
+                            onTouchMove={doCardDraw}
+                            onTouchEnd={stopCardDraw}
+                        />
+
                         {/* Placing stamp hint overlay */}
                         {placingStamp && (
                             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
@@ -283,10 +419,50 @@ export default function PostcardForm() {
                         <span className="font-mono text-xs text-neutral-500 select-none">Style</span>
                         <button type="button" onClick={() => setStyleIndex((styleIndex + 1) % NOTECARD_IDS.length)} className="text-neutral-400 hover:text-neutral-800 text-sm">&rsaquo;</button>
                     </div>
+                    <button
+                        type="button"
+                        onClick={() => { setDrawingMode(!drawingMode); setPlacingStamp(false); }}
+                        className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 border transition-colors font-mono text-sm ${drawingMode ? 'border-blue-400 bg-blue-50 text-blue-600' : 'border-neutral-200 bg-white hover:bg-neutral-50'}`}
+                    >
+                        &#9998; Draw
+                    </button>
                     <button type="submit" disabled={status === 'submitting'} className="flex items-center gap-1.5 rounded-full px-4 py-1.5 border border-neutral-200 bg-white hover:bg-neutral-50 disabled:opacity-50 transition-colors font-mono text-sm">
                         {status === 'submitting' ? 'Sending...' : status === 'success' ? 'Sent!' : '\u25B6 Submit'}
                     </button>
                 </div>
+
+                {/* Drawing toolbar */}
+                <AnimatePresence>
+                    {drawingMode && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="flex flex-wrap items-center justify-center gap-3 mt-3 px-4">
+                                <div className="flex items-center gap-1.5">
+                                    {CARD_DRAW_COLORS.map(c => (
+                                        <button
+                                            key={c}
+                                            type="button"
+                                            onClick={() => setDrawColor(c)}
+                                            className={`w-6 h-6 rounded-full border-2 transition-all ${drawColor === c ? 'border-neutral-800 scale-110' : 'border-neutral-300 hover:border-neutral-500'}`}
+                                            style={{ backgroundColor: c }}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-mono text-neutral-400">Size</span>
+                                    <input type="range" min={1} max={8} value={drawSize} onChange={e => setDrawSize(Number(e.target.value))} className="w-16 accent-neutral-500" />
+                                </div>
+                                <button type="button" onClick={undoCardDraw} disabled={cardDrawHistory.length <= 1} className="text-xs font-mono text-neutral-400 hover:text-neutral-700 disabled:opacity-30">
+                                    &#x21A9; Undo
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </form>
 
             <StampDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} onDone={(dataUrl) => { setStampDataUrl(dataUrl); setDrawerOpen(false); }} initialDataUrl={stampDataUrl || undefined} />
