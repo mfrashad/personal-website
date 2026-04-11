@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { capture } from '../../lib/analytics';
 import { motion } from 'framer-motion';
 import {
     useFloating,
@@ -247,7 +248,7 @@ export default function SkillGrid({ skills }: SkillGridProps) {
             {/* Filters */}
             <div className="flex flex-wrap gap-2 mb-6">
                 <button
-                    onClick={() => setFilter('all')}
+                    onClick={() => { setFilter('all'); capture('skill_filter_selected', { category: 'all' }); }}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                     style={filter === 'all'
                         ? { background: '#1a1a2e', color: '#fff' }
@@ -262,7 +263,7 @@ export default function SkillGrid({ skills }: SkillGridProps) {
                     return (
                         <button
                             key={tag}
-                            onClick={() => setFilter(tag)}
+                            onClick={() => { setFilter(tag); capture('skill_filter_selected', { category: tag }); }}
                             className="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                             style={filter === tag
                                 ? { background: cfg.color, color: '#fff' }

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
+import { capture } from '../../lib/analytics';
 import {
     MagnifyingGlass,
     X,
@@ -404,6 +405,7 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                                             href={item.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            onClick={() => capture('resource_clicked', { name: item.name, url: item.url, category: selectedCategory, tags: (item as any).tags })}
                                             className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors group"
                                         >
                                             <span>Visit</span>
@@ -576,6 +578,7 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                                                         href={item.url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
+                                                        onClick={() => capture('resource_clicked', { name: item.name, url: item.url, category: selectedCategory })}
                                                         className="inline-flex items-center gap-1 transition-colors hover:text-blue-600"
                                                     >
                                                         {item.name}

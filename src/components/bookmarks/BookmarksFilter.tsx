@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { capture } from '../../lib/analytics';
 import { MagnifyingGlass, X, ArrowSquareOut } from '@phosphor-icons/react';
 
 export type Bookmark = {
@@ -162,6 +163,7 @@ export default function BookmarksFilter({ bookmarks, allTags }: BookmarksFilterP
                                 href={bookmark.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => capture('bookmark_clicked', { title: bookmark.title, url: bookmark.link, type: bookmark.type, tags: bookmark.tags })}
                                 className="hidden md:flex items-center justify-between gap-4 py-2 hover:bg-surface-secondary/50 rounded transition-colors"
                             >
                                 <div className="flex max-w-[80%] shrink-0 items-center gap-2">
@@ -195,6 +197,7 @@ export default function BookmarksFilter({ bookmarks, allTags }: BookmarksFilterP
                                 href={bookmark.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => capture('bookmark_clicked', { title: bookmark.title, url: bookmark.link, type: bookmark.type, tags: bookmark.tags })}
                                 className="md:hidden mt-5 flex flex-col gap-2 border-b border-neutral-200 pb-5"
                             >
                                 <div className="flex items-center justify-between gap-1">
