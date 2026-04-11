@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { capture, identify } from '../../lib/analytics';
 import { AnimatePresence, motion } from 'framer-motion';
 import StampDrawer from './StampDrawer';
 import PostOfficeStamp from './PostOfficeStamp';
@@ -6,6 +7,76 @@ import SpriteCharacter from '../animations/SpriteCharacter';
 import { SPRITES } from '../../data/sprites';
 
 const NOTECARD_IDS = [1, 6, 8, 10, 11, 12, 13, 16, 18, 26, 29, 31];
+
+// Cross-platform haptic feedback (iOS Safari + Android)
+function triggerHaptic() {
+    // Android: use Vibration API
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(15);
+        return;
+    }
+    // iOS Safari 17.4+: use hidden switch checkbox hack
+    try {
+        const label = document.createElement('label');
+        label.style.cssText = 'position:fixed;top:-100px;left:-100px;opacity:0;pointer-events:none';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.setAttribute('switch', '');
+        label.appendChild(input);
+        document.body.appendChild(label);
+        input.click();
+        requestAnimationFrame(() => document.body.removeChild(label));
+    } catch {}
+}
+
+function triggerStrongHaptic() {
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate([60, 30, 40]);
+        return;
+    }
+    // iOS: toggle twice for stronger feel
+    try {
+        const label = document.createElement('label');
+        label.style.cssText = 'position:fixed;top:-100px;left:-100px;opacity:0;pointer-events:none';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.setAttribute('switch', '');
+        label.appendChild(input);
+        document.body.appendChild(label);
+        input.click();
+        setTimeout(() => { input.click(); requestAnimationFrame(() => document.body.removeChild(label)); }, 50);
+    } catch {}
+}
+
+// Shared AudioContext to avoid Safari autoplay restrictions
+let sharedAudioCtx: AudioContext | null = null;
+function getAudioCtx(): AudioContext | null {
+    try {
+        if (!sharedAudioCtx || sharedAudioCtx.state === 'closed') {
+            sharedAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        }
+        if (sharedAudioCtx.state === 'suspended') {
+            sharedAudioCtx.resume();
+        }
+        return sharedAudioCtx;
+    } catch { return null; }
+}
+
+function playStampSound() {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.15);
+}
 
 export default function PostcardForm() {
     const [message, setMessage] = useState('');
@@ -36,6 +107,14 @@ export default function PostcardForm() {
 
     const notecardBg = `/images/notecards/notecard${NOTECARD_IDS[styleIndex % NOTECARD_IDS.length]}.webp`;
     const stampRotation = 12;
+
+    // Warm up AudioContext on first touch/click so Safari allows playback later
+    useEffect(() => {
+        const warmUp = () => { getAudioCtx(); };
+        window.addEventListener('touchstart', warmUp, { once: true });
+        window.addEventListener('click', warmUp, { once: true });
+        return () => { window.removeEventListener('touchstart', warmUp); window.removeEventListener('click', warmUp); };
+    }, []);
 
     const showSpriteMsg = useCallback((msg: string, duration = 3000) => {
         setSpriteMsg(msg);
@@ -185,24 +264,12 @@ export default function PostcardForm() {
         setStamping(true);
         setPlacingStamp(false);
         // Light tap when stamper starts descending
-        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(15);
+        triggerHaptic();
         setTimeout(() => {
             setStampVisible(true);
-            // Strong thud at impact
-            if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([60, 30, 40]);
-            try {
-                const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(200, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
-                osc.onended = () => ctx.close();
-            } catch {}
+            // Strong thud at impact + sound
+            triggerStrongHaptic();
+            playStampSound();
         }, 500);
         setTimeout(() => setStamping(false), 1400);
     }, []);
@@ -235,6 +302,8 @@ export default function PostcardForm() {
             });
             if (!res.ok) { const data = await res.json(); throw new Error(data.error || 'Failed to submit'); }
             setStatus('success');
+            capture('postcard_submitted', { author: author.trim(), notecard_style: NOTECARD_IDS[styleIndex % NOTECARD_IDS.length], has_drawing: !!getCardDrawingDataUrl(), has_url: !!url.trim(), has_email: !!email.trim() });
+            if (email.trim()) identify(email.trim(), { name: author.trim() });
             setMessage(''); setAuthor(''); setUrl(''); setEmail(''); setStampDataUrl(''); setStampPos(null); setStampVisible(false); setDrawingMode(false); setCardDrawHistory([]);
             const ctx = cardCanvasRef.current?.getContext('2d');
             if (ctx && cardCanvasRef.current) ctx.clearRect(0, 0, cardCanvasRef.current.width, cardCanvasRef.current.height);
