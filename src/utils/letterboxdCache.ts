@@ -4,19 +4,20 @@ import path from 'path';
 
 const CACHE_FILE = path.join(process.cwd(), 'src/data/letterboxd-cache.json');
 
-// Check if running in a serverless/read-only environment
-const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+// Only skip cache writes in the serverless runtime (not build step).
+// Vercel sets VERCEL=1 during both build and runtime, but during runtime
+// the filesystem is read-only. AWS_LAMBDA_FUNCTION_NAME is runtime-only.
+const isServerlessRuntime = !!process.env.AWS_LAMBDA_FUNCTION_NAME;
 
 /**
  * Fetches fresh Letterboxd data and saves it to cache
- * Only writes to cache in local development
+ * Writes cache locally and during Vercel build; skips at serverless runtime.
  */
 export async function fetchAndCacheLetterboxdData(username: string, maxPages: number = 5): Promise<LetterboxdData> {
     console.log('Fetching fresh Letterboxd data...');
     const freshData = await scrapeLetterboxdFilms(username, maxPages);
 
-    // Only write to cache in local development (not serverless)
-    if (!isServerless) {
+    if (!isServerlessRuntime) {
         try {
             // Ensure directory exists
             const dir = path.dirname(CACHE_FILE);
@@ -77,10 +78,10 @@ export async function getLetterboxdData(username: string, maxPages: number = 5):
         console.warn('Could not read cache file:', error);
     }
 
-    // In serverless without cache, return empty data
+    // In serverless runtime without cache, return empty data
     // (cache should be pre-populated during build via npm run fetch:movies)
-    if (isServerless) {
-        console.log('No cache available in serverless environment');
+    if (isServerlessRuntime) {
+        console.log('No cache available in serverless runtime');
         return {
             updated_at: new Date().toISOString(),
             count: 0,
