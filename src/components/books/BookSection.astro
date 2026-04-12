@@ -19,6 +19,8 @@ export interface Book {
     slug: string;
     authors: Author[];
     currentlyReading?: boolean;
+    description?: string;
+    tags?: string[];
     review?: {
         id: string;
         rating: number;
