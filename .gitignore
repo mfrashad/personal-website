@@ -37,6 +37,6 @@ pnpm-debug.log*
 public/content-generator/
 
 # cached data
-src/data/letterboxd-cache.json
+# (letterboxd-cache.json is committed — refresh with `npm run fetch:movies`)
 .vercel
 .env*.local
