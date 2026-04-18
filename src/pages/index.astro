@@ -6,6 +6,7 @@ import Grid from '@components/Grid.astro';
 import GridBox from '@components/GridBox.astro';
 import Headline from '@components/Headline.astro';
 import SectionContent from '@components/SectionContent.astro';
+import GuestCardCTA from '@components/GuestCardCTA.astro';
 import { Icon } from 'astro-icon/components';
 
 // Existing sections
@@ -537,6 +538,13 @@ import BookSection from '@components/books/BookSection.astro';
         </section>
 
         <AnimatedDivider variant="wave" client:visible />
+
+        <!-- Guest Card CTA -->
+        <Grid>
+            <GridBox desktopStart={4} desktopEnd={10}>
+                <GuestCardCTA />
+            </GridBox>
+        </Grid>
     </div>
 </Layout>
 

@@ -1,49 +1,5 @@
-<nav
-    class="pointer-events-none fixed bottom-5 left-1 right-1 z-[99999] flex cursor-pointer items-center justify-center lg:hidden"
->
-    <details class="pointer-events-auto relative w-52 select-none text-center text-md text-white">
-        <summary class="flex h-14 items-center justify-center rounded-3xl bg-black">
-            <span class="menu absolute left-8 mt-0.5">
-                <!-- <List weight="bold" size={20} /> -->
-            </span>
-            <span class="x absolute left-8 mt-0.5 hidden">
-                <!-- <X weight="bold" size={20} /> -->
-            </span>
-            Menu
-        </summary>
-        <ul class="absolute bottom-16 flex w-full flex-col rounded-3xl bg-black py-4 max-h-[70vh] overflow-y-auto">
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/" class="block px-4">Home</a></li>
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/postcards" class="block px-4">Postcards</a></li>
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/speaking" class="block px-4">Speaking</a></li>
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/create" class="block px-4">Create</a></li>
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/resources" class="block px-4">Resources</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/books" class="block px-6">Books</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/movies" class="block px-6">Movies</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/bookmarks" class="block px-6">Bookmarks</a></li>
-            <li class="py-2 hover:bg-lilac-light hover:text-black"><a href="/about" class="block px-4">About</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/hobbies" class="block px-6">Hobbies</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/achievements" class="block px-6">Achievements</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/blog" class="block px-6">Blog</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/diving" class="block px-6">Diving</a></li>
-            <li class="py-1.5 text-xs text-neutral-400 hover:bg-lilac-light hover:text-black"><a href="/hackathons" class="block px-6">Hackathons</a></li>
-        </ul>
-    </details>
-</nav>
+---
+import MobileNav from './MobileNav';
+---
 
-<style>
-    details[open] .menu {
-        display: none;
-    }
-    details[open] .x {
-        display: block;
-    }
-
-    details > summary {
-        list-style: none;
-    }
-
-    details > summary::marker,
-    details > summary::-webkit-details-marker {
-        display: none;
-    }
-</style>
+<MobileNav client:load transition:persist />

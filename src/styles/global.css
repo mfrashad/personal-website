@@ -95,6 +95,14 @@
     background-blend-mode: multiply, multiply, multiply, normal, normal;
 }
 
+.bg-hatched {
+    background-image: repeating-linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.08) 0 1px,
+        transparent 1px 14px
+    );
+}
+
 html {
     font-size: 16px;
 }
