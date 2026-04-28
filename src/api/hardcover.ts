@@ -3,6 +3,8 @@ export interface HardcoverBook {
     title: string;
     slug: string;
     pages: number;
+    description?: string | null;
+    cached_tags?: any;
     cached_contributors?: any[];
     contributions?: {
         author: {
@@ -10,6 +12,40 @@ export interface HardcoverBook {
         };
     }[];
 }
+
+/**
+ * Hardcover's `cached_tags` field can come back in several shapes
+ * (string[], { tag: string }[], { name: string }[], or an object keyed by category).
+ * Normalize to a flat string[] of unique tag names.
+ */
+const normalizeTags = (raw: any): string[] => {
+    if (!raw) return [];
+    const collect = (arr: any[]): string[] =>
+        arr
+            .map((t) => {
+                if (typeof t === 'string') return t;
+                if (t && typeof t === 'object') return t.tag || t.name || '';
+                return '';
+            })
+            .filter(Boolean);
+
+    let tags: string[] = [];
+    if (Array.isArray(raw)) {
+        tags = collect(raw);
+    } else if (typeof raw === 'object') {
+        // e.g. { Genre: [...], Tag: [...] } — prefer Genre if present
+        const preferred = raw.Genre || raw.genres;
+        if (Array.isArray(preferred)) {
+            tags = collect(preferred);
+        } else {
+            tags = Object.values(raw)
+                .filter(Array.isArray)
+                .flatMap((arr) => collect(arr as any[]));
+        }
+    }
+    // dedupe, limit
+    return Array.from(new Set(tags)).slice(0, 8);
+};
 
 export interface HardcoverUserBook {
     rating: number | null;
@@ -57,6 +93,8 @@ export const getReadBooks = async () => {
                                     title
                                     slug
                                     pages
+                                    description
+                                    cached_tags
                                     cached_contributors
                                     contributions {
                                         author {
@@ -117,6 +155,8 @@ export const getReadBooks = async () => {
                 slug: `https://hardcover.app/books/${userBook.book.slug}`,
                 pageCount: userBook.book.pages || 0,
                 cover: userBook.user_book_reads?.[0]?.edition?.image?.url || '',
+                description: userBook.book.description || '',
+                tags: normalizeTags(userBook.book.cached_tags),
                 authors: userBook.book.contributions?.map((c: any) => ({
                     name: c.author.name
                 })) || (userBook.book.cached_contributors ?
@@ -180,6 +220,8 @@ export const getCurrentlyReading = async () => {
                                     title
                                     slug
                                     pages
+                                    description
+                                    cached_tags
                                     cached_contributors
                                     contributions {
                                         author {
@@ -232,6 +274,8 @@ export const getCurrentlyReading = async () => {
             slug: `https://hardcover.app/books/${userBook.book.slug}`,
             pageCount: userBook.book.pages || 0,
             cover: userBook.user_book_reads?.[0]?.edition?.image?.url || '',
+            description: userBook.book.description || '',
+            tags: normalizeTags(userBook.book.cached_tags),
             authors: userBook.book.contributions?.map((c: any) => ({
                 name: c.author.name
             })) || (userBook.book.cached_contributors ?

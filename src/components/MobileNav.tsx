@@ -52,7 +52,7 @@ export default function MobileNav() {
 
   return (
     <nav
-      className="pointer-events-none fixed bottom-5 left-2 right-2 z-[99999] lg:hidden"
+      className="pointer-events-none fixed bottom-2 left-2 right-2 z-[99999] lg:hidden"
       aria-label="Mobile navigation"
     >
       {/* Peeking guest card — hidden on the postcards page itself */}
