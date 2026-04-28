@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef } from 'react';
-import type { Shelf } from './BookSection.astro';
+import type { Book, Shelf } from './BookSection.astro';
+import BookModal from './BookModal';
 
 interface BookStackChartProps {
     shelves: Shelf[];
@@ -66,6 +67,7 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
         y: number;
     } | null>(null);
     const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM);
+    const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const chartRef = useRef<HTMLDivElement>(null);
 
     const zoom = ZOOM_LEVELS[zoomLevel];
@@ -339,6 +341,7 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                                                             });
                                                         }}
                                                         onMouseLeave={() => setHoveredBook(null)}
+                                                        onClick={() => setSelectedBook(book)}
                                                     >
                                                         {/* Edge decorations */}
                                                         {spineHeight >= 14 && (
@@ -466,6 +469,21 @@ const BookStackChart: React.FC<BookStackChartProps> = ({ shelves }) => {
                 >
                     {hoveredBook.title} — {hoveredBook.author} — {hoveredBook.pages} pages
                 </div>
+            )}
+
+            {selectedBook && (
+                <BookModal
+                    isOpen={true}
+                    onClose={() => setSelectedBook(null)}
+                    title={selectedBook.title}
+                    authors={selectedBook.authors}
+                    cover={selectedBook.cover}
+                    rating={selectedBook.review?.rating}
+                    description={selectedBook.description}
+                    tags={selectedBook.tags}
+                    review={selectedBook.review}
+                    hardcoverUrl={selectedBook.slug}
+                />
             )}
         </div>
     );

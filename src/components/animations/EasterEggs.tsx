@@ -16,7 +16,7 @@ export default function EasterEggs() {
     const [konamiIndex, setKonamiIndex] = useState(0);
     const [secretWordIndex, setSecretWordIndex] = useState(0);
     const [showEasterEgg, setShowEasterEgg] = useState(false);
-    const [easterEggType, setEasterEggType] = useState<'konami' | 'secret' | 'shake' | null>(null);
+    const [easterEggType, setEasterEggType] = useState<'konami' | 'secret' | null>(null);
     const [clickCount, setClickCount] = useState(0);
     const [partyMode, setPartyMode] = useState(false);
 
@@ -54,41 +54,6 @@ export default function EasterEggs() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [konamiIndex, secretWordIndex]);
 
-    // Device shake detection (for mobile)
-    useEffect(() => {
-        let shakeThreshold = 15;
-        let lastX: number, lastY: number, lastZ: number;
-        let lastTime = 0;
-
-        const handleMotion = (e: DeviceMotionEvent) => {
-            const acceleration = e.accelerationIncludingGravity;
-            if (!acceleration) return;
-
-            const currentTime = Date.now();
-            if (currentTime - lastTime > 100) {
-                const diffTime = currentTime - lastTime;
-                lastTime = currentTime;
-
-                const x = acceleration.x || 0;
-                const y = acceleration.y || 0;
-                const z = acceleration.z || 0;
-
-                const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
-
-                if (speed > shakeThreshold) {
-                    triggerEasterEgg('shake');
-                }
-
-                lastX = x;
-                lastY = y;
-                lastZ = z;
-            }
-        };
-
-        window.addEventListener('devicemotion', handleMotion);
-        return () => window.removeEventListener('devicemotion', handleMotion);
-    }, []);
-
     // Triple click on logo triggers party mode
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
@@ -109,7 +74,7 @@ export default function EasterEggs() {
         return () => document.removeEventListener('click', handleClick);
     }, [clickCount]);
 
-    const triggerEasterEgg = useCallback((type: 'konami' | 'secret' | 'shake') => {
+    const triggerEasterEgg = useCallback((type: 'konami' | 'secret') => {
         setEasterEggType(type);
         setShowEasterEgg(true);
 
@@ -162,10 +127,6 @@ export default function EasterEggs() {
             title: '🔮 SECRET DISCOVERED! 🔮',
             message: 'You typed the magic word! You\'re awesome!'
         },
-        shake: {
-            title: '📱 SHAKE IT! 📱',
-            message: 'You shook your device! Party time!'
-        }
     };
 
     return (
