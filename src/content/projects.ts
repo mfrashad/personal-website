@@ -1,5 +1,10 @@
 import type { Props } from '@components/ProjectItem.astro';
 
+// Current Projects
+import BuildForPublicLogo from '../assets/projects/thumb-buildforpublic.png';
+import OpenNGOLogo from '../assets/projects/thumb-openngo.png';
+import BookshelfLogo from '../assets/projects/thumb-bookshelf.png';
+
 // ML Projects
 import CreativeGANLogo from '../assets/projects/thumb-creativegan.jpg';
 import GANCreateLogo from '../assets/projects/thumb-gancreate.jpg';
@@ -28,6 +33,38 @@ import DotHitLogo from '../assets/projects/thumb-dot_hit.jpg';
 import CubeRunnerLogo from '../assets/projects/thumb-cube_runner.jpg';
 
 export const projects: Props[] = [
+    // Current Projects
+    {
+        bgColor: '#000000',
+        href: 'https://buildforpublic.com',
+        title: 'Build for Public',
+        description: 'Open-source movement connecting builders to social impact work in Malaysia.',
+        labels: ['Community', 'Social Impact'],
+        logo: BuildForPublicLogo,
+        logoWidth: '5rem',
+        year: '2025'
+    },
+    {
+        bgColor: '#c96442',
+        href: 'https://openngo.my',
+        title: 'OpenNGO',
+        description: 'Crowdsourced directory of 190+ Malaysian NGOs and 730+ volunteer roles with a public REST API.',
+        labels: ['Open Source', 'NGO'],
+        logo: OpenNGOLogo,
+        logoWidth: '5rem',
+        year: '2025'
+    },
+    {
+        bgColor: '#4dd9f0',
+        href: 'https://bookshelf.aiforgood.my',
+        title: 'Bookshelf',
+        description: 'Turn your reading list into a shareable poster — grid, stack, or mosaic layouts, export-ready.',
+        labels: ['Open Source', 'Books'],
+        logo: BookshelfLogo,
+        logoWidth: '5rem',
+        year: '2025'
+    },
+
     // Machine Learning Projects
     {
         bgColor: '#2d5ea6',
