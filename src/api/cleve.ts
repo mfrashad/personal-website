@@ -1,7 +1,7 @@
 import { ConvexHttpClient } from 'convex/browser';
 import { anyApi } from 'convex/server';
 
-const CONVEX_URL = import.meta.env.PUBLIC_CONVEX_URL || process.env.PUBLIC_CONVEX_URL || '';
+const CONVEX_URL = (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_CONVEX_URL) || process.env.PUBLIC_CONVEX_URL || '';
 const CLEVE_PROFILE_SLUG = (typeof import.meta !== 'undefined' && import.meta.env?.CLEVE_PROFILE_SLUG) || process.env.CLEVE_PROFILE_SLUG || 'mfrashad';
 
 export interface CleveWriting {
