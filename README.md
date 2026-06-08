@@ -71,6 +71,29 @@ npm run dev            # http://localhost:4321
 
 ---
 
+## Screenshots
+
+<table>
+<tr>
+<td align="center"><a href="https://www.mfrashad.com/create"><img src="docs/screenshots/content-creation.png" width="380" alt="Content Creation page"/></a><br/><sub><b>/create</b> — Content showcase</sub></td>
+<td align="center"><a href="https://www.mfrashad.com/blog"><img src="docs/screenshots/blog.png" width="380" alt="Blog page"/></a><br/><sub><b>/blog</b> — Writing & notes</sub></td>
+</tr>
+<tr>
+<td align="center"><a href="https://www.mfrashad.com/books"><img src="docs/screenshots/books.png" width="380" alt="Books page"/></a><br/><sub><b>/books</b> — Reading list</sub></td>
+<td align="center"><a href="https://www.mfrashad.com/movies"><img src="docs/screenshots/movies.png" width="380" alt="Movies page"/></a><br/><sub><b>/movies</b> — Letterboxd diary</sub></td>
+</tr>
+<tr>
+<td align="center"><a href="https://www.mfrashad.com/postcards"><img src="docs/screenshots/postcards.png" width="380" alt="Postcards guestbook"/></a><br/><sub><b>/postcards</b> — Guestbook</sub></td>
+<td align="center"><a href="https://www.mfrashad.com/hobbies"><img src="docs/screenshots/hobbies.png" width="380" alt="Hobbies page"/></a><br/><sub><b>/hobbies</b> — Hobbies overview</sub></td>
+</tr>
+<tr>
+<td align="center"><a href="https://www.mfrashad.com/diving"><img src="docs/screenshots/diving.png" width="380" alt="Diving log"/></a><br/><sub><b>/diving</b> — Dive log</sub></td>
+<td align="center"><a href="https://www.mfrashad.com/media"><img src="docs/screenshots/media.png" width="380" alt="Media mentions"/></a><br/><sub><b>/media</b> — Press & mentions</sub></td>
+</tr>
+</table>
+
+---
+
 ## Data Sources
 
 | Feature | Page | Source |
@@ -136,11 +159,15 @@ if (import.meta.env.PROD) return new Response(null, { status: 403 });
 | `/admin/resources` | Edit resource list metadata in-browser |
 | `/admin/skills` | Manage the skill tree and achievements |
 
+![Resource admin panel](docs/screenshots/admin-resources.png)
+
 ---
 
 ## ★ Content Generator
 
 `/admin/content-generator` is a local studio that converts the site's curated resource lists into polished Instagram carousels and Reels/TikTok videos — without leaving the browser.
+
+![Content Generator studio](docs/screenshots/content-generator.png)
 
 ### What it produces
 
@@ -179,6 +206,9 @@ src/pages/admin/content-generator.astro   ← Astro page (forbidden in prod)
 8. **Optional per-item overrides**: custom screenshot, description, name.
 9. **Persistent content descriptions**: per-item marketing copy is saved to disk and survives refresh.
 10. **For videos**: hit **Detect Beats** to auto-set per-item timing from the audio track.
+
+    ![Beat sync panel](docs/screenshots/content-generator-beat-sync.png)
+
 11. **Render** — the server bundles the Remotion composition and calls `renderStill` (carousel) or `renderMedia` (video). Output auto-downloads.
 
 ### Rendering
