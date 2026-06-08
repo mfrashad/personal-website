@@ -40,3 +40,7 @@ public/content-generator/
 # (letterboxd-cache.json is committed — refresh with `npm run fetch:movies`)
 .vercel
 .env*.local
+
+# Claude Code session files (agent memory, worktrees, transcripts)
+.claude/
+.agents/

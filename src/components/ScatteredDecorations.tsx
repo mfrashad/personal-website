@@ -197,7 +197,6 @@ export default function ScatteredDecorations() {
         });
         setEnabledDecorations(initialEnabled);
         setDecorationProps(initialProps);
-        console.log('Initialized positions:', currentPositions.current);
     }, []);
 
     // Use decorationsConfig directly
@@ -264,17 +263,13 @@ export default function ScatteredDecorations() {
                 };
             });
 
-            console.log('Saving config:', updatedConfig);
-
             const response = await fetch('/api/save-decorations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedConfig)
             });
 
-            console.log('Response status:', response.status);
             const responseText = await response.text();
-            console.log('Response text:', responseText);
 
             if (response.ok) {
                 const data = JSON.parse(responseText);

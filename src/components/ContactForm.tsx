@@ -12,7 +12,12 @@ export default function ContactForm() {
         setFormState('submitting');
 
         try {
-            const response = await fetch('https://formspree.io/m.fathyrashad@gmail.com', {
+            const formspreeUrl = import.meta.env.PUBLIC_FORMSPREE_URL;
+            if (!formspreeUrl) {
+                setFormState('error');
+                return;
+            }
+            const response = await fetch(formspreeUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

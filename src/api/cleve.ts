@@ -1,7 +1,7 @@
 import { ConvexHttpClient } from 'convex/browser';
 import { anyApi } from 'convex/server';
 
-const CONVEX_URL = 'https://earnest-chicken-856.convex.cloud';
+const CONVEX_URL = import.meta.env.PUBLIC_CONVEX_URL || process.env.PUBLIC_CONVEX_URL || '';
 const CLEVE_PROFILE_SLUG = (typeof import.meta !== 'undefined' && import.meta.env?.CLEVE_PROFILE_SLUG) || process.env.CLEVE_PROFILE_SLUG || 'mfrashad';
 
 export interface CleveWriting {
@@ -120,6 +120,7 @@ export async function fetchCleveWritings(): Promise<{
     writings: CleveWriting[];
     folders: never[];
 }> {
+    if (!CONVEX_URL) return { writings: [], folders: [] };
     try {
         const client = new ConvexHttpClient(CONVEX_URL);
         const slug = CLEVE_PROFILE_SLUG;
