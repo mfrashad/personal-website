@@ -32,7 +32,6 @@
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
-        "@astrojs/db": "^0.14.14",
         "@astrojs/mdx": "^4.3.13",
         "@astrojs/react": "^4.2.1",
         "@astrojs/sitemap": "^3.7.2",
