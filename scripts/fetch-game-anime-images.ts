@@ -15,7 +15,7 @@ const ROOT = path.resolve(process.cwd());
 const FAVICONS_DIR = path.join(ROOT, 'public/resource-images/favicons');
 const OG_DIR = path.join(ROOT, 'public/resource-images/og');
 const SCREENSHOTS_DIR = path.join(ROOT, 'public/resource-images/screenshots');
-const TMDB_API_KEY = process.env.TMDB_API_KEY || 'TMDB_API_KEY_REMOVED';
+const TMDB_API_KEY = process.env.TMDB_API_KEY || '';
 
 fs.mkdirSync(FAVICONS_DIR, { recursive: true });
 fs.mkdirSync(OG_DIR, { recursive: true });

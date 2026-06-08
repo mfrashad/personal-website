@@ -1,4 +1,4 @@
-# iamrobin - Personal Website
+# mfrashad - Personal Website
 
 A modern, feature-rich personal website built with Astro 5, featuring blog posts, digital garden (powered by Cleve API), bookmarks, postcards, movies, and integrations with multiple external services. This is the personal website of Muhammad Rashad (@mfrashad).
 
@@ -1202,20 +1202,22 @@ const tags = ExifReader.load(imageFile);
 
 ## License
 
-### Code License
+See [LICENSE](LICENSE) for the full terms. Summary:
 
-The code is licensed under [MIT License](MIT.md)
+### Code — MIT License
 
-You can use parts of the code for any purpose, but not the website as a whole. Copying the entire design is not permitted as it belongs to the original creator.
+The source code (`.ts`, `.tsx`, `.astro`, `.js`, `.css`, config files) is MIT licensed. You are free to use, copy, modify, and distribute it for any purpose, including commercial projects. Attribution appreciated but not required.
 
-### Content License
+### Personal Content — All Rights Reserved
 
-The content is licensed under [CC BY-NC-SA 4.0](CC.md)
+The following remain the exclusive copyright of Muhammad Fathy Rashad and are **not** covered by the MIT License:
 
-You can use the content for non-commercial purposes with:
-- Attribution to the original source
-- Share-alike (same license)
-- Non-commercial use only
+- Photos and images (`public/photos/`, `public/opengraph*`, `src/assets/`)
+- Blog posts and personal writing (`src/content/blog/`)
+- Project descriptions and portfolio content
+- Personal brand, name, and likeness
+
+**When using this as a template:** replace all personal content with your own before publishing.
 
 ### Fonts
 

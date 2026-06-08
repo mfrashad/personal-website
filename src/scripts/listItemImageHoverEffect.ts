@@ -1,7 +1,6 @@
 const coverDistance = 32;
 document.addEventListener('DOMContentLoaded', () => {
     const listItem = document.querySelectorAll('.list-item-image-hover-effect');
-    console.log('listItem', listItem);
 
     listItem.forEach((item: Element) => {
         const cover = item.querySelectorAll('.cover-image')[0] as HTMLImageElement;
