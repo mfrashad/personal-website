@@ -1,14 +1,4 @@
 {
     "buildCommand": "npm run build",
-    "ignoreCommand": "git diff --quiet HEAD^ HEAD",
-    "rewrites": [
-        {
-            "source": "/iamrobin/js/script.js",
-            "destination": "https://plausible.io/js/script.js"
-        },
-        {
-            "source": "/iamrobin/api/event",
-            "destination": "https://plausible.io/api/event"
-        }
-    ]
+    "ignoreCommand": "git diff --quiet HEAD^ HEAD"
 }
