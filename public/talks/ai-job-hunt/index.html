@@ -250,6 +250,8 @@ body.static .fill { width:var(--w) !important; transition:none !important; }
 .hud { position:fixed; z-index:900; font-family:var(--font-mono); color:var(--ink-3); font-size:13px; letter-spacing:.15em; text-transform:uppercase; }
 .hud.act { left:28px; bottom:20px; }
 .hud.count { right:28px; bottom:20px; }
+.hud.mark { right:28px; top:16px; opacity:.75; }
+.hud.mark a { color:inherit; text-decoration:none; }
 .progress { position:fixed; top:0; left:0; height:3px; background:var(--green); width:0%; z-index:901; transition:width .3s ease; }
 
 /* ===========================================
@@ -267,6 +269,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <div class="progress" id="progress"></div>
 <div class="hud act" id="hudAct"></div>
 <div class="hud count" id="hudCount"></div>
+<div class="hud mark">Rashad · mfrashad.com</div>
 <div class="notes-panel" id="notesPanel"><div class="nlabel">Speaker notes · N to hide</div><div id="notesText"></div></div>
 <div class="edit-hotzone" id="editHotzone"></div>
 <button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
