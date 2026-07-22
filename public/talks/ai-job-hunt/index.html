@@ -102,6 +102,11 @@ img, video, canvas, svg { max-width:100%; max-height:100%; }
 .caption .dim { font-weight:400; }
 .caption-kicker { font-family:var(--font-mono); font-size:24px; letter-spacing:.3em; text-transform:uppercase; color:var(--green); }
 
+/* clickable screenshots — open the live site in a new tab */
+.shotlink { display:block; cursor:pointer; }
+.shotlink img { transition:transform .25s var(--ease), box-shadow .25s var(--ease); }
+.shotlink:hover img { transform:scale(1.012); box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 0 3px rgba(118,185,0,.55); }
+
 /* 3-up screenshot wall */
 .wall { display:flex; gap:36px; align-items:stretch; justify-content:center; }
 .wall .cell { flex:1; display:flex; flex-direction:column; gap:20px; align-items:center; min-width:0; }
@@ -469,7 +474,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <section class="slide" data-act="01 · Projects">
 <template class="note">this tool is called gitresume. paste your repo, it clones it in the browser, reads your commits, and generates resume bullets — and each bullet cites the exact commits it came from. receipts included.</template>
   <div class="shot-wrap">
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/web/gitresume.png" alt="gitresume GitHub repo">
+    <a class="shotlink reveal" href="https://github.com/Shawnchee/gitresume" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/gitresume.png" alt="gitresume GitHub repo"></a>
     <div class="caption reveal"><span class="accent">gitresume</span> — your git history → cited resume bullets</div>
   </div>
 </section>
@@ -501,7 +506,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <section class="slide" data-act="01 · Projects">
 <template class="note">let me show you my favourite example ever. this applicant built his portfolio as a working macOS. there's a dock. windows open. there's a trash can. i've reviewed hundreds of applications and i still remember this one — THAT is the entire point of a portfolio.</template>
   <div class="shot-wrap">
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/web/jeffreygao.png" alt="jeffreygao.work — a macOS-style portfolio site">
+    <a class="shotlink reveal" href="https://www.jeffreygao.work/" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/jeffreygao.png" alt="jeffreygao.work — a macOS-style portfolio site"></a>
     <div class="caption reveal">A candidate built his site as a <span class="accent">working macOS</span>. I still remember him.</div>
   </div>
   <div class="footnote">jeffreygao.work</div>
@@ -509,12 +514,13 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 
 <!-- 21 · Wall -->
 <section class="slide" data-act="01 · Projects">
-<template class="note">more examples — faw's site, and a couple from my personal bookmarks folder... yes i collect portfolio websites, it's a problem lol. but look at the range. yours doesn't need to be fancy. it needs to EXIST.</template>
+<template class="note">and these are all local — hannah's and janelle's, malaysian students just like you, plus mine. look at the range: scrapbook vibes, playful illustration, whatever feels like YOU. [tip: click any screenshot to open the real site and scroll through it live] yours doesn't need to be fancy. it needs to EXIST.</template>
   <div class="shot-wrap">
+    <div class="caption-kicker reveal">Made by Malaysian students 🇲🇾</div>
     <div class="wall reveal">
-      <div class="cell"><img src="/talks/ai-job-hunt/assets/crops/site-faw.png" alt="faw.dev"><div class="site">faw.dev</div></div>
-      <div class="cell"><img src="/talks/ai-job-hunt/assets/web/nateparrott.png" alt="nateparrott.com"><div class="site">nateparrott.com</div></div>
-      <div class="cell"><img src="/talks/ai-job-hunt/assets/web/polina.png" alt="polinamatviyenko.com"><div class="site">polinamatviyenko.com</div></div>
+      <div class="cell"><a class="shotlink" href="https://hannahdaud.github.io/" target="_blank" rel="noopener"><img src="/talks/ai-job-hunt/assets/web/hannahdaud.png" alt="hannahdaud.github.io" style="object-position:center"></a><div class="site">hannahdaud.github.io</div></div>
+      <div class="cell"><a class="shotlink" href="https://janelleis.online/" target="_blank" rel="noopener"><img src="/talks/ai-job-hunt/assets/web/janelleis.png" alt="janelleis.online" style="object-position:12% 50%"></a><div class="site">janelleis.online</div></div>
+      <div class="cell"><a class="shotlink" href="https://www.mfrashad.com/" target="_blank" rel="noopener"><img src="/talks/ai-job-hunt/assets/web/mfrashad.png" alt="mfrashad.com"></a><div class="site">mfrashad.com <span style="opacity:.6">(mine)</span></div></div>
     </div>
     <div class="caption reveal">Yours doesn't need to be fancy. <span class="accent">It needs to exist.</span></div>
   </div>
@@ -625,7 +631,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <section class="slide" data-act="03 · Drive">
 <template class="note">if setting up a blog sounds like homework — shameless plug, this is literally what we build. write notes in cleve, hit publish, they become public pages. zero setup. the resource page for this talk is hosted exactly this way — QR at the end.</template>
   <div class="shot-wrap">
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/web/cleve.png" alt="Cleve — AI workspace for writing and thinking" style="max-height:640px">
+    <a class="shotlink reveal" href="https://www.cleve.ai/" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/cleve.png" alt="Cleve — AI workspace for writing and thinking" style="max-height:640px"></a>
     <div class="caption reveal">No time to build a blog? Write notes in <span class="accent">Cleve</span> → publish → free public pages.</div>
   </div>
   <div class="footnote">cleve.ai — this talk's resource page is hosted this way. QR at the end.</div>
@@ -774,7 +780,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   <div class="shot-wrap">
     <div class="caption-kicker reveal">Case study · my own CV</div>
     <h2 class="h-med reveal">My CV was <span class="accent">5 years stale</span>.<br>AI rebuilt it in one session.</h2>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/web/pr1.png" alt="GitHub PR: AI-powered CV pipeline" style="max-height:520px">
+    <a class="shotlink reveal" href="https://github.com/mfrashad/personal-website/pull/1" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/pr1.png" alt="GitHub PR: AI-powered CV pipeline" style="max-height:520px"></a>
   </div>
   <div class="footnote">github.com/mfrashad/personal-website · PR #1 — full write-up in the PR description</div>
 </section>
@@ -1149,9 +1155,11 @@ class SlidePresentation {
       if (e.key === 'End') this.show(this.slides.length - 1);
       if (e.key === 'n' || e.key === 'N') document.getElementById('notesPanel').classList.toggle('on');
     });
-    /* click advances (right 2/3), click left 1/3 goes back */
+    /* click advances (right 2/3), click left 1/3 goes back —
+       except clicks on links (clickable screenshots open the live site) */
     document.querySelector('.deck-viewport').addEventListener('click', (e) => {
       if (document.body.classList.contains('editing')) return;
+      if (e.target.closest && e.target.closest('a')) return;
       (e.clientX < window.innerWidth / 3) ? this.prev() : this.next();
     });
     /* wheel + touch */
