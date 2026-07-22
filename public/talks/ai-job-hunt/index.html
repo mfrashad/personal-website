@@ -533,15 +533,16 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 
 <!-- 22 · Vibe-code it — VIDEO PLACEHOLDER -->
 <section class="slide" data-act="01 · Projects">
-<template class="note">and here's what changed: this used to take weeks of fighting CSS. now? you describe it to claude code or cursor, react to what you see, iterate. genuinely a weekend project now. [if live demo: build a hero section on stage — have the backup video ready]</template>
-  <div class="shot-wrap">
-    <h2 class="h-med reveal">You can vibe-code this <span class="accent">in a weekend</span>.</h2>
-    <!-- 🎬 Replace this .video-ph block with: <video src="/talks/ai-job-hunt/assets/videos/vibecoding.mp4" autoplay muted loop class="shot"></video> -->
-    <div class="video-ph reveal">
-      <img src="/talks/ai-job-hunt/assets/crops/site-mfrashad.png" alt="video placeholder poster">
-      <div class="vlabel"><div class="play">▶</div><div class="txt">🎬 Replace with video · vibe-coding a portfolio</div></div>
+<template class="note">and here's what changed: this used to take weeks of fighting CSS. now you describe it, react to what you see, iterate. genuinely a weekend project. pick ONE tool: claude code if you like the terminal, cursor if you want an editor, lovable or figma make if you don't want to touch code at all. then deploy free on vercel or github pages.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">You can vibe-code this<br><span class="accent">in a weekend</span>.</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">TERMINAL</div><div class="t" style="font-size:44px">Claude Code</div><div class="d">agent builds it with you</div></div>
+      <div class="q"><div class="n">EDITOR</div><div class="t" style="font-size:44px">Cursor</div><div class="d">AI-first code editor</div></div>
+      <div class="q"><div class="n">PROMPT→APP</div><div class="t" style="font-size:44px">Lovable</div><div class="d">describe it, get a site</div></div>
+      <div class="q"><div class="n">DESIGN→SITE</div><div class="t" style="font-size:44px">Figma Make</div><div class="d">or v0, Bolt — pick one</div></div>
     </div>
-    <p class="sub reveal" style="font-size:28px">Claude Code · Cursor · v0 · Lovable — describe it, iterate, deploy free on Vercel/GitHub Pages</p>
+    <p class="sub reveal" style="font-size:30px">Describe → react → iterate. Deploy free on Vercel or GitHub Pages.</p>
   </div>
 </section>
 
@@ -732,6 +733,16 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
+<!-- 40b · AI autofill demo video -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">watch this — an AI agent filling an entire job application form by itself. i'm deliberately not naming the tool (this is not an ad lol), there are a few that do this now. the point: the "spray" side of applying is basically free now. which means the differentiator is everything else in this talk.</template>
+  <div class="shot-wrap">
+    <h2 class="h-med reveal">AI can fill the forms <span class="accent">for you</span>.</h2>
+    <video class="shot reveal" src="/talks/ai-job-hunt/assets/videos/autofill-demo.mp4" poster="/talks/ai-job-hunt/assets/videos/autofill-poster.jpg" controls playsinline preload="metadata" style="max-height:720px"></video>
+    <p class="sub reveal" style="font-size:28px">Several tools do this now — resume in, application out. Volume just got cheap.</p>
+  </div>
+</section>
+
 <!-- 41 · Case marker: Faw -->
 <section class="slide section-slide glow-green" data-act="Get Noticed">
 <template class="note">and to show you what "going deep" looks like — the full story of how faw got hired at cleve.</template>
@@ -781,13 +792,13 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 
 <!-- 45 · Case marker -->
 <section class="slide" data-act="My CV Pipeline">
-<template class="note">one more case study — mine. confession: my CV was five years stale. i rebuilt it with AI in one session, on a deadline day. this is the actual pull request — the whole write-up is public on my github, link in the resource page.</template>
-  <div class="shot-wrap">
+<template class="note">one more case study — mine. confession: my CV was five years stale. i rebuilt it with AI in one session, on a deadline day. and THIS is the actual output — notice what an ATS-friendly CV looks like: one column, no photos, no graphics, standard headings, real numbers. boring on purpose — robots read it first. the whole build is public on my github, link in the resource page.</template>
+  <div class="shot-wrap" style="gap:24px">
     <div class="caption-kicker reveal">Case study · my own CV</div>
-    <h2 class="h-med reveal">My CV was <span class="accent">5 years stale</span>.<br>AI rebuilt it in one session.</h2>
-    <a class="shotlink reveal" href="https://github.com/mfrashad/personal-website/pull/1" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/pr1.png" alt="GitHub PR: AI-powered CV pipeline" style="max-height:520px"></a>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/cv-page1.png" alt="Rashad's rendered ATS-friendly CV" style="max-height:780px; background:#fff">
+    <div class="caption reveal" style="font-size:36px">My CV was <span class="accent">5 years stale</span>. AI rebuilt it in one session — clean, one column, <span class="accent">ATS-friendly</span>.</div>
   </div>
-  <div class="footnote">github.com/mfrashad/personal-website · PR #1 — full write-up in the PR description</div>
+  <div class="footnote">rendered with RenderCV · full write-up: github.com/mfrashad/personal-website · PR #1</div>
 </section>
 
 <!-- 46 · Pipeline -->
@@ -920,15 +931,11 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 
 <!-- 54 · Start tonight — VIDEO PLACEHOLDER -->
 <section class="slide" data-act="Local AI on RTX">
-<template class="note">getting started is genuinely one download. LM studio if you like a nice app — or if you want to feel like a hacker, one line: ollama run qwen3:8b. do it tonight, message me your token speed lol. [backup video: LM studio running on the predator]</template>
+<template class="note">getting started is genuinely one download. ollama — one line in the terminal: ollama run qwen3:8b. or LM studio if you prefer a nice app. do it tonight, message me your token speed lol.</template>
   <div class="shot-wrap">
     <h2 class="h-med reveal">Start <span class="accent">tonight</span>. One download.</h2>
-    <!-- 🎬 Replace this .video-ph block with a screen recording of LM Studio / Ollama running on a Predator -->
-    <div class="video-ph reveal">
-      <img src="/talks/ai-job-hunt/assets/web/lmstudio.png" alt="video placeholder poster - LM Studio">
-      <div class="vlabel"><div class="play">▶</div><div class="txt">🎬 Replace with video · LM Studio running locally</div></div>
-    </div>
-    <p class="sub reveal" style="font-family:var(--font-mono); font-size:30px">lmstudio.ai &nbsp;·&nbsp; or: <span class="accent">ollama run qwen3:8b</span></p>
+    <a class="shotlink reveal" href="https://ollama.com/" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/ollama.png" alt="Ollama homepage" style="max-height:640px"></a>
+    <p class="sub reveal" style="font-family:var(--font-mono); font-size:30px">ollama.com → <span class="accent">ollama run qwen3:8b</span> &nbsp;·&nbsp; or LM Studio if you prefer an app</p>
   </div>
 </section>
 
