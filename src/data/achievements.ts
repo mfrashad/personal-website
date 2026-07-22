@@ -119,6 +119,17 @@ export const achievements: Achievement[] = [
         unlocked: true
     },
     {
+        id: 'founded-buildforpublic',
+        title: 'Build for Public',
+        description: 'Founded a tech-for-good initiative connecting volunteer builders with NGOs — 5+ nonprofit websites shipped and first community meetup held within two months of launch',
+        icon: '🌍',
+        category: 'community',
+        tags: ['community', 'open-source', 'social-impact'],
+        date: '2026',
+        unlocked: true,
+        skills: ['coding'],
+    },
+    {
         id: 'speaker',
         title: 'Public Speaker',
         description: 'Gave 20+ talks on AI, tech, and career',
@@ -752,7 +763,7 @@ export const achievements: Achievement[] = [
     {
         "id": "judge-dredd",
         "title": "Hackathon Judge",
-        "description": "Judged 10+ Hackathons. You determine the fate of junior devs.",
+        "description": "Judged 15+ Hackathons. You determine the fate of junior devs.",
         "icon": "⚖️",
         "category": "technical",
         "tags": ["community", "leadership"],
@@ -1115,7 +1126,7 @@ export const metrics: Metric[] = [
     {
         id: 'hackathons-judged',
         label: 'Hackathons Judged',
-        value: 10,
+        value: 15,
         unit: 'events',
         tags: ['hackathon', 'mentorship']
     },

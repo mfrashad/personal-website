@@ -38,7 +38,7 @@ export const projects: Props[] = [
         bgColor: '#000000',
         href: 'https://buildforpublic.com',
         title: 'Build for Public',
-        description: 'Open-source movement connecting builders to social impact work in Malaysia.',
+        description: 'Tech-for-good movement building free open-source websites for NGOs — 5+ nonprofit sites shipped in the first two months.',
         labels: ['Community', 'Social Impact'],
         logo: BuildForPublicLogo,
         logoWidth: '5rem',
