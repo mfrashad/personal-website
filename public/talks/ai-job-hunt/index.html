@@ -1190,14 +1190,36 @@ class SlidePresentation {
    INLINE EDIT MODE — hover top-left corner or press E
    Ctrl/Cmd+S downloads the edited HTML
    =========================================== */
+const EDITABLE_SEL = '.slide h1, .slide h2, .slide p, .slide .caption, .slide .what, .slide .t, .slide .d, .slide .runs, .slide .c, .slide .site, .slide .kicker, .slide .lbl span';
+const EDIT_KEY = 'deck-edits:getting-hired-in-the-ai-age';
+const editables = Array.from(document.querySelectorAll(EDITABLE_SEL));
+editables.forEach((el, i) => { el.dataset.eidx = i; el.dataset.orig = el.innerHTML; });
+/* restore saved edits — only where the source content is unchanged, so
+   deck updates always win over stale localStorage edits */
+try {
+  const saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}');
+  Object.entries(saved).forEach(([i, e]) => {
+    const el = editables[i];
+    if (el && el.dataset.orig === e.o) el.innerHTML = e.v;
+  });
+} catch (_) {}
+/* persist on every keystroke while editing */
+document.addEventListener('input', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-eidx]');
+  if (!el) return;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}'); } catch (_) {}
+  saved[el.dataset.eidx] = { o: el.dataset.orig, v: el.innerHTML };
+  localStorage.setItem(EDIT_KEY, JSON.stringify(saved));
+});
+
 const editor = {
   isActive: false,
   toggleEditMode() {
     this.isActive = !this.isActive;
     document.body.classList.toggle('editing', this.isActive);
     document.getElementById('editToggle').classList.toggle('active', this.isActive);
-    document.querySelectorAll('.slide h1, .slide h2, .slide p, .slide .caption, .slide .what, .slide .t, .slide .d, .slide .runs, .slide .c, .slide .site, .slide .kicker, .slide .lbl span')
-      .forEach(el => el.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
+    editables.forEach(el => el.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
   },
   save() {
     const clone = document.documentElement.cloneNode(true);
@@ -1219,7 +1241,13 @@ editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
 editToggle.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); });
 editToggle.addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); });
 document.addEventListener('keydown', (e) => {
-  if ((e.key === 'e' || e.key === 'E') && !(e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true')) editor.toggleEditMode();
+  if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') {
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
+    return;
+  }
+  /* E toggles edit mode · Shift+E discards all saved edits and reloads */
+  if (e.key === 'E' && e.shiftKey) { localStorage.removeItem(EDIT_KEY); location.reload(); return; }
+  if (e.key === 'e' || e.key === 'E') editor.toggleEditMode();
   if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
 });
 
