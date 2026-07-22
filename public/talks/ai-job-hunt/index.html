@@ -1201,6 +1201,17 @@ document.addEventListener('keydown', (e) => {
 /* headless export (Playwright/PDF): render everything final-state */
 if (navigator.webdriver) document.body.classList.add('static');
 
+/* auto-retry images that fail to load (flaky venue wi-fi / CDN hiccups) */
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('error', function () {
+    const tries = +(this.dataset.retries || 0);
+    if (tries >= 3) return;
+    this.dataset.retries = tries + 1;
+    setTimeout(() => { this.src = this.getAttribute('src').split('?')[0] + '?r=' + Date.now(); }, 900 * (tries + 1));
+  });
+  if (img.complete && img.naturalWidth === 0) img.dispatchEvent(new Event('error'));
+});
+
 new SlidePresentation();
 </script>
 </body>
