@@ -211,8 +211,15 @@ img, video, canvas, svg { max-width:100%; max-height:100%; }
 .cred .big { font-size:44px; font-weight:700; color:var(--ink); }
 .cred .sm { font-size:26px; color:var(--ink-2); margin-top:8px; }
 
-/* intro avatar + small QR/handles row */
-.avatar { width:250px; height:250px; border-radius:50%; object-fit:cover; border:5px solid var(--green); box-shadow:0 16px 50px rgba(0,0,0,.55), 0 0 40px rgba(118,185,0,.25); }
+/* intro slide — two-column editorial layout */
+.intro-grid { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:96px; padding:0 150px; }
+.intro-photo img { width:540px; height:720px; object-fit:cover; object-position:50% 42%; border-radius:26px;
+  border:1px solid rgba(255,255,255,.12); box-shadow:0 34px 90px rgba(0,0,0,.6), 0 0 70px rgba(139,92,246,.18); }
+.intro-right { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:40px; max-width:880px; }
+.intro-creds { display:flex; flex-direction:column; gap:22px; }
+.intro-creds .row { font-size:38px; color:var(--ink-2); }
+.intro-creds .row b { color:var(--ink); font-weight:700; }
+.intro-creds .row::before { content:'—'; color:var(--green); margin-right:20px; font-weight:700; }
 .me-links { display:flex; align-items:center; gap:28px; }
 .me-links .qr-mini { background:#fff; padding:10px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.5); }
 .me-links .qr-mini img { width:118px; height:118px; display:block; image-rendering:pixelated; }
@@ -294,17 +301,20 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <!-- 2 · Who am I -->
 <section class="slide" data-act="Hook">
 <template class="note">super quick intro so you know i'm not talking theory. i'm the co-founder and CTO of cleve — we build AI writing tools, around a hundred thousand people use it. i got into MIT research at 19 because of a blog (more on that later), and i've judged 15+ hackathons around malaysia, so i've seen a LOT of student portfolios.</template>
-  <div class="wrap" style="gap:30px">
-    <img class="avatar reveal" src="/talks/ai-job-hunt/assets/me.jpg" alt="Fathy Rashad">
-    <h2 class="h-med reveal">I build AI for a living.</h2>
-    <div class="creds reveal">
-      <div class="cred"><div class="big">CTO @ Cleve.ai</div><div class="sm">AI writing workspace · 100K+ users</div></div>
-      <div class="cred"><div class="big">MIT research at 19</div><div class="sm">Published GenAI paper (CreativeGAN)</div></div>
-      <div class="cred"><div class="big">15+ hackathons</div><div class="sm">judged across Malaysia</div></div>
-    </div>
-    <div class="me-links reveal">
-      <div class="qr-mini"><img src="/talks/ai-job-hunt/assets/qr-mfrashad.png" alt="QR to mfrashad.com"></div>
-      <div class="handles"><b>mfrashad.com</b><br>in/mfathyrashad · IG @rashadventure</div>
+  <div class="intro-grid">
+    <div class="intro-photo reveal"><img src="/talks/ai-job-hunt/assets/me-event.jpg" alt="Fathy Rashad"></div>
+    <div class="intro-right">
+      <div class="kicker reveal">Quick intro</div>
+      <h2 class="h-big reveal">I build AI<br>for a living.</h2>
+      <div class="intro-creds reveal">
+        <div class="row"><b>CTO @ Cleve.ai</b> · 100K+ users</div>
+        <div class="row"><b>MIT GenAI research</b> at 19</div>
+        <div class="row"><b>15+ hackathons</b> judged in Malaysia</div>
+      </div>
+      <div class="me-links reveal">
+        <div class="qr-mini"><img src="/talks/ai-job-hunt/assets/qr-mfrashad.png" alt="QR to mfrashad.com"></div>
+        <div class="handles"><b>mfrashad.com</b><br>in/mfathyrashad · IG @rashadventure</div>
+      </div>
     </div>
   </div>
 </section>
