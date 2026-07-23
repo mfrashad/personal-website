@@ -271,6 +271,50 @@ body.static .fill { width:var(--w) !important; transition:none !important; }
 .progress { position:fixed; top:0; left:0; height:3px; background:var(--green); width:0%; z-index:901; transition:width .3s ease; }
 
 /* ===========================================
+   OVERVIEW / SCRIPT MODE — press O or use the toolbar
+   Full list of slides + their speaker notes; tap to jump
+   =========================================== */
+.overview { position:fixed; inset:0; z-index:6000; background:rgba(8,8,14,.97); display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.overview.on { display:block; }
+.overview .ov-head { position:sticky; top:0; background:rgba(8,8,14,.97); padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); z-index:1; }
+.overview .ov-head .t { font-family:var(--font-mono); font-size:14px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); }
+.overview .ov-head button { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
+.overview .ov-list { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+.ov-row { padding:16px 14px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer; border-radius:10px; }
+.ov-row:hover { background:rgba(255,255,255,.04); }
+.ov-row.current { background:rgba(118,185,0,.1); border-left:3px solid var(--green); }
+.ov-row .ov-meta { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); letter-spacing:.12em; text-transform:uppercase; }
+.ov-row .ov-title { font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--ink); margin:4px 0; }
+.ov-row .ov-note { font-family:var(--font-display); font-size:15px; line-height:1.55; color:var(--ink-2); }
+
+/* ===========================================
+   MOBILE TOOLBAR + EDIT SHEET (phones/tablets)
+   =========================================== */
+.mtoolbar { display:none; position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:4000;
+  background:rgba(16,16,26,.92); border:1px solid rgba(255,255,255,.14); border-radius:100px; padding:8px 10px; gap:6px;
+  backdrop-filter:blur(8px); box-shadow:0 12px 40px rgba(0,0,0,.5); }
+.mtoolbar button { background:none; border:none; color:var(--ink); font-size:20px; padding:10px 14px; border-radius:100px; cursor:pointer; font-family:var(--font-mono); }
+.mtoolbar button.active { background:rgba(118,185,0,.22); color:var(--green); }
+.edit-sheet { position:fixed; left:0; right:0; bottom:0; z-index:7000; background:#14141f; border-top:2px solid var(--green);
+  padding:16px 18px calc(16px + env(safe-area-inset-bottom)); display:none; }
+.edit-sheet.on { display:block; }
+.edit-sheet textarea { width:100%; min-height:110px; background:#0a0a12; color:var(--ink); border:1px solid rgba(255,255,255,.18);
+  border-radius:10px; padding:12px; font-family:var(--font-display); font-size:16px; line-height:1.5; }
+.edit-sheet .sheet-row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+.edit-sheet .sheet-row .lbl { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); }
+.edit-sheet .sheet-row button { border-radius:8px; padding:10px 18px; font-size:15px; cursor:pointer; border:none; }
+.edit-sheet .sheet-save { background:var(--green); color:#0a0a12; font-weight:700; }
+.edit-sheet .sheet-close { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); margin-right:10px; }
+
+@media (max-width: 880px), (pointer: coarse) {
+  .mtoolbar { display:flex; }
+  .edit-hotzone, .edit-toggle { display:none; }
+  .hud.act { display:none; }
+  .hud.count { bottom:auto; top:16px; left:24px; right:auto; }
+  .notes-panel { bottom:84px; width:94vw; font-size:16px; max-height:45vh; overflow-y:auto; padding:16px 18px; }
+}
+
+/* ===========================================
    INLINE EDIT MODE (hover top-left corner or press E)
    =========================================== */
 .edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
@@ -288,6 +332,30 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 <div class="hud mark">Rashad · mfrashad.com</div>
 <div class="notes-panel" id="notesPanel"><div class="nlabel">Speaker notes · N to hide</div><div id="notesText"></div></div>
 <div id="blackout"></div>
+
+<!-- Overview / combined-script mode (O key or ⊞ button) -->
+<div class="overview" id="overview">
+  <div class="ov-head"><span class="t">Overview · tap a slide to jump</span><button id="ovClose">Close ✕</button></div>
+  <div class="ov-list" id="ovList"></div>
+</div>
+
+<!-- Mobile toolbar -->
+<nav class="mtoolbar" id="mtoolbar" aria-label="deck controls">
+  <button id="mbPrev" title="Previous">‹</button>
+  <button id="mbNext" title="Next">›</button>
+  <button id="mbNotes" title="Speaker notes">📝</button>
+  <button id="mbOverview" title="Overview">⊞</button>
+  <button id="mbEdit" title="Edit mode">✏️</button>
+</nav>
+
+<!-- Mobile edit sheet: tap any text while in edit mode -->
+<div class="edit-sheet" id="editSheet">
+  <textarea id="sheetText"></textarea>
+  <div class="sheet-row">
+    <span class="lbl">Edits save automatically to this browser</span>
+    <span><button class="sheet-close" id="sheetClose">Close</button><button class="sheet-save" id="sheetSave">Apply</button></span>
+  </div>
+</div>
 <div class="edit-hotzone" id="editHotzone"></div>
 <button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
 
@@ -1170,6 +1238,8 @@ class SlidePresentation {
       if (e.key === 'Home') this.show(0);
       if (e.key === 'End') this.show(this.slides.length - 1);
       if (e.key === 'n' || e.key === 'N') document.getElementById('notesPanel').classList.toggle('on');
+      if (e.key === 'o' || e.key === 'O') toggleOverview();
+      if (e.key === 'Escape') document.getElementById('overview').classList.remove('on');
       /* clicker compatibility: F5 = "start show" on most clickers → fullscreen, NOT refresh */
       if (e.key === 'F5') { e.preventDefault(); document.documentElement.requestFullscreen?.(); }
       if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen?.() : document.documentElement.requestFullscreen?.(); }
@@ -1280,6 +1350,80 @@ document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
 });
 
+/* ===========================================
+   OVERVIEW / COMBINED SCRIPT — O key or ⊞ button
+   =========================================== */
+function buildOverview() {
+  const list = document.getElementById('ovList');
+  list.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const title = (s.querySelector('h1, h2, .caption, .kicker')?.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 90);
+    const note = (s.querySelector('template.note')?.content.textContent || '').trim();
+    const row = document.createElement('div');
+    row.className = 'ov-row' + (i === deck.current ? ' current' : '');
+    row.innerHTML = '<div class="ov-meta">' + (i + 1) + ' · ' + (s.dataset.act || '') + '</div>' +
+      '<div class="ov-title"></div><div class="ov-note"></div>';
+    row.querySelector('.ov-title').textContent = title;
+    row.querySelector('.ov-note').textContent = note;
+    row.addEventListener('click', () => { deck.show(i); toggleOverview(false); });
+    list.appendChild(row);
+  });
+}
+function toggleOverview(force) {
+  const ov = document.getElementById('overview');
+  const on = force !== undefined ? force : !ov.classList.contains('on');
+  if (on) { buildOverview(); ov.classList.add('on'); ov.querySelector('.ov-row.current')?.scrollIntoView({ block: 'center' }); }
+  else ov.classList.remove('on');
+}
+document.getElementById('ovClose').addEventListener('click', () => toggleOverview(false));
+document.getElementById('overview').addEventListener('click', (e) => e.stopPropagation());
+
+/* ===========================================
+   MOBILE TOOLBAR + TOUCH EDIT SHEET
+   =========================================== */
+const isCoarse = matchMedia('(pointer: coarse)').matches;
+const mb = (id) => document.getElementById(id);
+mb('mbPrev').addEventListener('click', (e) => { e.stopPropagation(); deck.prev(); });
+mb('mbNext').addEventListener('click', (e) => { e.stopPropagation(); deck.next(); });
+mb('mbNotes').addEventListener('click', (e) => { e.stopPropagation(); mb('mbNotes').classList.toggle('active'); document.getElementById('notesPanel').classList.toggle('on'); });
+mb('mbOverview').addEventListener('click', (e) => { e.stopPropagation(); toggleOverview(); });
+mb('mbEdit').addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); mb('mbEdit').classList.toggle('active', editor.isActive); });
+document.getElementById('mtoolbar').addEventListener('click', (e) => e.stopPropagation());
+
+/* On touch devices, edit mode uses a bottom-sheet textarea instead of
+   contenteditable (slide text is too small to edit in place on a phone) */
+let sheetTarget = null;
+function openSheet(el) {
+  sheetTarget = el;
+  document.getElementById('sheetText').value = el.innerText;
+  document.getElementById('editSheet').classList.add('on');
+}
+document.getElementById('sheetSave').addEventListener('click', () => {
+  if (sheetTarget) {
+    sheetTarget.innerText = document.getElementById('sheetText').value;
+    sheetTarget.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  document.getElementById('editSheet').classList.remove('on');
+});
+document.getElementById('sheetClose').addEventListener('click', () => document.getElementById('editSheet').classList.remove('on'));
+document.getElementById('editSheet').addEventListener('click', (e) => e.stopPropagation());
+if (isCoarse) {
+  document.addEventListener('click', (e) => {
+    if (!editor.isActive) return;
+    const el = e.target.closest && e.target.closest('[data-eidx]');
+    if (el) { e.preventDefault(); e.stopPropagation(); openSheet(el); }
+  }, true);
+}
+
+/* ===========================================
+   OFFLINE SUPPORT — network-first service worker.
+   Online you ALWAYS get the freshly deployed version;
+   offline you get the last cached copy. No stale-cache traps.
+   =========================================== */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
 /* headless export (Playwright/PDF): render everything final-state */
 if (navigator.webdriver) document.body.classList.add('static');
 
@@ -1294,7 +1438,7 @@ document.querySelectorAll('img').forEach(img => {
   if (img.complete && img.naturalWidth === 0) img.dispatchEvent(new Event('error'));
 });
 
-new SlidePresentation();
+const deck = new SlidePresentation();
 </script>
 </body>
 </html>
