@@ -1,8 +1,8 @@
 /* Service worker for the talk deck — NETWORK-FIRST everywhere.
    Online: always fetches fresh (never stale after a deploy).
    Offline: falls back to the last cached copy of everything. */
-const CACHE = 'ai-job-hunt-v1';
-const PRECACHE = ["./", "./assets/crops/app-bad-chatgpt.png", "./assets/crops/app-bad-quiz.png", "./assets/crops/app-faw.png", "./assets/crops/app-switcher.png", "./assets/crops/github-faw.png", "./assets/crops/referral-dm.png", "./assets/crops/resume-metrics.png", "./assets/crops/resume-role.png", "./assets/crops/resume-stack.png", "./assets/crops/site-l4n1skyy.png", "./assets/crops/site-mfrashad.png", "./assets/cv-page1.png", "./assets/me-event.jpg", "./assets/qr-mfrashad.png", "./assets/qr-toolkit.png", "./assets/videos/autofill-demo.mp4", "./assets/videos/autofill-poster.jpg", "./assets/web/cleve.png", "./assets/web/gitresume.png", "./assets/web/hannahdaud.png", "./assets/web/janelleis.png", "./assets/web/jeffreygao.png", "./assets/web/mfrashad.png", "./assets/web/ollama.png"];
+const CACHE = 'ai-job-hunt-v2';
+const PRECACHE = ["./", "./assets/crops/app-bad-chatgpt.png", "./assets/crops/app-bad-quiz.png", "./assets/crops/app-faw.png", "./assets/crops/app-switcher.png", "./assets/crops/referral-dm.png", "./assets/crops/resume-metrics.png", "./assets/crops/site-faw.png", "./assets/crops/site-l4n1skyy.png", "./assets/crops/site-mfrashad.png", "./assets/cv-page1.png", "./assets/me-event.jpg", "./assets/qr-mfrashad.png", "./assets/qr-toolkit.png", "./assets/videos/janelle-casestudy-scroll.mp4", "./assets/videos/janelle-interactive.mp4", "./assets/videos/rashad-portfolio.mp4", "./assets/web/anythingllm.png", "./assets/web/cleve.png", "./assets/web/comfyui.png", "./assets/web/github-mfrashad.png", "./assets/web/gitresume.png", "./assets/web/hannahdaud.png", "./assets/web/janelleis.png", "./assets/web/mfrashad.png", "./assets/web/rendercv.png"];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
