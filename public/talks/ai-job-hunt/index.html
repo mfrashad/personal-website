@@ -378,7 +378,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 
 <!-- 2 · Who am I -->
 <section class="slide" data-act="Hook">
-<template class="note">super quick intro so you know i'm not talking theory. i'm the co-founder and CTO of cleve — we build AI writing tools, around a hundred thousand people use it. i got into MIT research at 19 because of a blog (more on that later), and i've judged 15+ hackathons around malaysia. most importantly: i've personally reviewed hundreds of job applications at cleve — everything today is from the reviewer's seat.</template>
+<template class="note">super quick intro so you know i'm not talking theory. i'm the co-founder and CTO of cleve — we build AI writing tools, around a hundred thousand people use it. i got into MIT research at 19 because of a blog (more on that later), and i've judged 15+ hackathons around malaysia. so i've seen a LOT of student portfolios.</template>
   <div class="intro-grid">
     <div class="intro-photo reveal"><img src="/talks/ai-job-hunt/assets/me-event.jpg" alt="Fathy Rashad"></div>
     <div class="intro-right">
@@ -397,6 +397,15 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
+<!-- POV -->
+<section class="slide" data-act="Hook">
+<template class="note">but the most relevant thing: i'm the guy on the other side of the table. i've personally read hundreds of applications at cleve. everything today is from the reviewer's seat — what actually makes me stop scrolling.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">I've reviewed <span class="accent">hundreds</span><br>of applications.</h2>
+    <p class="sub reveal">Here's what actually gets you hired in 2026.</p>
+  </div>
+</section>
+
 <!-- 3 · The stakes: Malaysia underemployment -->
 <section class="slide" data-act="Hook">
 <template class="note">let's start with the local reality. grad unemployment in malaysia is actually low — 3.2%. but the real story: one in three graduates end up in jobs that don't need their degree. "gaji cukup makan." the degree gets you INTO the race. it doesn't win the race.</template>
@@ -407,12 +416,22 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   <div class="footnote">~35.5% of employed graduates in semi/low-skilled roles — DOSM Graduate Statistics 2024</div>
 </section>
 
+<!-- Big number: 250 -->
+<section class="slide" data-act="Hook">
+<template class="note">and the race is crowded. when a company posts ONE good job opening — this is how many applications land on it. two hundred and fifty. let that sink in.</template>
+  <div class="wrap">
+    <div class="stat-number reveal">250</div>
+    <p class="sub reveal">applications land on <strong>one</strong> corporate job opening.</p>
+  </div>
+  <div class="footnote">HiringThing job application statistics, 2025</div>
+</section>
+
 <!-- 4 · The odds: dot funnel -->
 <section class="slide" data-act="Hook">
-<template class="note">and the race is crowded. when a company posts ONE good opening, around 250 applications land on it — that's every dot on this screen. four to six get an interview. a 2% hit rate. so the game isn't "be good" — plenty of good people in that grey pile. the game is "be visible."</template>
+<template class="note">and out of those 250 — every dot on this screen — four to six get an interview. a 2% hit rate. so the game isn't "be good" — plenty of good people in that grey pile. the game is "be visible."</template>
   <div class="wrap">
     <div class="dots reveal" id="dotgrid" aria-label="250 applicants, 5 interviewed"></div>
-    <h2 class="h-med reveal"><span class="accent">250</span> apply. Only <span class="accent">4–6</span> get interviewed.</h2>
+    <h2 class="h-med reveal">Only <span class="accent">4–6</span> get interviewed.</h2>
   </div>
   <div class="footnote">HiringThing job application statistics, 2025</div>
 </section>
@@ -438,217 +457,42 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   <div class="footnote">Greenhouse job seeker survey, Nov 2025</div>
 </section>
 
-<!-- Section: the AI application pipeline -->
-<section class="slide section-slide" data-act="The Pipeline">
-<template class="note">so how do you compete with those odds? let me just show you what i actually do. this is the exact pipeline i use today to apply for everything — jobs, grants, fellowships: CV, apply, outreach. all AI-assisted, all real.</template>
+<!-- 9 · 4 things -->
+<section class="slide" data-act="Framework">
+<template class="note">here's my mental checklist when i screen someone — four things. projects: can you build? experience: have you done it for real? drive: will you push without being pushed? communication: can you make me understand you? and this applies whatever your major — media, accounting, engineering — just swap "code" for whatever it is you make.</template>
   <div class="wrap">
-    <div class="num reveal">⌗</div>
-    <h2 class="h-big reveal">The AI application<br>pipeline</h2>
-    <p class="q reveal">CV → apply → outreach</p>
-  </div>
-</section>
-
-<!-- Step 1a · The ATS-friendly CV -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">step one, the CV. this is mine — and notice how BORING it is: one column, no photo, no graphics, standard headings, real numbers. that's the industry ATS format. boring on purpose — a robot reads it before any human does.</template>
-  <div class="shot-wrap" style="gap:24px">
-    <div class="caption-kicker reveal">Step 1 · The CV</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/cv-page1.png" alt="Rashad's rendered ATS-friendly CV" style="max-height:780px; background:#fff">
-    <div class="caption reveal" style="font-size:36px">This is <span class="accent">ATS-friendly</span>: one column, standard headings, numbers. Boring on purpose.</div>
-  </div>
-  <div class="footnote">my actual CV — generated with AI + RenderCV</div>
-</section>
-
-<!-- Step 1b · The CV is generated, not written -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">and here's the trick: i don't WRITE my CV anymore — i generate it. one master file with every real number i've ever earned: talks, users, papers, everything. AI reads the job posting, picks and re-words the relevant bullets, renders the PDF. update the master once, and every future application starts warm instead of from zero. rule number one though: AI never invents — every claim traces to something real.</template>
-  <div class="wrap">
-    <div class="kicker reveal">Step 1 · Generated, not written</div>
-    <div class="pipe reveal">
-      <div class="node"><div class="t">Master record</div><div class="d">every number I've ever earned, one file</div></div>
-      <div class="arrow">→</div>
-      <div class="node"><div class="t">AI tailors</div><div class="d">reads the job posting, mirrors its rubric</div></div>
-      <div class="arrow">→</div>
-      <div class="node hero"><div class="t">Rendered PDF</div><div class="d">1–2 pages, ATS-friendly</div></div>
+    <div class="kicker reveal">From my hiring seat</div>
+    <h2 class="h-med reveal">4 things I judge in every candidate</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">01</div><div class="t">Projects</div><div class="d">Can you build things?</div></div>
+      <div class="q"><div class="n">02</div><div class="t">Experience</div><div class="d">Used in real contexts?</div></div>
+      <div class="q"><div class="n">03</div><div class="t">Drive</div><div class="d">Will you excel?</div></div>
+      <div class="q"><div class="n">04</div><div class="t">Communication</div><div class="d">Can you share ideas?</div></div>
     </div>
-    <p class="sub reveal">Rule #1: AI never invents — every claim traceable. <em>“The taste and the truth stayed mine.”</em></p>
-  </div>
-</section>
-
-<!-- Step 1b · Tailor per job description with RenderCV -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">and you don't hand-make this. rendercv is free and open source — your CV lives as a simple text file, and it renders that clean PDF. which means AI can EDIT it: paste the job description, let AI re-order and re-word your real bullets to match what they're asking for, render, done. every application gets a personalized CV in minutes. one rule: AI never invents — every claim stays traceable to something you actually did.</template>
-  <div class="shot-wrap" style="gap:24px">
-    <div class="caption-kicker reveal">Step 1 · Tailor it — free</div>
-    <a class="shotlink reveal" href="https://github.com/rendercv/rendercv" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/rendercv.png" alt="RenderCV — open source CV generator" style="max-height:660px"></a>
-    <div class="caption reveal">Paste the job description → <span class="accent">AI rewrites your bullets</span> → RenderCV renders the PDF.</div>
-  </div>
-  <div class="footnote">github.com/rendercv/rendercv · your CV as a text file = AI can edit it per application</div>
-</section>
-
-<!-- Step 2 · AI autofill demo (YouTube embed, muted) -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">step two, applying. watch this — an AI agent filling an entire job application form by itself. i'm deliberately not naming the tool (this is not an ad lol), a few of them do this now. the point: the volume side of applying is basically free now. which means the differentiator is everything else in this talk.</template>
-  <div class="shot-wrap" style="flex-direction:row; gap:70px; padding:50px 110px 60px">
-    <!-- same video as youtu.be/Uu9MhTIp4mo — hosted locally (H.264) so it plays muted/offline/on-stage; YouTube embeds error out on file:// -->
-    <video class="reveal" src="/talks/ai-job-hunt/assets/videos/autofill-demo.mp4" poster="/talks/ai-job-hunt/assets/videos/autofill-poster.jpg" autoplay muted loop playsinline style="height:960px; width:auto; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
-    <div style="display:flex; flex-direction:column; gap:30px; align-items:flex-start; text-align:left; max-width:640px">
-      <div class="caption-kicker reveal">Step 2 · Apply</div>
-      <h2 class="h-med reveal">AI can fill the forms <span class="accent">for you</span>.</h2>
-      <p class="sub reveal" style="font-size:32px">Resume in, application out.<br><strong>Volume just got cheap.</strong></p>
-    </div>
-  </div>
-</section>
-
-<!-- Step 3 · Outreach -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">step three — reach out. DM the recruiter or founder, even AFTER you applied. let AI draft it, but rewrite it in YOUR voice and proofread every word. AI-sounding DMs get ignored; human ones get replies. remember faw's message — short, specific, real.</template>
-  <div class="wrap">
-    <div class="kicker reveal">Step 3 · Outreach</div>
-    <h2 class="h-big reveal">DM them.<br><span class="dim">Even after you applied.</span></h2>
-    <p class="sub reveal"><strong>AI drafts. You proofread.</strong> Rewrite it in your voice — every time.</p>
-  </div>
-</section>
-
-<!-- Spray + snipe -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">real talk: personalization takes energy. you can't do it for 100 companies. so do both — spray wide with AI for volume, and go DEEP by hand on the 3 companies you'd fight to join. that's where the effort actually converts. and what does going deep look like? let me tell you a story.</template>
-  <div class="wrap">
-    <h2 class="h-big reveal">Spray <span class="dim">wide</span> with AI.<br>Snipe your <span class="accent">top 3</span> by hand.</h2>
-    <p class="sub reveal">Personalization takes energy — you can't fake it at scale.<br>Spend yours on the few companies you'd <strong>fight</strong> to join.</p>
-  </div>
-</section>
-
-<!-- He hacked us -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">and what does "going deep" look like? the story of how faw got hired at cleve. he didn't stop at applying. he used the product for a day. sent us real feedback. and then... he found an exploit in our system. actually hacked it. and instead of doing anything weird, he responsibly disclosed it — inside his job application. as the CTO reading that: okay. you have my full attention.</template>
-  <div class="wrap">
-    <h2 class="h-big reveal">He didn't just apply.</h2>
-    <h2 class="h-big reveal"><span class="accent">He hacked us.</span></h2>
-    <p class="sub reveal">Used the product for a day → sent real feedback →<br>found an exploit in our system → <strong>shared it in his application</strong>.</p>
-  </div>
-</section>
-
-<!-- 43 · Referral DM -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">then this landed in my linkedin. a mutual friend: "he's found an exploit in your system... would be great if you could give his application a minute." here's the honest truth — i'm busy, applications pile up, good people get buried. this one message put him on top of the pile.</template>
-  <div class="shot-wrap">
-    <div class="caption-kicker reveal">Then someone DMed me for him</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/referral-dm.png" alt="LinkedIn referral message mentioning the exploit" style="max-height:740px">
-    <div class="caption reveal">“I was busy. This put him <span class="accent">on top of the pile</span>.”</div>
-  </div>
-</section>
-
-<!-- 44 · Formula -->
-<section class="slide" data-act="The Pipeline">
-<template class="note">so the formula: use the product. say something real about it. then DM and get a referral — yes, even AFTER you already applied. founders aren't ignoring you, we're drowning. outreach is how you get seen twice.</template>
-  <div class="wrap">
-    <div class="kicker reveal">The Faw formula</div>
-    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
-      <div class="node"><div class="t">Use the product</div><div class="d">for real, not 5 minutes</div></div>
-      <div class="arrow">→</div>
-      <div class="node"><div class="t">Say something real</div><div class="d">feedback, bugs, ideas</div></div>
-      <div class="arrow">→</div>
-      <div class="node hero"><div class="t">DM + referral</div><div class="d">even after you applied</div></div>
-    </div>
-    <p class="sub reveal">Founders are busy. <strong>Outreach is how you get seen twice.</strong></p>
   </div>
 </section>
 
 <!-- 10 · Manifesto -->
 <section class="slide glow-green" data-act="Framework">
-<template class="note">so that's the pipeline — anyone can run it, whatever your major. but here's the thing: everyone ELSE has the same AI. so what makes an application actually great? switch seats with me — i've reviewed hundreds of these at cleve. my whole thesis in one sentence: AI didn't change WHAT i look for. it changed how FAST you can build proof of it.</template>
+<template class="note">because here's my whole thesis, one sentence: AI didn't change WHAT i look for. it changed how FAST you can build proof of it. everything from here is just this sentence, with receipts.</template>
   <div class="wrap">
     <h2 class="h-big reveal">AI doesn't change <span class="dim">what I look for.</span></h2>
     <h2 class="h-big reveal">It changes <span class="accent">how fast you build proof.</span></h2>
   </div>
 </section>
 
-<!-- 9 · 4 things -->
-<section class="slide" data-act="Framework">
-<template class="note">here's my mental checklist when i screen someone — four things. communication: can you make me understand you, and sound like a human? projects: can you build? experience: have you done it for real? drive: will you push without being pushed? and this applies whatever your major — media, accounting, engineering — just swap "code" for whatever it is you make. we start with communication, because in the AI age it's where applications live or die.</template>
-  <div class="wrap">
-    <div class="kicker reveal">From my hiring seat</div>
-    <h2 class="h-med reveal">4 things I judge in every candidate</h2>
-    <div class="quad reveal">
-      <div class="q"><div class="n">01</div><div class="t">Communication</div><div class="d">Can you share ideas?</div></div>
-      <div class="q"><div class="n">02</div><div class="t">Projects</div><div class="d">Can you build things?</div></div>
-      <div class="q"><div class="n">03</div><div class="t">Experience</div><div class="d">Used in real contexts?</div></div>
-      <div class="q"><div class="n">04</div><div class="t">Drive</div><div class="d">Will you excel?</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- 32 · Section -->
-<section class="slide section-slide glow-green" data-act="01 · Communication">
-<template class="note">number one. communication — can you make me understand you, and want to keep reading?</template>
+<!-- 11 · Section -->
+<section class="slide section-slide glow-green" data-act="01 · Projects">
+<template class="note">number one. projects — can you actually build things?</template>
   <div class="wrap">
     <div class="num reveal">01</div>
-    <h2 class="h-giant reveal">Communication</h2>
-    <p class="q reveal">Can you effectively share your ideas?</p>
-  </div>
-</section>
-
-<!-- 33 · Sound human -->
-<section class="slide" data-act="01 · Communication">
-<template class="note">here's the thing about the AI age: every application sounds the same now. same chatgpt sentence rhythm, same "i am excited about this opportunity." which means the genuinely human ones stand out MORE than ever. short. personal. a little risky.</template>
-  <div class="wrap">
-    <h2 class="h-big reveal">Everyone sounds like AI now.</h2>
-    <h2 class="h-big reveal"><span class="accent">Sound like a human.</span></h2>
-    <p class="sub reveal">Short. Personal. A little risky.</p>
-  </div>
-</section>
-
-<!-- Good example: Faw -->
-<section class="slide" data-act="01 · Communication">
-<template class="note">and remember faw — the guy who hacked us? THIS is the actual application message he sent. "i actually used cleve for a day and i'm pretty impressed... i can tell there is a niche for this product." real observations, his own voice, zero AI-smell. do you know how rare that is? maybe 1 in 100 applications.</template>
-  <div class="shot-wrap">
-    <div class="caption-kicker reveal">✅ Remember Faw? His actual application</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-faw.png" alt="Faw's application message" style="max-height:750px">
-    <div class="caption reveal">“i actually <span class="accent">used cleve for a day</span> and i'm pretty impressed…” He did the homework.</div>
-  </div>
-</section>
-
-<!-- 36 · QUIZ: spot the problem -->
-<section class="slide glow-blue" data-act="01 · Communication">
-<template class="note">okay, game time. we actually received this. read it carefully... raise your hand when you spot the problem. [wait for it — someone always gets it]</template>
-  <div class="shot-wrap">
-    <div class="interact-tag reveal">✋ Spot the problem</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-bad-quiz.png" alt="A suspicious application message" style="max-height:800px">
-  </div>
-</section>
-
-<!-- 37 · Reveal -->
-<section class="slide" data-act="01 · Communication">
-<template class="note">yep. "your response looks great! here's a slightly tweaked version:" — he pasted the ENTIRE chatgpt reply. the prompt response. everything. my co-founder's reaction is right there in the screenshot lol. bro became a legend in our team chat. also: rejected.</template>
-  <div class="shot-wrap">
-    <div class="caption-kicker reveal" style="color:#ff6b6b">❌ He pasted the whole ChatGPT reply</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-bad-chatgpt.png" alt="Application with ChatGPT preamble left in, cofounder laughing" style="max-height:700px">
-    <div class="caption reveal">“Your response looks great! …here's a slightly tweaked version:” <span class="dim">— sent as-is. My co-founder's reaction says the rest.</span></div>
-  </div>
-</section>
-
-<!-- 38 · Rule -->
-<section class="slide" data-act="01 · Communication">
-<template class="note">so the rule is simple: AI is your ghostwriter, not your voice. draft with AI — then rewrite it like you're texting a friend. shorter, warmer, weirder, yours. if it sounds like a press release, delete it.</template>
-  <div class="wrap">
-    <h2 class="h-big reveal">AI is your <span class="accent">ghostwriter</span>,<br>not your voice.</h2>
-    <p class="sub reveal">Draft with AI. Rewrite it like you're <strong>texting a friend</strong>.</p>
-  </div>
-</section>
-
-<!-- 11 · Section -->
-<section class="slide section-slide glow-green" data-act="02 · Projects">
-<template class="note">number two. projects — can you actually build things?</template>
-  <div class="wrap">
-    <div class="num reveal">02</div>
     <h2 class="h-giant reveal">Projects</h2>
     <p class="q reveal">Can you actually build things?</p>
   </div>
 </section>
 
 <!-- 12 · Levels ladder -->
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">there are levels to this. school projects — that's the minimum, everyone in this room has those. side projects, freelance, open source — now i'm interested. and if you've shipped something real that strangers actually use? different league entirely. and "projects" doesn't mean code — a campaign you ran, a video series, a design portfolio, an event you organized, a spreadsheet system that saved someone hours. proof of work comes in every major.</template>
   <div class="wrap">
     <div class="kicker reveal">Level of projects</div>
@@ -661,7 +505,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- Resume bullets that work (Faw's real CV, 3 rapid beats) -->
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">this is a real CV from a real applicant — remember the name faw, he's coming back later in this talk. three things make his bullets work. one: the tools are named — tech stack for coders, but same for any major: the software, platforms, methods you used. the ATS robot literally keyword-matches these.</template>
   <div class="shot-wrap">
     <div class="caption-kicker reveal">Resume bullets that work · 1/3</div>
@@ -670,7 +514,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">two: he owns his role. "LED a team of 6." for group projects i NEED to know what YOU did, not what the team did. "we built an app" or "we ran a campaign" tells me nothing about you.</template>
   <div class="shot-wrap">
     <div class="caption-kicker reveal">Resume bullets that work · 2/3</div>
@@ -679,7 +523,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">three: numbers everywhere. 93.4% accuracy. 405 bill splits. RM400 revenue. numbers are the difference between "i did stuff" and "i did THIS." even small numbers beat no numbers — views, attendees, ringgit, hours saved. every major has numbers.</template>
   <div class="shot-wrap">
     <div class="caption-kicker reveal">Resume bullets that work · 3/3</div>
@@ -688,17 +532,49 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
+<!-- gitresume setup -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">now — if writing bullets like that sounds painful, i have good news. you already wrote them. for the coders: they're sitting in your git history. everyone else: they're in your project docs, reports, and campaign results.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Too lazy to write bullets?</h2>
+    <p class="sub reveal"><strong>Mine them from work you already did.</strong></p>
+  </div>
+</section>
+
 <!-- 12 · gitresume -->
-<section class="slide" data-act="02 · Projects">
-<template class="note">one for the coders in the room: if writing bullets sounds painful — you already wrote them, they're in your git history. gitresume: paste your repo, it reads your commits and generates resume bullets, each citing the exact commits. built by a malaysian student, shawn chee — building a tool like this IS the best resume bullet. not a coder? same idea works: paste your project docs, reports, or campaign results into any AI and ask it to draft the bullets. one caveat either way: AI generates claims, not measured outcomes — verify before you paste.</template>
+<section class="slide" data-act="01 · Projects">
+<template class="note">this tool is gitresume. paste your repo, it clones it in the browser, reads your commits, and generates resume bullets — each one citing the exact commits it came from. receipts included.</template>
   <div class="shot-wrap">
     <a class="shotlink reveal" href="https://github.com/Shawnchee/gitresume" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/gitresume.png" alt="gitresume GitHub repo"></a>
-    <div class="caption reveal"><span class="accent">gitresume</span> — your commits → resume bullets · by Malaysian student <span class="accent">Shawn Chee</span> 🇲🇾</div>
+    <div class="caption reveal"><span class="accent">gitresume</span> — your git history → cited resume bullets</div>
+  </div>
+</section>
+
+<!-- Malaysian credit -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">best part? built by a malaysian student — shawn chee. honestly, building a tool like this IS the best resume bullet. be like shawn. one caveat: AI generates claims, not measured outcomes, so verify before you paste. and if you don't code — same trick works: paste your reports or campaign results into any AI and ask it to draft the bullets.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Built by a <span class="accent">Malaysian student</span>.</h2>
+    <p class="sub reveal">Shawn Chee · github.com/Shawnchee/gitresume<br><span style="font-size:30px">(the tool itself is his best resume bullet 😉 — always verify AI claims before pasting)</span></p>
+  </div>
+</section>
+
+<!-- Showcase ladder -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">okay, you have projects. where do people SEE them? listing in your CV — good. a complete github profile — great. your own portfolio website — best. why? because when i google you — and i will google you — i should find something.</template>
+  <div class="wrap">
+    <div class="kicker reveal">How to showcase</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">🙂</div><div class="tier">Good</div><div class="what">Projects listed in your CV</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">A complete GitHub profile</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Your own portfolio website</div></div>
+    </div>
+    <p class="sub reveal">The best applicants are <strong>googleable</strong>.</p>
   </div>
 </section>
 
 <!-- 21 · Wall -->
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">where do people SEE your projects? when i google you — and i will google you — i should find something. these are all local: hannah's and janelle's, malaysian students just like you, plus mine. look at the range: scrapbook vibes, playful illustration, whatever feels like YOU. [tip: click any screenshot to open the real site and scroll through it live] yours doesn't need to be fancy. it needs to EXIST. the ones i remember months later are always the ones with a website.</template>
   <div class="shot-wrap">
     <div class="caption-kicker reveal">Made by Malaysian students 🇲🇾</div>
@@ -712,7 +588,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- Portfolio deep-dive: what makes a portfolio GOOD -->
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">so what actually makes a portfolio GOOD? after reviewing hundreds, it comes down to three things: visuals, write-ups, and a little bit of delight. let me show you each one.</template>
   <div class="wrap">
     <div class="kicker reveal">What makes a portfolio good?</div>
@@ -724,7 +600,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">one — visuals. screenshots, demo videos, GIFs. this is faw's projects page: every single project has an image. i can FEEL the work before i read a word. brutal truth: if your project has no screenshot, to a reviewer it doesn't exist.</template>
   <div class="shot-wrap" style="gap:24px">
     <div class="caption-kicker reveal">1 · Visuals</div>
@@ -733,7 +609,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">two — write-ups. this is janelle's case study for her forum project. look at the structure: context, process, decisions, results. a good write-up shows HOW you think, which is what i'm actually hiring. and bonus — case studies double as a blog. learning in public, again.</template>
   <div class="shot-wrap" style="gap:24px">
     <div class="caption-kicker reveal">2 · Write-ups</div>
@@ -743,7 +619,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   <div class="footnote">janelleis.online/case-studies/forum.html</div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">three — delight. small animations, hover effects, interactive touches. watch janelle's hover states — this probably took one extra evening, and it's the difference between "seen" and "remembered."</template>
   <div class="shot-wrap" style="gap:24px">
     <div class="caption-kicker reveal">3 · Delight</div>
@@ -752,7 +628,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">mine does the same thing — and here's the fun part: that pixel-art character of me? AI-generated. remember that for the last section of this talk, because you can generate art like this for free, on your own laptop.</template>
   <div class="shot-wrap" style="gap:24px">
     <div class="caption-kicker reveal">3 · Delight — mine</div>
@@ -763,7 +639,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- 22 · Vibe-code it — VIDEO PLACEHOLDER -->
-<section class="slide" data-act="02 · Projects">
+<section class="slide" data-act="01 · Projects">
 <template class="note">and here's what changed: this used to take weeks of fighting code. now you describe what you want in plain english, react to what you see, iterate. genuinely a weekend project — and you do NOT need to be a CS major. media, accounting, engineering — lovable and figma make are literally type-what-you-want-and-it-appears. coders can go claude code or cursor. everyone in this room can ship a website this weekend. then deploy free on vercel or github pages.</template>
   <div class="wrap">
     <h2 class="h-big reveal">You can vibe-code this<br><span class="accent">in a weekend</span>.</h2>
@@ -778,27 +654,36 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- GitHub + LinkedIn profiles -->
-<section class="slide" data-act="02 · Projects">
-<template class="note">and please — do not show up with an empty github. i WILL click it. this is mine: pinned projects with descriptions and stars, a bio, green squares. AI can draft every one of those READMEs tonight. not a coder? your version of this is a public body of work — designs on your site, videos, case studies, campaign decks. same energy for linkedin either way — headline, about, projects. AI drafts, you edit. a blank profile is a silent rejection you never hear about.</template>
+<section class="slide" data-act="01 · Projects">
+<template class="note">and please — do not show up with an empty github. i WILL click it. this is mine: pinned projects with descriptions and stars, a bio, green squares. AI can draft every one of those READMEs tonight. not a coder? your version of this is a public body of work — designs on your site, videos, case studies, campaign decks.</template>
   <div class="shot-wrap" style="gap:24px">
     <a class="shotlink reveal" href="https://github.com/mfrashad" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/github-mfrashad.png" alt="Rashad's GitHub profile — pinned repos, contributions" style="width:1680px; max-height:800px; object-fit:cover; object-position:top"></a>
-    <div class="caption reveal"><span class="accent">Never leave your GitHub empty.</span> Pin projects · READMEs (AI drafts them) · same for LinkedIn.</div>
+    <div class="caption reveal"><span class="accent">Never leave your GitHub empty.</span> Pin projects · write READMEs — AI drafts them.</div>
+  </div>
+</section>
+
+<!-- LinkedIn micro-beat -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">same story for linkedin — whatever your major. recruiters check it before they reply: headline, about section, project descriptions. let AI draft, you edit for truth and taste. a blank linkedin is a silent rejection you never hear about.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Same for LinkedIn.</h2>
+    <p class="sub reveal">Headline, about, project sections — <strong>AI drafts, you edit.</strong><br>Recruiters check it before they ever reply.</p>
   </div>
 </section>
 
 <!-- 25 · Section -->
-<section class="slide section-slide glow-purple" data-act="03 · Experience">
-<template class="note">number three. experience — have you used your skills where it counts?</template>
+<section class="slide section-slide glow-purple" data-act="02 · Experience">
+<template class="note">number two. experience — have you used your skills where it counts?</template>
   <div class="wrap">
-    <div class="num reveal" style="color:var(--purple)">03</div>
+    <div class="num reveal" style="color:var(--purple)">02</div>
     <h2 class="h-giant reveal">Experience</h2>
     <p class="q reveal">Have you applied your skills in real contexts?</p>
   </div>
 </section>
 
 <!-- Levels of experience -->
-<section class="slide" data-act="03 · Experience">
-<template class="note">same levels idea as projects. only the compulsory internship — that's the minimum, everyone has it. more than one internship — great, shows initiative. but the best candidates i've seen were doing freelance, part-time work, or running a small business WHILE studying. that's real-world reps nobody assigned you.</template>
+<section class="slide" data-act="02 · Experience">
+<template class="note">same levels idea as projects. only the compulsory internship — minimum. more than one internship — great, shows initiative. the best candidates were doing freelance, part-time work, or running a small business WHILE studying. real-world reps nobody assigned you.</template>
   <div class="wrap">
     <div class="kicker purple reveal">Level of experience</div>
     <div class="ladder reveal">
@@ -810,7 +695,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- AI collapsed shipping cost -->
-<section class="slide" data-act="03 · Experience">
+<section class="slide" data-act="02 · Experience">
 <template class="note">and before anyone says "nobody gives students opportunities" — faw's project was 6 students, one and a half weeks, real users, real funding. AI collapsed the cost of shipping. you can manufacture your own experience now. the excuse is officially gone lol.</template>
   <div class="wrap">
     <h2 class="h-big reveal">AI collapsed the cost<br>of shipping.</h2>
@@ -819,17 +704,17 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- 28 · Section -->
-<section class="slide section-slide glow-blue" data-act="04 · Drive">
-<template class="note">and number four, my favourite. drive. this one is about hunger — and honestly it's the tiebreaker between two equal candidates.</template>
+<section class="slide section-slide glow-blue" data-act="03 · Drive">
+<template class="note">number three, my favourite. drive. this one is about hunger — and honestly it's the tiebreaker between two equal candidates.</template>
   <div class="wrap">
-    <div class="num reveal" style="color:var(--blue)">04</div>
+    <div class="num reveal" style="color:var(--blue)">03</div>
     <h2 class="h-giant reveal">Drive</h2>
     <p class="q reveal">Do you have the motivation to excel?</p>
   </div>
 </section>
 
 <!-- How I read drive -->
-<section class="slide" data-act="04 · Drive">
+<section class="slide" data-act="03 · Drive">
 <template class="note">drive is simple: does this person do things nobody forced them to do? hackathons — you shipped something under pressure on a weekend, voluntarily. awards — you competed and won. clubs — bonus if you actually ran something, not just joined. initiatives — a blog, volunteering, a side project, organizing an event. none of these are graded. that's exactly why they matter — they're the receipts of hunger.</template>
   <div class="wrap">
     <div class="kicker blue reveal">How I read drive</div>
@@ -843,7 +728,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- Learning in public -->
-<section class="slide" data-act="04 · Drive">
+<section class="slide" data-act="03 · Drive">
 <template class="note">my favourite version of drive: learning in public. at 19 i was writing AI tutorials on a blog, mostly for myself. an MIT professor found them and emailed ME. that turned into a published research paper. i didn't apply — the blog applied for me, while i was sleeping. learning in public compounds like interest.</template>
   <div class="wrap">
     <h2 class="h-big reveal">My blog got me into<br><span class="accent">MIT research</span>.</h2>
@@ -852,13 +737,229 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
 </section>
 
 <!-- 31 · Cleve plug -->
-<section class="slide" data-act="04 · Drive">
+<section class="slide" data-act="03 · Drive">
 <template class="note">if setting up a blog sounds like homework — shameless plug, this is literally what we build. write notes in cleve, hit publish, they become public pages. zero setup. the resource page for this talk is hosted exactly this way — QR at the end.</template>
   <div class="shot-wrap">
     <a class="shotlink reveal" href="https://www.cleve.ai/" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/cleve.png" alt="Cleve — AI workspace for writing and thinking" style="max-height:640px"></a>
     <div class="caption reveal">No time to build a blog? Write notes in <span class="accent">Cleve</span> → publish → free public pages.</div>
   </div>
   <div class="footnote">cleve.ai — this talk's resource page is hosted this way. QR at the end.</div>
+</section>
+
+<!-- 32 · Section -->
+<section class="slide section-slide glow-green" data-act="04 · Communication">
+<template class="note">last one. communication — can you make me understand you, and want to keep reading?</template>
+  <div class="wrap">
+    <div class="num reveal">04</div>
+    <h2 class="h-giant reveal">Communication</h2>
+    <p class="q reveal">Can you effectively share your ideas?</p>
+  </div>
+</section>
+
+<!-- 33 · Sound human -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">here's the thing about the AI age: every application sounds the same now. same chatgpt sentence rhythm, same "i am excited about this opportunity." which means the genuinely human ones stand out MORE than ever. short. personal. a little risky.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Everyone sounds like AI now.</h2>
+    <h2 class="h-big reveal"><span class="accent">Sound like a human.</span></h2>
+    <p class="sub reveal">Short. Personal. A little risky.</p>
+  </div>
+</section>
+
+<!-- Good example: career switcher -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">real application we received. this person opened with how they found us — my tiktok of me drilling my curtain. lol. instantly human, instantly memorable. they told a real story — mechanical engineer, 5 years, career switch. i read every word.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ A real application we received</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-switcher.png" alt="Career switcher application message" style="max-height:740px">
+    <div class="caption reveal">“…came across Rashad's <span class="accent">TikTok of him drilling his curtain</span>.” Personal beats polished.</div>
+  </div>
+</section>
+
+<!-- Good example: Faw -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">and this one — remember the name faw, from the resume bullets earlier. "i actually used cleve for a day and i'm pretty impressed... i can tell there is a niche for this product." he used our product BEFORE applying and shared real observations, in his own voice, zero AI-smell. do you know how rare that is? maybe 1 in 100 applications.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ Another one — remember this guy</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-faw.png" alt="Faw's application message" style="max-height:750px">
+    <div class="caption reveal">“i actually <span class="accent">used cleve for a day</span> and i'm pretty impressed…” He did the homework.</div>
+  </div>
+</section>
+
+<!-- 36 · QUIZ: spot the problem -->
+<section class="slide glow-blue" data-act="04 · Communication">
+<template class="note">okay, game time. we actually received this. read it carefully... raise your hand when you spot the problem. [wait for it — someone always gets it]</template>
+  <div class="shot-wrap">
+    <div class="interact-tag reveal">✋ Spot the problem</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-bad-quiz.png" alt="A suspicious application message" style="max-height:800px">
+  </div>
+</section>
+
+<!-- 37 · Reveal -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">yep. "your response looks great! here's a slightly tweaked version:" — he pasted the ENTIRE chatgpt reply. the prompt response. everything. my co-founder's reaction is right there in the screenshot lol. bro became a legend in our team chat. also: rejected.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal" style="color:#ff6b6b">❌ He pasted the whole ChatGPT reply</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-bad-chatgpt.png" alt="Application with ChatGPT preamble left in, cofounder laughing" style="max-height:700px">
+    <div class="caption reveal">“Your response looks great! …here's a slightly tweaked version:” <span class="dim">— sent as-is. My co-founder's reaction says the rest.</span></div>
+  </div>
+</section>
+
+<!-- 38 · Rule -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">so the rule is simple: AI is your ghostwriter, not your voice. draft with AI — then rewrite it like you're texting a friend. shorter, warmer, weirder, yours. if it sounds like a press release, delete it.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI is your <span class="accent">ghostwriter</span>,<br>not your voice.</h2>
+    <p class="sub reveal">Draft with AI. Rewrite it like you're <strong>texting a friend</strong>.</p>
+  </div>
+</section>
+
+<!-- Section: the AI application pipeline -->
+<section class="slide section-slide" data-act="Get Noticed">
+<template class="note">okay. you've built the proof. now the last-mile problem: how do you not get buried under the other 249?</template>
+  <div class="wrap">
+    <div class="num reveal">⌗</div>
+    <h2 class="h-big reveal">How to not get buried<br>in the pile</h2>
+  </div>
+</section>
+
+<!-- Spray + snipe -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">real talk: personalization takes energy. you can't do it for 100 companies. so do both — spray wide with AI for volume, and go DEEP by hand on the 3 companies you'd fight to join. that's where the effort actually converts.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Spray <span class="dim">wide</span> with AI.<br>Snipe your <span class="accent">top 3</span> by hand.</h2>
+    <p class="sub reveal">Personalization takes energy — you can't fake it at scale.<br>Spend yours on the few companies you'd <strong>fight</strong> to join.</p>
+  </div>
+</section>
+
+<!-- Step 2 · AI autofill demo (YouTube embed, muted) -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">and for the volume game, watch this — an AI agent filling an entire job application form by itself. i'm deliberately not naming the tool (this is not an ad lol), a few of them do this now. the point: the volume side of applying is basically free now. which means the differentiator is everything else in this talk.</template>
+  <div class="shot-wrap" style="flex-direction:row; gap:70px; padding:50px 110px 60px">
+    <!-- same video as youtu.be/Uu9MhTIp4mo — hosted locally (H.264) so it plays muted/offline/on-stage; YouTube embeds error out on file:// -->
+    <video class="reveal" src="/talks/ai-job-hunt/assets/videos/autofill-demo.mp4" poster="/talks/ai-job-hunt/assets/videos/autofill-poster.jpg" autoplay muted loop playsinline style="height:960px; width:auto; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div style="display:flex; flex-direction:column; gap:30px; align-items:flex-start; text-align:left; max-width:640px">
+      <div class="caption-kicker reveal">AI autofill</div>
+      <h2 class="h-med reveal">AI can fill the forms <span class="accent">for you</span>.</h2>
+      <p class="sub reveal" style="font-size:32px">Resume in, application out.<br><strong>Volume just got cheap.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 3 · Outreach -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">and then — reach out. DM the recruiter or founder, even AFTER you applied. let AI draft it, but rewrite it in YOUR voice and proofread every word. AI-sounding DMs get ignored; human ones get replies. remember faw's message — short, specific, real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Outreach</div>
+    <h2 class="h-big reveal">DM them.<br><span class="dim">Even after you applied.</span></h2>
+    <p class="sub reveal"><strong>AI drafts. You proofread.</strong> Rewrite it in your voice — every time.</p>
+  </div>
+</section>
+
+<!-- Case marker: Faw -->
+<section class="slide section-slide glow-green" data-act="Get Noticed">
+<template class="note">and to show you what "going deep" looks like — the full story of how faw got hired at cleve.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Case study</div>
+    <h2 class="h-giant reveal">How Faw<br>got hired at Cleve</h2>
+  </div>
+</section>
+
+<!-- He hacked us -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">he didn't stop at applying. he used the product for a day. sent us real feedback. and then... he found an exploit in our system. actually hacked it. and instead of doing anything weird, he responsibly disclosed it — inside his job application. as the CTO reading that: okay. you have my full attention.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">He didn't just apply.</h2>
+    <h2 class="h-big reveal"><span class="accent">He hacked us.</span></h2>
+    <p class="sub reveal">Used the product for a day → sent real feedback →<br>found an exploit in our system → <strong>shared it in his application</strong>.</p>
+  </div>
+</section>
+
+<!-- 43 · Referral DM -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">then this landed in my linkedin. a mutual friend: "he's found an exploit in your system... would be great if you could give his application a minute." here's the honest truth — i'm busy, applications pile up, good people get buried. this one message put him on top of the pile.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Then someone DMed me for him</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/referral-dm.png" alt="LinkedIn referral message mentioning the exploit" style="max-height:740px">
+    <div class="caption reveal">“I was busy. This put him <span class="accent">on top of the pile</span>.”</div>
+  </div>
+</section>
+
+<!-- 44 · Formula -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">so the formula: use the product. say something real about it. then DM and get a referral — yes, even AFTER you already applied. founders aren't ignoring you, we're drowning. outreach is how you get seen twice.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The Faw formula</div>
+    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
+      <div class="node"><div class="t">Use the product</div><div class="d">for real, not 5 minutes</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">Say something real</div><div class="d">feedback, bugs, ideas</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">DM + referral</div><div class="d">even after you applied</div></div>
+    </div>
+    <p class="sub reveal">Founders are busy. <strong>Outreach is how you get seen twice.</strong></p>
+  </div>
+</section>
+
+<!-- Step 1a · The ATS-friendly CV -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">one more case study — mine. confession: my CV was five years stale, and i rebuilt it with AI in one session on a deadline day. this is the actual output — and notice how BORING it is: one column, no photo, no graphics, standard headings, real numbers. that's the industry ATS format. boring on purpose — remember, a robot reads it first.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Case study · my own CV</div>
+    <img class="shot reveal" src="/talks/ai-job-hunt/assets/cv-page1.png" alt="Rashad's rendered ATS-friendly CV" style="max-height:780px; background:#fff">
+    <div class="caption reveal" style="font-size:36px">My CV was <span class="accent">5 years stale</span>. AI rebuilt it — one column, standard headings, <span class="accent">ATS-friendly</span>. Boring on purpose.</div>
+  </div>
+  <div class="footnote">my actual CV — generated with AI + RenderCV</div>
+</section>
+
+<!-- Step 1b · The CV is generated, not written -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and here's the trick: i don't WRITE my CV anymore — i generate it. one master file with every real number i've ever earned: talks, users, papers, everything. AI reads the job posting, picks and re-words the relevant bullets, renders the PDF. update the master once, and every future application starts warm instead of from zero. rule number one though: AI never invents — every claim traces to something real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Generated, not written</div>
+    <div class="pipe reveal">
+      <div class="node"><div class="t">Master record</div><div class="d">every number I've ever earned, one file</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">AI tailors</div><div class="d">reads the job posting, mirrors its rubric</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">Rendered PDF</div><div class="d">1–2 pages, ATS-friendly</div></div>
+    </div>
+    <p class="sub reveal">Rule #1: AI never invents — every claim traceable. <em>“The taste and the truth stayed mine.”</em></p>
+  </div>
+</section>
+
+<!-- Step 1b · Tailor per job description with RenderCV -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and you don't hand-make this. rendercv is free and open source — your CV lives as a simple text file, and it renders that clean PDF. which means AI can EDIT it: paste the job description, let AI re-order and re-word your real bullets to match what they're asking for, render, done. every application gets a personalized CV in minutes. one rule: AI never invents — every claim stays traceable to something you actually did.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Tailor it per job — free</div>
+    <a class="shotlink reveal" href="https://github.com/rendercv/rendercv" target="_blank" rel="noopener"><img class="shot" src="/talks/ai-job-hunt/assets/web/rendercv.png" alt="RenderCV — open source CV generator" style="max-height:660px"></a>
+    <div class="caption reveal">Paste the job description → <span class="accent">AI rewrites your bullets</span> → RenderCV renders the PDF.</div>
+  </div>
+  <div class="footnote">github.com/rendercv/rendercv · your CV as a text file = AI can edit it per application</div>
+</section>
+
+<!-- Rules -->
+<section class="slide glow-green" data-act="My CV Pipeline">
+<template class="note">but rule number one, non-negotiable: AI never invents. every single claim traces back to something real in the master file. AI wrote the sentences — the taste and the truth stayed mine. the moment you let it fabricate, you're one interview question away from disaster.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Rule #1: AI never invents.</h2>
+    <p class="sub reveal">Every claim traceable to something real.</p>
+    <p class="sub reveal" style="font-style:italic; color:var(--ink)">“The taste and the truth stayed mine.”</p>
+  </div>
+</section>
+
+<!-- Meta-work -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and AI helped beyond the writing. it researched all 17+ mentors in the program, with sources, and honestly told me which "prestige picks" were bad fits. it caught a hidden 2,000-character form limit before it silently ate my essay. use AI for the meta-work, not just the words.</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">AI for the <span class="accent">meta-work</span>, not just the writing</h2>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1200px">
+      <div class="c">Researched all 17+ program mentors, with sources<small>and honestly scored fit — flagging the bad “prestige” picks</small></div>
+      <div class="c">Caught a hidden 2,000-character form limit<small>before it silently truncated my essay</small></div>
+      <div class="c">Pulled my live traction numbers into the CV<small>straight from my website's data</small></div>
+    </div>
+  </div>
 </section>
 
 <!-- 49 · Section -->
@@ -1065,6 +1166,17 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   </div>
 </section>
 
+<!-- Connect -->
+<section class="slide" data-act="Close">
+<template class="note">and connect with me — website, linkedin, instagram. DM me, i actually read them. faw is living proof that DMing me works lol.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Connect with me</div>
+    <div class="qr-card reveal"><img src="/talks/ai-job-hunt/assets/qr-mfrashad.png" alt="QR code to mfrashad.com"></div>
+    <p class="sub reveal"><strong>mfrashad.com</strong> · in/mfathyrashad · IG @rashadventure</p>
+    <p class="sub reveal" style="font-size:28px">DM me. I actually read them — Faw is proof. 😄</p>
+  </div>
+</section>
+
 <!-- 62 · End card -->
 <section class="slide title-slide glow-green" data-act="Close">
 <template class="note">the tools are free. your laptop can run them. the excuses are gone. now go build something. terima kasih, TAR UMT! 🚀</template>
@@ -1081,27 +1193,6 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); o
   <div class="wrap">
     <div class="kicker reveal">Appendix</div>
     <h2 class="h-med reveal dim">Backup slides</h2>
-  </div>
-</section>
-
-<!-- Appendix · Connect QR -->
-<section class="slide" data-act="Appendix">
-<template class="note">[backup: connect QR — pull this up during Q&A or networking]</template>
-  <div class="wrap">
-    <div class="kicker reveal">Connect with me</div>
-    <div class="qr-card reveal"><img src="/talks/ai-job-hunt/assets/qr-mfrashad.png" alt="QR code to mfrashad.com"></div>
-    <p class="sub reveal"><strong>mfrashad.com</strong> · in/mfathyrashad · IG @rashadventure</p>
-    <p class="sub reveal" style="font-size:28px">DM me. I actually read them — Faw is proof. 😄</p>
-  </div>
-</section>
-
-<!-- Appendix · Good example: career switcher -->
-<section class="slide" data-act="Appendix">
-<template class="note">[backup: second good-application example — the career switcher who found us through my tiktok of me drilling my curtain. personal beats polished.]</template>
-  <div class="shot-wrap">
-    <div class="caption-kicker reveal">✅ A real application we received</div>
-    <img class="shot reveal" src="/talks/ai-job-hunt/assets/crops/app-switcher.png" alt="Career switcher application message" style="max-height:740px">
-    <div class="caption reveal">“…came across Rashad's <span class="accent">TikTok of him drilling his curtain</span>.” Personal beats polished.</div>
   </div>
 </section>
 
