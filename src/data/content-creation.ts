@@ -1,4 +1,4 @@
-export type ContentType = 'cafe-hopping' | 'educational' | 'products' | 'experience' | 'personal-brand' | 'advocacy';
+export type ContentType = 'cafe-hopping' | 'educational' | 'products' | 'experience' | 'personal-brand';
 
 export interface ContentPiece {
     id: string;
@@ -53,10 +53,6 @@ export interface ContentPayment {
 export const contentPayments: Record<string, ContentPayment> = {};
 
 export const contentCategories: Record<ContentType, { label: string; description: string }> = {
-    advocacy: {
-        label: 'Advocacy',
-        description: 'Social causes, campaigns, and non-profit collaborations',
-    },
 
     'personal-brand': {
         label: 'Personal Brand',
@@ -71,8 +67,8 @@ export const contentCategories: Record<ContentType, { label: string; description
         description: 'Adventures, hobbies, and trying new things in my 20s',
     },
     educational: {
-        label: 'Educational',
-        description: 'AI literacy, startup insights, and building in public',
+        label: 'Education & Advocacy',
+        description: 'AI literacy, social causes, and building in public',
     },
     products: {
         label: 'Products',
@@ -603,12 +599,12 @@ export const contentPieces: ContentPiece[] = [
         },
     },
 
-    // === Advocacy ===
+    
     {
         id: 'unicef-unhcr-collab',
         title: 'World Refugee Day - Yemeni Baking',
         date: new Date('2026-06-13'),
-        type: 'advocacy',
+        type: 'educational',
         platform: 'instagram',
         url: 'https://www.instagram.com/p/DZy7o1wkgsF/?igsh=dHRnbjJoamVtZXk=',
         brand: 'UNICEF',
