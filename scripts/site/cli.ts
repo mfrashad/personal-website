@@ -350,7 +350,11 @@ function cmdStage(): never {
     const diffFull = git(['diff', '--', ...COMMIT_ALLOWLIST]);
     const untracked = git(['ls-files', '--others', '--exclude-standard', '--', ...COMMIT_ALLOWLIST], { allowFail: true });
 
-    const photoCount = [...files, ...untracked.split('\n')].filter((f) => /\.(webp|jpg|jpeg|png)$/i.test(f)).length;
+    // `files` already includes untracked paths, so union rather than concatenate —
+    // this number is quoted to Rashad in the confirmation and must be exact.
+    const photoCount = new Set(
+        [...files, ...untracked.split('\n')].map((f) => f.trim()).filter((f) => /\.(webp|jpg|jpeg|png)$/i.test(f))
+    ).size;
 
     fs.mkdirSync(PENDING_DIR, { recursive: true });
     const token = createHash('sha256').update(diffFull + untracked + Date.now()).digest('hex').slice(0, 8);
