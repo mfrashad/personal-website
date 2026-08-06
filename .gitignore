@@ -41,6 +41,11 @@ public/content-generator/
 .vercel
 .env*.local
 
-# Claude Code session files (agent memory, worktrees, transcripts)
-.claude/
+# Claude Code session files (agent memory, worktrees, transcripts) — skills stay tracked
+.claude/*
+!.claude/skills/
 .agents/
+
+# CV pipeline — entire directory kept local: master.yaml holds personal contact
+# data (this repo is public) and the rest is generated artifacts
+cv/

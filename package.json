@@ -28,7 +28,9 @@
         "remotion:studio": "npx remotion studio remotion/index.ts",
         "chrome:debug": "open -a 'Google Chrome' --args --remote-debugging-port=9222",
         "process:speaking-images": "tsx scripts/process-speaking-images.ts",
-        "process:content-images": "tsx scripts/process-content-images.ts"
+        "process:content-images": "tsx scripts/process-content-images.ts",
+        "generate:cv-data": "tsx scripts/export-cv-data.ts",
+        "cv:render": "uvx --from 'rendercv[full]==2.8' rendercv render cv/master.yaml --pdf-path output/master/Muhammad_Fathy_Rashad_CV.pdf --png-path output/master/page.png --dont-generate-html --dont-generate-markdown"
     },
     "dependencies": {
         "@astrojs/check": "^0.9.4",
