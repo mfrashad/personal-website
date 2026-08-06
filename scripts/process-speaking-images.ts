@@ -112,7 +112,14 @@ async function processImage(
 async function main() {
     console.log('Processing speaking images...\n');
 
-    const manifest: Record<string, string[]> = {};
+    // Seed from the existing manifest rather than starting empty. This script
+    // only knows about engagements present in FOLDER_MAP and in the local
+    // ~/Documents/speaking tree; starting from {} meant any run silently deleted
+    // every entry added by another route (e.g. scripts/site/images.ts, which the
+    // Telegram agent uses).
+    const manifest: Record<string, string[]> = fs.existsSync(MANIFEST_PATH)
+        ? JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'))
+        : {};
     const folders = fs.readdirSync(SOURCE_DIR);
 
     for (const folder of folders) {

@@ -109,7 +109,12 @@ async function processBrandLogos() {
 }
 
 async function processContentFolders() {
-    const manifest: Record<string, { content: string; analytics: string }> = {};
+    // Seed from the existing manifest rather than starting empty — see the same
+    // note in process-speaking-images.ts. Starting from {} meant a run here
+    // silently dropped every entry added by scripts/site/images.ts.
+    const manifest: Record<string, { content: string; analytics: string }> = fs.existsSync(MANIFEST_PATH)
+        ? JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'))
+        : {};
 
     for (const [folderName, config] of Object.entries(CONTENT_FOLDERS)) {
         const srcDir = path.join(SOURCE_DIR, folderName);

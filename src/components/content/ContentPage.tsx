@@ -2,24 +2,16 @@ import { useCallback } from 'react';
 import BrandMarquee from './BrandMarquee';
 import ContentSection from './ContentSection';
 
+// Deliberately narrow: these props are serialized into the delivered HTML as
+// island props, so this interface is the allowlist of what /create makes public.
+// Widen it only with fields that are safe to publish.
 interface SerializedContentPiece {
     id: string;
     title: string;
-    location?: string;
-    date: string;
-    type: string;
-    platform: string;
-    url?: string;
     metrics: {
         views: number;
         likes: number;
-        comments: number;
-        saves?: number;
-        shares?: number;
-        newFollowers?: number;
     };
-    description?: string;
-    brand?: string;
 }
 
 interface CategoryConfig {

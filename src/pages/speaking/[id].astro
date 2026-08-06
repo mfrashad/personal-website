@@ -13,7 +13,16 @@ export function getStaticPaths() {
 }
 
 const { id } = Astro.params;
-const engagement = speakingEngagements.find((e) => e.id === id)!;
+const engagement = speakingEngagements.find((e) => e.id === id);
+
+// This route is SSR (output: 'server'), so getStaticPaths above does not
+// constrain what can be requested. Without this guard an unknown id — say a
+// stale inbound link to a talk that was removed — reaches the date formatting
+// below on `undefined` and returns a 500 instead of a 404.
+if (!engagement) {
+    return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+
 const images = (imageManifest as Record<string, string[]>)[id] || [];
 
 const formattedDate = engagement.date.toLocaleDateString('en-US', {
