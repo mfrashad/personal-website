@@ -122,5 +122,9 @@
   "news-kosmo": {
     "content": "/content-images/personal-brand/news-kosmo/content.jpg",
     "analytics": "/content-images/personal-brand/news-kosmo/analytics.jpg"
+  },
+  "unicef-unhcr-collab": {
+    "content": "/content-images/educational/unicef-unhcr-collab/thumb.jpg",
+    "analytics": "/content-images/educational/unicef-unhcr-collab/thumb.jpg"
   }
 }
