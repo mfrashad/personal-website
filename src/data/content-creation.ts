@@ -1,4 +1,4 @@
-export type ContentType = 'cafe-hopping' | 'educational' | 'products' | 'experience' | 'personal-brand';
+export type ContentType = 'cafe-hopping' | 'educational' | 'products' | 'experience' | 'personal-brand' | 'advocacy';
 
 export interface ContentPiece {
     id: string;
@@ -53,6 +53,11 @@ export interface ContentPayment {
 export const contentPayments: Record<string, ContentPayment> = {};
 
 export const contentCategories: Record<ContentType, { label: string; description: string }> = {
+    advocacy: {
+        label: 'Advocacy',
+        description: 'Social causes, campaigns, and non-profit collaborations',
+    },
+
     'personal-brand': {
         label: 'Personal Brand',
         description: 'Career stories, milestones, and personal journey',
@@ -595,6 +600,25 @@ export const contentPieces: ContentPiece[] = [
             saves: 4,
             shares: 3,
             newFollowers: 0,
+        },
+    },
+
+    // === Advocacy ===
+    {
+        id: 'unicef-unhcr-collab',
+        title: 'World Refugee Day - Yemeni Baking',
+        date: new Date('2026-06-13'),
+        type: 'advocacy',
+        platform: 'instagram',
+        url: 'https://www.instagram.com/p/DZy7o1wkgsF/?igsh=dHRnbjJoamVtZXk=',
+        brand: 'UNICEF',
+        description: "Spent last Saturday making Yemeni beehive bread and ma'amoul cookies for World Refugee Day as part of UNHCR campaign, taught by Shaima, a refugee from Yemen. #HopeAwayFromHome #WorldRefugeeDay #KitaPilihdKemanusiaan",
+        metrics: {
+            views: 6200,
+            likes: 210,
+            comments: 2,
+            saves: 4,
+            shares: 1,
         },
     },
 ];
