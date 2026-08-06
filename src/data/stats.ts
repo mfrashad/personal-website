@@ -35,7 +35,7 @@ export const personalStats: PersonalStats = {
     usersImpacted: 100000,
     talksGiven: 20,
     hackathonsWon: 5,
-    hackathonsJudged: 10,
+    hackathonsJudged: 15,
     socialMedia: {
         followers: 16000,
         totalViews: 5000000

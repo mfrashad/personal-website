@@ -14,6 +14,55 @@ export interface HackathonEngagement {
 }
 
 export const hackathonEngagements: HackathonEngagement[] = [
+    // 2026
+    {
+        id: 'national-ai-competition-2026',
+        date: new Date('2026-06-13'),
+        title: '2026 National AI Competition',
+        event: 'National AI Competition 2026',
+        organizer: 'Sunway College',
+        description: 'Judge for the AI Innovation track (Categories A & B) at a nationwide competition with 2,000+ participants.',
+        location: 'Sunway College, Kuala Lumpur',
+        role: 'judge',
+        topics: ['AI', 'Innovation'],
+        logos: ['/speaking-logos/sunway-uni.webp'],
+        featured: true,
+    },
+    {
+        id: 'lovable-vibeathon-kl-2026',
+        date: new Date('2026-05-24'),
+        title: 'Lovable Vibeathon KL',
+        event: 'Lovable Vibeathon KL 2026',
+        organizer: 'Lovable',
+        description: 'Mentor and Judge',
+        location: 'Amazon Web Services, The Gardens North Tower, Kuala Lumpur',
+        role: 'judge',
+        topics: ['AI', 'No-Code'],
+    },
+    {
+        id: 'electrohack-2-utp-2026',
+        date: new Date('2026-05-17'),
+        title: 'ElectroHack 2.0',
+        event: 'ElectroHack 2.0',
+        organizer: 'Universiti Teknologi PETRONAS',
+        description: 'Final-day judge evaluating team presentations and prototypes.',
+        location: 'NADI – Centre of Student Experience, UTP',
+        role: 'judge',
+        topics: ['Electronics', 'Technology'],
+        logos: ['/speaking-logos/utp.webp'],
+    },
+    {
+        id: 'um-pitchlab-2026',
+        date: new Date('2026-05-09'),
+        title: 'Pitch Lab 2026',
+        event: 'Pitch Lab 2026 — Ideation & Entrepreneurship Competition',
+        organizer: 'University of Malaya',
+        description: 'Judge for the "Runway For Business Model" themed competition.',
+        location: 'Dewan Gemilang, Raja Dr Nazrin Shah Residential College, UM',
+        role: 'judge',
+        topics: ['Entrepreneurship', 'Startups'],
+        logos: ['/speaking-logos/um.webp'],
+    },
     // 2025
     {
         id: 'kiyoko-con-game-jam-2025',
