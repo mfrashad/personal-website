@@ -93,6 +93,10 @@ export const brandLogos = [
     { name: 'Schola', src: '/content-images/brandlogos/schola.png' },
     { name: 'Touch \'n Go', src: '/content-images/brandlogos/tounchngo.png' },
     { name: 'Cult Creative', src: '/content-images/brandlogos/cultcreative.png' },
+    {
+        name: 'Soundcore',
+        src: '/content-images/brandlogos/soundcore.png',
+    },
 ];
 
 export const contentPieces: ContentPiece[] = [
