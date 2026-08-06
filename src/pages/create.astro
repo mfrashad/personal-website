@@ -9,12 +9,15 @@ import imageManifest from '@data/content-images.json';
 const contentByType = getContentByType();
 const totalMetrics = getTotalMetrics();
 
-// Serialize for React (convert Date to ISO string)
+// Serialize for React. Pick fields explicitly rather than spreading: island props
+// are embedded in the delivered HTML, so a spread publishes every field on
+// ContentPiece — including any private ones (see contentPayments in @data/content-creation).
 const serializedByType: Record<string, any[]> = {};
 for (const [type, pieces] of Object.entries(contentByType)) {
     serializedByType[type] = pieces.map(p => ({
-        ...p,
-        date: p.date.toISOString(),
+        id: p.id,
+        title: p.title,
+        metrics: { views: p.metrics.views, likes: p.metrics.likes },
     }));
 }
 ---

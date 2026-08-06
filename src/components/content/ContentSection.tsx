@@ -1,24 +1,14 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import PhoneMockup from './PhoneMockup';
 
+// Narrow by design — see the note on the matching interface in ContentPage.tsx.
 interface SerializedContentPiece {
     id: string;
     title: string;
-    location?: string;
-    date: string;
-    type: string;
-    platform: string;
-    url?: string;
     metrics: {
         views: number;
         likes: number;
-        comments: number;
-        saves?: number;
-        shares?: number;
-        newFollowers?: number;
     };
-    description?: string;
-    brand?: string;
 }
 
 interface ContentSectionProps {

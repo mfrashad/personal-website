@@ -20,6 +20,38 @@ export interface ContentPiece {
     brand?: string;
 }
 
+/**
+ * What a piece of content paid.
+ *
+ * Deliberately NOT a field on ContentPiece: /create passes pieces to a React
+ * island, and island props are serialized into the delivered HTML, so anything
+ * hanging off ContentPiece is published whether or not a component renders it.
+ * Keeping this in a sibling map means no spread can reach it.
+ *
+ * Nothing under src/pages or src/components may import this. scripts/validate-content.ts
+ * enforces that.
+ */
+export interface ContentPayment {
+    /** Major units, e.g. 1500 for RM1,500. Never a formatted string — this has to stay summable. */
+    amount: number;
+    /** ISO 4217, e.g. 'MYR', 'USD'. */
+    currency: string;
+    /** Distinguishes a genuine zero from missing data, so averages aren't silently dragged down. */
+    kind: 'cash' | 'barter' | 'cash+barter' | 'unpaid';
+    /** Estimated retail value of gifted product, same currency as `amount`. */
+    barterValue?: number;
+    /** Payer when it isn't the brand itself — agency, PR firm, platform. */
+    paidBy?: string;
+    /** 'INV-YYYYMMDD-NN', joins to the invoice skill's records. */
+    invoiceId?: string;
+    /** 'YYYY-MM-DD'. */
+    paidOn?: string;
+    note?: string;
+}
+
+/** Keyed by ContentPiece.id. */
+export const contentPayments: Record<string, ContentPayment> = {};
+
 export const contentCategories: Record<ContentType, { label: string; description: string }> = {
     'personal-brand': {
         label: 'Personal Brand',
