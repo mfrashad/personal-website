@@ -50,7 +50,13 @@ export interface ContentPayment {
 }
 
 /** Keyed by ContentPiece.id. */
-export const contentPayments: Record<string, ContentPayment> = {};
+export const contentPayments: Record<string, ContentPayment> = {
+    'soundcore-earphones': {
+        amount: 700,
+        currency: 'MYR',
+        kind: 'cash',
+    },
+};
 
 export const contentCategories: Record<ContentType, { label: string; description: string }> = {
 
@@ -616,6 +622,18 @@ export const contentPieces: ContentPiece[] = [
             saves: 4,
             shares: 1,
         },
+    },
+    {
+        id: 'soundcore-earphones',
+        title: 'new soundcore earphone',
+        date: new Date('2026-07-14'),
+        type: 'products',
+        platform: 'tiktok',
+        metrics: {
+            views: 32000,
+            likes: 130,
+        },
+        brand: 'Soundcore',
     },
 ];
 

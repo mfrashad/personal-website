@@ -126,5 +126,9 @@
   "unicef-unhcr-collab": {
     "content": "/content-images/educational/unicef-unhcr-collab/content.jpg",
     "analytics": "/content-images/educational/unicef-unhcr-collab/analytics.jpg"
+  },
+  "soundcore-earphones": {
+    "content": "/content-images/products/soundcore-earphones/content.jpg",
+    "analytics": "/content-images/products/soundcore-earphones/analytics.jpg"
   }
 }
