@@ -167,7 +167,17 @@ async function cmdAdd(): Promise<never> {
             die(`missing required field "${f.name}" for kind ${kind}`, { help: f.help });
         }
         if (f.enum && data[f.name] !== undefined && !f.enum.includes(String(data[f.name]))) {
-            die(`field "${f.name}" must be one of ${f.enum.join(', ')}`, { got: data[f.name] });
+            die(`field "${f.name}" must be one of: ${f.enum.join(', ')}`, {
+                got: data[f.name],
+                // Observed failure: asked for an "advocacy" section, this rejected it,
+                // and the agent hand-edited the data files instead — producing an
+                // invalid ContentType and four commits of cleanup. Say so explicitly.
+                whatToDo:
+                    `"${data[f.name]}" is not one of the allowed values. Tell Rashad that and ask which he wants. ` +
+                    `Do NOT work around this by editing the data files directly — the value is constrained ` +
+                    `because the site's types and image directories depend on it. If he genuinely wants a new ` +
+                    `${f.name}, that is a code change to make deliberately, not something to improvise.`,
+            });
         }
     }
 
