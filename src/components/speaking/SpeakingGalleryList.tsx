@@ -14,6 +14,7 @@ interface SerializedEngagement {
     topics?: string[];
     images?: string[];
     logos?: string[];
+    slidesUrl?: string;
 }
 
 interface YearGroup {
@@ -120,15 +121,16 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                             const thumbs = getThumbs(engagement.id);
                             const isExpanded = expandedId === engagement.id;
                             const hasImages = images.length > 0;
+                            const hasExpandable = hasImages || !!engagement.slidesUrl;
                             const logos = engagement.logos || [];
 
                             return (
                                 <div key={engagement.id}>
                                     <article
                                         className={`border-b border-neutral-100 pb-3 pt-3 px-2 -mx-2 rounded transition-colors ${
-                                            hasImages ? 'cursor-pointer hover:bg-neutral-50' : ''
+                                            hasExpandable ? 'cursor-pointer hover:bg-neutral-50' : ''
                                         } ${isExpanded ? 'bg-neutral-50' : ''}`}
-                                        onClick={() => hasImages && handleRowClick(engagement.id)}
+                                        onClick={() => hasExpandable && handleRowClick(engagement.id)}
                                         onMouseEnter={(e) => !isExpanded && handleMouseEnter(engagement.id, e)}
                                         onMouseMove={handleMouseMove}
                                         onMouseLeave={() => setHoveredId(null)}
@@ -193,7 +195,7 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                                                 <span className="text-xs px-2 py-1 bg-neutral-100 text-neutral-600 rounded-full capitalize">
                                                     {engagement.type}
                                                 </span>
-                                                {hasImages && (
+                                                {hasExpandable && (
                                                     <svg
                                                         className={`w-4 h-4 text-neutral-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                                                         fill="none"
@@ -228,7 +230,7 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                                                 />
                                             ))}
                                         </div>
-                                        <div className="px-2 mt-2">
+                                        <div className="px-2 mt-2 flex items-center gap-4">
                                             <a
                                                 href={`/speaking/${engagement.id}`}
                                                 className="text-sm text-blue-600 hover:text-blue-800 font-medium"
@@ -236,6 +238,17 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                                             >
                                                 View Details &rarr;
                                             </a>
+                                            {engagement.slidesUrl && (
+                                                <a
+                                                    href={engagement.slidesUrl}
+                                                    target="_blank"
+                                                    rel="noopener"
+                                                    className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    Slides &rarr;
+                                                </a>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
