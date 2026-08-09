@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Hired in the AI Age — Fathy Rashad</title>
+
+<!-- Fonts: Switzer (Apple-keynote neutrality) + JetBrains Mono (tech kickers/numbers) -->
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+/* ===========================================
+   THEME — change these to restyle the whole deck
+   =========================================== */
+:root {
+    --bg: #0a0a12;                    /* near-black canvas */
+    --bg-soft: #11111c;
+    --ink: #f4f5f8;                   /* primary text */
+    --ink-2: #9aa0ac;                 /* secondary text */
+    --ink-3: #565c68;                 /* muted / footnotes */
+    --green: #76B900;                 /* NVIDIA green — THE accent */
+    --green-soft: rgba(118,185,0,.14);
+    --purple: #8B5CF6;                /* sparing section accent */
+    --blue: #38BDF8;                  /* sparing section accent */
+    --bar-gray: #3a3f4a;              /* de-emphasized chart mark */
+    --font-display: 'Switzer', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --stage-bg: #000;
+    --slide-bg: var(--bg);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===========================================
+   FIXED 16:9 STAGE (from viewport-base.css) — do not edit
+   =========================================== */
+html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--stage-bg,#000); }
+.deck-viewport { position:fixed; inset:0; overflow:hidden; background:var(--stage-bg,#000); }
+.deck-stage { position:absolute; left:0; top:0; width:1920px; height:1080px; overflow:hidden; transform-origin:0 0; background:var(--slide-bg,#fff); }
+.slide { position:absolute; inset:0; width:1920px; height:1080px; overflow:hidden; display:block; visibility:hidden; opacity:0; pointer-events:none; background:var(--slide-bg,#fff); }
+.slide.active, .slide.visible { visibility:visible; opacity:1; pointer-events:auto; z-index:1; }
+img, video, canvas, svg { max-width:100%; max-height:100%; }
+.deck-controls { position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:1000; }
+@media print {
+  html, body { width:1920px; height:auto; overflow:visible; background:#fff; }
+  .deck-viewport { position:static; overflow:visible; background:#fff; }
+  .deck-stage { position:static; width:auto; height:auto; transform:none !important; background:none; }
+  .slide { position:relative; display:block !important; visibility:visible !important; opacity:1 !important; pointer-events:auto !important; width:1920px; height:1080px; break-after:page; page-break-after:always; }
+  .slide:last-child { break-after:auto; page-break-after:auto; }
+  .deck-controls, .hud, .edit-hotzone, .edit-toggle { display:none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.2s !important; }
+}
+
+/* ===========================================
+   BASE SLIDE TYPOGRAPHY & LAYOUT
+   =========================================== */
+.slide { font-family: var(--font-display); color: var(--ink); }
+.wrap { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 0 160px; gap: 36px; }
+.wrap.left { align-items:flex-start; text-align:left; }
+
+/* kicker — small mono label above headlines */
+.kicker { font-family:var(--font-mono); font-size:26px; font-weight:500; letter-spacing:.35em; text-transform:uppercase; color:var(--green); }
+.kicker.purple { color: var(--purple); }
+.kicker.blue { color: var(--blue); }
+
+/* headline scale */
+.h-giant { font-size:150px; font-weight:800; line-height:1.02; letter-spacing:-0.03em; }
+.h-big   { font-size:110px; font-weight:800; line-height:1.05; letter-spacing:-0.025em; }
+.h-med   { font-size:78px;  font-weight:700; line-height:1.1;  letter-spacing:-0.02em; }
+.h-small { font-size:56px;  font-weight:700; line-height:1.15; letter-spacing:-0.015em; }
+.accent  { color: var(--green); }
+.dim     { color: var(--ink-2); }
+
+.sub { font-size:40px; font-weight:400; color:var(--ink-2); line-height:1.35; max-width:1360px; }
+.sub strong { color:var(--ink); font-weight:600; }
+
+/* giant stat number */
+.stat-number { font-size:400px; font-weight:900; letter-spacing:-0.04em; line-height:.95; color:var(--ink); }
+.stat-number.green { color:var(--green); }
+
+/* footnote — source line pinned to bottom */
+.footnote { position:absolute; bottom:44px; left:0; right:0; text-align:center; font-family:var(--font-mono); font-size:20px; color:var(--ink-3); letter-spacing:.02em; }
+
+/* ambient glows (restrained — one per slide max) */
+.glow-green::before, .glow-purple::before, .glow-blue::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+}
+.glow-green::before  { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(118,185,0,.13), transparent 65%); }
+.glow-purple::before { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(139,92,246,.13), transparent 65%); }
+.glow-blue::before   { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(56,189,248,.11), transparent 65%); }
+
+/* ===========================================
+   SCREENSHOT / EVIDENCE SLIDES
+   =========================================== */
+.shot-wrap { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px; padding:70px 120px 90px; }
+.shot { max-width:100%; max-height:800px; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55); }
+.shot.tall { max-height:840px; }
+.caption { font-size:42px; font-weight:600; color:var(--ink); }
+.caption .dim { font-weight:400; }
+.caption-kicker { font-family:var(--font-mono); font-size:24px; letter-spacing:.3em; text-transform:uppercase; color:var(--green); }
+
+/* clickable screenshots — open the live site in a new tab */
+.shotlink { display:block; cursor:pointer; }
+.shotlink img { transition:transform .25s var(--ease), box-shadow .25s var(--ease); }
+.shotlink:hover img { transform:scale(1.012); box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 0 3px rgba(118,185,0,.55); }
+
+/* 3-up screenshot wall */
+.wall { display:flex; gap:36px; align-items:stretch; justify-content:center; }
+.wall .cell { flex:1; display:flex; flex-direction:column; gap:20px; align-items:center; min-width:0; }
+.wall img { width:100%; height:430px; object-fit:cover; object-position:top; border-radius:16px; border:1px solid rgba(255,255,255,.09); box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.wall .site { font-family:var(--font-mono); font-size:24px; color:var(--ink-2); }
+
+/* ===========================================
+   LADDERS (min / great / best rows)
+   =========================================== */
+.ladder { display:flex; flex-direction:column; gap:30px; width:1380px; }
+.rung { display:flex; align-items:center; gap:44px; padding:44px 60px; border-radius:22px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.06); text-align:left; }
+.rung .emoji { font-size:64px; }
+.rung .tier { font-family:var(--font-mono); font-size:22px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-3); width:190px; flex:none; }
+.rung .what { font-size:44px; font-weight:600; color:var(--ink-2); }
+.rung.best { border-color:rgba(118,185,0,.5); background:linear-gradient(180deg, rgba(118,185,0,.10), rgba(118,185,0,.03)); }
+.rung.best .tier, .rung.best .what { color:var(--ink); }
+.rung.best .tier { color:var(--green); }
+
+/* 4-item icon row (framework / drive) */
+.quad { display:flex; gap:34px; justify-content:center; width:1600px; }
+.quad .q { flex:1; padding:56px 30px; border-radius:24px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.07); display:flex; flex-direction:column; gap:20px; align-items:center; }
+.quad .q .n { font-family:var(--font-mono); font-size:24px; color:var(--green); letter-spacing:.2em; }
+.quad .q .t { font-size:52px; font-weight:700; }
+.quad .q .d { font-size:28px; color:var(--ink-2); line-height:1.35; }
+
+/* ===========================================
+   CHARTS — minimal, direct-labeled, one message
+   =========================================== */
+/* dot matrix funnel */
+.dots { display:grid; grid-template-columns:repeat(25, 26px); gap:14px; justify-content:center; }
+.dots i { width:26px; height:26px; border-radius:50%; background:var(--bar-gray); }
+.dots i.win { background:var(--green); box-shadow:0 0 18px rgba(118,185,0,.8); }
+
+/* horizontal comparison bars */
+.bars { display:flex; flex-direction:column; gap:56px; width:1400px; }
+.bar-row { display:flex; flex-direction:column; gap:18px; text-align:left; }
+.bar-row .lbl { display:flex; justify-content:space-between; align-items:baseline; font-size:36px; color:var(--ink-2); }
+.bar-row .lbl .val { font-family:var(--font-mono); font-size:52px; font-weight:700; color:var(--ink); }
+.bar-row .track { height:34px; border-radius:4px; background:rgba(255,255,255,.05); overflow:hidden; }
+.bar-row .fill { height:100%; border-radius:4px 4px 4px 4px; background:var(--bar-gray); width:0; transition:width 1.1s var(--ease) .3s; }
+.bar-row.hero .fill { background:var(--green); }
+.bar-row.hero .lbl .val { color:var(--green); }
+.slide.visible .fill { width:var(--w); }
+
+/* GPU tier chart rows */
+.tiers { display:flex; flex-direction:column; gap:34px; width:1620px; }
+.tier-row { display:grid; grid-template-columns:430px 1fr 430px; gap:40px; align-items:center; text-align:left; }
+.tier-row .gpu { display:flex; flex-direction:column; gap:6px; }
+.tier-row .gpu .g { font-size:40px; font-weight:700; }
+.tier-row .gpu .m { font-family:var(--font-mono); font-size:22px; color:var(--ink-3); }
+.tier-row .track { height:30px; border-radius:4px; background:rgba(255,255,255,.05); position:relative; }
+.tier-row .fill { position:absolute; inset:0 auto 0 0; border-radius:4px; background:linear-gradient(90deg, #4c7a00, var(--green)); width:0; transition:width 1s var(--ease) .25s; }
+.tier-row .fill span { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:20px; font-weight:700; color:#0a0a12; }
+.slide.visible .tier-row .fill { width:var(--w); }
+.tier-row .runs { font-size:34px; font-weight:600; color:var(--ink); }
+.tier-row .runs small { display:block; font-size:24px; font-weight:400; color:var(--ink-2); margin-top:4px; }
+
+/* pipeline diagram */
+.pipe { display:flex; align-items:center; gap:34px; }
+.pipe .node { padding:52px 56px; border-radius:24px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.09); display:flex; flex-direction:column; gap:14px; min-width:380px; }
+.pipe .node .t { font-size:44px; font-weight:700; }
+.pipe .node .d { font-size:26px; color:var(--ink-2); line-height:1.35; }
+.pipe .node.hero { border-color:rgba(118,185,0,.55); background:linear-gradient(180deg, rgba(118,185,0,.12), rgba(118,185,0,.03)); }
+.pipe .arrow { font-size:60px; color:var(--green); font-weight:300; }
+
+/* checklist */
+.checks { display:grid; grid-template-columns:1fr 1fr; gap:26px 60px; text-align:left; }
+.checks .c { display:flex; gap:24px; align-items:baseline; font-size:44px; font-weight:600; }
+.checks .c::before { content:'✓'; color:var(--green); font-weight:800; }
+.checks .c small { display:block; font-size:27px; font-weight:400; color:var(--ink-2); }
+
+/* ===========================================
+   SPECIAL SLIDE TYPES
+   =========================================== */
+/* section marker */
+.section-slide .num { font-family:var(--font-mono); font-size:34px; letter-spacing:.4em; color:var(--green); }
+.section-slide .q { font-size:44px; color:var(--ink-2); font-weight:400; }
+
+/* poll / interactive */
+.hand { font-size:120px; }
+.interact-tag { font-family:var(--font-mono); font-size:24px; letter-spacing:.3em; text-transform:uppercase; color:var(--blue);
+  border:1px solid rgba(56,189,248,.4); padding:14px 30px; border-radius:100px; }
+
+/* step reveals — hidden until stepped through */
+.step { opacity:0; transform:translateY(26px); transition:opacity .55s var(--ease), transform .55s var(--ease); }
+.step.on { opacity:1; transform:translateY(0); }
+
+/* video placeholder — swap this frame for a real <video> */
+.video-ph { position:relative; width:1440px; height:720px; border-radius:22px; overflow:hidden; border:3px dashed rgba(118,185,0,.65); }
+.video-ph img { width:100%; height:100%; object-fit:cover; filter:brightness(.35) saturate(.7); }
+.video-ph .vlabel { position:absolute; inset:0; display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:center; }
+.video-ph .vlabel .play { width:130px; height:130px; border-radius:50%; background:rgba(118,185,0,.92); display:flex; align-items:center; justify-content:center; font-size:52px; color:#0a0a12; }
+.video-ph .vlabel .txt { font-family:var(--font-mono); font-size:26px; letter-spacing:.25em; color:var(--green); text-transform:uppercase; }
+
+/* QR slides */
+.qr-card { background:#fff; padding:44px; border-radius:28px; box-shadow:0 30px 90px rgba(0,0,0,.6); }
+.qr-card img { width:460px; height:460px; display:block; image-rendering:pixelated; }
+
+/* title slide */
+.title-slide .event-line { font-family:var(--font-mono); font-size:25px; letter-spacing:.28em; text-transform:uppercase; color:var(--ink-2); }
+.title-slide .event-line b { color:var(--green); font-weight:500; }
+.brandbar { position:absolute; top:0; left:0; right:0; height:8px; background:linear-gradient(90deg, var(--green) 0%, var(--green) 55%, var(--purple) 80%, var(--blue) 100%); }
+
+/* intro credentials strip */
+.creds { display:flex; gap:30px; justify-content:center; }
+.cred { padding:36px 48px; border-radius:20px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.07); text-align:left; }
+.cred .big { font-size:44px; font-weight:700; color:var(--ink); }
+.cred .sm { font-size:26px; color:var(--ink-2); margin-top:8px; }
+
+/* intro slide — two-column editorial layout */
+.intro-grid { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:96px; padding:0 150px; }
+.intro-photo img { width:540px; height:720px; object-fit:cover; object-position:50% 42%; border-radius:26px;
+  border:1px solid rgba(255,255,255,.12); box-shadow:0 34px 90px rgba(0,0,0,.6), 0 0 70px rgba(139,92,246,.18); }
+.intro-right { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:40px; max-width:880px; }
+.intro-creds { display:flex; flex-direction:column; gap:22px; }
+.intro-creds .row { font-size:38px; color:var(--ink-2); }
+.intro-creds .row b { color:var(--ink); font-weight:700; }
+.intro-creds .row::before { content:'—'; color:var(--green); margin-right:20px; font-weight:700; }
+.me-links { display:flex; align-items:center; gap:28px; }
+.me-links .qr-mini { background:#fff; padding:10px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.5); }
+.me-links .qr-mini img { width:118px; height:118px; display:block; image-rendering:pixelated; }
+.me-links .handles { font-family:var(--font-mono); font-size:23px; line-height:1.7; color:var(--ink-2); text-align:left; }
+.me-links .handles b { color:var(--ink); font-weight:500; }
+
+/* reveal animation (staggered on slide entry) */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.slide.visible .reveal { opacity:1; transform:translateY(0); }
+.slide.visible .reveal:nth-child(1){transition-delay:.05s} .slide.visible .reveal:nth-child(2){transition-delay:.15s}
+.slide.visible .reveal:nth-child(3){transition-delay:.25s} .slide.visible .reveal:nth-child(4){transition-delay:.35s}
+.slide.visible .reveal:nth-child(5){transition-delay:.45s} .slide.visible .reveal:nth-child(6){transition-delay:.55s}
+
+/* ===========================================
+   STATIC MODE — set on <body> for headless/PDF export:
+   all reveals, steps and chart fills render final-state instantly
+   =========================================== */
+body.static .reveal, body.static .step { opacity:1 !important; transform:none !important; transition:none !important; }
+body.static .fill { width:var(--w) !important; transition:none !important; }
+
+/* blank-screen (clicker B button) */
+#blackout { position:fixed; inset:0; background:#000; z-index:5000; display:none; }
+#blackout.on { display:block; }
+
+/* ===========================================
+   SPEAKER NOTES OVERLAY — toggle with N
+   Notes live in <template class="note"> inside each slide
+   =========================================== */
+.notes-panel { position:fixed; left:50%; bottom:56px; transform:translateX(-50%); width:min(1100px, 86vw);
+  background:rgba(10,10,18,.93); border:1px solid rgba(118,185,0,.45); border-radius:16px; padding:22px 30px;
+  font-family:var(--font-display); font-size:19px; line-height:1.5; color:#e8eaef; z-index:950;
+  box-shadow:0 18px 60px rgba(0,0,0,.6); display:none; backdrop-filter:blur(6px); }
+.notes-panel.on { display:block; }
+.notes-panel .nlabel { font-family:var(--font-mono); font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
+
+/* ===========================================
+   HUD (outside slide design): progress + act label + counter
+   =========================================== */
+.hud { position:fixed; z-index:900; font-family:var(--font-mono); color:var(--ink-3); font-size:13px; letter-spacing:.15em; text-transform:uppercase; }
+.hud.act { left:28px; bottom:20px; }
+.hud.count { right:28px; bottom:20px; }
+.hud.mark { right:28px; top:16px; opacity:.75; }
+.hud.mark a { color:inherit; text-decoration:none; }
+.progress { position:fixed; top:0; left:0; height:3px; background:var(--green); width:0%; z-index:901; transition:width .3s ease; }
+
+/* ===========================================
+   OVERVIEW / SCRIPT MODE — press O or use the toolbar
+   Full list of slides + their speaker notes; tap to jump
+   =========================================== */
+.overview { position:fixed; inset:0; z-index:6000; background:rgba(8,8,14,.97); display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.overview.on { display:block; }
+.overview .ov-head { position:sticky; top:0; background:rgba(8,8,14,.97); padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); z-index:1; }
+.overview .ov-head .t { font-family:var(--font-mono); font-size:14px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); }
+.overview .ov-head button { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
+.overview .ov-list { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+.ov-row { padding:16px 14px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer; border-radius:10px; }
+.ov-row:hover { background:rgba(255,255,255,.04); }
+.ov-row.current { background:rgba(118,185,0,.1); border-left:3px solid var(--green); }
+.ov-row .ov-meta { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); letter-spacing:.12em; text-transform:uppercase; }
+.ov-row .ov-title { font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--ink); margin:4px 0; }
+.ov-row .ov-note { font-family:var(--font-display); font-size:15px; line-height:1.55; color:var(--ink-2); }
+
+/* ===========================================
+   MOBILE TOOLBAR + EDIT SHEET (phones/tablets)
+   =========================================== */
+.mtoolbar { display:none; position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:4000;
+  background:rgba(16,16,26,.92); border:1px solid rgba(255,255,255,.14); border-radius:100px; padding:8px 10px; gap:6px;
+  backdrop-filter:blur(8px); box-shadow:0 12px 40px rgba(0,0,0,.5); }
+.mtoolbar button { background:none; border:none; color:var(--ink); font-size:20px; padding:10px 14px; border-radius:100px; cursor:pointer; font-family:var(--font-mono); }
+.mtoolbar button.active { background:rgba(118,185,0,.22); color:var(--green); }
+.edit-sheet { position:fixed; left:0; right:0; bottom:0; z-index:7000; background:#14141f; border-top:2px solid var(--green);
+  padding:16px 18px calc(16px + env(safe-area-inset-bottom)); display:none; }
+.edit-sheet.on { display:block; }
+.edit-sheet textarea { width:100%; min-height:110px; background:#0a0a12; color:var(--ink); border:1px solid rgba(255,255,255,.18);
+  border-radius:10px; padding:12px; font-family:var(--font-display); font-size:16px; line-height:1.5; }
+.edit-sheet .sheet-row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+.edit-sheet .sheet-row .lbl { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); }
+.edit-sheet .sheet-row button { border-radius:8px; padding:10px 18px; font-size:15px; cursor:pointer; border:none; }
+.edit-sheet .sheet-save { background:var(--green); color:#0a0a12; font-weight:700; }
+.edit-sheet .sheet-close { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); margin-right:10px; }
+
+@media (max-width: 880px), (pointer: coarse) {
+  .mtoolbar { display:flex; }
+  .edit-hotzone, .edit-toggle { display:none; }
+  .hud.act { display:none; }
+  .hud.count { bottom:auto; top:16px; left:24px; right:auto; }
+  .notes-panel { bottom:84px; width:94vw; font-size:16px; max-height:45vh; overflow-y:auto; padding:16px 18px; }
+}
+
+/* ===========================================
+   INLINE EDIT MODE (hover top-left corner or press E)
+   =========================================== */
+.edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+.edit-toggle { position:fixed; top:16px; left:16px; z-index:10001; font-size:20px; background:var(--bg-soft); color:var(--ink); border:1px solid rgba(255,255,255,.15); border-radius:10px; padding:8px 12px; cursor:pointer; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.edit-toggle.show, .edit-toggle.active { opacity:1; pointer-events:auto; }
+.edit-toggle.active { border-color:var(--green); color:var(--green); }
+body.editing [contenteditable="true"] { outline:1px dashed rgba(118,185,0,.6); outline-offset:4px; }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="hud act" id="hudAct"></div>
+<div class="hud count" id="hudCount"></div>
+<div class="hud mark">Rashad · mfrashad.com</div>
+<div class="notes-panel" id="notesPanel"><div class="nlabel">Speaker notes · N to hide</div><div id="notesText"></div></div>
+<div id="blackout"></div>
+
+<!-- Overview / combined-script mode (O key or ⊞ button) -->
+<div class="overview" id="overview">
+  <div class="ov-head"><span class="t">Overview · tap a slide to jump</span><button id="ovClose">Close ✕</button></div>
+  <div class="ov-list" id="ovList"></div>
+</div>
+
+<!-- Mobile toolbar -->
+<nav class="mtoolbar" id="mtoolbar" aria-label="deck controls">
+  <button id="mbPrev" title="Previous">‹</button>
+  <button id="mbNext" title="Next">›</button>
+  <button id="mbNotes" title="Speaker notes">📝</button>
+  <button id="mbOverview" title="Overview">⊞</button>
+  <button id="mbEdit" title="Edit mode">✏️</button>
+</nav>
+
+<!-- Mobile edit sheet: tap any text while in edit mode -->
+<div class="edit-sheet" id="editSheet">
+  <textarea id="sheetText"></textarea>
+  <div class="sheet-row">
+    <span class="lbl">Edits save automatically to this browser</span>
+    <span><button class="sheet-close" id="sheetClose">Close</button><button class="sheet-save" id="sheetSave">Apply</button></span>
+  </div>
+</div>
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
+
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage">
+
+<!-- ============ ACT: HOOK ============ -->
+
+<!-- 1 · Title -->
+<section class="slide title-slide glow-green active" data-act="Hook">
+<template class="note">hey everyone! thanks for having me — and thanks acer, nvidia and TAR UMT for putting this together. quick promise for the next 20 minutes: i'm going to show you exactly how top applicants are using AI right now — with real applications we received at cleve, including one guy who literally hacked us and got hired. stay till the end for that one.</template>
+  <div class="brandbar"></div>
+  <div class="wrap">
+    <div class="event-line reveal"><b>TAR UMT</b> × <b>ACER PREDATOR</b> × <b>NVIDIA</b> · 23 JULY 2026</div>
+    <h1 class="h-giant reveal">Getting Hired<br>in the <span class="accent">AI Age</span></h1>
+    <p class="sub reveal">How to be a top applicant when everyone has AI.</p>
+    <p class="sub reveal" style="font-size:30px">Fathy Rashad — Co-founder/CTO, Cleve.ai</p>
+  </div>
+</section>
+
+<!-- 2 · Who am I -->
+<section class="slide" data-act="Hook">
+<template class="note">super quick intro so you know i'm not talking theory. i'm the co-founder and CTO of cleve — we build AI writing tools, around a hundred thousand people use it. i got into MIT research at 19 because of a blog (more on that later), and i've judged 15+ hackathons around malaysia. so i've seen a LOT of student portfolios.</template>
+  <div class="intro-grid">
+    <div class="intro-photo reveal"><img src="assets/me-event.jpg" alt="Fathy Rashad"></div>
+    <div class="intro-right">
+      <div class="kicker reveal">Quick intro</div>
+      <h2 class="h-big reveal">I build AI<br>for a living.</h2>
+      <div class="intro-creds reveal">
+        <div class="row"><b>CTO @ Cleve.ai</b> · 100K+ users</div>
+        <div class="row"><b>MIT GenAI research</b> at 19</div>
+        <div class="row"><b>15+ hackathons</b> judged in Malaysia</div>
+      </div>
+      <div class="me-links reveal">
+        <div class="qr-mini"><img src="assets/qr-mfrashad.png" alt="QR to mfrashad.com"></div>
+        <div class="handles"><b>mfrashad.com</b><br>in/mfathyrashad · IG @rashadventure</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POV -->
+<section class="slide" data-act="Hook">
+<template class="note">but the most relevant thing: i'm the guy on the other side of the table. i've personally read hundreds of applications at cleve. everything today is from the reviewer's seat — what actually makes me stop scrolling.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">I've reviewed <span class="accent">hundreds</span><br>of applications.</h2>
+    <p class="sub reveal">Here's what actually gets you hired in 2026.</p>
+  </div>
+</section>
+
+<!-- 3 · The stakes: Malaysia underemployment -->
+<section class="slide" data-act="Hook">
+<template class="note">let's start with the local reality. grad unemployment in malaysia is actually low — 3.2%. but the real story: one in three graduates end up in jobs that don't need their degree. "gaji cukup makan." the degree gets you INTO the race. it doesn't win the race.</template>
+  <div class="wrap">
+    <div class="stat-number reveal">1<span class="dim" style="font-size:200px"> in </span>3</div>
+    <p class="sub reveal">Malaysian graduates end up underemployed —<br><strong>“gaji cukup makan.”</strong> The degree alone isn't enough.</p>
+  </div>
+  <div class="footnote">~35.5% of employed graduates in semi/low-skilled roles — DOSM Graduate Statistics 2024</div>
+</section>
+
+<!-- Big number: 250 -->
+<section class="slide" data-act="Hook">
+<template class="note">and the race is crowded. when a company posts ONE good job opening — this is how many applications land on it. two hundred and fifty. let that sink in.</template>
+  <div class="wrap">
+    <div class="stat-number reveal">250</div>
+    <p class="sub reveal">applications land on <strong>one</strong> corporate job opening.</p>
+  </div>
+  <div class="footnote">HiringThing job application statistics, 2025</div>
+</section>
+
+<!-- 4 · The odds: dot funnel -->
+<section class="slide" data-act="Hook">
+<template class="note">and out of those 250 — every dot on this screen — four to six get an interview. a 2% hit rate. so the game isn't "be good" — plenty of good people in that grey pile. the game is "be visible."</template>
+  <div class="wrap">
+    <div class="dots reveal" id="dotgrid" aria-label="250 applicants, 5 interviewed"></div>
+    <h2 class="h-med reveal">Only <span class="accent">4–6</span> get interviewed.</h2>
+  </div>
+  <div class="footnote">HiringThing job application statistics, 2025</div>
+</section>
+
+<!-- 5 · The game changed: ATS -->
+<section class="slide" data-act="Hook">
+<template class="note">and here's the plot twist about how those 250 get filtered: the first reader isn't even human. 97% of fortune 500 companies run applicant tracking systems — a robot screens you before any person sees your name. the game is already AI versus AI. so the real question is whether YOU are playing it well — which brings me to you...</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">An AI reads your resume<br><span class="dim">before any human does.</span></h2>
+  </div>
+  <div class="footnote">97–99% of Fortune 500 companies screen with ATS — Jobscan, 2025</div>
+</section>
+
+<!-- 8 · POLL (step reveal) — speaker: ask for raised hands first -->
+<section class="slide glow-blue" data-act="Hook">
+<template class="note">okay, audience participation time — raise your hand if you've EVER used AI for a resume or cover letter. [look around, count, have fun with it] ...yeah. globally it's 74%. so using AI isn't cheating — it's the baseline. the question is whether you use it well or badly. today is about the difference.</template>
+  <div class="wrap">
+    <div class="interact-tag reveal">✋ Raise your hand</div>
+    <h2 class="h-med reveal">Who has used AI for a resume<br>or cover letter?</h2>
+    <div class="step"><div class="stat-number green" style="font-size:280px">74%</div>
+    <p class="sub">of job seekers already do. <strong>It's not cheating — it's the baseline.</strong></p></div>
+  </div>
+  <div class="footnote">Greenhouse job seeker survey, Nov 2025</div>
+</section>
+
+<!-- 9 · 4 things -->
+<section class="slide" data-act="Framework">
+<template class="note">here's my mental checklist when i screen someone — four things. projects: can you build? experience: have you done it for real? drive: will you push without being pushed? communication: can you make me understand you? and this applies whatever your major — media, accounting, engineering — just swap "code" for whatever it is you make.</template>
+  <div class="wrap">
+    <div class="kicker reveal">From my hiring seat</div>
+    <h2 class="h-med reveal">4 things I judge in every candidate</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">01</div><div class="t">Projects</div><div class="d">Can you build things?</div></div>
+      <div class="q"><div class="n">02</div><div class="t">Experience</div><div class="d">Used in real contexts?</div></div>
+      <div class="q"><div class="n">03</div><div class="t">Drive</div><div class="d">Will you excel?</div></div>
+      <div class="q"><div class="n">04</div><div class="t">Communication</div><div class="d">Can you share ideas?</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · Manifesto -->
+<section class="slide glow-green" data-act="Framework">
+<template class="note">because here's my whole thesis, one sentence: AI didn't change WHAT i look for. it changed how FAST you can build proof of it. everything from here is just this sentence, with receipts.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI doesn't change <span class="dim">what I look for.</span></h2>
+    <h2 class="h-big reveal">It changes <span class="accent">how fast you build proof.</span></h2>
+  </div>
+</section>
+
+<!-- 11 · Section -->
+<section class="slide section-slide glow-green" data-act="01 · Projects">
+<template class="note">number one. projects — can you actually build things?</template>
+  <div class="wrap">
+    <div class="num reveal">01</div>
+    <h2 class="h-giant reveal">Projects</h2>
+    <p class="q reveal">Can you actually build things?</p>
+  </div>
+</section>
+
+<!-- 12 · Levels ladder -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">there are levels to this. school projects — that's the minimum, everyone in this room has those. side projects, freelance, open source — now i'm interested. and if you've shipped something real that strangers actually use? different league entirely. and "projects" doesn't mean code — a campaign you ran, a video series, a design portfolio, an event you organized, a spreadsheet system that saved someone hours. proof of work comes in every major.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Level of projects</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">😓</div><div class="tier">Minimum</div><div class="what">School projects</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">Side projects · freelance · open source</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Shipped a real product with real users</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Resume bullets that work (Faw's real CV, 3 rapid beats) -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">this is a real CV from a real applicant — remember the name faw, he's coming back later in this talk. three things make his bullets work. one: the tools are named — tech stack for coders, but same for any major: the software, platforms, methods you used. the ATS robot literally keyword-matches these.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 1/3</div>
+    <img class="shot reveal" src="assets/crops/resume-stack.png" alt="CV bullet with tech stack highlighted">
+    <div class="caption reveal">Name the <span class="accent">tools & stack</span>.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">two: he owns his role. "LED a team of 6." for group projects i NEED to know what YOU did, not what the team did. "we built an app" or "we ran a campaign" tells me nothing about you.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 2/3</div>
+    <img class="shot reveal" src="assets/crops/resume-role.png" alt="CV bullet with role highlighted">
+    <div class="caption reveal">Own your <span class="accent">role in the team</span>.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">three: numbers everywhere. 93.4% accuracy. 405 bill splits. RM400 revenue. numbers are the difference between "i did stuff" and "i did THIS." even small numbers beat no numbers — views, attendees, ringgit, hours saved. every major has numbers.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 3/3</div>
+    <img class="shot reveal" src="assets/crops/resume-metrics.png" alt="CV bullet with metrics highlighted">
+    <div class="caption reveal">Let the <span class="accent">numbers</span> talk. 93.4% · 405 splits · RM400.</div>
+  </div>
+</section>
+
+<!-- gitresume setup -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">now — if writing bullets like that sounds painful, i have good news. you already wrote them. for the coders: they're sitting in your git history. everyone else: they're in your project docs, reports, and campaign results.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Too lazy to write bullets?</h2>
+    <p class="sub reveal"><strong>Mine them from work you already did.</strong></p>
+  </div>
+</section>
+
+<!-- 12 · gitresume -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">this tool is gitresume. paste your repo, it clones it in the browser, reads your commits, and generates resume bullets — each one citing the exact commits it came from. receipts included.</template>
+  <div class="shot-wrap">
+    <a class="shotlink reveal" href="https://github.com/Shawnchee/gitresume" target="_blank" rel="noopener"><img class="shot" src="assets/web/gitresume.png" alt="gitresume GitHub repo"></a>
+    <div class="caption reveal"><span class="accent">gitresume</span> — your git history → cited resume bullets</div>
+  </div>
+</section>
+
+<!-- Malaysian credit -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">best part? built by a malaysian student — shawn chee. honestly, building a tool like this IS the best resume bullet. be like shawn. one caveat: AI generates claims, not measured outcomes, so verify before you paste. and if you don't code — same trick works: paste your reports or campaign results into any AI and ask it to draft the bullets.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Built by a <span class="accent">Malaysian student</span>.</h2>
+    <p class="sub reveal">Shawn Chee · github.com/Shawnchee/gitresume<br><span style="font-size:30px">(the tool itself is his best resume bullet 😉 — always verify AI claims before pasting)</span></p>
+  </div>
+</section>
+
+<!-- Showcase ladder -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">okay, you have projects. where do people SEE them? listing in your CV — good. a complete github profile — great. your own portfolio website — best. why? because when i google you — and i will google you — i should find something.</template>
+  <div class="wrap">
+    <div class="kicker reveal">How to showcase</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">🙂</div><div class="tier">Good</div><div class="what">Projects listed in your CV</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">A complete GitHub profile</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Your own portfolio website</div></div>
+    </div>
+    <p class="sub reveal">The best applicants are <strong>googleable</strong>.</p>
+  </div>
+</section>
+
+<!-- 21 · Wall -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">where do people SEE your projects? when i google you — and i will google you — i should find something. these are all local: hannah's and janelle's, malaysian students just like you, plus mine. look at the range: scrapbook vibes, playful illustration, whatever feels like YOU. [tip: click any screenshot to open the real site and scroll through it live] yours doesn't need to be fancy. it needs to EXIST. the ones i remember months later are always the ones with a website.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Made by Malaysian students 🇲🇾</div>
+    <div class="wall reveal">
+      <div class="cell"><a class="shotlink" href="https://hannahdaud.github.io/" target="_blank" rel="noopener"><img src="assets/web/hannahdaud.png" alt="hannahdaud.github.io" style="object-position:center"></a><div class="site">hannahdaud.github.io</div></div>
+      <div class="cell"><a class="shotlink" href="https://janelleis.online/" target="_blank" rel="noopener"><img src="assets/web/janelleis.png" alt="janelleis.online" style="object-position:12% 50%"></a><div class="site">janelleis.online</div></div>
+      <div class="cell"><a class="shotlink" href="https://www.mfrashad.com/" target="_blank" rel="noopener"><img src="assets/web/mfrashad.png" alt="mfrashad.com"></a><div class="site">mfrashad.com <span style="opacity:.6">(mine)</span></div></div>
+    </div>
+    <div class="caption reveal">Yours doesn't need to be fancy. <span class="accent">It needs to exist.</span></div>
+  </div>
+</section>
+
+<!-- Portfolio deep-dive: what makes a portfolio GOOD -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">so what actually makes a portfolio GOOD? after reviewing hundreds, it comes down to three things: visuals, write-ups, and a little bit of delight. let me show you each one.</template>
+  <div class="wrap">
+    <div class="kicker reveal">What makes a portfolio good?</div>
+    <div class="quad reveal" style="width:1400px">
+      <div class="q"><div class="n">01</div><div class="t">Visuals</div><div class="d">screenshots · demo videos</div></div>
+      <div class="q"><div class="n">02</div><div class="t">Write-ups</div><div class="d">tell the story behind it</div></div>
+      <div class="q"><div class="n">03</div><div class="t">Delight</div><div class="d">animation · interactivity</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">one — visuals. screenshots, demo videos, GIFs. this is faw's projects page: every single project has an image. i can FEEL the work before i read a word. brutal truth: if your project has no screenshot, to a reviewer it doesn't exist.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">1 · Visuals</div>
+    <img class="shot reveal" src="assets/crops/site-faw.png" alt="faw.dev project grid — every project has a visual" style="width:1680px; max-height:820px; object-fit:cover; object-position:top">
+    <div class="caption reveal">Every project gets a <span class="accent">screenshot or demo video</span>. No visual = doesn't exist.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">two — write-ups. this is janelle's case study for her forum project. look at the structure: context, process, decisions, results. a good write-up shows HOW you think, which is what i'm actually hiring. and bonus — case studies double as a blog. learning in public, again.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">2 · Write-ups</div>
+    <video class="reveal" src="assets/videos/janelle-casestudy-scroll.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">Janelle's case study — <span class="accent">the story behind the project</span>. Doubles as a blog.</div>
+  </div>
+  <div class="footnote">janelleis.online/case-studies/forum.html</div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">three — delight. small animations, hover effects, interactive touches. watch janelle's hover states — this probably took one extra evening, and it's the difference between "seen" and "remembered."</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">3 · Delight</div>
+    <video class="reveal" src="assets/videos/janelle-interactive.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">Small <span class="accent">animations & interactions</span> — the difference between seen and remembered.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Projects">
+<template class="note">mine does the same thing — and here's the fun part: that pixel-art character of me? AI-generated. remember that for the last section of this talk, because you can generate art like this for free, on your own laptop.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">3 · Delight — mine</div>
+    <video class="reveal" src="assets/videos/rashad-portfolio.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">The pixel me? <span class="accent">AI-generated.</span> (Hold that thought for later.)</div>
+  </div>
+  <div class="footnote">mfrashad.com</div>
+</section>
+
+<!-- 22 · Vibe-code it — VIDEO PLACEHOLDER -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">and here's what changed: this used to take weeks of fighting code. now you describe what you want in plain english, react to what you see, iterate. genuinely a weekend project — and you do NOT need to be a CS major. media, accounting, engineering — lovable and figma make are literally type-what-you-want-and-it-appears. coders can go claude code or cursor. everyone in this room can ship a website this weekend. then deploy free on vercel or github pages.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">You can vibe-code this<br><span class="accent">in a weekend</span>.</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">TERMINAL</div><div class="t" style="font-size:44px">Claude Code</div><div class="d">agent builds it with you</div></div>
+      <div class="q"><div class="n">EDITOR</div><div class="t" style="font-size:44px">Cursor</div><div class="d">AI-first code editor</div></div>
+      <div class="q"><div class="n">PROMPT→APP</div><div class="t" style="font-size:44px">Lovable</div><div class="d">describe it, get a site</div></div>
+      <div class="q"><div class="n">DESIGN→SITE</div><div class="t" style="font-size:44px">Figma Make</div><div class="d">or v0, Bolt — pick one</div></div>
+    </div>
+    <p class="sub reveal" style="font-size:30px"><strong>No coding needed</strong> — describe it in plain English, react, iterate. Free hosting included.</p>
+  </div>
+</section>
+
+<!-- GitHub + LinkedIn profiles -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">and please — do not show up with an empty github. i WILL click it. this is mine: pinned projects with descriptions and stars, a bio, green squares. AI can draft every one of those READMEs tonight. not a coder? your version of this is a public body of work — designs on your site, videos, case studies, campaign decks.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <a class="shotlink reveal" href="https://github.com/mfrashad" target="_blank" rel="noopener"><img class="shot" src="assets/web/github-mfrashad.png" alt="Rashad's GitHub profile — pinned repos, contributions" style="width:1680px; max-height:800px; object-fit:cover; object-position:top"></a>
+    <div class="caption reveal"><span class="accent">Never leave your GitHub empty.</span> Pin projects · write READMEs — AI drafts them.</div>
+  </div>
+</section>
+
+<!-- LinkedIn micro-beat -->
+<section class="slide" data-act="01 · Projects">
+<template class="note">same story for linkedin — whatever your major. recruiters check it before they reply: headline, about section, project descriptions. let AI draft, you edit for truth and taste. a blank linkedin is a silent rejection you never hear about.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Same for LinkedIn.</h2>
+    <p class="sub reveal">Headline, about, project sections — <strong>AI drafts, you edit.</strong><br>Recruiters check it before they ever reply.</p>
+  </div>
+</section>
+
+<!-- 25 · Section -->
+<section class="slide section-slide glow-purple" data-act="02 · Experience">
+<template class="note">number two. experience — have you used your skills where it counts?</template>
+  <div class="wrap">
+    <div class="num reveal" style="color:var(--purple)">02</div>
+    <h2 class="h-giant reveal">Experience</h2>
+    <p class="q reveal">Have you applied your skills in real contexts?</p>
+  </div>
+</section>
+
+<!-- Levels of experience -->
+<section class="slide" data-act="02 · Experience">
+<template class="note">same levels idea as projects. only the compulsory internship — minimum. more than one internship — great, shows initiative. the best candidates were doing freelance, part-time work, or running a small business WHILE studying. real-world reps nobody assigned you.</template>
+  <div class="wrap">
+    <div class="kicker purple reveal">Level of experience</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">😓</div><div class="tier">Minimum</div><div class="what">Only the compulsory internship</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">More than one internship</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Freelance / part-time / business while studying</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI collapsed shipping cost -->
+<section class="slide" data-act="02 · Experience">
+<template class="note">and before anyone says "nobody gives students opportunities" — faw's project was 6 students, one and a half weeks, real users, real funding. AI collapsed the cost of shipping. you can manufacture your own experience now. the excuse is officially gone lol.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI collapsed the cost<br>of shipping.</h2>
+    <p class="sub reveal">ChopChopSplit: <strong>6 students, 1.5 weeks</strong>, real users, seed funding.<br>“No opportunity” is no longer the excuse — <strong>build your own experience.</strong></p>
+  </div>
+</section>
+
+<!-- 28 · Section -->
+<section class="slide section-slide glow-blue" data-act="03 · Drive">
+<template class="note">number three, my favourite. drive. this one is about hunger — and honestly it's the tiebreaker between two equal candidates.</template>
+  <div class="wrap">
+    <div class="num reveal" style="color:var(--blue)">03</div>
+    <h2 class="h-giant reveal">Drive</h2>
+    <p class="q reveal">Do you have the motivation to excel?</p>
+  </div>
+</section>
+
+<!-- How I read drive -->
+<section class="slide" data-act="03 · Drive">
+<template class="note">drive is simple: does this person do things nobody forced them to do? hackathons — you shipped something under pressure on a weekend, voluntarily. awards — you competed and won. clubs — bonus if you actually ran something, not just joined. initiatives — a blog, volunteering, a side project, organizing an event. none of these are graded. that's exactly why they matter — they're the receipts of hunger.</template>
+  <div class="wrap">
+    <div class="kicker blue reveal">How I read drive</div>
+    <div class="quad reveal">
+      <div class="q"><div class="n" style="color:var(--blue)">🧑‍💻</div><div class="t">Hackathons</div><div class="d">ship under pressure</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🏆</div><div class="t">Awards</div><div class="d">competitive proof</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🚪</div><div class="t">Clubs</div><div class="d">bonus if you lead one</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🏃</div><div class="t">Initiatives</div><div class="d">blogs · volunteering · events</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Learning in public -->
+<section class="slide" data-act="03 · Drive">
+<template class="note">my favourite version of drive: learning in public. at 19 i was writing AI tutorials on a blog, mostly for myself. an MIT professor found them and emailed ME. that turned into a published research paper. i didn't apply — the blog applied for me, while i was sleeping. learning in public compounds like interest.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">My blog got me into<br><span class="accent">MIT research</span>.</h2>
+    <p class="sub reveal">A professor found my AI tutorials online — at 19, no connections, no application.<br><strong>Learning in public compounds.</strong></p>
+  </div>
+</section>
+
+<!-- 31 · Cleve plug -->
+<section class="slide" data-act="03 · Drive">
+<template class="note">if setting up a blog sounds like homework — shameless plug, this is literally what we build. write notes in cleve, hit publish, they become public pages. zero setup. the resource page for this talk is hosted exactly this way — QR at the end.</template>
+  <div class="shot-wrap">
+    <a class="shotlink reveal" href="https://www.cleve.ai/" target="_blank" rel="noopener"><img class="shot" src="assets/web/cleve.png" alt="Cleve — AI workspace for writing and thinking" style="max-height:640px"></a>
+    <div class="caption reveal">No time to build a blog? Write notes in <span class="accent">Cleve</span> → publish → free public pages.</div>
+  </div>
+  <div class="footnote">cleve.ai — this talk's resource page is hosted this way. QR at the end.</div>
+</section>
+
+<!-- 32 · Section -->
+<section class="slide section-slide glow-green" data-act="04 · Communication">
+<template class="note">last one. communication — can you make me understand you, and want to keep reading?</template>
+  <div class="wrap">
+    <div class="num reveal">04</div>
+    <h2 class="h-giant reveal">Communication</h2>
+    <p class="q reveal">Can you effectively share your ideas?</p>
+  </div>
+</section>
+
+<!-- 33 · Sound human -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">here's the thing about the AI age: every application sounds the same now. same chatgpt sentence rhythm, same "i am excited about this opportunity." which means the genuinely human ones stand out MORE than ever. short. personal. a little risky.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Everyone sounds like AI now.</h2>
+    <h2 class="h-big reveal"><span class="accent">Sound like a human.</span></h2>
+    <p class="sub reveal">Short. Personal. A little risky.</p>
+  </div>
+</section>
+
+<!-- Good example: career switcher -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">real application we received. this person opened with how they found us — my tiktok of me drilling my curtain. lol. instantly human, instantly memorable. they told a real story — mechanical engineer, 5 years, career switch. i read every word.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ A real application we received</div>
+    <img class="shot reveal" src="assets/crops/app-switcher.png" alt="Career switcher application message" style="max-height:740px">
+    <div class="caption reveal">“…came across Rashad's <span class="accent">TikTok of him drilling his curtain</span>.” Personal beats polished.</div>
+  </div>
+</section>
+
+<!-- Good example: Faw -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">and this one — remember the name faw, from the resume bullets earlier. "i actually used cleve for a day and i'm pretty impressed... i can tell there is a niche for this product." he used our product BEFORE applying and shared real observations, in his own voice, zero AI-smell. do you know how rare that is? maybe 1 in 100 applications.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ Another one — remember this guy</div>
+    <img class="shot reveal" src="assets/crops/app-faw.png" alt="Faw's application message" style="max-height:750px">
+    <div class="caption reveal">“i actually <span class="accent">used cleve for a day</span> and i'm pretty impressed…” He did the homework.</div>
+  </div>
+</section>
+
+<!-- 36 · QUIZ: spot the problem -->
+<section class="slide glow-blue" data-act="04 · Communication">
+<template class="note">okay, game time. we actually received this. read it carefully... raise your hand when you spot the problem. [wait for it — someone always gets it]</template>
+  <div class="shot-wrap">
+    <div class="interact-tag reveal">✋ Spot the problem</div>
+    <img class="shot reveal" src="assets/crops/app-bad-quiz.png" alt="A suspicious application message" style="max-height:800px">
+  </div>
+</section>
+
+<!-- 37 · Reveal -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">yep. "your response looks great! here's a slightly tweaked version:" — he pasted the ENTIRE chatgpt reply. the prompt response. everything. my co-founder's reaction is right there in the screenshot lol. bro became a legend in our team chat. also: rejected.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal" style="color:#ff6b6b">❌ He pasted the whole ChatGPT reply</div>
+    <img class="shot reveal" src="assets/crops/app-bad-chatgpt.png" alt="Application with ChatGPT preamble left in, cofounder laughing" style="max-height:700px">
+    <div class="caption reveal">“Your response looks great! …here's a slightly tweaked version:” <span class="dim">— sent as-is. My co-founder's reaction says the rest.</span></div>
+  </div>
+</section>
+
+<!-- 38 · Rule -->
+<section class="slide" data-act="04 · Communication">
+<template class="note">so the rule is simple: AI is your ghostwriter, not your voice. draft with AI — then rewrite it like you're texting a friend. shorter, warmer, weirder, yours. if it sounds like a press release, delete it.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI is your <span class="accent">ghostwriter</span>,<br>not your voice.</h2>
+    <p class="sub reveal">Draft with AI. Rewrite it like you're <strong>texting a friend</strong>.</p>
+  </div>
+</section>
+
+<!-- Section: the AI application pipeline -->
+<section class="slide section-slide" data-act="Get Noticed">
+<template class="note">okay. you've built the proof. now the last-mile problem: how do you not get buried under the other 249?</template>
+  <div class="wrap">
+    <div class="num reveal">⌗</div>
+    <h2 class="h-big reveal">How to not get buried<br>in the pile</h2>
+  </div>
+</section>
+
+<!-- Spray + snipe -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">real talk: personalization takes energy. you can't do it for 100 companies. so do both — spray wide with AI for volume, and go DEEP by hand on the 3 companies you'd fight to join. that's where the effort actually converts.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Spray <span class="dim">wide</span> with AI.<br>Snipe your <span class="accent">top 3</span> by hand.</h2>
+    <p class="sub reveal">Personalization takes energy — you can't fake it at scale.<br>Spend yours on the few companies you'd <strong>fight</strong> to join.</p>
+  </div>
+</section>
+
+<!-- Step 2 · AI autofill demo (YouTube embed, muted) -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">and for the volume game, watch this — an AI agent filling an entire job application form by itself. i'm deliberately not naming the tool (this is not an ad lol), a few of them do this now. the point: the volume side of applying is basically free now. which means the differentiator is everything else in this talk.</template>
+  <div class="shot-wrap" style="flex-direction:row; gap:70px; padding:50px 110px 60px">
+    <!-- same video as youtu.be/Uu9MhTIp4mo — hosted locally (H.264) so it plays muted/offline/on-stage; YouTube embeds error out on file:// -->
+    <video class="reveal" src="assets/videos/autofill-demo.mp4" poster="assets/videos/autofill-poster.jpg" autoplay muted loop playsinline style="height:960px; width:auto; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div style="display:flex; flex-direction:column; gap:30px; align-items:flex-start; text-align:left; max-width:640px">
+      <div class="caption-kicker reveal">AI autofill</div>
+      <h2 class="h-med reveal">AI can fill the forms <span class="accent">for you</span>.</h2>
+      <p class="sub reveal" style="font-size:32px">Resume in, application out.<br><strong>Volume just got cheap.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 3 · Outreach -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">and then — reach out. DM the recruiter or founder, even AFTER you applied. let AI draft it, but rewrite it in YOUR voice and proofread every word. AI-sounding DMs get ignored; human ones get replies. remember faw's message — short, specific, real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Outreach</div>
+    <h2 class="h-big reveal">DM them.<br><span class="dim">Even after you applied.</span></h2>
+    <p class="sub reveal"><strong>AI drafts. You proofread.</strong> Rewrite it in your voice — every time.</p>
+  </div>
+</section>
+
+<!-- Case marker: Faw -->
+<section class="slide section-slide glow-green" data-act="Get Noticed">
+<template class="note">and to show you what "going deep" looks like — the full story of how faw got hired at cleve.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Case study</div>
+    <h2 class="h-giant reveal">How Faw<br>got hired at Cleve</h2>
+  </div>
+</section>
+
+<!-- He hacked us -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">he didn't stop at applying. he used the product for a day. sent us real feedback. and then... he found an exploit in our system. actually hacked it. and instead of doing anything weird, he responsibly disclosed it — inside his job application. as the CTO reading that: okay. you have my full attention.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">He didn't just apply.</h2>
+    <h2 class="h-big reveal"><span class="accent">He hacked us.</span></h2>
+    <p class="sub reveal">Used the product for a day → sent real feedback →<br>found an exploit in our system → <strong>shared it in his application</strong>.</p>
+  </div>
+</section>
+
+<!-- 43 · Referral DM -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">then this landed in my linkedin. a mutual friend: "he's found an exploit in your system... would be great if you could give his application a minute." here's the honest truth — i'm busy, applications pile up, good people get buried. this one message put him on top of the pile.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Then someone DMed me for him</div>
+    <img class="shot reveal" src="assets/crops/referral-dm.png" alt="LinkedIn referral message mentioning the exploit" style="max-height:740px">
+    <div class="caption reveal">“I was busy. This put him <span class="accent">on top of the pile</span>.”</div>
+  </div>
+</section>
+
+<!-- 44 · Formula -->
+<section class="slide" data-act="Get Noticed">
+<template class="note">so the formula: use the product. say something real about it. then DM and get a referral — yes, even AFTER you already applied. founders aren't ignoring you, we're drowning. outreach is how you get seen twice.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The Faw formula</div>
+    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
+      <div class="node"><div class="t">Use the product</div><div class="d">for real, not 5 minutes</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">Say something real</div><div class="d">feedback, bugs, ideas</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">DM + referral</div><div class="d">even after you applied</div></div>
+    </div>
+    <p class="sub reveal">Founders are busy. <strong>Outreach is how you get seen twice.</strong></p>
+  </div>
+</section>
+
+<!-- Step 1a · The ATS-friendly CV -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">one more case study — mine. confession: my CV was five years stale, and i rebuilt it with AI in one session on a deadline day. this is the actual output — and notice how BORING it is: one column, no photo, no graphics, standard headings, real numbers. that's the industry ATS format. boring on purpose — remember, a robot reads it first.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Case study · my own CV</div>
+    <img class="shot reveal" src="assets/cv-page1.png" alt="Rashad's rendered ATS-friendly CV" style="max-height:780px; background:#fff">
+    <div class="caption reveal" style="font-size:36px">My CV was <span class="accent">5 years stale</span>. AI rebuilt it — one column, standard headings, <span class="accent">ATS-friendly</span>. Boring on purpose.</div>
+  </div>
+  <div class="footnote">my actual CV — generated with AI + RenderCV</div>
+</section>
+
+<!-- Step 1b · The CV is generated, not written -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and here's the trick: i don't WRITE my CV anymore — i generate it. one master file with every real number i've ever earned: talks, users, papers, everything. AI reads the job posting, picks and re-words the relevant bullets, renders the PDF. update the master once, and every future application starts warm instead of from zero. rule number one though: AI never invents — every claim traces to something real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Generated, not written</div>
+    <div class="pipe reveal">
+      <div class="node"><div class="t">Master record</div><div class="d">every number I've ever earned, one file</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">AI tailors</div><div class="d">reads the job posting, mirrors its rubric</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">Rendered PDF</div><div class="d">1–2 pages, ATS-friendly</div></div>
+    </div>
+    <p class="sub reveal">Rule #1: AI never invents — every claim traceable. <em>“The taste and the truth stayed mine.”</em></p>
+  </div>
+</section>
+
+<!-- Step 1b · Tailor per job description with RenderCV -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and you don't hand-make this. rendercv is free and open source — your CV lives as a simple text file, and it renders that clean PDF. which means AI can EDIT it: paste the job description, let AI re-order and re-word your real bullets to match what they're asking for, render, done. every application gets a personalized CV in minutes. one rule: AI never invents — every claim stays traceable to something you actually did.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Tailor it per job — free</div>
+    <a class="shotlink reveal" href="https://github.com/rendercv/rendercv" target="_blank" rel="noopener"><img class="shot" src="assets/web/rendercv.png" alt="RenderCV — open source CV generator" style="max-height:660px"></a>
+    <div class="caption reveal">Paste the job description → <span class="accent">AI rewrites your bullets</span> → RenderCV renders the PDF.</div>
+  </div>
+  <div class="footnote">github.com/rendercv/rendercv · your CV as a text file = AI can edit it per application</div>
+</section>
+
+<!-- Rules -->
+<section class="slide glow-green" data-act="My CV Pipeline">
+<template class="note">but rule number one, non-negotiable: AI never invents. every single claim traces back to something real in the master file. AI wrote the sentences — the taste and the truth stayed mine. the moment you let it fabricate, you're one interview question away from disaster.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Rule #1: AI never invents.</h2>
+    <p class="sub reveal">Every claim traceable to something real.</p>
+    <p class="sub reveal" style="font-style:italic; color:var(--ink)">“The taste and the truth stayed mine.”</p>
+  </div>
+</section>
+
+<!-- Meta-work -->
+<section class="slide" data-act="My CV Pipeline">
+<template class="note">and AI helped beyond the writing. it researched all 17+ mentors in the program, with sources, and honestly told me which "prestige picks" were bad fits. it caught a hidden 2,000-character form limit before it silently ate my essay. use AI for the meta-work, not just the words.</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">AI for the <span class="accent">meta-work</span>, not just the writing</h2>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1200px">
+      <div class="c">Researched all 17+ program mentors, with sources<small>and honestly scored fit — flagging the bad “prestige” picks</small></div>
+      <div class="c">Caught a hidden 2,000-character form limit<small>before it silently truncated my essay</small></div>
+      <div class="c">Pulled my live traction numbers into the CV<small>straight from my website's data</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 49 · Section -->
+<section class="slide section-slide glow-green" data-act="Local AI on RTX">
+<template class="note">okay, last section — and since we're at an acer–nvidia event, let me show you something most of you don't realize: that gaming laptop is secretly an AI workstation.</template>
+  <div class="wrap">
+    <div class="kicker reveal">One more thing</div>
+    <h2 class="h-giant reveal">Your laptop is<br>an <span class="accent">AI machine</span>.</h2>
+  </div>
+</section>
+
+<!-- 50 · Tensor cores -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">the same tensor cores rendering your DLSS frames in valorant can run language models. the new RTX 5090 laptops push 1,824 AI TOPS. that's a small data center in a backpack. you bought it for gaming — it moonlights as a research rig.</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">The Tensor cores that run <span class="accent">DLSS</span><br>also run <span class="accent">LLMs</span>.</h2>
+    <div class="stat-number reveal" style="font-size:260px">1,824</div>
+    <p class="sub reveal">AI TOPS in an RTX 5090 laptop GPU. Gaming machine = AI workstation.</p>
+  </div>
+  <div class="footnote">NVIDIA GeForce RTX 50-series laptop announcement, 2025</div>
+</section>
+
+<!-- 51 · Cost bars -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">why should you care? chatgpt plus costs RM99.90 a month — that's RM1,200 a year. student money. local models? RM zero. unlimited. private. works offline. you already paid for the GPU — the intelligence on top is free.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Why run AI locally?</div>
+    <div class="bars reveal">
+      <div class="bar-row">
+        <div class="lbl"><span>ChatGPT Plus, 1 year</span><span class="val">RM 1,200</span></div>
+        <div class="track"><div class="fill" style="--w:92%"></div></div>
+      </div>
+      <div class="bar-row hero">
+        <div class="lbl"><span>Local models on your RTX — unlimited, private, offline</span><span class="val">RM 0</span></div>
+        <div class="track"><div class="fill" style="--w:1.2%"></div></div>
+      </div>
+    </div>
+    <p class="sub reveal">Buy the laptop once. The intelligence is free forever.</p>
+  </div>
+  <div class="footnote">ChatGPT Plus RM99.90/month in Malaysia (OpenAI, 2025) · budget option: ChatGPT Go RM24/month</div>
+</section>
+
+<!-- Open source caught up: Kimi K3 -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">and if you think open-source models are the "budget" option — that ended last week. moonshot's kimi K3 dropped on july 16: 2.8 trillion parameters, fully open weights, and it's literally #1 on frontend code arena — ahead of claude fable 5 and GPT-5.6 sol, the best closed models on earth. neck and neck with the frontier, free to download. now, K3 itself is way too big for a laptop — but its smaller open-source siblings, the qwens and gemmas and llamas, run on YOURS — right after a word about the machine itself.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Open source caught up · last week</div>
+    <h2 class="h-med reveal"><span class="accent">Kimi K3</span> — open weights, frontier-class.</h2>
+    <div class="bars reveal" style="width:1340px; gap:34px">
+      <div class="bar-row hero">
+        <div class="lbl"><span>Kimi K3 <em style="font-style:normal; color:var(--green)">· open source</em></span><span class="val">1,679</span></div>
+        <div class="track"><div class="fill" style="--w:92%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="lbl"><span>Claude Fable 5 · closed</span><span class="val">1,631</span></div>
+        <div class="track"><div class="fill" style="--w:89.4%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="lbl"><span>GPT-5.6 Sol · closed</span><span class="val">1,618</span></div>
+        <div class="track"><div class="fill" style="--w:88.6%"></div></div>
+      </div>
+    </div>
+    <p class="sub reveal" style="font-size:29px">#1 on Frontend Code Arena · ahead of Opus 4.8 overall · and its smaller open siblings run on <strong>your laptop</strong> →</p>
+  </div>
+  <div class="footnote">Frontend Code Arena scores · Moonshot AI Kimi K3, released 16 July 2026 · Tom's Hardware / VentureBeat</div>
+</section>
+
+<!-- The machine: Acer Predator Helios lineup -->
+<section class="slide glow-green" data-act="Local AI on RTX">
+<template class="note">and the machines at this event are exactly that. the predator helios line is acer's AI-ready range: the helios neo 16 starts around RM7,299 with an RTX 5070. the neo 16S AI carries the 5070 Ti with 12 gigs of VRAM. and the helios 18 AI goes up to an RTX 5090 with 24 gigs — that's frontier-model territory. remember the VRAM numbers — they map straight onto the next two charts.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The machine · Acer Predator Helios</div>
+    <div class="quad reveal" style="width:1520px">
+      <div class="q"><div class="n">FROM RM7,299</div><div class="t" style="font-size:42px">Helios Neo 16</div><div class="d">RTX 5070 · 8GB VRAM</div></div>
+      <div class="q"><div class="n">STEP UP</div><div class="t" style="font-size:42px">Neo 16S AI</div><div class="d">RTX 5070 Ti · 12GB VRAM</div></div>
+      <div class="q" style="border-color:rgba(118,185,0,.5)"><div class="n">FLAGSHIP</div><div class="t" style="font-size:42px">Helios 18 AI</div><div class="d">up to RTX 5090 · 24GB VRAM</div></div>
+    </div>
+    <p class="sub reveal" style="font-size:30px">The VRAM decides which models you can run — see the next chart.</p>
+  </div>
+  <div class="footnote">Acer Malaysia 2026 lineup · The Star, May 2026 · match VRAM → models on the next slides</div>
+</section>
+
+<!-- 52 · Tier chart A -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">so what can YOUR laptop actually run? entry-level nitro with an RTX 4050 — 3 to 4 billion parameter models, totally fine for chat and drafting. the 5060 with 8 gigs — that runs 8B models at 40 to 60 tokens per second. that's faster than you can read.</template>
+  <div class="wrap">
+    <div class="kicker reveal">What can YOUR laptop run?</div>
+    <div class="tiers reveal">
+      <div class="tier-row">
+        <div class="gpu"><div class="g">RTX 4050 · 6GB</div><div class="m">Acer Nitro V ~RM3.9K</div></div>
+        <div class="track"><div class="fill" style="--w:25%"><span>6GB</span></div></div>
+        <div class="runs">Llama 3.2 3B · Gemma 3 4B<small>everyday chat + drafting</small></div>
+      </div>
+      <div class="tier-row">
+        <div class="gpu"><div class="g">RTX 5060 · 8GB</div><div class="m">Acer Nitro V16S ~RM5.4K</div></div>
+        <div class="track"><div class="fill" style="--w:33%"><span>8GB</span></div></div>
+        <div class="runs">Llama 3.1 8B · Qwen3 8B<small>~40–60 tokens/sec — faster than you can read</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="footnote">Q4 quantization via Ollama/LM Studio · speeds: RTX 4060-class benchmarks, Databasemart 2025</div>
+</section>
+
+<!-- 53 · Tier chart B -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">got a 5070 Ti? 14B models — serious reasoning territory. the 16-gig cards run GPT-OSS — that's openai's own open model, running on your lap, no internet. and the 5090 with 24 gigs runs 27 to 32B models fully offline. no subscription, forever.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Going bigger</div>
+    <div class="tiers reveal">
+      <div class="tier-row">
+        <div class="gpu"><div class="g">RTX 5070 Ti · 12GB</div><div class="m">Predator Helios Neo 16S</div></div>
+        <div class="track"><div class="fill" style="--w:50%"><span>12GB</span></div></div>
+        <div class="runs">Qwen3 14B · Phi-4<small>serious reasoning</small></div>
+      </div>
+      <div class="tier-row">
+        <div class="gpu"><div class="g">RTX 5080 · 16GB</div><div class="m">Predator Helios 18 AI</div></div>
+        <div class="track"><div class="fill" style="--w:67%"><span>16GB</span></div></div>
+        <div class="runs">GPT-OSS 20B · Mistral Small 24B<small>OpenAI's open model, on your lap</small></div>
+      </div>
+      <div class="tier-row">
+        <div class="gpu"><div class="g">RTX 5090 · 24GB</div><div class="m">Predator Helios 18 AI (top)</div></div>
+        <div class="track"><div class="fill" style="--w:100%"><span>24GB</span></div></div>
+        <div class="runs">Gemma 3 27B · Qwen3 32B<small>frontier-class, fully offline</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="footnote">Q4 quantization · VRAM fits per LocalLLM/Ollama guides, 2025</div>
+</section>
+
+<!-- Start tonight: AnythingLLM -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">how do you actually start? the easiest way in is anythingLLM. one download, free, open source — and it's the app nvidia officially accelerates on RTX. three steps: install it → pick a model that fits your VRAM (the chart we just saw) → then drag your resume, notes, and transcripts in, and chat with them privately. that's a personal AI trained on YOUR stuff, running on YOUR laptop. do it tonight. (terminal people: ollama works too.)</template>
+  <div class="shot-wrap" style="gap:24px">
+    <h2 class="h-med reveal">Start <span class="accent">tonight</span>. One download.</h2>
+    <a class="shotlink reveal" href="https://anythingllm.com/" target="_blank" rel="noopener"><img class="shot" src="assets/web/anythingllm.png" alt="AnythingLLM — all-in-one local AI app" style="max-height:620px"></a>
+    <p class="sub reveal" style="font-size:29px"><span class="accent">AnythingLLM</span> — free · open source · NVIDIA-accelerated on RTX<br><strong>1</strong> install &nbsp;→&nbsp; <strong>2</strong> pick a model that fits your VRAM &nbsp;→&nbsp; <strong>3</strong> chat with your own files, privately</p>
+  </div>
+</section>
+
+<!-- 55 · Free copilot -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">for the coders: point continue or cline in VS code at a local qwen coder model, and congratulations — unlimited copilot, RM0 a month, running on your own GPU.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">A free Copilot,<br><span class="accent">on your own GPU</span>.</h2>
+    <p class="sub reveal">VS Code + Continue or Cline + <strong>Qwen2.5-Coder</strong> via Ollama.<br>Unlimited code completions. RM0/month.</p>
+  </div>
+</section>
+
+<!-- 56 · Privacy -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">and the underrated part: privacy. your IC number, transcripts, personal essays — with local AI they never leave the laptop. nvidia's chatRTX literally lets you chat with your own files, fully on-device. works offline. even on kampung wifi lol.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Your IC. Your transcripts.<br>Your drafts.</h2>
+    <h2 class="h-med reveal accent reveal">They never leave your laptop.</h2>
+    <p class="sub reveal">NVIDIA ChatRTX: chat with your own files, 100% on-device. Works offline — even in kampung Wi-Fi.</p>
+  </div>
+</section>
+
+<!-- Local image gen — expanded -->
+<section class="slide" data-act="Local AI on RTX">
+<template class="note">and remember the pixel-art me from my portfolio? THIS is how you make things like that — local image generation. stable diffusion XL does an image in about 8 seconds on an RTX 4060 laptop. fooocus if you want one-click simple, comfyUI if you want full control. unlimited portfolio art, project thumbnails, pixel characters — RM0, no credits, no subscriptions.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <h2 class="h-med reveal">Free <span class="accent">unlimited image gen</span> — remember my pixel me?</h2>
+    <a class="shotlink reveal" href="https://www.comfy.org/" target="_blank" rel="noopener"><img class="shot" src="assets/web/comfyui.png" alt="ComfyUI — local image generation" style="max-height:620px"></a>
+    <p class="sub reveal" style="font-size:29px">SDXL: <strong>~8 s/image</strong> on an RTX 4060 laptop · <span class="accent">Fooocus</span> (one-click) · <span class="accent">ComfyUI</span> (full control)<br>Portfolio art · thumbnails · pixel characters — no credits, ever.</p>
+  </div>
+</section>
+
+<!-- 58 · Warning -->
+<section class="slide glow-green" data-act="Close">
+<template class="note">okay, bringing it home. AI raises the floor — everyone's resume looks decent now, everyone's cover letter is grammatical. proof of work raises the ceiling. so use AI to BUILD more — not to fake more. that's the whole talk in two sentences.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI raises the <span class="dim">floor</span>.</h2>
+    <h2 class="h-big reveal">Proof of work raises the <span class="accent">ceiling</span>.</h2>
+    <p class="sub reveal">Use AI to <strong>build more</strong> — not to fake more.</p>
+  </div>
+</section>
+
+<!-- 59 · Summary -->
+<section class="slide" data-act="Close">
+<template class="note">your homework — and i mean tonight, not "someday": vibe-code the portfolio. run gitresume on your repos. start the master CV file. fill in github and linkedin. publish something you learned. and when you apply — DM, referral, real feedback. all of it runs free on the machine you already own.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Do this, starting tonight</div>
+    <div class="checks reveal">
+      <div class="c">Vibe-code your portfolio site</div>
+      <div class="c">gitresume your commits</div>
+      <div class="c">Build a master CV record</div>
+      <div class="c">Complete GitHub + LinkedIn</div>
+      <div class="c">Publish what you learn</div>
+      <div class="c">DM + referrals + real feedback</div>
+      <div class="c">Snipe your top 3 companies</div>
+      <div class="c">Run it all free on RTX</div>
+    </div>
+  </div>
+</section>
+
+<!-- 60 · QR toolkit -->
+<section class="slide glow-green" data-act="Close">
+<template class="note">every tool, link, and the VRAM cheat sheet — one QR, scan it now. and fun fact: you're watching the cleve publish feature work right now, this page IS a published note. [pause 5 seconds, let them scan]</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">Everything from this talk. <span class="accent">One link.</span></h2>
+    <div class="qr-card reveal"><img src="assets/qr-toolkit.png" alt="QR code to the AI Job Hunt Toolkit"></div>
+    <p class="sub reveal" style="font-size:28px">All tools, links & the VRAM cheat-sheet — published as a <strong>Cleve note</strong> (yes, the blog thing from earlier 😉)</p>
+  </div>
+</section>
+
+<!-- Connect -->
+<section class="slide" data-act="Close">
+<template class="note">and connect with me — website, linkedin, instagram. DM me, i actually read them. faw is living proof that DMing me works lol.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Connect with me</div>
+    <div class="qr-card reveal"><img src="assets/qr-mfrashad.png" alt="QR code to mfrashad.com"></div>
+    <p class="sub reveal"><strong>mfrashad.com</strong> · in/mfathyrashad · IG @rashadventure</p>
+    <p class="sub reveal" style="font-size:28px">DM me. I actually read them — Faw is proof. 😄</p>
+  </div>
+</section>
+
+<!-- 62 · End card -->
+<section class="slide title-slide glow-green" data-act="Close">
+<template class="note">the tools are free. your laptop can run them. the excuses are gone. now go build something. terima kasih, TAR UMT! 🚀</template>
+  <div class="brandbar"></div>
+  <div class="wrap">
+    <h2 class="h-giant reveal">Now go <span class="accent">build</span><br>something.</h2>
+    <div class="event-line reveal"><b>TAR UMT</b> × <b>ACER PREDATOR</b> × <b>NVIDIA</b> · Terima kasih! 🚀</div>
+  </div>
+</section>
+
+<!-- 63 · Appendix marker -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup slides from here — not part of the main flow]</template>
+  <div class="wrap">
+    <div class="kicker reveal">Appendix</div>
+    <h2 class="h-med reveal dim">Backup slides</h2>
+  </div>
+</section>
+
+<!-- 64 · Live poll QR backup -->
+<section class="slide glow-blue" data-act="Appendix">
+<template class="note">[backup: if using menti/slido instead of raised hands — paste the poll QR here beforehand]</template>
+  <div class="wrap">
+    <div class="interact-tag reveal">📱 Live poll backup</div>
+    <h2 class="h-med reveal">Have you used AI in a job application?</h2>
+    <div class="qr-card reveal" style="display:flex; align-items:center; justify-content:center; width:548px; height:548px">
+      <div style="color:#0a0a12; font-size:34px; font-weight:700; text-align:center; padding:20px">🎯 PLACEHOLDER<br><br>Paste your Menti / Slido QR here</div>
+    </div>
+  </div>
+</section>
+
+<!-- 65 · Full VRAM table -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup: full VRAM reference if someone asks "can my laptop run X" during Q&A]</template>
+  <div class="wrap">
+    <div class="kicker reveal">Reference · VRAM cheat-sheet (Q4 quant)</div>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1350px; gap:20px">
+      <div class="c">6 GB — Llama 3.2 3B · Qwen3 4B · Gemma 3 4B</div>
+      <div class="c">8 GB — Llama 3.1 8B · Qwen3 8B · DeepSeek-R1-Distill 8B · Mistral 7B</div>
+      <div class="c">12 GB — Qwen3 14B · Phi-4 14B · Gemma 3 12B</div>
+      <div class="c">16 GB — GPT-OSS 20B · Mistral Small 24B</div>
+      <div class="c">24 GB — Gemma 3 27B · Qwen3 32B · Qwen3-30B-A3B (fast MoE)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 66 · Extra stats -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup ammo for Q&A: 29.3% resume-AI usage doubled year over year; 65% of students use it for cover letters; salary gap data if someone asks "is it worth the effort"]</template>
+  <div class="wrap">
+    <div class="kicker reveal">Extra ammo</div>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1400px; gap:20px">
+      <div class="c">29.3% used AI on their resume last year — nearly 2× the year before<small>iHire State of Online Recruiting, 2025</small></div>
+      <div class="c">65% of students use AI for cover letters, 64% for interview prep<small>Inside Higher Ed, Oct 2025</small></div>
+      <div class="c">78% of hiring managers look at online portfolios<small>hiring-manager surveys (indicative)</small></div>
+      <div class="c">Median all-graduate salary RM4,521 vs fresh-grad ~RM3,000<small>DOSM 2024 — experience compounds; start building it now</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 67 · gitresume workflow -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup: exact gitresume workflow if people ask how during Q&A or hands-on session]</template>
+  <div class="wrap">
+    <div class="kicker reveal">gitresume in 4 steps</div>
+    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
+      <div class="node"><div class="t">1 · Paste repo URL</div><div class="d">clones fully in-browser</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">2 · Filter your commits</div><div class="d">by author + date range</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">3 · Generate</div><div class="d">bullets cite the exact commits</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">4 · Verify → paste</div><div class="d">claims ≠ measured outcomes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 68 · Extra inspo -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup: simpler portfolio examples — the point is you can start basic, like the student site on the left, and iterate for years, like mine on the right]</template>
+  <div class="shot-wrap">
+    <div class="wall reveal">
+      <div class="cell"><img src="assets/crops/site-l4n1skyy.png" alt="l4n1skyy.github.io"><div class="site">l4n1skyy.github.io — a student's simple site</div></div>
+      <div class="cell"><img src="assets/crops/site-mfrashad.png" alt="mfrashad.com"><div class="site">mfrashad.com — mine, 8 years of iterations</div></div>
+    </div>
+    <div class="caption reveal">Start simple. <span class="accent">Iterate forever.</span></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ===========================================
+   SLIDE CONTROLLER — scaling, nav, steps, HUD
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.current = 0;
+    this.stage = document.getElementById('deckStage');
+    this.setupStageScale();
+    this.setupNav();
+    /* resume at the slide in the URL hash (#12) — survives refreshes,
+       accidental clicker F5, and lets you deep-link a slide */
+    const fromHash = parseInt((location.hash || '').slice(1), 10);
+    this.show(Number.isFinite(fromHash) && fromHash >= 1 ? fromHash - 1 : 0);
+  }
+  setupStageScale() {
+    const scale = () => {
+      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2;
+      const y = (window.innerHeight - 1080 * f) / 2;
+      this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+  /* steps: reveal .step elements inside the active slide before advancing */
+  pendingSteps() { return this.slides[this.current].querySelectorAll('.step:not(.on)'); }
+  next() {
+    const steps = this.pendingSteps();
+    if (steps.length) { steps[0].classList.add('on'); return; }
+    this.show(this.current + 1);
+  }
+  prev() { this.show(this.current - 1); }
+  show(i) {
+    this.current = Math.max(0, Math.min(i, this.slides.length - 1));
+    this.slides.forEach((s, idx) => {
+      s.classList.toggle('active', idx === this.current);
+      s.classList.toggle('visible', idx === this.current);
+      if (idx !== this.current) s.querySelectorAll('.step.on').forEach(el => el.classList.remove('on'));
+    });
+    /* HUD */
+    document.getElementById('hudAct').textContent = this.slides[this.current].dataset.act || '';
+    document.getElementById('hudCount').textContent = `${this.current + 1} / ${this.slides.length}`;
+    document.getElementById('progress').style.width = `${((this.current + 1) / this.slides.length) * 100}%`;
+    /* speaker notes for the active slide */
+    const note = this.slides[this.current].querySelector('template.note');
+    document.getElementById('notesText').textContent = note ? note.content.textContent.trim() : '';
+    history.replaceState(null, '', '#' + (this.current + 1));
+  }
+  setupNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.getAttribute && e.target.getAttribute('contenteditable')) return;
+      if (['ArrowRight',' ','PageDown','Enter'].includes(e.key)) { e.preventDefault(); this.next(); }
+      if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); this.prev(); }
+      if (e.key === 'Home') this.show(0);
+      if (e.key === 'End') this.show(this.slides.length - 1);
+      if (e.key === 'n' || e.key === 'N') document.getElementById('notesPanel').classList.toggle('on');
+      if (e.key === 'o' || e.key === 'O') toggleOverview();
+      if (e.key === 'Escape') document.getElementById('overview').classList.remove('on');
+      /* clicker compatibility: F5 = "start show" on most clickers → fullscreen, NOT refresh */
+      if (e.key === 'F5') { e.preventDefault(); document.documentElement.requestFullscreen?.(); }
+      if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen?.() : document.documentElement.requestFullscreen?.(); }
+      /* clicker blank-screen button sends B */
+      if (e.key === 'b' || e.key === 'B') document.getElementById('blackout').classList.toggle('on');
+    });
+    /* click advances (right 2/3), click left 1/3 goes back —
+       except clicks on links (clickable screenshots open the live site) */
+    document.querySelector('.deck-viewport').addEventListener('click', (e) => {
+      if (document.body.classList.contains('editing')) return;
+      if (e.target.closest && e.target.closest('a, video')) return;
+      (e.clientX < window.innerWidth / 3) ? this.prev() : this.next();
+    });
+    /* wheel + touch */
+    let wheelLock = 0;
+    window.addEventListener('wheel', (e) => {
+      const now = Date.now();
+      if (now - wheelLock < 500) return;
+      wheelLock = now;
+      (e.deltaY > 0) ? this.next() : this.prev();
+    }, { passive: true });
+    let tx = null;
+    window.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+    window.addEventListener('touchend', e => {
+      if (tx === null) return;
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 50) (dx < 0) ? this.next() : this.prev();
+      tx = null;
+    }, { passive: true });
+  }
+}
+
+/* ===========================================
+   DOT-MATRIX FUNNEL (slide 5): 250 dots, 5 green
+   =========================================== */
+(function buildDots() {
+  const grid = document.getElementById('dotgrid');
+  const winners = new Set([31, 84, 122, 168, 215]); /* scattered green dots */
+  for (let i = 0; i < 250; i++) {
+    const d = document.createElement('i');
+    if (winners.has(i)) d.className = 'win';
+    grid.appendChild(d);
+  }
+})();
+
+/* ===========================================
+   INLINE EDIT MODE — hover top-left corner or press E
+   Ctrl/Cmd+S downloads the edited HTML
+   =========================================== */
+const EDITABLE_SEL = '.slide h1, .slide h2, .slide p, .slide .caption, .slide .what, .slide .t, .slide .d, .slide .runs, .slide .c, .slide .site, .slide .kicker, .slide .lbl span';
+const EDIT_KEY = 'deck-edits:getting-hired-in-the-ai-age';
+const editables = Array.from(document.querySelectorAll(EDITABLE_SEL));
+editables.forEach((el, i) => { el.dataset.eidx = i; el.dataset.orig = el.innerHTML; });
+/* restore saved edits — only where the source content is unchanged, so
+   deck updates always win over stale localStorage edits */
+try {
+  const saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}');
+  Object.entries(saved).forEach(([i, e]) => {
+    const el = editables[i];
+    if (el && el.dataset.orig === e.o) el.innerHTML = e.v;
+  });
+} catch (_) {}
+/* persist on every keystroke while editing */
+document.addEventListener('input', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-eidx]');
+  if (!el) return;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}'); } catch (_) {}
+  saved[el.dataset.eidx] = { o: el.dataset.orig, v: el.innerHTML };
+  localStorage.setItem(EDIT_KEY, JSON.stringify(saved));
+});
+
+const editor = {
+  isActive: false,
+  toggleEditMode() {
+    this.isActive = !this.isActive;
+    document.body.classList.toggle('editing', this.isActive);
+    document.getElementById('editToggle').classList.toggle('active', this.isActive);
+    editables.forEach(el => el.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
+  },
+  save() {
+    const clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    clone.querySelector('body').classList.remove('editing');
+    const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'getting-hired-in-the-ai-age-edited.html';
+    a.click();
+  }
+};
+const hotzone = document.getElementById('editHotzone');
+const editToggle = document.getElementById('editToggle');
+let hideTimeout = null;
+hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+hotzone.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); });
+editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+editToggle.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); });
+editToggle.addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); });
+document.addEventListener('keydown', (e) => {
+  if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') {
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
+    return;
+  }
+  /* E toggles edit mode · Shift+E discards all saved edits and reloads */
+  if (e.key === 'E' && e.shiftKey) { localStorage.removeItem(EDIT_KEY); location.reload(); return; }
+  if (e.key === 'e' || e.key === 'E') editor.toggleEditMode();
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
+});
+
+/* ===========================================
+   OVERVIEW / COMBINED SCRIPT — O key or ⊞ button
+   =========================================== */
+function buildOverview() {
+  const list = document.getElementById('ovList');
+  list.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const title = (s.querySelector('h1, h2, .caption, .kicker')?.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 90);
+    const note = (s.querySelector('template.note')?.content.textContent || '').trim();
+    const row = document.createElement('div');
+    row.className = 'ov-row' + (i === deck.current ? ' current' : '');
+    row.innerHTML = '<div class="ov-meta">' + (i + 1) + ' · ' + (s.dataset.act || '') + '</div>' +
+      '<div class="ov-title"></div><div class="ov-note"></div>';
+    row.querySelector('.ov-title').textContent = title;
+    row.querySelector('.ov-note').textContent = note;
+    row.addEventListener('click', () => { deck.show(i); toggleOverview(false); });
+    list.appendChild(row);
+  });
+}
+function toggleOverview(force) {
+  const ov = document.getElementById('overview');
+  const on = force !== undefined ? force : !ov.classList.contains('on');
+  if (on) { buildOverview(); ov.classList.add('on'); ov.querySelector('.ov-row.current')?.scrollIntoView({ block: 'center' }); }
+  else ov.classList.remove('on');
+}
+document.getElementById('ovClose').addEventListener('click', () => toggleOverview(false));
+document.getElementById('overview').addEventListener('click', (e) => e.stopPropagation());
+
+/* ===========================================
+   MOBILE TOOLBAR + TOUCH EDIT SHEET
+   =========================================== */
+const isCoarse = matchMedia('(pointer: coarse)').matches;
+const mb = (id) => document.getElementById(id);
+mb('mbPrev').addEventListener('click', (e) => { e.stopPropagation(); deck.prev(); });
+mb('mbNext').addEventListener('click', (e) => { e.stopPropagation(); deck.next(); });
+mb('mbNotes').addEventListener('click', (e) => { e.stopPropagation(); mb('mbNotes').classList.toggle('active'); document.getElementById('notesPanel').classList.toggle('on'); });
+mb('mbOverview').addEventListener('click', (e) => { e.stopPropagation(); toggleOverview(); });
+mb('mbEdit').addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); mb('mbEdit').classList.toggle('active', editor.isActive); });
+document.getElementById('mtoolbar').addEventListener('click', (e) => e.stopPropagation());
+
+/* On touch devices, edit mode uses a bottom-sheet textarea instead of
+   contenteditable (slide text is too small to edit in place on a phone) */
+let sheetTarget = null;
+function openSheet(el) {
+  sheetTarget = el;
+  document.getElementById('sheetText').value = el.innerText;
+  document.getElementById('editSheet').classList.add('on');
+}
+document.getElementById('sheetSave').addEventListener('click', () => {
+  if (sheetTarget) {
+    sheetTarget.innerText = document.getElementById('sheetText').value;
+    sheetTarget.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  document.getElementById('editSheet').classList.remove('on');
+});
+document.getElementById('sheetClose').addEventListener('click', () => document.getElementById('editSheet').classList.remove('on'));
+document.getElementById('editSheet').addEventListener('click', (e) => e.stopPropagation());
+if (isCoarse) {
+  document.addEventListener('click', (e) => {
+    if (!editor.isActive) return;
+    const el = e.target.closest && e.target.closest('[data-eidx]');
+    if (el) { e.preventDefault(); e.stopPropagation(); openSheet(el); }
+  }, true);
+}
+
+/* ===========================================
+   VIDEO OPERATOR CONTROLS — native controls appear on mouse hover
+   so the operator can pause / restart / unmute with the mouse
+   without interfering with the clicker
+   =========================================== */
+document.querySelectorAll('.slide video').forEach((v) => {
+  v.addEventListener('mouseenter', () => { v.controls = true; });
+  v.addEventListener('mouseleave', () => { v.controls = false; });
+});
+
+/* ===========================================
+   OFFLINE SUPPORT — network-first service worker.
+   Online you ALWAYS get the freshly deployed version;
+   offline you get the last cached copy. No stale-cache traps.
+   =========================================== */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0 && !navigator.webdriver) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+/* headless export (Playwright/PDF): render everything final-state,
+   and freeze videos on a frame so the network can go idle */
+if (navigator.webdriver) {
+  document.body.classList.add('static');
+  document.querySelectorAll('video').forEach((v) => {
+    v.removeAttribute('autoplay');
+    v.loop = false;
+    v.addEventListener('loadeddata', () => { v.pause(); try { v.currentTime = 1; } catch (e) {} }, { once: true });
+    v.pause();
+  });
+}
+
+/* auto-retry images that fail to load (flaky venue wi-fi / CDN hiccups) */
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('error', function () {
+    const tries = +(this.dataset.retries || 0);
+    if (tries >= 3) return;
+    this.dataset.retries = tries + 1;
+    setTimeout(() => { this.src = this.getAttribute('src').split('?')[0] + '?r=' + Date.now(); }, 900 * (tries + 1));
+  });
+  if (img.complete && img.naturalWidth === 0) img.dispatchEvent(new Event('error'));
+});
+
+const deck = new SlidePresentation();
+</script>
+</body>
+</html>

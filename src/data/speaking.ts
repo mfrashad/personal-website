@@ -12,10 +12,36 @@ export interface SpeakingEngagement {
     topics?: string[];
     images?: string[];
     logos?: string[];
+    slidesUrl?: string;
     featured?: boolean;
 }
 
 export const speakingEngagements: SpeakingEngagement[] = [
+    // 2026
+    {
+        id: 'yayasan-peneraju-future-ready-2026',
+        date: new Date('2026-07-30'),
+        title: 'Future-Ready Careers: How AI is Changing the Workplace',
+        event: 'Talent Management (Technology) Programme',
+        organizer: 'Yayasan Peneraju',
+        location: 'Online (Microsoft Teams)',
+        type: 'talk',
+        topics: ['AI', 'Future of Work', 'Career'],
+        logos: ['/speaking-logos/yayasanpeneraju.webp'],
+        slidesUrl: '/speaking-slides/future-ready-careers.html',
+    },
+    {
+        id: 'tarumt-getting-hired-2026',
+        date: new Date('2026-07-23'),
+        title: 'Getting Hired in the AI Age',
+        event: 'TAR UMT × Acer Predator × NVIDIA',
+        organizer: 'TAR UMT',
+        description: 'How to be a top applicant when everyone has AI.',
+        type: 'talk',
+        topics: ['Career', 'AI', 'Hiring'],
+        logos: ['/speaking-logos/tarumt.webp', '/speaking-logos/acer.webp', '/speaking-logos/nvidia.webp'],
+        slidesUrl: '/speaking-slides/getting-hired-in-the-ai-age.html',
+    },
     // 2025
     {
         id: 'future-ready-connect-2025',
