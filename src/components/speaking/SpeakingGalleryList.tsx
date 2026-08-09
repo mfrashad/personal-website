@@ -142,13 +142,13 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                                                         {formatDate(engagement.date)}
                                                     </div>
                                                     {logos.length > 0 && (
-                                                        <div className="flex items-center gap-1.5">
-                                                            {logos.slice(0, 1).map((logo, i) => (
+                                                        <div className="flex flex-wrap items-center justify-center gap-1.5">
+                                                            {logos.slice(0, 3).map((logo, i) => (
                                                                 <img
                                                                     key={i}
                                                                     src={logo}
                                                                     alt=""
-                                                                    className="h-5 max-w-[40px] object-contain"
+                                                                    className="h-5 max-w-[28px] object-contain"
                                                                 />
                                                             ))}
                                                         </div>
