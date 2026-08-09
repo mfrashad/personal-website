@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future-Ready Careers: How AI is Changing the Workplace — Fathy Rashad</title>
+
+<!-- Fonts: Switzer (Apple-keynote neutrality) + JetBrains Mono (tech kickers/numbers) -->
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600,700,800,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+/* ===========================================
+   THEME — change these to restyle the whole deck
+   =========================================== */
+:root {
+    --bg: #0a0a12;                    /* near-black canvas */
+    --bg-soft: #11111c;
+    --ink: #f4f5f8;                   /* primary text */
+    --ink-2: #9aa0ac;                 /* secondary text */
+    --ink-3: #565c68;                 /* muted / footnotes */
+    --green: #F2B233;                 /* Peneraju gold — THE accent */
+    --green-soft: rgba(242,178,51,.14);
+    --purple: #8B5CF6;                /* sparing section accent */
+    --blue: #38BDF8;                  /* sparing section accent */
+    --bar-gray: #3a3f4a;              /* de-emphasized chart mark */
+    --font-display: 'Switzer', -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --stage-bg: #000;
+    --slide-bg: var(--bg);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===========================================
+   FIXED 16:9 STAGE (from viewport-base.css) — do not edit
+   =========================================== */
+html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--stage-bg,#000); }
+.deck-viewport { position:fixed; inset:0; overflow:hidden; background:var(--stage-bg,#000); }
+.deck-stage { position:absolute; left:0; top:0; width:1920px; height:1080px; overflow:hidden; transform-origin:0 0; background:var(--slide-bg,#fff); }
+.slide { position:absolute; inset:0; width:1920px; height:1080px; overflow:hidden; display:block; visibility:hidden; opacity:0; pointer-events:none; background:var(--slide-bg,#fff); }
+.slide.active, .slide.visible { visibility:visible; opacity:1; pointer-events:auto; z-index:1; }
+img, video, canvas, svg { max-width:100%; max-height:100%; }
+.deck-controls { position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:1000; }
+@media print {
+  html, body { width:1920px; height:auto; overflow:visible; background:#fff; }
+  .deck-viewport { position:static; overflow:visible; background:#fff; }
+  .deck-stage { position:static; width:auto; height:auto; transform:none !important; background:none; }
+  .slide { position:relative; display:block !important; visibility:visible !important; opacity:1 !important; pointer-events:auto !important; width:1920px; height:1080px; break-after:page; page-break-after:always; }
+  .slide:last-child { break-after:auto; page-break-after:auto; }
+  .deck-controls, .hud, .edit-hotzone, .edit-toggle { display:none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.2s !important; }
+}
+
+/* ===========================================
+   BASE SLIDE TYPOGRAPHY & LAYOUT
+   =========================================== */
+.slide { font-family: var(--font-display); color: var(--ink); }
+.wrap { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 0 160px; gap: 36px; }
+.wrap.left { align-items:flex-start; text-align:left; }
+
+/* kicker — small mono label above headlines */
+.kicker { font-family:var(--font-mono); font-size:26px; font-weight:500; letter-spacing:.35em; text-transform:uppercase; color:var(--green); }
+.kicker.purple { color: var(--purple); }
+.kicker.blue { color: var(--blue); }
+
+/* headline scale */
+.h-giant { font-size:150px; font-weight:800; line-height:1.02; letter-spacing:-0.03em; }
+.h-big   { font-size:110px; font-weight:800; line-height:1.05; letter-spacing:-0.025em; }
+.h-med   { font-size:78px;  font-weight:700; line-height:1.1;  letter-spacing:-0.02em; }
+.h-small { font-size:56px;  font-weight:700; line-height:1.15; letter-spacing:-0.015em; }
+.accent  { color: var(--green); }
+.dim     { color: var(--ink-2); }
+
+.sub { font-size:40px; font-weight:400; color:var(--ink-2); line-height:1.35; max-width:1360px; }
+.sub strong { color:var(--ink); font-weight:600; }
+
+/* giant stat number */
+.stat-number { font-size:400px; font-weight:900; letter-spacing:-0.04em; line-height:.95; color:var(--ink); }
+.stat-number.green { color:var(--green); }
+
+/* footnote — source line pinned to bottom */
+.footnote { position:absolute; bottom:44px; left:0; right:0; text-align:center; font-family:var(--font-mono); font-size:20px; color:var(--ink-3); letter-spacing:.02em; }
+
+/* ambient glows (restrained — one per slide max) */
+.glow-green::before, .glow-purple::before, .glow-blue::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+}
+.glow-green::before  { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(242,178,51,.13), transparent 65%); }
+.glow-purple::before { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(139,92,246,.13), transparent 65%); }
+.glow-blue::before   { background: radial-gradient(ellipse 900px 600px at 50% 110%, rgba(56,189,248,.11), transparent 65%); }
+
+/* ===========================================
+   SCREENSHOT / EVIDENCE SLIDES
+   =========================================== */
+.shot-wrap { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px; padding:70px 120px 90px; }
+.shot { max-width:100%; max-height:800px; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55); }
+.shot.tall { max-height:840px; }
+.caption { font-size:42px; font-weight:600; color:var(--ink); }
+.caption .dim { font-weight:400; }
+.caption-kicker { font-family:var(--font-mono); font-size:24px; letter-spacing:.3em; text-transform:uppercase; color:var(--green); }
+
+/* clickable screenshots — open the live site in a new tab */
+.shotlink { display:block; cursor:pointer; }
+.shotlink img { transition:transform .25s var(--ease), box-shadow .25s var(--ease); }
+.shotlink:hover img { transform:scale(1.012); box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 0 3px rgba(242,178,51,.55); }
+
+/* 3-up screenshot wall */
+.wall { display:flex; gap:36px; align-items:stretch; justify-content:center; }
+.wall .cell { flex:1; display:flex; flex-direction:column; gap:20px; align-items:center; min-width:0; }
+.wall img { width:100%; height:430px; object-fit:cover; object-position:top; border-radius:16px; border:1px solid rgba(255,255,255,.09); box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.wall .site { font-family:var(--font-mono); font-size:24px; color:var(--ink-2); }
+
+/* ===========================================
+   LADDERS (min / great / best rows)
+   =========================================== */
+.ladder { display:flex; flex-direction:column; gap:30px; width:1380px; }
+.rung { display:flex; align-items:center; gap:44px; padding:44px 60px; border-radius:22px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.06); text-align:left; }
+.rung .emoji { font-size:64px; }
+.rung .tier { font-family:var(--font-mono); font-size:22px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-3); width:190px; flex:none; }
+.rung .what { font-size:44px; font-weight:600; color:var(--ink-2); }
+.rung.best { border-color:rgba(242,178,51,.5); background:linear-gradient(180deg, rgba(242,178,51,.10), rgba(242,178,51,.03)); }
+.rung.best .tier, .rung.best .what { color:var(--ink); }
+.rung.best .tier { color:var(--green); }
+
+/* 4-item icon row (framework / drive) */
+.quad { display:flex; gap:34px; justify-content:center; width:1600px; }
+.quad .q { flex:1; padding:56px 30px; border-radius:24px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.07); display:flex; flex-direction:column; gap:20px; align-items:center; }
+.quad .q .n { font-family:var(--font-mono); font-size:24px; color:var(--green); letter-spacing:.2em; }
+.quad .q .t { font-size:52px; font-weight:700; }
+.quad .q .d { font-size:28px; color:var(--ink-2); line-height:1.35; }
+
+/* ===========================================
+   CHARTS — minimal, direct-labeled, one message
+   =========================================== */
+/* dot matrix funnel */
+.dots { display:grid; grid-template-columns:repeat(25, 26px); gap:14px; justify-content:center; }
+.dots i { width:26px; height:26px; border-radius:50%; background:var(--bar-gray); }
+.dots i.win { background:var(--green); box-shadow:0 0 18px rgba(242,178,51,.8); }
+/* dot pop-in — per-dot transition-delay is set in JS */
+.dots i { opacity:0; transform:scale(.2); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+.slide.visible .dots i { opacity:1; transform:scale(1); }
+@media (prefers-reduced-motion: reduce) { .dots i { transition-delay:0ms !important; } }
+
+/* horizontal comparison bars */
+.bars { display:flex; flex-direction:column; gap:56px; width:1400px; }
+.bar-row { display:flex; flex-direction:column; gap:18px; text-align:left; }
+.bar-row .lbl { display:flex; justify-content:space-between; align-items:baseline; font-size:36px; color:var(--ink-2); }
+.bar-row .lbl .val { font-family:var(--font-mono); font-size:52px; font-weight:700; color:var(--ink); }
+.bar-row .track { height:34px; border-radius:4px; background:rgba(255,255,255,.05); overflow:hidden; }
+.bar-row .fill { height:100%; border-radius:4px 4px 4px 4px; background:var(--bar-gray); width:0; transition:width 1.1s var(--ease) .3s; }
+.bar-row.hero .fill { background:var(--green); }
+.bar-row.hero .lbl .val { color:var(--green); }
+.slide.visible .fill { width:var(--w); }
+
+/* GPU tier chart rows */
+.tiers { display:flex; flex-direction:column; gap:34px; width:1620px; }
+.tier-row { display:grid; grid-template-columns:430px 1fr 430px; gap:40px; align-items:center; text-align:left; }
+.tier-row .gpu { display:flex; flex-direction:column; gap:6px; }
+.tier-row .gpu .g { font-size:40px; font-weight:700; }
+.tier-row .gpu .m { font-family:var(--font-mono); font-size:22px; color:var(--ink-3); }
+.tier-row .track { height:30px; border-radius:4px; background:rgba(255,255,255,.05); position:relative; }
+.tier-row .fill { position:absolute; inset:0 auto 0 0; border-radius:4px; background:linear-gradient(90deg, #9a6f14, var(--green)); width:0; transition:width 1s var(--ease) .25s; }
+.tier-row .fill span { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-family:var(--font-mono); font-size:20px; font-weight:700; color:#0a0a12; }
+.slide.visible .tier-row .fill { width:var(--w); }
+.tier-row .runs { font-size:34px; font-weight:600; color:var(--ink); }
+.tier-row .runs small { display:block; font-size:24px; font-weight:400; color:var(--ink-2); margin-top:4px; }
+
+/* pipeline diagram */
+.pipe { display:flex; align-items:center; gap:34px; }
+.pipe .node { padding:52px 56px; border-radius:24px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.09); display:flex; flex-direction:column; gap:14px; min-width:380px; }
+.pipe .node .t { font-size:44px; font-weight:700; }
+.pipe .node .d { font-size:26px; color:var(--ink-2); line-height:1.35; }
+.pipe .node.hero { border-color:rgba(242,178,51,.55); background:linear-gradient(180deg, rgba(242,178,51,.12), rgba(242,178,51,.03)); }
+.pipe .arrow { font-size:60px; color:var(--green); font-weight:300; }
+
+/* checklist */
+.checks { display:grid; grid-template-columns:1fr 1fr; gap:26px 60px; text-align:left; }
+.checks .c { display:flex; gap:24px; align-items:baseline; font-size:44px; font-weight:600; }
+.checks .c::before { content:'✓'; color:var(--green); font-weight:800; }
+.checks .c small { display:block; font-size:27px; font-weight:400; color:var(--ink-2); }
+
+/* ===========================================
+   SPECIAL SLIDE TYPES
+   =========================================== */
+/* section marker */
+.section-slide .num { font-family:var(--font-mono); font-size:34px; letter-spacing:.4em; color:var(--green); }
+.section-slide .q { font-size:44px; color:var(--ink-2); font-weight:400; }
+
+/* poll / interactive */
+.hand { font-size:120px; }
+.interact-tag { font-family:var(--font-mono); font-size:24px; letter-spacing:.3em; text-transform:uppercase; color:var(--blue);
+  border:1px solid rgba(56,189,248,.4); padding:14px 30px; border-radius:100px; }
+
+/* step reveals — hidden until stepped through */
+.step { opacity:0; transform:translateY(26px); transition:opacity .55s var(--ease), transform .55s var(--ease); }
+.step.on { opacity:1; transform:translateY(0); }
+
+/* video placeholder — swap this frame for a real <video> */
+.video-ph { position:relative; width:1440px; height:720px; border-radius:22px; overflow:hidden; border:3px dashed rgba(242,178,51,.65); }
+.video-ph img { width:100%; height:100%; object-fit:cover; filter:brightness(.35) saturate(.7); }
+.video-ph .vlabel { position:absolute; inset:0; display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:center; }
+.video-ph .vlabel .play { width:130px; height:130px; border-radius:50%; background:rgba(242,178,51,.92); display:flex; align-items:center; justify-content:center; font-size:52px; color:#0a0a12; }
+.video-ph .vlabel .txt { font-family:var(--font-mono); font-size:26px; letter-spacing:.25em; color:var(--green); text-transform:uppercase; }
+
+/* QR slides */
+.qr-card { background:#fff; padding:44px; border-radius:28px; box-shadow:0 30px 90px rgba(0,0,0,.6); }
+.qr-card img { width:460px; height:460px; display:block; image-rendering:pixelated; }
+
+/* title slide */
+.title-slide .event-line { font-family:var(--font-mono); font-size:25px; letter-spacing:.28em; text-transform:uppercase; color:var(--ink-2); }
+.title-slide .event-line b { color:var(--green); font-weight:500; }
+.brandbar { position:absolute; top:0; left:0; right:0; height:8px; background:linear-gradient(90deg, var(--green) 0%, var(--green) 55%, var(--purple) 80%, var(--blue) 100%); }
+
+/* intro credentials strip */
+.creds { display:flex; gap:30px; justify-content:center; }
+.cred { padding:36px 48px; border-radius:20px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.07); text-align:left; }
+.cred .big { font-size:44px; font-weight:700; color:var(--ink); }
+.cred .sm { font-size:26px; color:var(--ink-2); margin-top:8px; }
+
+/* intro slide — two-column editorial layout */
+.intro-grid { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:96px; padding:0 150px; }
+.intro-photo img { width:540px; height:720px; object-fit:cover; object-position:50% 42%; border-radius:26px;
+  border:1px solid rgba(255,255,255,.12); box-shadow:0 34px 90px rgba(0,0,0,.6), 0 0 70px rgba(139,92,246,.18); }
+.intro-right { display:flex; flex-direction:column; align-items:flex-start; text-align:left; gap:40px; max-width:880px; }
+.intro-creds { display:flex; flex-direction:column; gap:22px; }
+.intro-creds .row { font-size:38px; color:var(--ink-2); }
+.intro-creds .row b { color:var(--ink); font-weight:700; }
+.intro-creds .row::before { content:'—'; color:var(--green); margin-right:20px; font-weight:700; }
+.me-links { display:flex; align-items:center; gap:28px; }
+.me-links .qr-mini { background:#fff; padding:10px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.5); }
+.me-links .qr-mini img { width:118px; height:118px; display:block; image-rendering:pixelated; }
+.me-links .handles { font-family:var(--font-mono); font-size:23px; line-height:1.7; color:var(--ink-2); text-align:left; }
+.me-links .handles b { color:var(--ink); font-weight:500; }
+
+/* reveal animation (staggered on slide entry) */
+.reveal { opacity:0; transform:translateY(30px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+.slide.visible .reveal { opacity:1; transform:translateY(0); }
+.slide.visible .reveal:nth-child(1){transition-delay:.05s} .slide.visible .reveal:nth-child(2){transition-delay:.15s}
+.slide.visible .reveal:nth-child(3){transition-delay:.25s} .slide.visible .reveal:nth-child(4){transition-delay:.35s}
+.slide.visible .reveal:nth-child(5){transition-delay:.45s} .slide.visible .reveal:nth-child(6){transition-delay:.55s}
+
+/* ===========================================
+   STATIC MODE — set on <body> for headless/PDF export:
+   all reveals, steps and chart fills render final-state instantly
+   =========================================== */
+body.static .reveal, body.static .step, body.static .dots i { opacity:1 !important; transform:none !important; transition:none !important; }
+body.static .fill { width:var(--w) !important; transition:none !important; }
+
+/* blank-screen (clicker B button) */
+#blackout { position:fixed; inset:0; background:#000; z-index:5000; display:none; }
+#blackout.on { display:block; }
+
+/* ===========================================
+   SPEAKER NOTES OVERLAY — toggle with N
+   Notes live in <template class="note"> inside each slide
+   =========================================== */
+.notes-panel { position:fixed; left:50%; bottom:56px; transform:translateX(-50%); width:min(1100px, 86vw);
+  background:rgba(10,10,18,.93); border:1px solid rgba(242,178,51,.45); border-radius:16px; padding:22px 30px;
+  font-family:var(--font-display); font-size:19px; line-height:1.5; color:#e8eaef; z-index:950;
+  box-shadow:0 18px 60px rgba(0,0,0,.6); display:none; backdrop-filter:blur(6px); }
+.notes-panel.on { display:block; }
+.notes-panel .nlabel { font-family:var(--font-mono); font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
+
+/* ===========================================
+   HUD (outside slide design): progress + act label + counter
+   =========================================== */
+.hud { position:fixed; z-index:900; font-family:var(--font-mono); color:var(--ink-3); font-size:13px; letter-spacing:.15em; text-transform:uppercase; }
+.hud.act { left:28px; bottom:20px; }
+.hud.count { right:28px; bottom:20px; }
+.hud.mark { right:28px; top:16px; opacity:.75; }
+.hud.mark a { color:inherit; text-decoration:none; }
+.progress { position:fixed; top:0; left:0; height:3px; background:var(--green); width:0%; z-index:901; transition:width .3s ease; }
+
+/* ===========================================
+   OVERVIEW / SCRIPT MODE — press O or use the toolbar
+   Full list of slides + their speaker notes; tap to jump
+   =========================================== */
+.overview { position:fixed; inset:0; z-index:6000; background:rgba(8,8,14,.97); display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.overview.on { display:block; }
+.overview .ov-head { position:sticky; top:0; background:rgba(8,8,14,.97); padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); z-index:1; }
+.overview .ov-head .t { font-family:var(--font-mono); font-size:14px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); }
+.overview .ov-head button { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
+.overview .ov-list { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+.ov-row { padding:16px 14px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer; border-radius:10px; }
+.ov-row:hover { background:rgba(255,255,255,.04); }
+.ov-row.current { background:rgba(242,178,51,.1); border-left:3px solid var(--green); }
+.ov-row .ov-meta { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); letter-spacing:.12em; text-transform:uppercase; }
+.ov-row .ov-title { font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--ink); margin:4px 0; }
+.ov-row .ov-note { font-family:var(--font-display); font-size:15px; line-height:1.55; color:var(--ink-2); }
+
+/* ===========================================
+   MOBILE TOOLBAR + EDIT SHEET (phones/tablets)
+   =========================================== */
+.mtoolbar { display:none; position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:4000;
+  background:rgba(16,16,26,.92); border:1px solid rgba(255,255,255,.14); border-radius:100px; padding:8px 10px; gap:6px;
+  backdrop-filter:blur(8px); box-shadow:0 12px 40px rgba(0,0,0,.5); }
+.mtoolbar button { background:none; border:none; color:var(--ink); font-size:20px; padding:10px 14px; border-radius:100px; cursor:pointer; font-family:var(--font-mono); }
+.mtoolbar button.active { background:rgba(242,178,51,.22); color:var(--green); }
+.edit-sheet { position:fixed; left:0; right:0; bottom:0; z-index:7000; background:#14141f; border-top:2px solid var(--green);
+  padding:16px 18px calc(16px + env(safe-area-inset-bottom)); display:none; }
+.edit-sheet.on { display:block; }
+.edit-sheet textarea { width:100%; min-height:110px; background:#0a0a12; color:var(--ink); border:1px solid rgba(255,255,255,.18);
+  border-radius:10px; padding:12px; font-family:var(--font-display); font-size:16px; line-height:1.5; }
+.edit-sheet .sheet-row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+.edit-sheet .sheet-row .lbl { font-family:var(--font-mono); font-size:12px; color:var(--ink-3); }
+.edit-sheet .sheet-row button { border-radius:8px; padding:10px 18px; font-size:15px; cursor:pointer; border:none; }
+.edit-sheet .sheet-save { background:var(--green); color:#0a0a12; font-weight:700; }
+.edit-sheet .sheet-close { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); margin-right:10px; }
+
+@media (max-width: 880px), (pointer: coarse) {
+  .mtoolbar { display:flex; }
+  .edit-hotzone, .edit-toggle { display:none; }
+  .hud.act { display:none; }
+  .hud.count { bottom:auto; top:16px; left:24px; right:auto; }
+  .notes-panel { bottom:84px; width:94vw; font-size:16px; max-height:45vh; overflow-y:auto; padding:16px 18px; }
+}
+
+/* ===========================================
+   INLINE EDIT MODE (hover top-left corner or press E)
+   =========================================== */
+.edit-hotzone { position:fixed; top:0; left:0; width:80px; height:80px; z-index:10000; cursor:pointer; }
+.edit-toggle { position:fixed; top:16px; left:16px; z-index:10001; font-size:20px; background:var(--bg-soft); color:var(--ink); border:1px solid rgba(255,255,255,.15); border-radius:10px; padding:8px 12px; cursor:pointer; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.edit-toggle.show, .edit-toggle.active { opacity:1; pointer-events:auto; }
+.edit-toggle.active { border-color:var(--green); color:var(--green); }
+body.editing [contenteditable="true"] { outline:1px dashed rgba(242,178,51,.6); outline-offset:4px; }
+
+/* ===========================================
+   GRID VIEW — bird's-eye thumbnails of every slide (G key or 🎞 button)
+   Each thumbnail is a live scaled-down clone of the real slide, grouped by act.
+   =========================================== */
+.gridview { --gvs:.14; position:fixed; inset:0; z-index:6000; background:#08080e; display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.gridview.on { display:block; }
+.gridview .gv-head { position:sticky; top:0; z-index:3; background:rgba(8,8,14,.97); padding:18px 28px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); }
+.gridview .gv-head .t { font-family:var(--font-mono); font-size:14px; letter-spacing:.25em; text-transform:uppercase; color:var(--green); }
+.gridview .gv-head button { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
+.gv-act { font-family:var(--font-mono); font-size:13px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-3); margin:36px 36px 14px; }
+.gv-act b { color:var(--green); font-weight:500; }
+.gv-grid { display:flex; flex-wrap:wrap; gap:18px; padding:0 36px; }
+.gv-cell { position:relative; cursor:pointer; flex:none; width:calc(1920px * var(--gvs)); height:calc(1080px * var(--gvs));
+  border-radius:10px; overflow:hidden; contain:paint; border:2px solid rgba(255,255,255,.10); background:var(--bg);
+  transition:border-color .2s ease, transform .2s ease; }
+.gv-cell:hover { border-color:rgba(242,178,51,.65); transform:translateY(-3px); }
+.gv-cell.current { border-color:var(--green); box-shadow:0 0 24px rgba(242,178,51,.35); }
+.gv-cell .gv-num { position:absolute; left:8px; bottom:6px; z-index:2; font-family:var(--font-mono); font-size:12px; color:var(--ink-2); background:rgba(8,8,14,.78); padding:2px 8px; border-radius:6px; }
+.gv-frame { width:1920px; height:1080px; transform:scale(var(--gvs)); transform-origin:0 0; pointer-events:none; position:relative; background:var(--bg); }
+/* clones render final-state: visible, reveals/steps/charts done, dots on */
+.gv-frame .slide { visibility:visible !important; opacity:1 !important; }
+.gv-frame .reveal, .gv-frame .step { opacity:1 !important; transform:none !important; transition:none !important; }
+.gv-frame .fill { width:var(--w) !important; transition:none !important; }
+.gv-frame .dots i { opacity:1 !important; transform:none !important; transition:none !important; }
+@media (max-width:880px), (pointer:coarse) { .gridview { --gvs:.185; } .gv-grid { padding:0 18px; gap:14px; } .gv-act { margin:26px 18px 10px; } }
+
+/* transcript sidebar inside grid view — N key or Transcript button */
+.gv-notes { position:fixed; top:0; right:0; bottom:0; width:min(480px, 94vw); z-index:4; display:none;
+  background:#0c0c14; border-left:1px solid rgba(255,255,255,.10); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.gridview.notes-on .gv-notes { display:block; }
+@media (min-width:881px) { .gridview.notes-on .gv-head { padding-right:508px; } .gridview.notes-on #gvBody { margin-right:480px; } }
+.gvn-head { position:sticky; top:0; z-index:1; background:#0c0c14; padding:18px 22px; font-family:var(--font-mono); font-size:13px;
+  letter-spacing:.25em; text-transform:uppercase; color:var(--green); border-bottom:1px solid rgba(255,255,255,.08); }
+.gvn-act { font-family:var(--font-mono); font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-3); padding:20px 22px 8px; }
+.gvn-row { padding:12px 22px 14px; border-bottom:1px solid rgba(255,255,255,.05); cursor:pointer; }
+.gvn-row:hover { background:rgba(255,255,255,.04); }
+.gvn-row.current { background:rgba(242,178,51,.08); box-shadow:inset 3px 0 0 var(--green); }
+.gvn-row .gvn-meta { font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:5px; }
+.gvn-row .gvn-meta b { color:var(--ink-2); font-weight:500; }
+.gvn-row .gvn-txt { font-size:14px; line-height:1.55; color:var(--ink-2); }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="hud act" id="hudAct"></div>
+<div class="hud count" id="hudCount"></div>
+<div class="hud mark">Rashad · mfrashad.com</div>
+<div class="notes-panel" id="notesPanel"><div class="nlabel">Speaker notes · N to hide</div><div id="notesText"></div></div>
+<div id="blackout"></div>
+
+<!-- Grid view / bird's-eye thumbnails (G key or 🎞 button) -->
+<div class="gridview" id="gridview">
+  <div class="gv-head"><span class="t">Bird's-eye view · click a slide to jump</span><span><button id="gvNotesBtn">📝 Transcript (N)</button> <button id="gvClose">Close ✕</button></span></div>
+  <div id="gvBody" style="padding-bottom:70px"></div>
+  <div class="gv-notes" id="gvNotes">
+    <div class="gvn-head">Transcript · click a note to jump · N to hide</div>
+    <div id="gvNotesList"></div>
+  </div>
+</div>
+
+<!-- Overview / combined-script mode (O key or ⊞ button) -->
+<div class="overview" id="overview">
+  <div class="ov-head"><span class="t">Overview · tap a slide to jump</span><button id="ovClose">Close ✕</button></div>
+  <div class="ov-list" id="ovList"></div>
+</div>
+
+<!-- Mobile toolbar -->
+<nav class="mtoolbar" id="mtoolbar" aria-label="deck controls">
+  <button id="mbPrev" title="Previous">‹</button>
+  <button id="mbNext" title="Next">›</button>
+  <button id="mbNotes" title="Speaker notes">📝</button>
+  <button id="mbOverview" title="Overview">⊞</button>
+  <button id="mbGrid" title="Grid view">🎞</button>
+  <button id="mbEdit" title="Edit mode">✏️</button>
+</nav>
+
+<!-- Mobile edit sheet: tap any text while in edit mode -->
+<div class="edit-sheet" id="editSheet">
+  <textarea id="sheetText"></textarea>
+  <div class="sheet-row">
+    <span class="lbl">Edits save automatically to this browser</span>
+    <span><button class="sheet-close" id="sheetClose">Close</button><button class="sheet-save" id="sheetSave">Apply</button></span>
+  </div>
+</div>
+<div class="edit-hotzone" id="editHotzone"></div>
+<button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
+
+<div class="deck-viewport">
+<main class="deck-stage" id="deckStage">
+
+<!-- ============ ACT: HOOK ============ -->
+
+<!-- 1 · Title -->
+<section class="slide title-slide glow-green active" data-act="Hook">
+<template class="note">assalamualaikum and good evening everyone! thank you to the talent management (technology) team at yayasan peneraju for putting this together. quick promise for the next hour: i'm going to show you exactly how top applicants are using AI right now — with real applications we received at cleve, including one guy who literally hacked us and got hired. stay till the end for that one.</template>
+  <div class="brandbar"></div>
+  <div class="wrap">
+    <div class="event-line reveal"><b>YAYASAN PENERAJU</b> · TALENT MANAGEMENT (TECHNOLOGY) · 30 JULY 2026 · LIVE ON TEAMS</div>
+    <h1 class="h-giant reveal">Future-Ready<br><span class="accent">Careers</span></h1>
+    <p class="sub reveal">How AI is changing the workplace — and how to be the applicant it can't ignore.</p>
+    <p class="sub reveal" style="font-size:30px">Fathy Rashad — Co-founder/CTO, Cleve.ai</p>
+  </div>
+</section>
+
+<!-- 2 · Who am I -->
+<section class="slide" data-act="Hook">
+<template class="note">super quick intro so you know i'm not talking theory. i'm the co-founder and CTO of cleve — we build AI writing tools, around a hundred thousand people use it. i got into MIT research at 19 because of a blog (more on that later), and i've judged 15+ hackathons around malaysia. so i've seen a LOT of student portfolios.</template>
+  <div class="intro-grid">
+    <div class="intro-photo reveal"><img src="assets/me-event.jpg" alt="Fathy Rashad"></div>
+    <div class="intro-right">
+      <div class="kicker reveal">Quick intro</div>
+      <h2 class="h-big reveal">I build AI<br>for a living.</h2>
+      <div class="intro-creds reveal">
+        <div class="row"><b>CTO @ Cleve.ai</b> · 100K+ users</div>
+        <div class="row"><b>MIT GenAI research</b> at 19</div>
+        <div class="row"><b>15+ hackathons</b> judged in Malaysia</div>
+      </div>
+      <div class="me-links reveal">
+        <div class="qr-mini"><img src="assets/qr-mfrashad.png" alt="QR to mfrashad.com"></div>
+        <div class="handles"><b>mfrashad.com</b><br>in/mfathyrashad · IG @rashadventure</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POV -->
+<section class="slide" data-act="Hook">
+<template class="note">but the most relevant thing: i'm the guy on the other side of the table. i've personally read hundreds of applications at cleve. everything today is from the reviewer's seat — what actually makes me stop scrolling.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">I've reviewed <span class="accent">hundreds</span><br>of applications.</h2>
+    <p class="sub reveal">Here's what actually gets you hired in 2026.</p>
+  </div>
+</section>
+
+<!-- 3 · The stakes: Malaysia underemployment -->
+<section class="slide" data-act="Hook">
+<template class="note">let's start with the local reality. grad unemployment in malaysia is actually low — 3.2%. but the real story: one in three graduates end up in jobs that don't need their degree. "gaji cukup makan." the degree gets you INTO the race. it doesn't win the race.</template>
+  <div class="wrap">
+    <div class="stat-number reveal">1<span class="dim" style="font-size:200px"> in </span><span data-count="3" data-dur="900">3</span></div>
+    <p class="sub reveal">Malaysian graduates end up underemployed —<br><strong>“gaji cukup makan.”</strong> The degree alone isn't enough.</p>
+  </div>
+  <div class="footnote">~35.5% of employed graduates in semi/low-skilled roles — DOSM Graduate Statistics 2024</div>
+</section>
+
+<!-- Big number: 250 -->
+<section class="slide" data-act="Hook">
+<template class="note">and the race is crowded. when a company posts ONE good job opening — this is how many applications land on it. two hundred and fifty. let that sink in.</template>
+  <div class="wrap">
+    <div class="stat-number reveal"><span data-count="250">250</span></div>
+    <p class="sub reveal">applications land on <strong>one</strong> corporate job opening.</p>
+  </div>
+  <div class="footnote">HiringThing job application statistics, 2025</div>
+</section>
+
+<!-- 4 · The odds: dot funnel -->
+<section class="slide" data-act="Hook">
+<template class="note">and out of those 250 — every dot on this screen — four to six get an interview. a 2% hit rate. so the game isn't "be good" — plenty of good people in that grey pile. the game is "be visible."</template>
+  <div class="wrap">
+    <div class="dots reveal" id="dotgrid" aria-label="250 applicants, 5 interviewed"></div>
+    <h2 class="h-med reveal">Only <span class="accent">4–6</span> get interviewed.</h2>
+  </div>
+  <div class="footnote">HiringThing job application statistics, 2025</div>
+</section>
+
+<!-- 5 · The game changed: ATS -->
+<section class="slide" data-act="Hook">
+<template class="note">and here's the plot twist about how those 250 get filtered: the first reader isn't even human. 97% of fortune 500 companies run applicant tracking systems — a robot screens you before any person sees your name. the game is already AI versus AI. so the real question is whether YOU are playing it well — which brings me to you...</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">An AI reads your resume<br><span class="dim">before any human does.</span></h2>
+  </div>
+  <div class="footnote">97–99% of Fortune 500 companies screen with ATS — Jobscan, 2025</div>
+</section>
+
+<!-- 8 · POLL (step reveal) — speaker: ask in the Teams chat first -->
+<section class="slide glow-blue" data-act="Hook">
+<template class="note">okay, participation time — no raised hands online, so: type YES in the chat if you've EVER used AI for a resume or cover letter. [read a few names out loud as answers roll in — have fun with it] ...yeah. globally it's 74%. so using AI isn't cheating — it's the baseline. the question is whether you use it well or badly. today is about the difference.</template>
+  <div class="wrap">
+    <div class="interact-tag reveal">💬 Type YES in the chat</div>
+    <h2 class="h-med reveal">Who has used AI for a resume<br>or cover letter?</h2>
+    <div class="step"><div class="stat-number green" style="font-size:280px"><span data-count="74">74</span>%</div>
+    <p class="sub">of job seekers already do. <strong>It's not cheating — it's the baseline.</strong></p></div>
+  </div>
+  <div class="footnote">Greenhouse job seeker survey, Nov 2025</div>
+</section>
+
+<!-- ============ ACT: THE GAME ============ -->
+
+<!-- Game 1 · Numbers game -->
+<section class="slide" data-act="The Game">
+<template class="note">before any tactics — internalize this: rejection is rarely a verdict on you. the role got filled internally. budget froze. the ATS ate your keywords. 249 other people applied. you can't control any of that. so the game has two halves: volume — apply a lot, because it IS a numbers game — and visibility: when a human finally looks at you, you have seconds to be impossible to ignore. tonight covers both halves.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The game, honestly</div>
+    <h2 class="h-big reveal">It's a numbers game —<br><span class="accent">so play both halves.</span></h2>
+    <p class="sub reveal"><strong>Volume:</strong> apply wide — most rejections were never about you.<br><strong>Visibility:</strong> when a human looks, be impossible to ignore.</p>
+  </div>
+</section>
+
+<!-- Game 2 · Self-diagnostic -->
+<section class="slide glow-green" data-act="The Game">
+<template class="note">and here's the most useful diagnostic i can give you — where are YOU stuck? no interviews at all? that's almost never a skills problem — it's a packaging problem: resume, portfolio, personal brand, outreach. getting interviews but no offers? THAT's a hard-skills gap — go build. tonight is mostly the packaging game — and how AI makes the skills side faster to build too.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Diagnose yourself</div>
+    <div class="pipe reveal" style="gap:44px">
+      <div class="node hero" style="min-width:600px"><div class="t" style="font-size:40px">No interviews?</div><div class="d">Not your skills — your <strong>packaging</strong>:<br>resume · portfolio · brand · outreach</div></div>
+      <div class="node" style="min-width:600px"><div class="t" style="font-size:40px">Interviews, no offers?</div><div class="d">That's a <strong>hard-skills</strong> gap —<br>go build (AI makes this faster too)</div></div>
+    </div>
+    <p class="sub reveal">Tonight: mostly the <strong>packaging game</strong> — plus faster skill-building with AI.</p>
+  </div>
+</section>
+
+<!-- 9 · 4 things -->
+<section class="slide" data-act="The Game">
+<template class="note">here's my mental checklist when i screen someone — four things, and we'll walk them in this order. communication: can you package and pitch yourself? projects: can you build? experience: have you done it for real? drive: will you push without being pushed? and since you're all in tech — cloud, data, cyber, software — "projects" means shipped technical work, whatever your track.</template>
+  <div class="wrap">
+    <div class="kicker reveal">From my hiring seat</div>
+    <h2 class="h-med reveal">4 things I judge in every candidate</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">01</div><div class="t">Communication</div><div class="d">Can you package yourself?</div></div>
+      <div class="q"><div class="n">02</div><div class="t">Projects</div><div class="d">Can you build things?</div></div>
+      <div class="q"><div class="n">03</div><div class="t">Experience</div><div class="d">Used in real contexts?</div></div>
+      <div class="q"><div class="n">04</div><div class="t">Drive</div><div class="d">Will you excel?</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · Manifesto -->
+<section class="slide glow-green" data-act="The Game">
+<template class="note">because here's my whole thesis, one sentence: AI didn't change WHAT i look for. it changed how FAST you can build proof of it. everything from here is just this sentence, with receipts.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI doesn't change <span class="dim">what I look for.</span></h2>
+    <h2 class="h-big reveal">It changes <span class="accent">how fast you build proof.</span></h2>
+  </div>
+</section>
+
+<!-- ============ ACT: 01 · COMMUNICATION ============ -->
+
+<!-- 32 · Section -->
+<section class="slide section-slide glow-green" data-act="01 · Communication">
+<template class="note">first up — and the most underrated: communication. because if you can't even get an interview, it's not your skills — it's your packaging: resume, outreach, voice. this whole section is that packaging layer.</template>
+  <div class="wrap">
+    <div class="num reveal">01</div>
+    <h2 class="h-giant reveal">Communication</h2>
+    <p class="q reveal">Your packaging — resume, outreach, voice.</p>
+  </div>
+</section>
+
+<!-- Resume bullets that work (Faw's real CV, 3 rapid beats) -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">this is a real CV from a real applicant — remember the name faw, he's coming back later in this talk. three things make his bullets work. one: the tools are named — tech stack for coders, but same for any major: the software, platforms, methods you used. the ATS robot literally keyword-matches these.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 1/3</div>
+    <img class="shot reveal" src="assets/crops/resume-stack.png" alt="CV bullet with tech stack highlighted">
+    <div class="caption reveal">Name the <span class="accent">tools & stack</span>.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Communication">
+<template class="note">two: he owns his role. "LED a team of 6." for group projects i NEED to know what YOU did, not what the team did. "we built an app" or "we ran a campaign" tells me nothing about you.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 2/3</div>
+    <img class="shot reveal" src="assets/crops/resume-role.png" alt="CV bullet with role highlighted">
+    <div class="caption reveal">Own your <span class="accent">role in the team</span>.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="01 · Communication">
+<template class="note">three: numbers everywhere. 93.4% accuracy. 405 bill splits. RM400 revenue. numbers are the difference between "i did stuff" and "i did THIS." even small numbers beat no numbers — views, attendees, ringgit, hours saved. every field has numbers.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Resume bullets that work · 3/3</div>
+    <img class="shot reveal" src="assets/crops/resume-metrics.png" alt="CV bullet with metrics highlighted">
+    <div class="caption reveal">Let the <span class="accent">numbers</span> talk. 93.4% · 405 splits · RM400.</div>
+  </div>
+</section>
+
+<!-- gitresume setup -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">now — if writing bullets like that sounds painful, i have good news. you already wrote them. for the coders: they're sitting in your git history. everyone else: they're in your project docs, reports, and campaign results.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Too lazy to write bullets?</h2>
+    <p class="sub reveal"><strong>Mine them from work you already did.</strong></p>
+  </div>
+</section>
+
+<!-- 12 · gitresume -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">this tool is gitresume. paste your repo, it clones it in the browser, reads your commits, and generates resume bullets — each one citing the exact commits it came from. receipts included.</template>
+  <div class="shot-wrap">
+    <a class="shotlink reveal" href="https://github.com/Shawnchee/gitresume" target="_blank" rel="noopener"><img class="shot" src="assets/web/gitresume.png" alt="gitresume GitHub repo"></a>
+    <div class="caption reveal"><span class="accent">gitresume</span> — your git history → cited resume bullets</div>
+  </div>
+</section>
+
+<!-- Malaysian credit -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">best part? built by a malaysian student — shawn chee. honestly, building a tool like this IS the best resume bullet. be like shawn. one caveat: AI generates claims, not measured outcomes, so verify before you paste. and if you don't code — same trick works: paste your reports or campaign results into any AI and ask it to draft the bullets.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Built by a <span class="accent">Malaysian student</span>.</h2>
+    <p class="sub reveal">Shawn Chee · github.com/Shawnchee/gitresume<br><span style="font-size:30px">(the tool itself is his best resume bullet 😉 — always verify AI claims before pasting)</span></p>
+  </div>
+</section>
+
+<!-- Step 1a · The ATS-friendly CV -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">now, my own CV. confession: it was five years stale, and i rebuilt it with AI in one session on a deadline day. this is the actual output — and notice how BORING it is: one column, no photo, no graphics, standard headings, real numbers. that's the industry ATS format. boring on purpose — remember, a robot reads it first.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Case study · my own CV</div>
+    <img class="shot reveal" src="assets/cv-page1.png" alt="Rashad's rendered ATS-friendly CV" style="max-height:780px; background:#fff">
+    <div class="caption reveal" style="font-size:36px">My CV was <span class="accent">5 years stale</span>. AI rebuilt it — one column, standard headings, <span class="accent">ATS-friendly</span>. Boring on purpose.</div>
+  </div>
+  <div class="footnote">my actual CV — generated with AI + RenderCV</div>
+</section>
+
+<!-- Step 1b · The CV is generated, not written -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and here's the trick: i don't WRITE my CV anymore — i generate it. one master file with every real number i've ever earned: talks, users, papers, everything. AI reads the job posting, picks and re-words the relevant bullets, renders the PDF. update the master once, and every future application starts warm instead of from zero. rule number one though: AI never invents — every claim traces to something real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Generated, not written</div>
+    <div class="pipe reveal">
+      <div class="node"><div class="t">Master record</div><div class="d">every number I've ever earned, one file</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">AI tailors</div><div class="d">reads the job posting, mirrors its rubric</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">Rendered PDF</div><div class="d">1–2 pages, ATS-friendly</div></div>
+    </div>
+    <p class="sub reveal">Rule #1: AI never invents — every claim traceable. <em>“The taste and the truth stayed mine.”</em></p>
+  </div>
+</section>
+
+<!-- Step 1b · Tailor per job description with RenderCV -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and you don't hand-make this. rendercv is free and open source — your CV lives as a simple text file, and it renders that clean PDF. which means AI can EDIT it: paste the job description, let AI re-order and re-word your real bullets to match what they're asking for, render, done. every application gets a personalized CV in minutes. one rule: AI never invents — every claim stays traceable to something you actually did.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Tailor it per job — free</div>
+    <a class="shotlink reveal" href="https://github.com/rendercv/rendercv" target="_blank" rel="noopener"><img class="shot" src="assets/web/rendercv.png" alt="RenderCV — open source CV generator" style="max-height:660px"></a>
+    <div class="caption reveal">Paste the job description → <span class="accent">AI rewrites your bullets</span> → RenderCV renders the PDF.</div>
+  </div>
+  <div class="footnote">github.com/rendercv/rendercv · your CV as a text file = AI can edit it per application</div>
+</section>
+
+<!-- Rules -->
+<section class="slide glow-green" data-act="01 · Communication">
+<template class="note">but rule number one, non-negotiable: AI never invents. every single claim traces back to something real in the master file. AI wrote the sentences — the taste and the truth stayed mine. the moment you let it fabricate, you're one interview question away from disaster.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Rule #1: AI never invents.</h2>
+    <p class="sub reveal">Every claim traceable to something real.</p>
+    <p class="sub reveal" style="font-style:italic; color:var(--ink)">“The taste and the truth stayed mine.”</p>
+  </div>
+</section>
+
+<!-- Meta-work -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and AI helped beyond the writing. it researched all 17+ mentors in the program, with sources, and honestly told me which "prestige picks" were bad fits. it caught a hidden 2,000-character form limit before it silently ate my essay. use AI for the meta-work, not just the words.</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">AI for the <span class="accent">meta-work</span>, not just the writing</h2>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1200px">
+      <div class="c">Researched all 17+ program mentors, with sources<small>and honestly scored fit — flagging the bad “prestige” picks</small></div>
+      <div class="c">Caught a hidden 2,000-character form limit<small>before it silently truncated my essay</small></div>
+      <div class="c">Pulled my live traction numbers into the CV<small>straight from my website's data</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: the AI application pipeline -->
+<section class="slide section-slide" data-act="01 · Communication">
+<template class="note">okay — your paperwork is sharp. now the scale problem: you're still one of 250. how do you not get buried?</template>
+  <div class="wrap">
+    <div class="num reveal">⌗</div>
+    <h2 class="h-big reveal">How to not get buried<br>in the pile</h2>
+  </div>
+</section>
+
+<!-- Spray + snipe -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">real talk: personalization takes energy. you can't do it for 100 companies. so do both — spray wide with AI for volume, and go DEEP by hand on the 3 companies you'd fight to join. that's where the effort actually converts.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Spray <span class="dim">wide</span> with AI.<br>Snipe your <span class="accent">top 3</span> by hand.</h2>
+    <p class="sub reveal">Personalization takes energy — you can't fake it at scale.<br>Spend yours on the few companies you'd <strong>fight</strong> to join.</p>
+  </div>
+</section>
+
+<!-- Step 2 · AI autofill demo (YouTube embed, muted) -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and for the volume game, watch this — an AI agent filling an entire job application form by itself. i'm deliberately not naming the tool (this is not an ad lol), a few of them do this now. the point: the volume side of applying is basically free now. which means the differentiator is everything else in this talk.</template>
+  <div class="shot-wrap" style="flex-direction:row; gap:70px; padding:50px 110px 60px">
+    <!-- same video as youtu.be/Uu9MhTIp4mo — hosted locally (H.264) so it plays muted/offline/on-stage; YouTube embeds error out on file:// -->
+    <video class="reveal" src="assets/videos/autofill-demo.mp4" poster="assets/videos/autofill-poster.jpg" autoplay muted loop playsinline style="height:960px; width:auto; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div style="display:flex; flex-direction:column; gap:30px; align-items:flex-start; text-align:left; max-width:640px">
+      <div class="caption-kicker reveal">AI autofill</div>
+      <h2 class="h-med reveal">AI can fill the forms <span class="accent">for you</span>.</h2>
+      <p class="sub reveal" style="font-size:32px">Resume in, application out.<br><strong>Volume just got cheap.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 3 · Outreach -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and then — reach out. DM the recruiter or founder, even AFTER you applied. let AI draft it, but rewrite it in YOUR voice and proofread every word. AI-sounding DMs get ignored; human ones get replies. and in a minute i'll show you real messages that worked — short, specific, real.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Outreach</div>
+    <h2 class="h-big reveal">DM them.<br><span class="dim">Even after you applied.</span></h2>
+    <p class="sub reveal"><strong>AI drafts. You proofread.</strong> Rewrite it in your voice — every time.</p>
+  </div>
+</section>
+
+<!-- 33 · Sound human -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">here's the thing about the AI age: every application sounds the same now. same chatgpt sentence rhythm, same "i am excited about this opportunity." which means the genuinely human ones stand out MORE than ever. short. personal. a little risky.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Everyone sounds like AI now.</h2>
+    <h2 class="h-big reveal"><span class="accent">Sound like a human.</span></h2>
+    <p class="sub reveal">Short. Personal. A little risky.</p>
+  </div>
+</section>
+
+<!-- Good example: career switcher -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">real application we received. this person opened with how they found us — my tiktok of me drilling my curtain. lol. instantly human, instantly memorable. they told a real story — mechanical engineer, 5 years, career switch. i read every word.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ A real application we received</div>
+    <img class="shot reveal" src="assets/crops/app-switcher.png" alt="Career switcher application message" style="max-height:740px">
+    <div class="caption reveal">“…came across Rashad's <span class="accent">TikTok of him drilling his curtain</span>.” Personal beats polished.</div>
+  </div>
+</section>
+
+<!-- Good example: Faw -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">and this one — remember the name faw, from the resume bullets earlier. "i actually used cleve for a day and i'm pretty impressed... i can tell there is a niche for this product." he used our product BEFORE applying and shared real observations, in his own voice, zero AI-smell. do you know how rare that is? maybe 1 in 100 applications.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">✅ Another one — remember this guy</div>
+    <img class="shot reveal" src="assets/crops/app-faw.png" alt="Faw's application message" style="max-height:750px">
+    <div class="caption reveal">“i actually <span class="accent">used cleve for a day</span> and i'm pretty impressed…” He did the homework.</div>
+  </div>
+</section>
+
+<!-- 36 · QUIZ: spot the problem -->
+<section class="slide glow-blue" data-act="01 · Communication">
+<template class="note">okay, game time. we actually received this. read it carefully... type it in the chat when you spot the problem. [watch the chat — someone always gets it]</template>
+  <div class="shot-wrap">
+    <div class="interact-tag reveal">💬 Spot the problem — type it in chat</div>
+    <img class="shot reveal" src="assets/crops/app-bad-quiz.png" alt="A suspicious application message" style="max-height:800px">
+  </div>
+</section>
+
+<!-- 37 · Reveal -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">yep. "your response looks great! here's a slightly tweaked version:" — he pasted the ENTIRE chatgpt reply. the prompt response. everything. my co-founder's reaction is right there in the screenshot lol. bro became a legend in our team chat. also: rejected.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal" style="color:#ff6b6b">❌ He pasted the whole ChatGPT reply</div>
+    <img class="shot reveal" src="assets/crops/app-bad-chatgpt.png" alt="Application with ChatGPT preamble left in, cofounder laughing" style="max-height:700px">
+    <div class="caption reveal">“Your response looks great! …here's a slightly tweaked version:” <span class="dim">— sent as-is. My co-founder's reaction says the rest.</span></div>
+  </div>
+</section>
+
+<!-- 38 · Rule -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">so the rule is simple: AI is your ghostwriter, not your voice. draft with AI — then rewrite it like you're texting a friend. shorter, warmer, weirder, yours. if it sounds like a press release, delete it.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI is your <span class="accent">ghostwriter</span>,<br>not your voice.</h2>
+    <p class="sub reveal">Draft with AI. Rewrite it like you're <strong>texting a friend</strong>.</p>
+  </div>
+</section>
+
+<!-- Case marker: Faw -->
+<section class="slide section-slide glow-green" data-act="01 · Communication">
+<template class="note">and to show you what "going deep" looks like — the full story of how faw got hired at cleve.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Case study</div>
+    <h2 class="h-giant reveal">How Faw<br>got hired at Cleve</h2>
+  </div>
+</section>
+
+<!-- He hacked us -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">he didn't stop at applying. he used the product for a day. sent us real feedback. and then... he found an exploit in our system. actually hacked it. and instead of doing anything weird, he responsibly disclosed it — inside his job application. as the CTO reading that: okay. you have my full attention.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">He didn't just apply.</h2>
+    <h2 class="h-big reveal"><span class="accent">He hacked us.</span></h2>
+    <p class="sub reveal">Used the product for a day → sent real feedback →<br>found an exploit in our system → <strong>shared it in his application</strong>.</p>
+  </div>
+</section>
+
+<!-- 43 · Referral DM -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">then this landed in my linkedin. a mutual friend: "he's found an exploit in your system... would be great if you could give his application a minute." here's the honest truth — i'm busy, applications pile up, good people get buried. this one message put him on top of the pile.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Then someone DMed me for him</div>
+    <img class="shot reveal" src="assets/crops/referral-dm.png" alt="LinkedIn referral message mentioning the exploit" style="max-height:740px">
+    <div class="caption reveal">“I was busy. This put him <span class="accent">on top of the pile</span>.”</div>
+  </div>
+</section>
+
+<!-- 44 · Formula -->
+<section class="slide" data-act="01 · Communication">
+<template class="note">so the formula: use the product. say something real about it. then DM and get a referral — yes, even AFTER you already applied. founders aren't ignoring you, we're drowning. outreach is how you get seen twice.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The Faw formula</div>
+    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
+      <div class="node"><div class="t">Use the product</div><div class="d">for real, not 5 minutes</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">Say something real</div><div class="d">feedback, bugs, ideas</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">DM + referral</div><div class="d">even after you applied</div></div>
+    </div>
+    <p class="sub reveal">Founders are busy. <strong>Outreach is how you get seen twice.</strong></p>
+  </div>
+</section>
+
+<!-- ============ ACT: 02 · PROJECTS ============ -->
+
+<!-- 11 · Section -->
+<section class="slide section-slide glow-green" data-act="02 · Projects">
+<template class="note">number two. projects — can you actually build things?</template>
+  <div class="wrap">
+    <div class="num reveal">02</div>
+    <h2 class="h-giant reveal">Projects</h2>
+    <p class="q reveal">Can you actually build things?</p>
+  </div>
+</section>
+
+<!-- Bar 1 · Then vs now -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">let me make that concrete for tech. when i was a student, the left column was impressive — a landing page, a todo app, a CRUD demo. today? with AI coding tools, the wow bar is the right column: full-stack, auth, payments, deployed, real users — built by ONE student in weeks. work that used to need a mid-level engineer. that's not me being demanding — that's just where the bar moved when the tools changed.</template>
+  <div class="wrap">
+    <div class="kicker reveal">AI coding moved the bar</div>
+    <div class="pipe reveal" style="gap:44px">
+      <div class="node" style="min-width:520px"><div class="t dim">Impressive in 2019</div><div class="d">Static landing page<br>Todo app · CRUD demo<br>One semester</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero" style="min-width:560px"><div class="t">Impressive in 2026</div><div class="d">Full-stack app — frontend + backend<br>+ auth + payments + deployed<br><strong>Weeks, not months</strong></div></div>
+    </div>
+    <p class="sub reveal">What used to be <strong>mid-level engineer work</strong> is now the student project bar.</p>
+  </div>
+</section>
+
+<!-- Bar 2 · Chat quiz -->
+<section class="slide glow-blue" data-act="02 · Projects">
+<template class="note">quick game — type your guess in the chat: how long do you think it took the last applicant who impressed me to build a working payment-enabled web app with AI tools? [read guesses out loud] ... one weekend for the working core, about two weeks polished. that's the new normal. and if that sounds unfair — good news: the same tools are available to you tonight.</template>
+  <div class="wrap">
+    <div class="interact-tag reveal">💬 Guess in the chat</div>
+    <h2 class="h-med reveal">Full-stack app with auth + payments,<br>built with AI tools. How long?</h2>
+    <div class="step"><div class="stat-number green" style="font-size:180px">1 weekend</div>
+    <p class="sub">for the working core. ~2 weeks polished. <strong>That's the new normal.</strong></p></div>
+  </div>
+</section>
+
+<!-- Bar 3 · The interview gap -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">and here's what actually makes me sad in interviews: i ask intern candidates "which AI coding tools do you use?" and most say... none. no cursor, no codex, no claude code. not because they tried them and chose manual — they never tried. as a company we now expect AI-tool familiarity the same way we expect git. which means the ones who ARE fluent stand out instantly — precisely because most still aren't.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">I interview intern candidates.</h2>
+    <h2 class="h-big reveal"><span class="accent">Most have never opened</span><br>Cursor, Codex, or Claude Code.</h2>
+    <p class="sub reveal">Companies now expect AI fluency like we expect Git.<br><strong>Being fluent stands out — because most aren't.</strong></p>
+  </div>
+</section>
+
+<!-- Bar 4 · Fundamentals vs AI fluency -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">now, the debate you've all heard: "should students even use AI, or learn to code manually first?" my honest answer: both — weighted by where you're aiming. big companies and MNCs still test fundamentals — leetcode, manual coding — because they can afford the time and money to train you on AI tools after hiring. smaller companies and startups can't; we value how fast and how well you ship WITH the tools, from day one. neither camp is wrong. know your target, prep for THAT interview.</template>
+  <div class="wrap">
+    <div class="kicker reveal">“Fundamentals or AI tools?” — both, weighted by target</div>
+    <div class="pipe reveal" style="gap:44px">
+      <div class="node" style="min-width:560px"><div class="t" style="font-size:40px">Big co / MNC</div><div class="d">Fundamentals · manual coding · <strong>LeetCode interviews</strong><br>They can afford to train you on AI later</div></div>
+      <div class="node hero" style="min-width:560px"><div class="t" style="font-size:40px">Startup / SME</div><div class="d"><strong>AI fluency from day one</strong> — ship faster, ship more<br>Your speed and output quality are the hire</div></div>
+    </div>
+    <p class="sub reveal">AI fluency is rising everywhere — but targeting MNCs? <strong>Still grind the fundamentals.</strong></p>
+  </div>
+</section>
+
+<!-- Bar 5 · Learn WITH AI -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">so how do you build both at once? use AI to learn faster — not to skip learning. build with AI beyond your current level. make it explain every line you don't understand — it's the most patient senior engineer you'll ever meet. then rebuild the core yourself, manually, so the fundamentals stick. run that loop and the whole "AI vs fundamentals" debate disappears — you're building both at once.</template>
+  <div class="wrap">
+    <div class="kicker reveal">How to learn in the AI age</div>
+    <div class="quad reveal" style="width:1400px">
+      <div class="q"><div class="n">01</div><div class="t" style="font-size:44px">Build with AI</div><div class="d">ship beyond your level</div></div>
+      <div class="q"><div class="n">02</div><div class="t" style="font-size:44px">Ask it to explain</div><div class="d">every line you don't get</div></div>
+      <div class="q"><div class="n">03</div><div class="t" style="font-size:44px">Rebuild it manually</div><div class="d">fundamentals still stick</div></div>
+    </div>
+    <p class="sub reveal">AI to <strong>learn faster</strong> — not to skip learning.</p>
+  </div>
+</section>
+
+<!-- Cert 1 · Congrats -->
+<section class="slide glow-green" data-act="02 · Projects">
+<template class="note">now — most of you on this call just completed your professional certifications through peneraju. first things first: congrats, seriously. that's months of structured work, verified by an exam. it's real proof, recruiters do notice it, and it should sit front and center on your CV and linkedin.</template>
+  <div class="wrap">
+    <div class="kicker reveal">First — congrats 🎓</div>
+    <h2 class="h-big reveal">Your certification is<br><span class="accent">real proof</span>.</h2>
+    <p class="sub reveal">Months of structured skill-building, verified by an exam.<br><strong>Recruiters notice it. Keep it front and center.</strong></p>
+  </div>
+</section>
+
+<!-- Cert 2 · The honest catch -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">but here's the honest part: everyone in your cohort holds the same cert. when 250 applications hit a role and thirty of them list the same certification, it stops separating you. a cert QUALIFIES you — it gets you into the race. something else has to make you the one they call back.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">A cert gets you <span class="accent">into the race</span>.</h2>
+    <h2 class="h-big reveal"><span class="dim">It doesn't win the race.</span></h2>
+    <p class="sub reveal">Everyone in your cohort holds the same one.<br><strong>What you build on top is what separates you.</strong></p>
+  </div>
+</section>
+
+<!-- Cert 3 · Stack on top (ladder) -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">so the play is stacking. cert alone — minimum, still better than nothing. cert plus a project that uses those exact skills — now i believe you can APPLY it. cert plus something shipped and public that i can click — different league. the cert proves you learned it; the project proves you can do it. the rest of this talk is how to build those top layers fast, with AI.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Stack on top of it</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">📜</div><div class="tier">Minimum</div><div class="what">The certification alone</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">Cert + a project using those exact skills</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Cert + shipped, public work anyone can click</div></div>
+    </div>
+    <p class="sub reveal">Cert proves you <strong>learned it</strong>. Projects prove you can <strong>do it</strong>.</p>
+  </div>
+</section>
+
+<!-- 12 · Levels ladder -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">there are levels to this. school projects — that's the minimum, every one of you has those. side projects, freelance, open source — now i'm interested. and if you've shipped something real that strangers actually use? different league entirely. and "projects" doesn't mean code — a campaign you ran, a video series, a design portfolio, an event you organized, a spreadsheet system that saved someone hours. proof of work comes in every field.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Level of projects</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">😓</div><div class="tier">Minimum</div><div class="what">School projects</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">Side projects · freelance · open source</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Shipped a real product with real users</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Showcase ladder -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">okay, you have projects. where do people SEE them? listing in your CV — good. a complete github profile — great. your own portfolio website — best. why? because when i google you — and i will google you — i should find something.</template>
+  <div class="wrap">
+    <div class="kicker reveal">How to showcase</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">🙂</div><div class="tier">Good</div><div class="what">Projects listed in your CV</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">A complete GitHub profile</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Your own portfolio website</div></div>
+    </div>
+    <p class="sub reveal">The best applicants are <strong>googleable</strong>.</p>
+  </div>
+</section>
+
+<!-- 21 · Wall -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">where do people SEE your projects? when i google you — and i will google you — i should find something. these are all local: hannah's and janelle's, malaysians just like you, plus mine. look at the range: scrapbook vibes, playful illustration, whatever feels like YOU. [tip: click any screenshot to open the real site and scroll through it live] yours doesn't need to be fancy. it needs to EXIST. the ones i remember months later are always the ones with a website.</template>
+  <div class="shot-wrap">
+    <div class="caption-kicker reveal">Made by Malaysians 🇲🇾</div>
+    <div class="wall reveal">
+      <div class="cell"><a class="shotlink" href="https://hannahdaud.github.io/" target="_blank" rel="noopener"><img src="assets/web/hannahdaud.png" alt="hannahdaud.github.io" style="object-position:center"></a><div class="site">hannahdaud.github.io</div></div>
+      <div class="cell"><a class="shotlink" href="https://janelleis.online/" target="_blank" rel="noopener"><img src="assets/web/janelleis.png" alt="janelleis.online" style="object-position:12% 50%"></a><div class="site">janelleis.online</div></div>
+      <div class="cell"><a class="shotlink" href="https://www.mfrashad.com/" target="_blank" rel="noopener"><img src="assets/web/mfrashad.png" alt="mfrashad.com"></a><div class="site">mfrashad.com <span style="opacity:.6">(mine)</span></div></div>
+    </div>
+    <div class="caption reveal">Yours doesn't need to be fancy. <span class="accent">It needs to exist.</span></div>
+  </div>
+</section>
+
+<!-- Portfolio deep-dive: what makes a portfolio GOOD -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">so what actually makes a portfolio GOOD? after reviewing hundreds, it comes down to three things: visuals, write-ups, and a little bit of delight. let me show you each one.</template>
+  <div class="wrap">
+    <div class="kicker reveal">What makes a portfolio good?</div>
+    <div class="quad reveal" style="width:1400px">
+      <div class="q"><div class="n">01</div><div class="t">Visuals</div><div class="d">screenshots · demo videos</div></div>
+      <div class="q"><div class="n">02</div><div class="t">Write-ups</div><div class="d">tell the story behind it</div></div>
+      <div class="q"><div class="n">03</div><div class="t">Delight</div><div class="d">animation · interactivity</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-act="02 · Projects">
+<template class="note">one — visuals. screenshots, demo videos, GIFs. this is faw's projects page: every single project has an image. i can FEEL the work before i read a word. brutal truth: if your project has no screenshot, to a reviewer it doesn't exist.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">1 · Visuals</div>
+    <img class="shot reveal" src="assets/crops/site-faw.png" alt="faw.dev project grid — every project has a visual" style="width:1680px; max-height:820px; object-fit:cover; object-position:top">
+    <div class="caption reveal">Every project gets a <span class="accent">screenshot or demo video</span>. No visual = doesn't exist.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="02 · Projects">
+<template class="note">two — write-ups. this is janelle's case study for her forum project. look at the structure: context, process, decisions, results. a good write-up shows HOW you think, which is what i'm actually hiring. and bonus — case studies double as a blog. learning in public, again.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">2 · Write-ups</div>
+    <video class="reveal" src="assets/videos/janelle-casestudy-scroll.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">Janelle's case study — <span class="accent">the story behind the project</span>. Doubles as a blog.</div>
+  </div>
+  <div class="footnote">janelleis.online/case-studies/forum.html</div>
+</section>
+
+<section class="slide" data-act="02 · Projects">
+<template class="note">three — delight. small animations, hover effects, interactive touches. watch janelle's hover states — this probably took one extra evening, and it's the difference between "seen" and "remembered."</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">3 · Delight</div>
+    <video class="reveal" src="assets/videos/janelle-interactive.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">Small <span class="accent">animations & interactions</span> — the difference between seen and remembered.</div>
+  </div>
+</section>
+
+<section class="slide" data-act="02 · Projects">
+<template class="note">mine does the same thing — and here's the fun part: that pixel-art character of me? AI-generated. tools like stable diffusion or midjourney can make unlimited portfolio art like this.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">3 · Delight — mine</div>
+    <video class="reveal" src="assets/videos/rashad-portfolio.mp4" autoplay muted loop playsinline style="width:1680px; max-height:820px; object-fit:cover; object-position:top; border-radius:18px; border:1px solid rgba(255,255,255,.09); box-shadow:0 30px 90px rgba(0,0,0,.55)"></video>
+    <div class="caption reveal">The pixel me? <span class="accent">AI-generated.</span></div>
+  </div>
+  <div class="footnote">mfrashad.com</div>
+</section>
+
+<!-- 22 · Vibe-code it — VIDEO PLACEHOLDER -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">and here's what changed: this used to take weeks of fighting code. now you describe what you want in plain english, react to what you see, iterate. genuinely a weekend project — and you do NOT need to be a CS major. media, accounting, engineering — lovable and figma make are literally type-what-you-want-and-it-appears. coders can go claude code or cursor. everyone on this call can ship a website this weekend. then deploy free on vercel or github pages.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">You can vibe-code this<br><span class="accent">in a weekend</span>.</h2>
+    <div class="quad reveal">
+      <div class="q"><div class="n">TERMINAL</div><div class="t" style="font-size:44px">Claude Code</div><div class="d">agent builds it with you</div></div>
+      <div class="q"><div class="n">EDITOR</div><div class="t" style="font-size:44px">Cursor</div><div class="d">AI-first code editor</div></div>
+      <div class="q"><div class="n">PROMPT→APP</div><div class="t" style="font-size:44px">Lovable</div><div class="d">describe it, get a site</div></div>
+      <div class="q"><div class="n">DESIGN→SITE</div><div class="t" style="font-size:44px">Figma Make</div><div class="d">or v0, Bolt — pick one</div></div>
+    </div>
+    <p class="sub reveal" style="font-size:30px"><strong>No coding needed</strong> — describe it in plain English, react, iterate. Free hosting included.</p>
+  </div>
+</section>
+
+<!-- GitHub + LinkedIn profiles -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">and please — do not show up with an empty github. i WILL click it. this is mine: pinned projects with descriptions and stars, a bio, green squares. AI can draft every one of those READMEs tonight. not a coder? your version of this is a public body of work — designs on your site, videos, case studies, campaign decks.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <a class="shotlink reveal" href="https://github.com/mfrashad" target="_blank" rel="noopener"><img class="shot" src="assets/web/github-mfrashad.png" alt="Rashad's GitHub profile — pinned repos, contributions" style="width:1680px; max-height:800px; object-fit:cover; object-position:top"></a>
+    <div class="caption reveal"><span class="accent">Never leave your GitHub empty.</span> Pin projects · write READMEs — AI drafts them.</div>
+  </div>
+</section>
+
+<!-- LinkedIn micro-beat -->
+<section class="slide" data-act="02 · Projects">
+<template class="note">same story for linkedin — whatever your major. recruiters check it before they reply: headline, about section, project descriptions. let AI draft, you edit for truth and taste. a blank linkedin is a silent rejection you never hear about.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">Same for LinkedIn.</h2>
+    <p class="sub reveal">Headline, about, project sections — <strong>AI drafts, you edit.</strong><br>Recruiters check it before they ever reply.</p>
+  </div>
+</section>
+
+<!-- ============ ACT: 03 · EXPERIENCE ============ -->
+
+<!-- 25 · Section -->
+<section class="slide section-slide glow-purple" data-act="03 · Experience">
+<template class="note">number three. experience — have you used your skills where it counts?</template>
+  <div class="wrap">
+    <div class="num reveal" style="color:var(--purple)">03</div>
+    <h2 class="h-giant reveal">Experience</h2>
+    <p class="q reveal">Have you applied your skills in real contexts?</p>
+  </div>
+</section>
+
+<!-- Levels of experience -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">same levels idea as projects. coursework and cert labs only — that's the minimum, everyone here has those. an internship or one real client project — now i'm interested. and the best candidates are doing freelance, part-time work, or building something real ALONGSIDE their studies or day job. real-world reps nobody assigned you.</template>
+  <div class="wrap">
+    <div class="kicker purple reveal">Level of experience</div>
+    <div class="ladder reveal">
+      <div class="rung"><div class="emoji">😓</div><div class="tier">Minimum</div><div class="what">Coursework &amp; cert labs only</div></div>
+      <div class="rung"><div class="emoji">😄</div><div class="tier">Great</div><div class="what">An internship or one real client project</div></div>
+      <div class="rung best"><div class="emoji">😍</div><div class="tier">Best</div><div class="what">Freelance / part-time / building — alongside study or work</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Manufacture experience -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">"but nobody hires people without experience" — so manufacture it. freelance one small client; even an RM500 project beats zero. rebuild a local business's website and pitch it to them — worst case portfolio piece, best case paid client. contribute one pull request to an open-source tool you already use — public, verifiable, senior-reviewed. or ship one tiny product with real users. any ONE of these, done this month, puts you ahead of most of the pile.</template>
+  <div class="wrap">
+    <div class="kicker purple reveal">No one hiring you? Manufacture experience</div>
+    <div class="checks reveal">
+      <div class="c">Freelance one small client<small>an RM500 project beats zero experience</small></div>
+      <div class="c">Rebuild a local business's site — pitch them<small>worst case: portfolio piece. best case: paid client</small></div>
+      <div class="c">One PR to an open-source tool you use<small>public, verifiable, senior-reviewed</small></div>
+      <div class="c">Ship one tiny product with real users<small>AI collapsed the cost — next slide</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI collapsed shipping cost -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">and before anyone says "nobody gives students opportunities" — faw's project was 6 students, one and a half weeks, real users, real funding. AI collapsed the cost of shipping. you can manufacture your own experience now. the excuse is officially gone lol.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI collapsed the cost<br>of shipping.</h2>
+    <p class="sub reveal">ChopChopSplit: <strong>6 students, 1.5 weeks</strong>, real users, seed funding.<br>“No opportunity” is no longer the excuse — <strong>build your own experience.</strong></p>
+  </div>
+</section>
+
+<!-- Intel 2 · Loyalty vs hopping -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">and while we're on real-world experience — some real-world numbers. first uncomfortable truth, from daren tan's malaysian career-data talks: loyalty is underpaid. stay put and you get ten to fifteen percent a year. jump companies strategically and each jump is twenty percent minimum — some land forty, sixty, even double. hop every single year and one tracked example compounded to plus one-six-two percent. i'm not telling you to betray anyone — i'm telling you to negotiate with data, and move deliberately when growth stalls. and salary isn't the whole story — next two slides.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Malaysian tech salaries · loyalty vs moving</div>
+    <div class="bars reveal" style="gap:40px">
+      <div class="bar-row">
+        <div class="lbl"><span>Stay at one company</span><span class="val">+10–15%<span style="font-size:30px">/yr</span></span></div>
+        <div class="track"><div class="fill" style="--w:18%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="lbl"><span>Strategic jumps</span><span class="val">+20–60%<span style="font-size:30px">/jump</span></span></div>
+        <div class="track"><div class="fill" style="--w:48%"></div></div>
+      </div>
+      <div class="bar-row hero">
+        <div class="lbl"><span>Hop every year — tracked cumulative</span><span class="val">+<span data-count="162">162</span>%</span></div>
+        <div class="track"><div class="fill" style="--w:92%"></div></div>
+      </div>
+    </div>
+    <p class="sub reveal" style="font-size:30px">Not a disloyalty lecture — <strong>negotiate with data, move when growth stalls.</strong></p>
+  </div>
+  <div class="footnote">Daren Tan (Developer Kaki) — MY tech career talks · self-reported data · full video on the resource page</div>
+</section>
+
+<!-- Intel 3 · Age you save RM1M -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">same talks, longer horizon: start at 23, ten percent increments, same spending — at what AGE do you save your first million ringgit? US job: thirty. singapore: forty-seven. stay local in malaysia: fifty-six. and the quiet winner — remote job for a foreign company while living HERE: thirty-seven. same kampung, foreign salary. a twenty-six year spread on the same milestone, decided by one career decision. remote roles are the arbitrage — and daren's talk breaks down how people actually land them from malaysia.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Age you save your first RM1,000,000</div>
+    <div class="bars reveal" style="gap:36px">
+      <div class="bar-row">
+        <div class="lbl"><span>US job</span><span class="val">age <span data-count="30">30</span></span></div>
+        <div class="track"><div class="fill" style="--w:50%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="lbl"><span>Singapore job</span><span class="val">age <span data-count="47">47</span></span></div>
+        <div class="track"><div class="fill" style="--w:78%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="lbl"><span>Malaysia local job</span><span class="val">age <span data-count="56">56</span></span></div>
+        <div class="track"><div class="fill" style="--w:93%"></div></div>
+      </div>
+      <div class="bar-row hero">
+        <div class="lbl"><span>Remote — foreign employer, living in MY</span><span class="val">age <span data-count="37">37</span></span></div>
+        <div class="track"><div class="fill" style="--w:62%"></div></div>
+      </div>
+    </div>
+    <p class="sub reveal" style="font-size:30px">A <strong>26-year spread</strong> on the same milestone — from one career decision.</p>
+  </div>
+  <div class="footnote">Assumes start at 23, ~10%/yr increments, flat spending — Daren Tan career talks · illustrative, not financial advice</div>
+</section>
+
+<!-- Intel 4 · Path menu -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">so the menu looks like this. MNCs — accenture, petronas, TM, maxis, shell — stable, structured, brand on your CV, and yes: leetcode-style interviews, fundamentals matter most there. startups and SMEs — fastest learning, broadest scope, where your AI fluency is worth the most. remote for a foreign employer — the arbitrage we just saw. freelance — RM50 to 200 an hour is what malaysian devs actually charge. none of these is "correct" — but each one changes what you prep: which interview, which skills, which proof.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Pick a lane — it decides your prep</div>
+    <div class="quad reveal">
+      <div class="q"><div class="n">STABLE</div><div class="t" style="font-size:38px">MNC</div><div class="d">Petronas · Accenture · TM<br>fundamentals + LeetCode</div></div>
+      <div class="q"><div class="n">LEARN FAST</div><div class="t" style="font-size:38px">Startup / SME</div><div class="d">broadest scope<br>AI fluency valued most</div></div>
+      <div class="q"><div class="n">ARBITRAGE</div><div class="t" style="font-size:38px">Remote</div><div class="d">foreign salary,<br>MY cost of living</div></div>
+      <div class="q"><div class="n">FREEDOM</div><div class="t" style="font-size:38px">Freelance</div><div class="d">RM50–200/hr —<br>real MY dev rates</div></div>
+    </div>
+    <p class="sub reveal" style="font-size:30px">Each lane changes <strong>which interview you prep for</strong> — remember the MNC vs startup split.</p>
+  </div>
+</section>
+
+<!-- Intel 5 · Resource: Daren Tan talk -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">those four slides came from one talk: daren tan — he also runs the developer kaki and hackathon kaki communities. ninety minutes of real malaysian numbers: job hopping, MNC vs startup vs remote pros and cons, freelance pricing — even how the same website is RM3k for one client and RM30k for gardenia, lol. link is on the resource page QR at the end. watch it this week.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Resource · careers</div>
+    <h2 class="h-big reveal">Daren Tan's<br><span class="accent">MY tech career talk</span></h2>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1240px">
+      <div class="c">Job hopping vs loyalty — with real increments</div>
+      <div class="c">MNC vs startup vs remote — pros, cons, take-home</div>
+      <div class="c">Freelance pricing — what MY devs actually charge</div>
+    </div>
+    <p class="sub reveal" style="font-size:28px">YouTube: “Tech Career in Malaysia” · Developer Kaki — <strong>link on the resource page</strong></p>
+  </div>
+</section>
+
+<!-- Intel 6 · Resource: Malaysian Paygap -->
+<section class="slide" data-act="03 · Experience">
+<template class="note">resource two: malaysian paygap — paygap.asia. real submitted malaysian salaries, but the gold is the STORIES under each number: how they got there, what it cost — burnout, toxic workplaces, lifestyle — and the paths you can actually replicate: who job-hopped, who stayed loyal, who switched industries. read it like a map, not a leaderboard. don't just envy the RM21k product manager — read what that role costs.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Resource · salaries</div>
+    <a class="shotlink reveal" href="https://paygap.asia/" target="_blank" rel="noopener"><img class="shot" src="assets/web/paygap.png" alt="Malaysian Paygap — salaries with stories" style="max-height:700px"></a>
+    <div class="caption reveal"><span class="accent">paygap.asia</span> — real MY salaries, <span class="accent">with the story behind them</span>: the path and the price.</div>
+  </div>
+</section>
+
+<!-- ============ ACT: 04 · DRIVE ============ -->
+
+<!-- 28 · Section -->
+<section class="slide section-slide glow-blue" data-act="04 · Drive">
+<template class="note">last of the four — my favourite. drive. this one is about hunger — and honestly it's the tiebreaker between two equal candidates.</template>
+  <div class="wrap">
+    <div class="num reveal" style="color:var(--blue)">04</div>
+    <h2 class="h-giant reveal">Drive</h2>
+    <p class="q reveal">Do you have the motivation to excel?</p>
+  </div>
+</section>
+
+<!-- How I read drive -->
+<section class="slide" data-act="04 · Drive">
+<template class="note">drive is simple: does this person do things nobody forced them to do? hackathons — you shipped something under pressure on a weekend, voluntarily. awards — you competed and won. communities — meetups, open source, groups like developer kaki and hackathon kaki on facebook; bonus if you organize, not just attend. initiatives — a blog, volunteering, a side project, organizing an event. none of these are graded. that's exactly why they matter — they're the receipts of hunger.</template>
+  <div class="wrap">
+    <div class="kicker blue reveal">How I read drive</div>
+    <div class="quad reveal">
+      <div class="q"><div class="n" style="color:var(--blue)">🧑‍💻</div><div class="t">Hackathons</div><div class="d">ship under pressure</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🏆</div><div class="t">Awards</div><div class="d">competitive proof</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🚪</div><div class="t">Communities</div><div class="d">meetups · open source · lead one</div></div>
+      <div class="q"><div class="n" style="color:var(--blue)">🏃</div><div class="t">Initiatives</div><div class="d">blogs · volunteering · events</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Learning in public -->
+<section class="slide" data-act="04 · Drive">
+<template class="note">my favourite version of drive: learning in public. at 19 i was writing AI tutorials on a blog, mostly for myself. an MIT professor found them and emailed ME. that turned into a published research paper. i didn't apply — the blog applied for me, while i was sleeping. learning in public compounds like interest.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">My blog got me into<br><span class="accent">MIT research</span>.</h2>
+    <p class="sub reveal">A professor found my AI tutorials online — at 19, no connections, no application.<br><strong>Learning in public compounds.</strong></p>
+  </div>
+</section>
+
+<!-- 31 · Cleve plug -->
+<section class="slide" data-act="04 · Drive">
+<template class="note">if setting up a blog sounds like homework — shameless plug, this is literally what we build. write notes in cleve, hit publish, they become public pages. zero setup. the resource page for this talk is hosted exactly this way — QR at the end.</template>
+  <div class="shot-wrap">
+    <a class="shotlink reveal" href="https://www.cleve.ai/" target="_blank" rel="noopener"><img class="shot" src="assets/web/cleve.png" alt="Cleve — AI workspace for writing and thinking" style="max-height:640px"></a>
+    <div class="caption reveal">No time to build a blog? Write notes in <span class="accent">Cleve</span> → publish → free public pages.</div>
+  </div>
+  <div class="footnote">cleve.ai — this talk's resource page is hosted this way. QR at the end.</div>
+</section>
+
+<!-- ============ ACT: CLOSE ============ -->
+
+<!-- 58 · Warning -->
+<section class="slide glow-green" data-act="Close">
+<template class="note">okay, bringing it home. AI raises the floor — everyone's resume looks decent now, everyone's cover letter is grammatical. proof of work raises the ceiling. so use AI to BUILD more — not to fake more. and that closes the loop from the start of this talk: your cert opened the door. this proof is what decides the offer.</template>
+  <div class="wrap">
+    <h2 class="h-big reveal">AI raises the <span class="dim">floor</span>.</h2>
+    <h2 class="h-big reveal">Proof of work raises the <span class="accent">ceiling</span>.</h2>
+    <p class="sub reveal">Use AI to <strong>build more</strong> — not to fake more.<br>Your cert opened the door — <strong>your proof decides the offer.</strong></p>
+  </div>
+</section>
+
+<!-- 59 · Summary -->
+<section class="slide" data-act="Close">
+<template class="note">your homework — and i mean tonight, not "someday": pick one real project that uses your cert skills. vibe-code the portfolio. run gitresume on your repos. start the master CV file. fill in github and linkedin. publish something you learned. and when you apply — DM, referral, real feedback. all of it is free — and all of it can start tonight.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Do this, starting tonight</div>
+    <div class="checks reveal">
+      <div class="c">One real project on your cert skills</div>
+      <div class="c">Vibe-code your portfolio site</div>
+      <div class="c">gitresume your commits</div>
+      <div class="c">Build a master CV record</div>
+      <div class="c">Complete GitHub + LinkedIn</div>
+      <div class="c">Publish what you learn</div>
+      <div class="c">DM + referrals + real feedback</div>
+      <div class="c">Snipe your top 3 companies</div>
+    </div>
+  </div>
+</section>
+
+<!-- Intel 7 · Resource: roadmap.sh -->
+<section class="slide" data-act="Close">
+<template class="note">one more resource, for "i don't even know what to learn next": roadmap dot sh. pick your target role — frontend, backend, devops, AI engineer — and it gives you the step-by-step skill map, free. here's the combo: roadmap tells you WHAT to learn, the AI loop from earlier is HOW to learn it fast, and your portfolio is the PROOF you learned it. that's the whole system.</template>
+  <div class="shot-wrap" style="gap:24px">
+    <div class="caption-kicker reveal">Resource · skills</div>
+    <a class="shotlink reveal" href="https://roadmap.sh/" target="_blank" rel="noopener"><img class="shot" src="assets/web/roadmapsh.png" alt="roadmap.sh — developer skill roadmaps" style="max-height:700px"></a>
+    <div class="caption reveal"><span class="accent">roadmap.sh</span> — pick a role, follow the map. <span class="accent">What</span> to learn → AI is <span class="accent">how</span> → portfolio is <span class="accent">proof</span>.</div>
+  </div>
+</section>
+
+<!-- Close · Resource shelf recap -->
+<section class="slide" data-act="Close">
+<template class="note">quick recap of the resource shelf from tonight — daren tan's career talk for the salary and path data, malaysian paygap for salaries with the story attached, roadmap dot sh for what to learn next, and the portfolio examples — hannah, janelle, faw, mine. all of them are linked on the resource page — QR on the next slide.</template>
+  <div class="wrap">
+    <div class="kicker reveal">The resource shelf</div>
+    <div class="quad reveal">
+      <div class="q"><div class="n">CAREERS</div><div class="t" style="font-size:36px">Daren Tan's talk</div><div class="d">job hops · paths · rates</div></div>
+      <div class="q"><div class="n">SALARIES</div><div class="t" style="font-size:36px">paygap.asia</div><div class="d">real MY pay + the story</div></div>
+      <div class="q"><div class="n">SKILLS</div><div class="t" style="font-size:36px">roadmap.sh</div><div class="d">what to learn, per role</div></div>
+      <div class="q"><div class="n">PROOF</div><div class="t" style="font-size:36px">Portfolio examples</div><div class="d">hannah · janelle · faw</div></div>
+    </div>
+    <p class="sub reveal" style="font-size:30px">All linked on the resource page — <strong>QR on the next slide.</strong></p>
+  </div>
+</section>
+
+<!-- 60 · QR toolkit -->
+<section class="slide glow-green" data-act="Close">
+<template class="note">every tool and link from this talk — one QR — scan it, or grab the link i'm dropping in the teams chat right now. and fun fact: you're watching the cleve publish feature work right now, this page IS a published note. [pause 5 seconds, let them scan]</template>
+  <div class="wrap">
+    <h2 class="h-med reveal">Everything from this talk. <span class="accent">One link.</span></h2>
+    <div class="qr-card reveal"><img src="assets/qr-toolkit.png" alt="QR code to the AI Job Hunt Toolkit"></div>
+    <p class="sub reveal" style="font-size:28px">All tools & links from this talk — published as a <strong>Cleve note</strong> (yes, the blog thing from earlier 😉)</p>
+  </div>
+</section>
+
+<!-- Connect -->
+<section class="slide" data-act="Close">
+<template class="note">and connect with me — website, linkedin, instagram. DM me, i actually read them. faw is living proof that DMing me works lol.</template>
+  <div class="wrap">
+    <div class="kicker reveal">Connect with me</div>
+    <div class="qr-card reveal"><img src="assets/qr-mfrashad.png" alt="QR code to mfrashad.com"></div>
+    <p class="sub reveal"><strong>mfrashad.com</strong> · in/mfathyrashad · IG @rashadventure</p>
+    <p class="sub reveal" style="font-size:28px">DM me. I actually read them — Faw is proof. 😄</p>
+  </div>
+</section>
+
+<!-- 62 · End card -->
+<section class="slide title-slide glow-green" data-act="Close">
+<template class="note">the tools are free. your laptop can run them. the excuses are gone. now go build something. terima kasih, yayasan peneraju! 🚀</template>
+  <div class="brandbar"></div>
+  <div class="wrap">
+    <h2 class="h-giant reveal">Now go <span class="accent">build</span><br>something.</h2>
+    <div class="event-line reveal"><b>YAYASAN PENERAJU</b> · TALENT MANAGEMENT (TECHNOLOGY) · Terima kasih! 🚀</div>
+  </div>
+</section>
+
+<!-- ============ ACT: APPENDIX ============ -->
+
+<!-- 63 · Appendix marker -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup slides from here — not part of the main flow]</template>
+  <div class="wrap">
+    <div class="kicker reveal">Appendix</div>
+    <h2 class="h-med reveal dim">Backup slides</h2>
+  </div>
+</section>
+
+<!-- 64 · Live poll QR backup -->
+<section class="slide glow-blue" data-act="Appendix">
+<template class="note">[backup: if using menti/slido instead of raised hands — paste the poll QR here beforehand]</template>
+  <div class="wrap">
+    <div class="interact-tag reveal">📱 Live poll backup</div>
+    <h2 class="h-med reveal">Have you used AI in a job application?</h2>
+    <div class="qr-card reveal" style="display:flex; align-items:center; justify-content:center; width:548px; height:548px">
+      <div style="color:#0a0a12; font-size:34px; font-weight:700; text-align:center; padding:20px">🎯 PLACEHOLDER<br><br>Paste your Menti / Slido QR here</div>
+    </div>
+  </div>
+</section>
+
+<!-- 66 · Extra stats -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup ammo for Q&A: 29.3% resume-AI usage doubled year over year; 65% of students use it for cover letters; salary gap data if someone asks "is it worth the effort"]</template>
+  <div class="wrap">
+    <div class="kicker reveal">Extra ammo</div>
+    <div class="checks reveal" style="grid-template-columns:1fr; width:1400px; gap:20px">
+      <div class="c">29.3% used AI on their resume last year — nearly 2× the year before<small>iHire State of Online Recruiting, 2025</small></div>
+      <div class="c">65% of students use AI for cover letters, 64% for interview prep<small>Inside Higher Ed, Oct 2025</small></div>
+      <div class="c">78% of hiring managers look at online portfolios<small>hiring-manager surveys (indicative)</small></div>
+      <div class="c">Median all-graduate salary RM4,521 vs fresh-grad ~RM3,000<small>DOSM 2024 — experience compounds; start building it now</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 67 · gitresume workflow -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup: exact gitresume workflow if people ask how during Q&A or hands-on session]</template>
+  <div class="wrap">
+    <div class="kicker reveal">gitresume in 4 steps</div>
+    <div class="pipe reveal" style="flex-wrap:wrap; justify-content:center">
+      <div class="node"><div class="t">1 · Paste repo URL</div><div class="d">clones fully in-browser</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">2 · Filter your commits</div><div class="d">by author + date range</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">3 · Generate</div><div class="d">bullets cite the exact commits</div></div>
+      <div class="arrow">→</div>
+      <div class="node hero"><div class="t">4 · Verify → paste</div><div class="d">claims ≠ measured outcomes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 68 · Extra inspo -->
+<section class="slide" data-act="Appendix">
+<template class="note">[backup: simpler portfolio examples — the point is you can start basic, like the student site on the left, and iterate for years, like mine on the right]</template>
+  <div class="shot-wrap">
+    <div class="wall reveal">
+      <div class="cell"><img src="assets/crops/site-l4n1skyy.png" alt="l4n1skyy.github.io"><div class="site">l4n1skyy.github.io — a student's simple site</div></div>
+      <div class="cell"><img src="assets/crops/site-mfrashad.png" alt="mfrashad.com"><div class="site">mfrashad.com — mine, 8 years of iterations</div></div>
+    </div>
+    <div class="caption reveal">Start simple. <span class="accent">Iterate forever.</span></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+/* ===========================================
+   SLIDE CONTROLLER — scaling, nav, steps, HUD
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = Array.from(document.querySelectorAll('.slide'));
+    this.current = 0;
+    this.stage = document.getElementById('deckStage');
+    this.setupStageScale();
+    this.setupNav();
+    /* resume at the slide in the URL hash (#12) — survives refreshes,
+       accidental clicker F5, and lets you deep-link a slide */
+    const fromHash = parseInt((location.hash || '').slice(1), 10);
+    this.show(Number.isFinite(fromHash) && fromHash >= 1 ? fromHash - 1 : 0);
+  }
+  setupStageScale() {
+    const scale = () => {
+      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2;
+      const y = (window.innerHeight - 1080 * f) / 2;
+      this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+  /* steps: reveal .step elements inside the active slide before advancing */
+  pendingSteps() { return this.slides[this.current].querySelectorAll('.step:not(.on)'); }
+  next() {
+    const steps = this.pendingSteps();
+    if (steps.length) { steps[0].classList.add('on'); runCounters(steps[0]); return; }
+    this.show(this.current + 1);
+  }
+  prev() { this.show(this.current - 1); }
+  show(i) {
+    this.current = Math.max(0, Math.min(i, this.slides.length - 1));
+    this.slides.forEach((s, idx) => {
+      s.classList.toggle('active', idx === this.current);
+      s.classList.toggle('visible', idx === this.current);
+      if (idx !== this.current) s.querySelectorAll('.step.on').forEach(el => el.classList.remove('on'));
+    });
+    /* HUD */
+    document.getElementById('hudAct').textContent = this.slides[this.current].dataset.act || '';
+    document.getElementById('hudCount').textContent = `${this.current + 1} / ${this.slides.length}`;
+    document.getElementById('progress').style.width = `${((this.current + 1) / this.slides.length) * 100}%`;
+    /* speaker notes for the active slide */
+    const note = this.slides[this.current].querySelector('template.note');
+    document.getElementById('notesText').textContent = note ? note.content.textContent.trim() : '';
+    history.replaceState(null, '', '#' + (this.current + 1));
+    runCounters(this.slides[this.current]);
+    this.slides[this.current].querySelectorAll('video[autoplay]').forEach(v => { if (v.paused) v.play().catch(() => {}); });
+    const gv = document.getElementById('gridview');
+    if (gv && gv.classList.contains('on')) {
+      markGridCurrent();
+      document.querySelector('.gv-cell.current')?.scrollIntoView({ block: 'nearest' });
+      if (gv.classList.contains('notes-on')) markGvNotesCurrent(false);
+    }
+  }
+  setupNav() {
+    document.addEventListener('keydown', (e) => {
+      if (e.target.getAttribute && e.target.getAttribute('contenteditable')) return;
+      if (['ArrowRight',' ','PageDown','Enter'].includes(e.key)) { e.preventDefault(); this.next(); }
+      if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); this.prev(); }
+      if (e.key === 'Home') this.show(0);
+      if (e.key === 'End') this.show(this.slides.length - 1);
+      if (e.key === 'n' || e.key === 'N') {
+        if (document.getElementById('gridview').classList.contains('on')) toggleGvNotes();
+        else document.getElementById('notesPanel').classList.toggle('on');
+      }
+      if (e.key === 'o' || e.key === 'O') toggleOverview();
+      if (e.key === 'g' || e.key === 'G') toggleGrid();
+      if (e.key === 'Escape') { document.getElementById('overview').classList.remove('on'); document.getElementById('gridview').classList.remove('on'); }
+      /* clicker compatibility: F5 = "start show" on most clickers → fullscreen, NOT refresh */
+      if (e.key === 'F5') { e.preventDefault(); document.documentElement.requestFullscreen?.(); }
+      if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen?.() : document.documentElement.requestFullscreen?.(); }
+      /* clicker blank-screen button sends B */
+      if (e.key === 'b' || e.key === 'B') document.getElementById('blackout').classList.toggle('on');
+    });
+    /* click advances (right 2/3), click left 1/3 goes back —
+       except clicks on links (clickable screenshots open the live site) */
+    document.querySelector('.deck-viewport').addEventListener('click', (e) => {
+      if (document.body.classList.contains('editing')) return;
+      if (e.target.closest && e.target.closest('a, video')) return;
+      (e.clientX < window.innerWidth / 3) ? this.prev() : this.next();
+    });
+    /* wheel + touch */
+    let wheelLock = 0;
+    window.addEventListener('wheel', (e) => {
+      const now = Date.now();
+      if (now - wheelLock < 500) return;
+      wheelLock = now;
+      (e.deltaY > 0) ? this.next() : this.prev();
+    }, { passive: true });
+    let tx = null;
+    window.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+    window.addEventListener('touchend', e => {
+      if (tx === null) return;
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 50) (dx < 0) ? this.next() : this.prev();
+      tx = null;
+    }, { passive: true });
+  }
+}
+
+/* ===========================================
+   DOT-MATRIX FUNNEL (slide 5): 250 dots, 5 green
+   =========================================== */
+(function buildDots() {
+  const grid = document.getElementById('dotgrid');
+  const winners = new Set([31, 84, 122, 168, 215]); /* scattered gold dots */
+  let w = 0;
+  for (let i = 0; i < 250; i++) {
+    const d = document.createElement('i');
+    /* staggered pop-in: grey dots sweep across first, the 5 winners land last */
+    if (winners.has(i)) { d.className = 'win'; d.style.transitionDelay = (1250 + (w++) * 200) + 'ms'; }
+    else d.style.transitionDelay = (i * 4) + 'ms';
+    grid.appendChild(d);
+  }
+})();
+
+/* ===========================================
+   NUMBER COUNTERS — [data-count] spins 0 → value each time its
+   slide (or its .step) becomes visible. data-comma formats 1,824-style;
+   data-dur overrides the 1400ms default. Skipped in static/reduced-motion
+   modes, where the hardcoded HTML value simply stays put.
+   =========================================== */
+function runCounters(root) {
+  if (document.body.classList.contains('static') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  root.querySelectorAll('[data-count]').forEach((el) => {
+    const step = el.closest('.step');
+    if (step && !step.classList.contains('on')) return; /* counts when its step reveals */
+    const target = parseFloat(el.dataset.count);
+    const comma = el.dataset.comma !== undefined;
+    const dur = parseFloat(el.dataset.dur || 1400);
+    if (el._raf) cancelAnimationFrame(el._raf);
+    const t0 = performance.now();
+    const fmt = (v) => comma ? Math.round(v).toLocaleString('en-US') : String(Math.round(v));
+    const tick = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3); /* ease-out cubic */
+      el.textContent = fmt(target * eased);
+      if (p < 1) el._raf = requestAnimationFrame(tick);
+    };
+    el._raf = requestAnimationFrame(tick);
+  });
+}
+
+/* ===========================================
+   INLINE EDIT MODE — hover top-left corner or press E
+   Ctrl/Cmd+S downloads the edited HTML
+   =========================================== */
+const EDITABLE_SEL = '.slide h1, .slide h2, .slide p, .slide .caption, .slide .what, .slide .t, .slide .d, .slide .runs, .slide .c, .slide .site, .slide .kicker, .slide .lbl span';
+const EDIT_KEY = 'deck-edits:future-ready-careers';
+const editables = Array.from(document.querySelectorAll(EDITABLE_SEL));
+editables.forEach((el, i) => { el.dataset.eidx = i; el.dataset.orig = el.innerHTML; });
+/* restore saved edits — only where the source content is unchanged, so
+   deck updates always win over stale localStorage edits */
+try {
+  const saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}');
+  Object.entries(saved).forEach(([i, e]) => {
+    const el = editables[i];
+    if (el && el.dataset.orig === e.o) el.innerHTML = e.v;
+  });
+} catch (_) {}
+/* persist on every keystroke while editing */
+document.addEventListener('input', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-eidx]');
+  if (!el) return;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(EDIT_KEY) || '{}'); } catch (_) {}
+  saved[el.dataset.eidx] = { o: el.dataset.orig, v: el.innerHTML };
+  localStorage.setItem(EDIT_KEY, JSON.stringify(saved));
+});
+
+const editor = {
+  isActive: false,
+  toggleEditMode() {
+    this.isActive = !this.isActive;
+    document.body.classList.toggle('editing', this.isActive);
+    document.getElementById('editToggle').classList.toggle('active', this.isActive);
+    editables.forEach(el => el.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
+  },
+  save() {
+    const clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    clone.querySelector('body').classList.remove('editing');
+    const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'future-ready-careers-edited.html';
+    a.click();
+  }
+};
+const hotzone = document.getElementById('editHotzone');
+const editToggle = document.getElementById('editToggle');
+let hideTimeout = null;
+hotzone.addEventListener('mouseenter', () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); });
+hotzone.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); });
+editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+editToggle.addEventListener('mouseleave', () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); });
+editToggle.addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); });
+document.addEventListener('keydown', (e) => {
+  if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') {
+    if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
+    return;
+  }
+  /* E toggles edit mode · Shift+E discards all saved edits and reloads */
+  if (e.key === 'E' && e.shiftKey) { localStorage.removeItem(EDIT_KEY); location.reload(); return; }
+  if (e.key === 'e' || e.key === 'E') editor.toggleEditMode();
+  if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); editor.save(); }
+});
+
+/* ===========================================
+   OVERVIEW / COMBINED SCRIPT — O key or ⊞ button
+   =========================================== */
+function buildOverview() {
+  const list = document.getElementById('ovList');
+  list.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const tEl = s.querySelector('h1, h2, .caption, .kicker');
+    const title = tEl ? Array.from(tEl.childNodes).map(n => n.textContent).join(' ').trim().replace(/\s+/g, ' ').slice(0, 90) : '';
+    const note = (s.querySelector('template.note')?.content.textContent || '').trim();
+    const row = document.createElement('div');
+    row.className = 'ov-row' + (i === deck.current ? ' current' : '');
+    row.innerHTML = '<div class="ov-meta">' + (i + 1) + ' · ' + (s.dataset.act || '') + '</div>' +
+      '<div class="ov-title"></div><div class="ov-note"></div>';
+    row.querySelector('.ov-title').textContent = title;
+    row.querySelector('.ov-note').textContent = note;
+    row.addEventListener('click', () => { deck.show(i); toggleOverview(false); });
+    list.appendChild(row);
+  });
+}
+function toggleOverview(force) {
+  const ov = document.getElementById('overview');
+  const on = force !== undefined ? force : !ov.classList.contains('on');
+  if (on) { buildOverview(); ov.classList.add('on'); ov.querySelector('.ov-row.current')?.scrollIntoView({ block: 'center' }); }
+  else ov.classList.remove('on');
+}
+document.getElementById('ovClose').addEventListener('click', () => toggleOverview(false));
+document.getElementById('overview').addEventListener('click', (e) => e.stopPropagation());
+
+/* ===========================================
+   GRID VIEW — visual bird's-eye of the whole deck.
+   Thumbnails are live clones of each slide scaled down with CSS,
+   grouped by data-act, built lazily on first open.
+   =========================================== */
+let gridBuilt = false;
+function buildGrid() {
+  if (gridBuilt) return;
+  gridBuilt = true;
+  const wrap = document.getElementById('gvBody');
+  let act = null, grid = null;
+  deck.slides.forEach((s, i) => {
+    if (s.dataset.act !== act) {
+      act = s.dataset.act;
+      const h = document.createElement('div');
+      h.className = 'gv-act'; h.innerHTML = '<b></b>';
+      h.querySelector('b').textContent = act;
+      wrap.appendChild(h);
+      grid = document.createElement('div'); grid.className = 'gv-grid';
+      wrap.appendChild(grid);
+    }
+    const cell = document.createElement('div');
+    cell.className = 'gv-cell'; cell.dataset.i = i;
+    const frame = document.createElement('div'); frame.className = 'gv-frame';
+    const clone = s.cloneNode(true);
+    clone.classList.remove('active', 'visible');
+    clone.removeAttribute('id');
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); /* no duplicate ids */
+    clone.querySelectorAll('template').forEach(t => t.remove());
+    clone.querySelectorAll('video').forEach(v => { /* freeze videos to a first frame */
+      v.removeAttribute('autoplay'); v.loop = false; v.muted = true; v.preload = 'metadata';
+    });
+    frame.appendChild(clone);
+    const num = document.createElement('div'); num.className = 'gv-num'; num.textContent = i + 1;
+    cell.appendChild(frame); cell.appendChild(num);
+    cell.addEventListener('click', () => { deck.show(i); toggleGrid(false); });
+    grid.appendChild(cell);
+  });
+}
+function markGridCurrent() {
+  document.querySelectorAll('.gv-cell').forEach(c => c.classList.toggle('current', +c.dataset.i === deck.current));
+}
+function toggleGrid(force) {
+  const gv = document.getElementById('gridview');
+  const on = force !== undefined ? force : !gv.classList.contains('on');
+  if (on) {
+    buildGrid(); markGridCurrent();
+    gv.classList.add('on');
+    gv.querySelector('.gv-cell.current')?.scrollIntoView({ block: 'center' });
+  } else gv.classList.remove('on');
+}
+document.getElementById('gvClose').addEventListener('click', () => toggleGrid(false));
+document.getElementById('gridview').addEventListener('click', (e) => e.stopPropagation());
+
+/* transcript sidebar: every slide's speaker notes in one scrollable list */
+let gvNotesBuilt = false;
+function buildGvNotes() {
+  if (gvNotesBuilt) return;
+  gvNotesBuilt = true;
+  const list = document.getElementById('gvNotesList');
+  let act = null;
+  deck.slides.forEach((s, i) => {
+    if (s.dataset.act !== act) {
+      act = s.dataset.act;
+      const h = document.createElement('div');
+      h.className = 'gvn-act'; h.textContent = act || '';
+      list.appendChild(h);
+    }
+    const note = (s.querySelector('template.note')?.content.textContent || '').trim();
+    if (!note) return; /* slides without notes get no row */
+    const tEl = s.querySelector('h1, h2, .caption, .kicker');
+    const title = tEl ? Array.from(tEl.childNodes).map(n => n.textContent).join(' ').trim().replace(/\s+/g, ' ').slice(0, 70) : '';
+    const row = document.createElement('div');
+    row.className = 'gvn-row'; row.dataset.i = i;
+    row.innerHTML = '<div class="gvn-meta"></div><div class="gvn-txt"></div>';
+    row.querySelector('.gvn-meta').innerHTML = (i + 1) + ' · <b></b>';
+    row.querySelector('.gvn-meta b').textContent = title;
+    row.querySelector('.gvn-txt').textContent = note;
+    row.addEventListener('click', () => deck.show(i)); /* grid stays open; highlights sync via show() */
+    list.appendChild(row);
+  });
+}
+function markGvNotesCurrent(scroll) {
+  document.querySelectorAll('.gvn-row').forEach(r => r.classList.toggle('current', +r.dataset.i === deck.current));
+  if (scroll) document.querySelector('.gvn-row.current')?.scrollIntoView({ block: 'nearest' });
+}
+function toggleGvNotes(force) {
+  const gv = document.getElementById('gridview');
+  const on = force !== undefined ? force : !gv.classList.contains('notes-on');
+  if (on) { buildGvNotes(); gv.classList.add('notes-on'); markGvNotesCurrent(true); }
+  else gv.classList.remove('notes-on');
+}
+document.getElementById('gvNotesBtn').addEventListener('click', () => toggleGvNotes());
+
+/* ===========================================
+   MOBILE TOOLBAR + TOUCH EDIT SHEET
+   =========================================== */
+const isCoarse = matchMedia('(pointer: coarse)').matches;
+const mb = (id) => document.getElementById(id);
+mb('mbPrev').addEventListener('click', (e) => { e.stopPropagation(); deck.prev(); });
+mb('mbNext').addEventListener('click', (e) => { e.stopPropagation(); deck.next(); });
+mb('mbNotes').addEventListener('click', (e) => { e.stopPropagation(); if (document.getElementById('gridview').classList.contains('on')) { toggleGvNotes(); return; } mb('mbNotes').classList.toggle('active'); document.getElementById('notesPanel').classList.toggle('on'); });
+mb('mbOverview').addEventListener('click', (e) => { e.stopPropagation(); toggleOverview(); });
+mb('mbGrid').addEventListener('click', (e) => { e.stopPropagation(); toggleGrid(); });
+mb('mbEdit').addEventListener('click', (e) => { e.stopPropagation(); editor.toggleEditMode(); mb('mbEdit').classList.toggle('active', editor.isActive); });
+document.getElementById('mtoolbar').addEventListener('click', (e) => e.stopPropagation());
+
+/* On touch devices, edit mode uses a bottom-sheet textarea instead of
+   contenteditable (slide text is too small to edit in place on a phone) */
+let sheetTarget = null;
+function openSheet(el) {
+  sheetTarget = el;
+  document.getElementById('sheetText').value = el.innerText;
+  document.getElementById('editSheet').classList.add('on');
+}
+document.getElementById('sheetSave').addEventListener('click', () => {
+  if (sheetTarget) {
+    sheetTarget.innerText = document.getElementById('sheetText').value;
+    sheetTarget.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+  document.getElementById('editSheet').classList.remove('on');
+});
+document.getElementById('sheetClose').addEventListener('click', () => document.getElementById('editSheet').classList.remove('on'));
+document.getElementById('editSheet').addEventListener('click', (e) => e.stopPropagation());
+if (isCoarse) {
+  document.addEventListener('click', (e) => {
+    if (!editor.isActive) return;
+    const el = e.target.closest && e.target.closest('[data-eidx]');
+    if (el) { e.preventDefault(); e.stopPropagation(); openSheet(el); }
+  }, true);
+}
+
+/* ===========================================
+   VIDEO OPERATOR CONTROLS — native controls appear on mouse hover
+   so the operator can pause / restart / unmute with the mouse
+   without interfering with the clicker
+   =========================================== */
+document.querySelectorAll('.slide video').forEach((v) => {
+  v.addEventListener('mouseenter', () => { v.controls = true; });
+  v.addEventListener('mouseleave', () => { v.controls = false; });
+});
+
+/* ===========================================
+   OFFLINE SUPPORT — network-first service worker.
+   Online you ALWAYS get the freshly deployed version;
+   offline you get the last cached copy. No stale-cache traps.
+   =========================================== */
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0 && !navigator.webdriver) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+/* headless export (Playwright/PDF): render everything final-state,
+   and freeze videos on a frame so the network can go idle */
+if (navigator.webdriver) {
+  document.body.classList.add('static');
+  document.querySelectorAll('video').forEach((v) => {
+    v.removeAttribute('autoplay');
+    v.loop = false;
+    v.addEventListener('loadeddata', () => { v.pause(); try { v.currentTime = 1; } catch (e) {} }, { once: true });
+    v.pause();
+  });
+}
+
+/* auto-retry images that fail to load (flaky venue wi-fi / CDN hiccups) */
+document.querySelectorAll('img').forEach(img => {
+  img.addEventListener('error', function () {
+    const tries = +(this.dataset.retries || 0);
+    if (tries >= 3) return;
+    this.dataset.retries = tries + 1;
+    setTimeout(() => { this.src = this.getAttribute('src').split('?')[0] + '?r=' + Date.now(); }, 900 * (tries + 1));
+  });
+  if (img.complete && img.naturalWidth === 0) img.dispatchEvent(new Event('error'));
+});
+
+const deck = new SlidePresentation();
+</script>
+</body>
+</html>
