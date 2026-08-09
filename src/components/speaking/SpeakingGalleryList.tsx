@@ -211,25 +211,61 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
 
                                     {/* Expanded gallery */}
                                     <div
-                                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                                            isExpanded ? 'max-h-[300px] opacity-100 py-4' : 'max-h-0 opacity-0'
-                                        }`}
+                                        className="overflow-hidden transition-all duration-300 ease-in-out"
+                                        style={{
+                                            maxHeight: isExpanded
+                                                ? (engagement.slidesUrl ? (hasImages ? 900 : 560) : 300)
+                                                : 0,
+                                            opacity: isExpanded ? 1 : 0,
+                                            paddingTop: isExpanded ? 16 : 0,
+                                            paddingBottom: isExpanded ? 16 : 0,
+                                        }}
                                     >
-                                        <div className="flex gap-3 overflow-x-auto pb-2 px-2 scrollbar-hide">
-                                            {thumbs.map((thumb, i) => (
-                                                <img
-                                                    key={i}
-                                                    src={thumb}
-                                                    alt={`Fathy Rashad at ${engagement.title} - photo ${i + 1}`}
-                                                    className="h-40 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity shrink-0 object-cover"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        openLightbox(engagement.id, i);
-                                                    }}
-                                                    loading="lazy"
-                                                />
-                                            ))}
-                                        </div>
+                                        {hasImages && (
+                                            <div className="flex gap-3 overflow-x-auto pb-2 px-2 scrollbar-hide">
+                                                {thumbs.map((thumb, i) => (
+                                                    <img
+                                                        key={i}
+                                                        src={thumb}
+                                                        alt={`Fathy Rashad at ${engagement.title} - photo ${i + 1}`}
+                                                        className="h-40 w-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity shrink-0 object-cover"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            openLightbox(engagement.id, i);
+                                                        }}
+                                                        loading="lazy"
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                        {engagement.slidesUrl && (
+                                            <div className="px-2">
+                                                <div
+                                                    className="group relative w-full max-w-3xl mx-auto rounded-lg overflow-hidden border border-neutral-200 shadow-sm bg-neutral-900"
+                                                    style={{ aspectRatio: '16 / 9' }}
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    {isExpanded && (
+                                                        <iframe
+                                                            src={engagement.slidesUrl}
+                                                            title={`${engagement.title} — slides`}
+                                                            className="absolute inset-0 w-full h-full border-0"
+                                                            loading="lazy"
+                                                            allowFullScreen
+                                                        />
+                                                    )}
+                                                    <a
+                                                        href={engagement.slidesUrl}
+                                                        target="_blank"
+                                                        rel="noopener"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="absolute top-2 right-2 z-10 text-xs px-2 py-1 rounded-md bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                                                    >
+                                                        Open fullscreen &#8599;
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="px-2 mt-2 flex items-center gap-4">
                                             <a
                                                 href={`/speaking/${engagement.id}`}
@@ -246,7 +282,7 @@ export default function SpeakingGalleryList({ yearGroups, imageManifest }: Speak
                                                     className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                                                     onClick={(e) => e.stopPropagation()}
                                                 >
-                                                    Slides &rarr;
+                                                    Open slides &rarr;
                                                 </a>
                                             )}
                                         </div>
