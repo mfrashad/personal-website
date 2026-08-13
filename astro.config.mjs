@@ -22,6 +22,9 @@ export default defineConfig({
         isr: {
             // Cache for 60 seconds, then revalidate in background
             expiration: 60,
+            // ISR caches by path and drops the query string, so any route whose
+            // behaviour depends on query params must bypass it.
+            exclude: ['/api/whatsapp/webhook'],
         }
     }),
     redirects: {
