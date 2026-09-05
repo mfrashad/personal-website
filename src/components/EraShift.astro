@@ -1,0 +1,286 @@
+---
+// "What one person knew" — interactive for the generalist/specialist post.
+// Each labelled bar is a skill domain a typical person actually held; height is
+// how deep they went. The number of bars grows as humanity learns more, and the
+// shape flips from wide-and-shallow to one spike and back.
+// Styles are is:global and namespaced under .es-root because the JS builds
+// elements at runtime, which Astro's scoped styles would not reach.
+---
+
+<div class="es-root" id="esRoot">
+
+  <div class="es-head">
+    <div>
+      <h3 class="es-h3">What one person knew</h3>
+      <p class="es-cap">Each bar is a skill a typical person actually held. More bars means more exists to know. Taller means they went deeper.</p>
+    </div>
+    <button type="button" class="es-btn" id="esPlay">▶ Play</button>
+  </div>
+
+  <div class="es-card">
+    <div class="es-cardtop">
+      <div>
+        <div class="es-when" id="esWhen"></div>
+        <h4 class="es-name" id="esName"></h4>
+      </div>
+      <div class="es-meta">
+        <span class="es-pill" id="esCount"></span>
+        <span class="es-pill es-pill2" id="esDeep"></span>
+      </div>
+    </div>
+    <p class="es-body" id="esBody"></p>
+    <p class="es-eg" id="esEg"></p>
+  </div>
+
+  <div class="es-chart" id="esChart" aria-hidden="true"></div>
+
+  <input class="es-range" id="esRange" type="range" min="0" max="5" step="1" value="0" aria-label="Era" />
+  <div class="es-ticks" id="esTickLabels" aria-hidden="true"></div>
+</div>
+
+<style is:global>
+  .es-root {
+    --es-bg: var(--color-bg-primary, #fff);
+    --es-bg2: var(--color-bg-secondary, #f1f5f9);
+    --es-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --es-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --es-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --es-line: var(--color-border-default, rgba(0,0,0,.12));
+    --es-bar: #3F73D6;
+    --es-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--es-sans); color: var(--es-ink);
+    border:1px solid var(--es-line); border-radius:14px;
+    padding:1.25rem 1.35rem; background:var(--es-bg);
+    container-type: inline-size;
+    /* break out of the prose column so 22 bars have room */
+    width: min(1180px, calc(100vw - 2.5rem));
+    max-width: none;
+    margin: 2.5rem 0 2.5rem 50%;
+    transform: translateX(-50%);
+  }
+  .es-head { display:flex; gap:1rem; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; }
+  .es-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .es-cap { font-size:.8rem; color:var(--es-mut); margin:0; max-width:48ch; line-height:1.45; }
+  .es-btn {
+    font:inherit; font-size:.8rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--es-line); background:var(--es-bg2); color:var(--es-ink);
+    border-radius:999px; padding:.42rem .85rem; white-space:nowrap;
+  }
+  .es-btn:hover { transform:translateY(-1px); }
+
+  .es-meta { display:flex; gap:.4rem; flex-wrap:wrap; align-items:flex-start; }
+  .es-pill {
+    font-size:.7rem; font-weight:600; padding:.25rem .6rem; border-radius:999px;
+    background: color-mix(in srgb, var(--es-bar) 14%, transparent); color:var(--es-ink);
+  }
+  .es-pill2 { background: var(--es-bg2); color:var(--es-mut); }
+
+  .es-chart {
+    --es-gutter: 104px;
+    display:flex; align-items:stretch; gap:5px; height:300px;
+    margin:1.1rem 0 .35rem;
+  }
+  .es-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; }
+  .es-barwrap {
+    height: calc(100% - var(--es-gutter));
+    display:flex; align-items:flex-end;
+    border-bottom:1px solid var(--es-line);
+  }
+  .es-bar {
+    width:100%; border-radius:3px 3px 0 0; background:var(--es-bar); opacity:.88;
+    transition: height .5s cubic-bezier(.4,0,.2,1);
+  }
+  .es-tag {
+    height: var(--es-gutter); padding-top:.35rem;
+    font-size:.62rem; line-height:1.1; color:var(--es-mut);
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    display:flex; align-items:flex-end; justify-content:flex-start;
+  }
+  /* Few enough bars to lay the labels flat without collisions. */
+  .es-chart.es-roomy { --es-gutter: 46px; }
+  .es-chart.es-roomy .es-tag {
+    writing-mode:horizontal-tb; transform:none; white-space:normal;
+    text-align:center; justify-content:center; align-items:flex-start; font-size:.68rem;
+  }
+
+  .es-range { width:100%; accent-color:var(--es-bar); cursor:pointer; margin-top:.6rem; }
+  .es-ticks { display:flex; justify-content:space-between; margin-top:.3rem; font-size:.63rem; color:var(--es-sub); gap:.2rem; }
+  .es-ticks span { flex:1 1 0; text-align:center; line-height:1.25; }
+  .es-ticks span.on { color:var(--es-ink); font-weight:700; }
+
+  .es-card { margin-top:1rem; background:var(--es-bg2); border-radius:10px; padding:.9rem 1rem; }
+  .es-cardtop { display:flex; gap:1rem; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; margin-bottom:.45rem; }
+  .es-when { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--es-sub); }
+  .es-name { font-size:1.05rem; font-weight:700; margin:.1rem 0 0; letter-spacing:-.01em; }
+  .es-body { font-size:.86rem; line-height:1.55; margin:0; color:var(--es-ink); max-width:80ch; }
+  .es-eg { font-size:.78rem; line-height:1.5; margin:.5rem 0 0; color:var(--es-mut); }
+
+  @media (prefers-reduced-motion: reduce) { .es-bar { transition:none; } }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('esRoot');
+    if (!root) return;
+
+    // Named skills, real to each era. Depth 0–100, illustrative — the shape and
+    // the count are the argument, not the exact heights.
+    const ERAS = [
+      {
+        tick: 'Foraging',
+        when: 'Most of human history',
+        name: 'Everyone does everything',
+        skills: [
+          ['tracking', 45], ['edible plants', 42], ['navigation', 40],
+          ['toolmaking', 38], ['fire', 44], ['shelter', 36],
+          ['first aid', 30], ['weather', 34],
+        ],
+        body: 'Eight things, and everyone held all eight. Bands were too small to spare anyone — there was division of labour by sex and age, but nobody was only one thing.',
+        eg: 'There is no guy who exclusively sharpens spearheads. A group of thirty cannot afford him.'
+      },
+      {
+        tick: 'Farming',
+        when: 'From ~10,000 BC',
+        name: 'Surplus buys the first specialists',
+        skills: [
+          ['tracking', 22], ['edible plants', 30], ['navigation', 26],
+          ['toolmaking', 40], ['fire', 32], ['shelter', 38],
+          ['first aid', 26], ['weather', 44], ['crop cycles', 62],
+          ['animal husbandry', 55], ['pottery', 48], ['metalwork', 52],
+          ['writing', 30],
+        ],
+        body: 'Spare food buys people who don’t make food. Thirteen domains now, and for the first time some of them are jobs — potter, smith, scribe — held by people who do little else.',
+        eg: 'A scribe who cannot farm is a genuinely new kind of human being.'
+      },
+      {
+        tick: 'Renaissance',
+        when: '15th–17th century',
+        name: 'The polymath window',
+        skills: [
+          ['anatomy', 72], ['painting', 78], ['engineering', 70],
+          ['mathematics', 68], ['astronomy', 65], ['music', 58],
+          ['rhetoric', 62], ['Latin', 74], ['philosophy', 66],
+          ['botany', 55], ['cartography', 60], ['optics', 58],
+          ['metallurgy', 50], ['navigation', 54], ['printing', 48],
+          ['medicine', 52], ['law', 46], ['architecture', 64],
+        ],
+        body: 'Knowledge is arriving fast — but there is still little enough of it that one person can hold a serious amount at once. Peter Burke counts ~500 Western polymaths, clustered right here.',
+        eg: 'Leonardo could do all of these because the total volume of European anatomy was a shelf, not a library.'
+      },
+      {
+        tick: 'Industrial',
+        when: '1776 onwards',
+        name: 'The pin factory',
+        skills: [
+          ['wire drawing', 96], ['straightening', 14], ['cutting', 12],
+          ['pointing', 16], ['head grinding', 13], ['whitening', 11],
+          ['papering', 10], ['bookkeeping', 18], ['machine repair', 20],
+          ['chemistry', 15], ['mining', 12], ['rail logistics', 17],
+          ['telegraphy', 14], ['steam engines', 19], ['law', 13],
+          ['medicine', 12], ['finance', 16], ['surveying', 11],
+          ['textiles', 13], ['shipping', 12],
+        ],
+        body: 'Smith counts pins: ten workers splitting the job into eighteen operations make 48,000 a day, where alone each might manage one. The deal on offer to every worker is go narrow, get paid.',
+        eg: 'Your job title becomes one of the eighteen operations.'
+      },
+      {
+        tick: 'Late 20th C',
+        when: '1950–2010',
+        name: 'Peak narrow',
+        skills: [
+          ['your sub-field', 100], ['adjacent sub-field', 22], ['stats', 18],
+          ['your language', 14], ['lab technique', 20], ['grant writing', 16],
+          ['teaching', 12], ['one programming language', 15], ['accounting', 8],
+          ['management', 11], ['law', 7], ['medicine', 6],
+          ['engineering', 9], ['design', 7], ['marketing', 8],
+          ['logistics', 7], ['chemistry', 6], ['electronics', 9],
+          ['finance', 8], ['linguistics', 5], ['history', 6], ['biology', 7],
+        ],
+        body: 'Knowledge keeps compounding, so the only way to reach the frontier of anything is to stand on a smaller and smaller patch of it. Burke calls this the third crisis of knowledge. The polymath loses.',
+        eg: 'A PhD is, by construction, knowing almost everything about almost nothing.'
+      },
+      {
+        tick: 'Now',
+        when: '2020s',
+        name: 'Wide again, maybe',
+        skills: [
+          ['your actual craft', 72], ['writing', 52], ['design taste', 46],
+          ['data literacy', 50], ['prompting', 44], ['video', 42],
+          ['product sense', 54], ['selling', 40], ['code', 48],
+          ['finance basics', 38], ['ops', 36], ['negotiation', 34],
+          ['audience building', 46], ['research', 44], ['law basics', 30],
+          ['languages', 32], ['systems', 40], ['facilitation', 33],
+          ['analytics', 42], ['security', 28], ['hiring', 30], ['strategy', 45],
+        ],
+        body: 'AI makes competence outside your lane unnervingly cheap, so the value moves from executing to knowing what is worth executing. Meanwhile your feed shows you the top of every one of these at once.',
+        eg: 'Nobody has lived through this era yet, so treat this one as a guess.'
+      },
+    ];
+
+    const chart  = document.getElementById('esChart');
+    const range  = document.getElementById('esRange');
+    const ticks  = document.getElementById('esTickLabels');
+    const elWhen = document.getElementById('esWhen');
+    const elName = document.getElementById('esName');
+    const elBody = document.getElementById('esBody');
+    const elEg   = document.getElementById('esEg');
+    const elCount= document.getElementById('esCount');
+    const elDeep = document.getElementById('esDeep');
+    const playBtn= document.getElementById('esPlay');
+
+    ERAS.forEach((e) => {
+      const s = document.createElement('span');
+      s.textContent = e.tick;
+      ticks.appendChild(s);
+    });
+
+    function show(i) {
+      const e = ERAS[i];
+      chart.innerHTML = '';
+      chart.classList.toggle('es-roomy', e.skills.length <= 10);
+      e.skills.forEach(([label, depth]) => {
+        const col = document.createElement('div');
+        col.className = 'es-col';
+        const wrap = document.createElement('div');
+        wrap.className = 'es-barwrap';
+        const bar = document.createElement('div');
+        bar.className = 'es-bar';
+        bar.style.height = depth + '%';
+        wrap.appendChild(bar);
+        const tag = document.createElement('span');
+        tag.className = 'es-tag';
+        tag.textContent = label;
+        tag.title = label;
+        col.append(wrap, tag);
+        chart.appendChild(col);
+      });
+
+      const deepest = Math.max(...e.skills.map(s => s[1]));
+      elCount.textContent = e.skills.length + ' domains worth knowing';
+      elDeep.textContent  = 'deepest: ' + deepest + '/100';
+
+      elWhen.textContent = e.when;
+      elName.textContent = e.name;
+      elBody.textContent = e.body;
+      elEg.textContent   = e.eg;
+      ticks.querySelectorAll('span').forEach((s, n) => s.classList.toggle('on', n === i));
+    }
+
+    range.addEventListener('input', () => show(Number(range.value)));
+
+    let timer = null;
+    playBtn.addEventListener('click', () => {
+      if (timer) { clearInterval(timer); timer = null; playBtn.textContent = '▶ Play'; return; }
+      playBtn.textContent = '❚❚ Pause';
+      let i = Number(range.value);
+      timer = setInterval(() => {
+        i = (i + 1) % ERAS.length;
+        range.value = String(i);
+        show(i);
+      }, 2200);
+    });
+
+    show(0);
+  })();
+</script>

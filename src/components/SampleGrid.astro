@@ -1,0 +1,199 @@
+---
+// "1,000 people" — interactive for the comparison post.
+// Every dot is one person out of a representative thousand. Leads with the
+// percentage, and with the reverse framing — the share who never got the thing
+// you're feeling behind on. One stat at a time: these categories overlap, so
+// stacking them would produce a number nobody has measured.
+// Styles are is:global and namespaced under .sg-root because the JS builds
+// elements at runtime, which Astro's scoped styles would not reach.
+---
+
+<div class="sg-root" id="sgRoot">
+
+  <div class="sg-head">
+    <h3 class="sg-h3">1,000 people</h3>
+    <p class="sg-cap">Every dot is one person, out of a representative thousand. Tap whatever your feed has been making you feel bad about.</p>
+  </div>
+
+  <div class="sg-chips" id="sgChips" role="group" aria-label="Pick a comparison"></div>
+
+  <div class="sg-stage">
+    <div class="sg-dots" id="sgDots" aria-hidden="true"></div>
+    <div class="sg-readout">
+      <div class="sg-big" id="sgBig">—</div>
+      <div class="sg-of" id="sgOf">Pick one above</div>
+      <div class="sg-flip" id="sgFlip"></div>
+      <p class="sg-desc" id="sgDesc">Every dot is a person.</p>
+      <p class="sg-src" id="sgSrc"></p>
+    </div>
+  </div>
+
+  <p class="sg-note">One at a time on purpose. These groups overlap, so multiplying them together would give you a number nobody has measured.</p>
+</div>
+
+<style is:global>
+  .sg-root {
+    --sg-bg: var(--color-bg-primary, #fff);
+    --sg-bg2: var(--color-bg-secondary, #f1f5f9);
+    --sg-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --sg-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --sg-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --sg-line: var(--color-border-default, rgba(0,0,0,.12));
+    --sg-on: #2E9E6B;
+    --sg-off: color-mix(in srgb, var(--sg-ink) 14%, transparent);
+    --sg-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--sg-sans);
+    color: var(--sg-ink);
+    border:1px solid var(--sg-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--sg-bg);
+    container-type: inline-size;
+  }
+  .sg-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .sg-cap { font-size:.8rem; color:var(--sg-mut); margin:0; max-width:52ch; line-height:1.45; }
+
+  .sg-chips { display:flex; flex-wrap:wrap; gap:.4rem; margin:.9rem 0 1rem; }
+  .sg-chip {
+    font:inherit; font-size:.76rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--sg-line); background:var(--sg-bg2); color:var(--sg-ink);
+    border-radius:999px; padding:.4rem .8rem; transition:transform .12s ease, background .18s ease, border-color .18s ease;
+  }
+  .sg-chip:hover { transform:translateY(-1px); }
+  .sg-chip[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--sg-on) 16%, transparent);
+    border-color: color-mix(in srgb, var(--sg-on) 55%, transparent);
+  }
+
+  .sg-stage { display:grid; grid-template-columns: 1fr minmax(160px, 225px); gap:1.2rem; align-items:start; }
+  @container (max-width: 480px) { .sg-stage { grid-template-columns:1fr; } }
+
+  .sg-dots { display:grid; grid-template-columns:repeat(40, 1fr); gap:2px; align-content:start; }
+  .sg-dot { aspect-ratio:1; border-radius:50%; background:var(--sg-off); transition: background .28s ease; }
+  .sg-dot.on { background:var(--sg-on); }
+
+  .sg-readout { padding-top:.2rem; }
+  .sg-big { font-size:3.4rem; line-height:.95; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.04em; }
+  .sg-of { font-size:.78rem; color:var(--sg-mut); margin-top:.35rem; line-height:1.4; }
+  .sg-flip {
+    font-size:.9rem; font-weight:700; line-height:1.4; margin-top:.6rem;
+    padding:.5rem .6rem; border-radius:8px; background:var(--sg-bg2);
+  }
+  .sg-flip:empty { display:none; }
+  .sg-desc { font-size:.8rem; line-height:1.5; color:var(--sg-mut); margin:.6rem 0 0; }
+  .sg-src { font-size:.68rem; line-height:1.4; color:var(--sg-sub); margin:.5rem 0 0; }
+  .sg-note { font-size:.72rem; color:var(--sg-sub); margin:1rem 0 0; line-height:1.5; }
+
+  @media (prefers-reduced-motion: reduce) { .sg-dot { transition:none; } }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('sgRoot');
+    if (!root) return;
+
+    const STATS = [
+      {
+        id: 'intl',
+        chip: '✈️ “I’ve been to 30 countries”',
+        pct: 4,
+        of: 'of the world boarded an international flight in a year',
+        flip: '96% didn’t. If you have, you’re in the 4%.',
+        desc: 'Travel is the most aspirational thing on the internet and it is being made by a rounding error of the planet.',
+        src: 'Gössling & Humpe 2020, Global Environmental Change — roughly 4% flew internationally in 2018.'
+      },
+      {
+        id: 'plane',
+        chip: '🛫 Got on a plane at all',
+        pct: 11,
+        of: 'of the world took any flight at all in a year',
+        flip: '89% didn’t fly at all.',
+        desc: 'Not international. Any flight, anywhere, including domestic. Nine in ten people did not board one.',
+        src: 'Gössling & Humpe 2020 — 11% of the world used air transport in 2018.'
+      },
+      {
+        id: 'money',
+        chip: '💸 Lives on more than $30 a day',
+        pct: 15,
+        of: 'of the world lives on more than $30 a day',
+        flip: '85% live on less. If you clear it, you’re in the richest 15% alive.',
+        desc: 'That is about $11,000 a year — a tight budget in a rich country, and the global top fifteen percent.',
+        src: 'World Bank / Our World in Data — 85% of the world lives on less than $30 a day.'
+      },
+      {
+        id: 'ten',
+        chip: '🪙 Lives on more than $10 a day',
+        pct: 48,
+        of: 'of the world lives on more than $10 a day',
+        flip: '52% live on less than $10 a day.',
+        desc: 'Half the world. Not the poorest half of a poor country — the world.',
+        src: 'World Bank / Our World in Data — 52% live on under $10 a day.'
+      },
+      {
+        id: 'body',
+        chip: '💪 Not overweight',
+        pct: 57,
+        of: 'of the world’s adults are not overweight',
+        flip: '43% are. Being unremarkable puts you ahead of the median body.',
+        desc: 'The shirtless guy with abs is not the standard you are failing to hit. He is a slice of a slice.',
+        src: 'WHO, 2022 data — 43% of adults overweight, 16% obese.'
+      },
+    ];
+
+    const chipWrap = document.getElementById('sgChips');
+    const dotWrap  = document.getElementById('sgDots');
+    const elBig    = document.getElementById('sgBig');
+    const elOf     = document.getElementById('sgOf');
+    const elFlip   = document.getElementById('sgFlip');
+    const elDesc   = document.getElementById('sgDesc');
+    const elSrc    = document.getElementById('sgSrc');
+
+    const dots = [];
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 1000; i++) {
+      const d = document.createElement('span');
+      d.className = 'sg-dot';
+      frag.appendChild(d);
+      dots.push(d);
+    }
+    dotWrap.appendChild(frag);
+
+    // Deterministic scatter so it reads as a population, not a bar.
+    const order = dots.map((_, i) => i);
+    let seed = 20260907;
+    for (let i = order.length - 1; i > 0; i--) {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      const j = seed % (i + 1);
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+
+    let active = null;
+
+    function render(stat) {
+      const n = stat ? Math.round(stat.pct * 10) : 0;
+      const lit = new Set(order.slice(0, n));
+      dots.forEach((d, i) => d.classList.toggle('on', lit.has(i)));
+      elBig.textContent  = stat ? stat.pct + '%' : '—';
+      elOf.textContent   = stat ? stat.of : 'Pick one above';
+      elFlip.textContent = stat ? stat.flip : '';
+      elDesc.textContent = stat ? stat.desc : 'Every dot is a person.';
+      elSrc.textContent  = stat ? stat.src : '';
+    }
+
+    STATS.forEach((s) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sg-chip';
+      b.textContent = s.chip;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => {
+        active = active === s.id ? null : s.id;
+        chipWrap.querySelectorAll('.sg-chip').forEach((el, i) => {
+          el.setAttribute('aria-pressed', String(STATS[i].id === active));
+        });
+        render(active ? STATS.find(x => x.id === active) : null);
+      });
+      chipWrap.appendChild(b);
+    });
+
+    render(null);
+  })();
+</script>

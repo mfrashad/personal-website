@@ -1,0 +1,123 @@
+---
+// "8,339" — interactive for the narcissism post.
+// One dot per cyberbullying complaint filed with Malaysia's MCMC between
+// January and November 2025. Press play and watch the year fill in at the rate
+// it actually happened. Every number here is the reported figure.
+// Styles are is:global and namespaced under .ct-root.
+---
+
+<div class="ct-root" id="ctRoot">
+  <div class="ct-head">
+    <div>
+      <h3 class="ct-h3">One dot is one complaint</h3>
+      <p class="ct-cap">Cyberbullying complaints filed with Malaysia's MCMC, January to November 2025. Watch the year fill in.</p>
+    </div>
+    <button type="button" class="ct-btn" id="ctPlay">▶ Play the year</button>
+  </div>
+
+  <div class="ct-stats">
+    <div class="ct-stat"><span class="ct-lbl">Month</span><span class="ct-v" id="ctMonth">Jan</span></div>
+    <div class="ct-stat"><span class="ct-lbl">Complaints</span><span class="ct-v" id="ctCount">0</span></div>
+    <div class="ct-stat"><span class="ct-lbl">Per day</span><span class="ct-v">27</span></div>
+  </div>
+
+  <canvas id="ctCanvas" class="ct-canvas" width="900" height="300" aria-label="Dot grid, one dot per complaint"></canvas>
+
+  <p class="ct-verdict" id="ctVerdict">Each of those is a person who filed a form about what happened to them online. It is a floor, not a ceiling — most people never report it.</p>
+  <p class="ct-note">Source: MCMC figures for January–November 2025, reported alongside the Penal Code amendments that came into force in July that year.</p>
+</div>
+
+<style is:global>
+  .ct-root {
+    --ct-bg: var(--color-bg-primary, #fff);
+    --ct-bg2: var(--color-bg-secondary, #f1f5f9);
+    --ct-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --ct-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --ct-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --ct-line: var(--color-border-default, rgba(0,0,0,.12));
+    --ct-dot: #D95F4E;
+    --ct-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--ct-sans); color:var(--ct-ink);
+    border:1px solid var(--ct-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--ct-bg); container-type:inline-size;
+  }
+  .ct-head { display:flex; gap:1rem; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; }
+  .ct-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .ct-cap { font-size:.8rem; color:var(--ct-mut); margin:0; max-width:48ch; line-height:1.45; }
+  .ct-btn {
+    font:inherit; font-size:.8rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--ct-line); background:var(--ct-bg2); color:var(--ct-ink);
+    border-radius:999px; padding:.42rem .85rem; white-space:nowrap;
+  }
+  .ct-stats { display:flex; gap:1.5rem; flex-wrap:wrap; margin:1rem 0 .7rem; }
+  .ct-stat { display:flex; flex-direction:column; gap:.05rem; }
+  .ct-lbl { font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ct-sub); }
+  .ct-v { font-size:1.5rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .ct-canvas { width:100%; height:auto; display:block; border-radius:8px; background:var(--ct-bg2); }
+  .ct-verdict { font-size:.85rem; line-height:1.55; margin:.9rem 0 0; }
+  .ct-note { font-size:.72rem; color:var(--ct-sub); margin:.6rem 0 0; line-height:1.5; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('ctRoot');
+    if (!root) return;
+
+    const TOTAL = 8339;
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'];
+
+    const cv     = document.getElementById('ctCanvas');
+    const ctx    = cv.getContext('2d');
+    const elMon  = document.getElementById('ctMonth');
+    const elCnt  = document.getElementById('ctCount');
+    const btn    = document.getElementById('ctPlay');
+    const reduced= window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const COLS = 120;
+    const ROWS = Math.ceil(TOTAL / COLS);
+    const cw = cv.width / COLS;
+    const ch = cv.height / ROWS;
+    const r  = Math.max(1.4, Math.min(cw, ch) * 0.34);
+
+    const ink = getComputedStyle(root).getPropertyValue('--ct-dot').trim() || '#D95F4E';
+
+    function draw(n) {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      ctx.fillStyle = ink;
+      for (let i = 0; i < n; i++) {
+        const x = (i % COLS) * cw + cw / 2;
+        const y = Math.floor(i / COLS) * ch + ch / 2;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      elCnt.textContent = n.toLocaleString();
+      const mi = Math.min(MONTHS.length - 1, Math.floor((n / TOTAL) * MONTHS.length));
+      elMon.textContent = MONTHS[mi];
+    }
+
+    let raf = null, playing = false;
+
+    function stop() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = null; playing = false; btn.textContent = '▶ Play the year';
+    }
+
+    btn.addEventListener('click', () => {
+      if (playing) { stop(); return; }
+      playing = true; btn.textContent = '❚❚ Pause';
+      if (reduced) { draw(TOTAL); stop(); return; }
+      const t0 = performance.now();
+      const DUR = 6500;
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / DUR);
+        draw(Math.round(TOTAL * p));
+        if (p < 1) { raf = requestAnimationFrame(step); }
+        else { stop(); }
+      };
+      raf = requestAnimationFrame(step);
+    });
+
+    draw(0);
+  })();
+</script>

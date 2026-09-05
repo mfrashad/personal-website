@@ -1,0 +1,150 @@
+---
+// "Pick one" — interactive for the comparison post.
+// Solnick & Hemenway's 1998 survey, run on the reader before the result is
+// revealed. Both the question and the finding are theirs, unchanged.
+// Styles are is:global and namespaced under .pc-root.
+---
+
+<div class="pc-root" id="pcRoot">
+  <div class="pc-head">
+    <h3 class="pc-h3">Pick one, honestly</h3>
+    <p class="pc-cap">This is the actual question Solnick and Hemenway put to 257 people at Harvard School of Public Health in 1995. Prices are theirs. Answer before you scroll.</p>
+  </div>
+
+  <p class="pc-hint" id="pcHint">👇 Tap the one you'd actually pick</p>
+
+  <div class="pc-opts" id="pcOpts">
+    <button type="button" class="pc-opt" data-k="a">
+      <span class="pc-row"><span class="pc-tag">A</span><span class="pc-radio" aria-hidden="true"></span></span>
+      <span class="pc-you">You earn <b>$50,000</b></span>
+      <span class="pc-them">Everyone else earns <b>$25,000</b></span>
+      <span class="pc-cta">Choose A</span>
+    </button>
+    <button type="button" class="pc-opt" data-k="b">
+      <span class="pc-row"><span class="pc-tag">B</span><span class="pc-radio" aria-hidden="true"></span></span>
+      <span class="pc-you">You earn <b>$100,000</b></span>
+      <span class="pc-them">Everyone else earns <b>$200,000</b></span>
+      <span class="pc-cta">Choose B</span>
+    </button>
+  </div>
+
+  <div class="pc-result" id="pcResult" hidden>
+    <div class="pc-rline" id="pcRline"></div>
+    <div class="pc-split">
+      <div class="pc-halfbar"><div class="pc-fill" style="width:50%"></div></div>
+      <div class="pc-legend"><span>~50% chose A</span><span>~50% chose B</span></div>
+    </div>
+    <p class="pc-body">Roughly half of a room of public health academics chose to be <b>twice as poor</b> in absolute terms, so long as they were ahead of everyone around them. Option B doubles your actual money. Half of them turned it down.</p>
+    <p class="pc-body pc-dim">That's not those people being broken. That's standard-issue human machinery, showing up under lab conditions — and it's why your feed can make you miserable without a single thing in your life getting worse.</p>
+    <button type="button" class="pc-again" id="pcAgain">↺ Ask me again</button>
+  </div>
+
+  <p class="pc-note">Solnick &amp; Hemenway, "Is more always better? A survey on positional concerns", Journal of Economic Behavior &amp; Organization, 1998.</p>
+</div>
+
+<style is:global>
+  .pc-root {
+    --pc-bg: var(--color-bg-primary, #fff);
+    --pc-bg2: var(--color-bg-secondary, #f1f5f9);
+    --pc-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --pc-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --pc-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --pc-line: var(--color-border-default, rgba(0,0,0,.12));
+    --pc-acc: #3F73D6;
+    --pc-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--pc-sans); color:var(--pc-ink);
+    border:1px solid var(--pc-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--pc-bg); container-type:inline-size;
+  }
+  .pc-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .pc-cap { font-size:.8rem; color:var(--pc-mut); margin:0; max-width:56ch; line-height:1.45; }
+
+  .pc-opts { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; margin:1rem 0 0; }
+  @container (max-width: 440px) { .pc-opts { grid-template-columns:1fr; } }
+  .pc-hint { font-size:.78rem; font-weight:600; color:var(--pc-acc); margin:.9rem 0 .1rem; }
+  .pc-hint[hidden] { display:none; }
+
+  .pc-opt {
+    font:inherit; text-align:left; cursor:pointer; display:flex; flex-direction:column; gap:.35rem;
+    border:2px solid var(--pc-line); background:var(--pc-bg2); color:var(--pc-ink);
+    border-radius:12px; padding:.9rem 1rem 1rem;
+    transition:transform .12s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .pc-opt:hover {
+    transform:translateY(-2px);
+    border-color:var(--pc-acc);
+    box-shadow:0 6px 18px color-mix(in srgb, var(--pc-acc) 22%, transparent);
+  }
+  .pc-opt:active { transform:translateY(0); }
+  .pc-opt:focus-visible { outline:3px solid color-mix(in srgb, var(--pc-acc) 55%, transparent); outline-offset:2px; }
+  .pc-opt[aria-pressed="true"] { border-color:var(--pc-acc); background:color-mix(in srgb, var(--pc-acc) 12%, transparent); }
+
+  .pc-row { display:flex; align-items:center; justify-content:space-between; }
+  .pc-tag { font-size:.66rem; font-weight:800; letter-spacing:.08em; color:var(--pc-sub); }
+  .pc-radio {
+    width:20px; height:20px; border-radius:50%; flex:0 0 auto;
+    border:2px solid color-mix(in srgb, var(--pc-ink) 28%, transparent);
+    background:var(--pc-bg); transition:border-color .18s ease, box-shadow .18s ease;
+  }
+  .pc-opt:hover .pc-radio { border-color:var(--pc-acc); }
+  .pc-opt[aria-pressed="true"] .pc-radio {
+    border-color:var(--pc-acc);
+    box-shadow: inset 0 0 0 4px var(--pc-acc);
+  }
+
+  .pc-you { font-size:1.05rem; }
+  .pc-you b { font-weight:800; }
+  .pc-them { font-size:1.05rem; color:var(--pc-mut); }
+  .pc-them b { font-weight:700; color:var(--pc-ink); }
+
+  .pc-cta {
+    margin-top:.35rem; align-self:flex-start;
+    font-size:.74rem; font-weight:700; letter-spacing:.02em;
+    color:var(--pc-acc); background:color-mix(in srgb, var(--pc-acc) 12%, transparent);
+    border-radius:999px; padding:.28rem .7rem;
+  }
+  .pc-opt[aria-pressed="true"] .pc-cta { color:#fff; background:var(--pc-acc); }
+
+  .pc-result { margin-top:1rem; }
+  .pc-rline { font-size:.9rem; font-weight:700; margin-bottom:.65rem; }
+  .pc-halfbar { height:12px; border-radius:999px; background:color-mix(in srgb, var(--pc-ink) 12%, transparent); overflow:hidden; }
+  .pc-fill { height:100%; background:var(--pc-acc); border-radius:999px; }
+  .pc-legend { display:flex; justify-content:space-between; font-size:.7rem; color:var(--pc-sub); margin-top:.25rem; }
+  .pc-body { font-size:.84rem; line-height:1.55; margin:.75rem 0 0; }
+  .pc-body.pc-dim { color:var(--pc-mut); }
+  .pc-again {
+    font:inherit; font-size:.76rem; font-weight:600; cursor:pointer; margin-top:.8rem;
+    border:1px solid var(--pc-line); background:var(--pc-bg2); color:var(--pc-ink);
+    border-radius:999px; padding:.35rem .8rem;
+  }
+  .pc-note { font-size:.7rem; color:var(--pc-sub); margin:1rem 0 0; line-height:1.5; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('pcRoot');
+    if (!root) return;
+    const opts   = root.querySelectorAll('.pc-opt');
+    const result = document.getElementById('pcResult');
+    const rline  = document.getElementById('pcRline');
+    const again  = document.getElementById('pcAgain');
+
+    opts.forEach((o) => {
+      o.setAttribute('aria-pressed', 'false');
+      o.addEventListener('click', () => {
+        opts.forEach(x => x.setAttribute('aria-pressed', String(x === o)));
+        rline.textContent = o.dataset.k === 'a'
+          ? 'You picked A — less money, but ahead. So did about half of them.'
+          : 'You picked B — more money, but behind. So did about half of them.';
+        result.hidden = false;
+        document.getElementById('pcHint').hidden = true;
+      });
+    });
+
+    again.addEventListener('click', () => {
+      opts.forEach(x => x.setAttribute('aria-pressed', 'false'));
+      result.hidden = true;
+      document.getElementById('pcHint').hidden = false;
+    });
+  })();
+</script>

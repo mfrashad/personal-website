@@ -1,0 +1,113 @@
+---
+// "How big is your pond" — interactive for the comparison post.
+// Being top 1% is a fixed achievement; how it feels depends entirely on the
+// size of the group. Straight arithmetic: 1% of the pond is how many people
+// are ahead of you. The village number is real (Dunbar-scale bands); the world
+// figure is just 1% of 8.1 billion.
+// Styles are is:global and namespaced under .pr-root.
+---
+
+<div class="pr-root" id="prRoot">
+  <div class="pr-head">
+    <h3 class="pr-h3">Same you. Different pond.</h3>
+    <p class="pr-cap">Say you're genuinely top 1% at your thing — better than 99 out of every 100 people. Now slide the size of the room you can see.</p>
+  </div>
+
+  <div class="pr-figure">
+    <div class="pr-big" id="prAhead">1</div>
+    <div class="pr-cap2">people ahead of you</div>
+  </div>
+
+  <input class="pr-range" id="prRange" type="range" min="0" max="4" step="1" value="0" aria-label="Size of your comparison group" />
+  <div class="pr-ticks" id="prTicks" aria-hidden="true"></div>
+
+  <div class="pr-card">
+    <div class="pr-pond" id="prPond"></div>
+    <p class="pr-body" id="prBody"></p>
+  </div>
+
+  <p class="pr-note">Just arithmetic — 1% of the group. Nothing about your ability changes as you drag this. The only thing changing is how many of them you can see.</p>
+</div>
+
+<style is:global>
+  .pr-root {
+    --pr-bg: var(--color-bg-primary, #fff);
+    --pr-bg2: var(--color-bg-secondary, #f1f5f9);
+    --pr-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --pr-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --pr-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --pr-line: var(--color-border-default, rgba(0,0,0,.12));
+    --pr-acc: #8C72E0;
+    --pr-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--pr-sans); color:var(--pr-ink);
+    border:1px solid var(--pr-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--pr-bg); container-type:inline-size;
+  }
+  .pr-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .pr-cap { font-size:.8rem; color:var(--pr-mut); margin:0; max-width:54ch; line-height:1.45; }
+  .pr-figure { text-align:center; margin:1.3rem 0 1rem; }
+  .pr-big { font-size:3.6rem; font-weight:800; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums; color:var(--pr-acc); }
+  .pr-cap2 { font-size:.74rem; text-transform:uppercase; letter-spacing:.07em; color:var(--pr-sub); margin-top:.3rem; }
+  .pr-range { width:100%; accent-color:var(--pr-acc); cursor:pointer; }
+  .pr-ticks { display:flex; justify-content:space-between; margin-top:.3rem; font-size:.63rem; color:var(--pr-sub); gap:.2rem; }
+  .pr-ticks span { flex:1 1 0; text-align:center; line-height:1.25; }
+  .pr-ticks span.on { color:var(--pr-ink); font-weight:700; }
+  .pr-card { margin-top:1rem; background:var(--pr-bg2); border-radius:10px; padding:.85rem .9rem; }
+  .pr-pond { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--pr-sub); margin-bottom:.25rem; }
+  .pr-body { font-size:.85rem; line-height:1.55; margin:0; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('prRoot');
+    if (!root) return;
+
+    const PONDS = [
+      { tick:'Village', label:'A foraging band or village — 150 people',
+        n:150,
+        body:'One person is better than you, and you probably know them by name. For almost the whole of human history this was the entire comparison set. You were, functionally, the best.' },
+      { tick:'School', label:'A large school — 2,000 people',
+        n:2000,
+        body:'Twenty ahead of you. Enough to notice, not enough to feel hopeless. This is roughly the pond most people grew up measuring themselves in.' },
+      { tick:'City', label:'A city — 1 million people',
+        n:1000000,
+        body:'Ten thousand people are better than you at your thing, in your city alone. You will never meet most of them, and until recently you would never have seen them either.' },
+      { tick:'Country', label:'Malaysia — 34 million people',
+        n:34000000,
+        body:'340,000 ahead. You could scroll past a better one every day for a thousand years and not run out.' },
+      { tick:'The feed', label:'Everyone — 8.1 billion people',
+        n:8100000000,
+        body:'81 million people are ahead of you, and the algorithm’s entire job is to find the most impressive of them and put them on your screen. You did not get worse. The room got bigger.' },
+    ];
+
+    const elBig  = document.getElementById('prAhead');
+    const range  = document.getElementById('prRange');
+    const ticks  = document.getElementById('prTicks');
+    const elPond = document.getElementById('prPond');
+    const elBody = document.getElementById('prBody');
+
+    PONDS.forEach(p => {
+      const s = document.createElement('span');
+      s.textContent = p.tick;
+      ticks.appendChild(s);
+    });
+
+    function fmt(n) {
+      if (n >= 1e6) return (n / 1e6) % 1 === 0 ? (n / 1e6) + ' million' : (n / 1e6).toFixed(1) + ' million';
+      if (n >= 1e3) return Math.round(n / 1e3) + ',000';
+      return String(n);
+    }
+
+    function show(i) {
+      const p = PONDS[i];
+      const ahead = Math.round(p.n * 0.01);
+      elBig.textContent = ahead < 1000 ? String(ahead) : fmt(ahead);
+      elPond.textContent = p.label;
+      elBody.textContent = p.body;
+      ticks.querySelectorAll('span').forEach((s, n) => s.classList.toggle('on', n === i));
+    }
+
+    range.addEventListener('input', () => show(Number(range.value)));
+    show(0);
+  })();
+</script>

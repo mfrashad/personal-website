@@ -1,0 +1,157 @@
+---
+// "The Composite" — interactive for the comparison post.
+// Scroll a feed one post at a time. Each person you pass donates their best
+// attribute to a panel on the right, until you are looking at a single person
+// made of everyone's peak. That person is who you think you're losing to.
+// Styles are is:global and namespaced under .cp-root because the JS builds
+// elements at runtime, which Astro's scoped styles would not reach.
+---
+
+<div class="cp-root" id="cpRoot">
+
+  <div class="cp-head">
+    <div>
+      <h3 class="cp-h3">Ten minutes of scrolling</h3>
+      <p class="cp-cap">Tap through the feed. Watch what your brain quietly keeps from each one.</p>
+    </div>
+    <button type="button" class="cp-btn" id="cpNext">Next post →</button>
+  </div>
+
+  <div class="cp-stage">
+    <div class="cp-feed" id="cpFeed"></div>
+
+    <div class="cp-panel">
+      <div class="cp-plabel">Who you're now measuring yourself against</div>
+      <ul class="cp-traits" id="cpTraits"></ul>
+      <div class="cp-empty" id="cpEmpty">Nothing yet.</div>
+      <div class="cp-verdict" id="cpVerdict" hidden>
+        <strong>This person does not exist.</strong>
+        <span>Five real people, five different lives, five sets of trade-offs you never saw. Your brain filed them as one competitor and then scored you against it.</span>
+        <button type="button" class="cp-btn cp-reset" id="cpReset">↺ Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .cp-root {
+    --cp-bg: var(--color-bg-primary, #fff);
+    --cp-bg2: var(--color-bg-secondary, #f1f5f9);
+    --cp-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --cp-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --cp-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --cp-line: var(--color-border-default, rgba(0,0,0,.12));
+    --cp-acc: #8C72E0;
+    --cp-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--cp-sans); color: var(--cp-ink);
+    border:1px solid var(--cp-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--cp-bg);
+    container-type: inline-size;
+  }
+  .cp-head { display:flex; gap:1rem; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; }
+  .cp-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .cp-cap { font-size:.8rem; color:var(--cp-mut); margin:0; max-width:44ch; line-height:1.45; }
+  .cp-btn {
+    font:inherit; font-size:.8rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--cp-line); background:var(--cp-bg2); color:var(--cp-ink);
+    border-radius:999px; padding:.42rem .85rem; white-space:nowrap;
+  }
+  .cp-btn:hover { transform:translateY(-1px); }
+  .cp-btn:disabled { opacity:.4; cursor:default; transform:none; }
+
+  .cp-stage { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem; align-items:start; }
+  @container (max-width: 520px) { .cp-stage { grid-template-columns:1fr; } }
+
+  .cp-feed { display:flex; flex-direction:column; gap:.5rem; min-height:210px; }
+  .cp-post {
+    border:1px solid var(--cp-line); border-radius:10px; padding:.6rem .7rem;
+    background:var(--cp-bg2); animation: cpIn .3s ease;
+  }
+  .cp-who { font-size:.78rem; font-weight:700; }
+  .cp-said { font-size:.76rem; color:var(--cp-ink); margin-top:.15rem; line-height:1.4; }
+  .cp-cost { font-size:.7rem; color:var(--cp-sub); margin-top:.35rem; line-height:1.4; font-style:italic; }
+  @keyframes cpIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+  .cp-panel { border:1px dashed var(--cp-line); border-radius:10px; padding:.75rem .8rem; min-height:210px; }
+  .cp-plabel { font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:var(--cp-sub); margin-bottom:.5rem; }
+  .cp-traits { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.35rem; }
+  .cp-traits li {
+    font-size:.8rem; font-weight:600; padding:.35rem .5rem; border-radius:7px;
+    background: color-mix(in srgb, var(--cp-acc) 13%, transparent);
+    animation: cpIn .3s ease;
+  }
+  .cp-empty { font-size:.78rem; color:var(--cp-sub); }
+  .cp-verdict { margin-top:.7rem; font-size:.8rem; line-height:1.5; display:flex; flex-direction:column; gap:.5rem; align-items:flex-start; }
+  .cp-verdict strong { font-size:.9rem; }
+  .cp-verdict span { color:var(--cp-mut); }
+
+  @media (prefers-reduced-motion: reduce) { .cp-post, .cp-traits li { animation:none; } }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('cpRoot');
+    if (!root) return;
+
+    const FEED = [
+      { who: 'open water swimmer', said: 'Channel crossing done 🏊', trait: 'swims the Channel',
+        cost: 'Fifteen years in cold water. That is where the hours went.' },
+      { who: 'someone finishing a PhD', said: 'Dr. as of this morning, at 24', trait: 'PhD at 24',
+        cost: 'Gave up their twenties for it. Has never had a salary.' },
+      { who: 'a founder', said: 'Thrilled to announce our Series A 🚀', trait: 'raised a Series A',
+        cost: 'No weekends for four years, a relationship under strain, a body being spent.' },
+      { who: 'a couple in Lisbon', said: 'Morning view from the new place ☀️', trait: 'lives in Lisbon, no visible job',
+        cost: 'Either burning savings or about to sell you a course.' },
+      { who: 'the 5am guy', said: 'Sunrise muscle-ups. No excuses.', trait: 'muscle-ups at sunrise',
+        cost: 'Trains 2 hours a day. Has to be in bed by nine, every night, forever.' },
+    ];
+
+    const feedEl   = document.getElementById('cpFeed');
+    const traitsEl = document.getElementById('cpTraits');
+    const emptyEl  = document.getElementById('cpEmpty');
+    const nextBtn  = document.getElementById('cpNext');
+    const resetBtn = document.getElementById('cpReset');
+    const verdict  = document.getElementById('cpVerdict');
+
+    let i = 0;
+
+    function reset() {
+      i = 0;
+      feedEl.innerHTML = '';
+      traitsEl.innerHTML = '';
+      emptyEl.hidden = false;
+      verdict.hidden = true;
+      nextBtn.disabled = false;
+      nextBtn.textContent = 'Next post →';
+    }
+
+    function step() {
+      if (i >= FEED.length) return;
+      const p = FEED[i];
+
+      const post = document.createElement('div');
+      post.className = 'cp-post';
+      post.innerHTML =
+        '<div class="cp-who">' + p.who + '</div>' +
+        '<div class="cp-said">' + p.said + '</div>' +
+        '<div class="cp-cost">What the post left out: ' + p.cost + '</div>';
+      feedEl.appendChild(post);
+
+      const li = document.createElement('li');
+      li.textContent = p.trait;
+      traitsEl.appendChild(li);
+      emptyEl.hidden = true;
+
+      i++;
+      if (i >= FEED.length) {
+        nextBtn.disabled = true;
+        nextBtn.textContent = 'End of scroll';
+        verdict.hidden = false;
+      }
+    }
+
+    nextBtn.addEventListener('click', step);
+    resetBtn.addEventListener('click', reset);
+    reset();
+  })();
+</script>

@@ -1,0 +1,128 @@
+---
+// "Why the polymath died" — interactive for the generalist/specialist post.
+// Burke's argument as a picture: total knowledge compounds, one human's
+// capacity to hold it doesn't move. Where the curves cross is where polymathy
+// stops being possible. A schematic of his argument, not measured data.
+// Styles are is:global and namespaced under .kg-root.
+---
+
+<div class="kg-root" id="kgRoot">
+  <div class="kg-head">
+    <h3 class="kg-h3">Why the polymath died</h3>
+    <p class="kg-cap">The blue line is how much there is to know. The flat line is how much one person can hold — which has not changed since the Renaissance. Step through Burke's three crises.</p>
+  </div>
+
+  <svg class="kg-svg" id="kgSvg" viewBox="0 0 600 260" role="img" aria-label="Total knowledge rising steeply against a flat human capacity line">
+    <line x1="40" y1="220" x2="580" y2="220" class="kg-axis" />
+    <line x1="40" y1="20"  x2="40"  y2="220" class="kg-axis" />
+    <line x1="40" y1="182" x2="580" y2="182" class="kg-cap-line" />
+    <text x="46" y="176" class="kg-caplabel">what one person can hold</text>
+    <path id="kgCurve" class="kg-curve" d="" />
+    <circle id="kgMarker" class="kg-marker" cx="40" cy="220" r="5" />
+    <text id="kgMarkText" class="kg-marktext" x="0" y="0"></text>
+  </svg>
+
+  <input class="kg-range" id="kgRange" type="range" min="0" max="4" step="1" value="0" aria-label="Point in history" />
+  <div class="kg-ticks" id="kgTicks" aria-hidden="true"></div>
+
+  <div class="kg-card">
+    <div class="kg-when" id="kgWhen"></div>
+    <p class="kg-body" id="kgBody"></p>
+  </div>
+
+  <p class="kg-note">A schematic of Peter Burke's argument in <em>The Polymath</em>, not a measured dataset — nobody has a tonnage figure for human knowledge. What's his: the three crises, the ~500 polymaths, and the claim that each flood of information pushed people further into a corner of it.</p>
+</div>
+
+<style is:global>
+  .kg-root {
+    --kg-bg: var(--color-bg-primary, #fff);
+    --kg-bg2: var(--color-bg-secondary, #f1f5f9);
+    --kg-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --kg-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --kg-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --kg-line: var(--color-border-default, rgba(0,0,0,.12));
+    --kg-acc: #3F73D6;
+    --kg-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--kg-sans); color:var(--kg-ink);
+    border:1px solid var(--kg-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--kg-bg); container-type:inline-size;
+  }
+  .kg-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .kg-cap { font-size:.8rem; color:var(--kg-mut); margin:0 0 .9rem; max-width:56ch; line-height:1.45; }
+  .kg-svg { width:100%; height:auto; display:block; }
+  .kg-axis { stroke: var(--kg-line); stroke-width:1; }
+  .kg-cap-line { stroke: var(--kg-mut); stroke-width:1.5; stroke-dasharray:5 4; }
+  .kg-caplabel { font-size:9px; fill: var(--kg-mut); font-family:var(--kg-sans); }
+  .kg-curve { fill:none; stroke: var(--kg-acc); stroke-width:2.5; stroke-linecap:round; transition: d .5s ease; }
+  .kg-marker { fill: var(--kg-acc); transition: cx .5s ease, cy .5s ease; }
+  .kg-marktext { font-size:10px; font-weight:700; fill: var(--kg-ink); font-family:var(--kg-sans); }
+  .kg-range { width:100%; accent-color:var(--kg-acc); cursor:pointer; margin-top:.5rem; }
+  .kg-ticks { display:flex; justify-content:space-between; margin-top:.3rem; font-size:.63rem; color:var(--kg-sub); gap:.2rem; }
+  .kg-ticks span { flex:1 1 0; text-align:center; line-height:1.25; }
+  .kg-ticks span.on { color:var(--kg-ink); font-weight:700; }
+  .kg-card { margin-top:1rem; background:var(--kg-bg2); border-radius:10px; padding:.85rem .9rem; }
+  .kg-when { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--kg-sub); }
+  .kg-body { font-size:.84rem; line-height:1.55; margin:.2rem 0 0; }
+  .kg-note { font-size:.72rem; color:var(--kg-sub); margin:.9rem 0 0; line-height:1.5; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('kgRoot');
+    if (!root) return;
+
+    // x in 0..1 across the chart, y is "amount of knowledge" 0..1 (1 = top).
+    const POINTS = [
+      { tick:'1450', when:'Before printing', x:0.06, k:0.10,
+        body:'Books are copied by hand. There is not much to know, and most of it is locked in monasteries. One well-placed person can hold a real share of European learning.' },
+      { tick:'1500s', when:'Crisis one: Gutenberg', x:0.22, k:0.22,
+        body:'Printing, the New World, the Scientific Revolution. Knowledge floods in — and this is the good bit, because there is still little enough of it that one head can hold a lot. Burke’s ~500 polymaths cluster here.' },
+      { tick:'1700s', when:'The line gets crossed', x:0.42, k:0.48,
+        body:'Total knowledge passes what any individual can carry. From here, being broad means being shallow, and that is a new problem nobody had before.' },
+      { tick:'1800s', when:'Crisis two: cheap print', x:0.62, k:0.76,
+        body:'Mass-market printing, industrial science, the modern university. Disciplines split, then split again. Specialising stops being a choice and becomes the only way to reach the edge of anything.' },
+      { tick:'Now', when:'Crisis three, and after', x:0.94, k:0.99,
+        body:'The gap is now so large it is almost funny. Which is the twist: when no individual can hold the frontier anyway, the advantage moves back to whoever can connect the pieces rather than own one.' },
+    ];
+
+    const svg    = document.getElementById('kgSvg');
+    const curve  = document.getElementById('kgCurve');
+    const marker = document.getElementById('kgMarker');
+    const mtext  = document.getElementById('kgMarkText');
+    const range  = document.getElementById('kgRange');
+    const ticks  = document.getElementById('kgTicks');
+    const elWhen = document.getElementById('kgWhen');
+    const elBody = document.getElementById('kgBody');
+
+    const X0 = 40, X1 = 580, Y0 = 220, Y1 = 26;
+    const px = (x) => X0 + x * (X1 - X0);
+    const py = (k) => Y0 - k * (Y0 - Y1);
+
+    POINTS.forEach(p => {
+      const s = document.createElement('span');
+      s.textContent = p.tick;
+      ticks.appendChild(s);
+    });
+
+    function show(i) {
+      const upto = POINTS.slice(0, i + 1);
+      let d = 'M ' + px(0) + ' ' + py(0.04);
+      upto.forEach(p => { d += ' L ' + px(p.x) + ' ' + py(p.k); });
+      curve.setAttribute('d', d);
+
+      const p = POINTS[i];
+      marker.setAttribute('cx', String(px(p.x)));
+      marker.setAttribute('cy', String(py(p.k)));
+      mtext.setAttribute('x', String(Math.min(px(p.x) + 8, 520)));
+      mtext.setAttribute('y', String(Math.max(py(p.k) - 8, 16)));
+      mtext.textContent = p.tick;
+
+      elWhen.textContent = p.when;
+      elBody.textContent = p.body;
+      ticks.querySelectorAll('span').forEach((s, n) => s.classList.toggle('on', n === i));
+    }
+
+    range.addEventListener('input', () => show(Number(range.value)));
+    show(0);
+  })();
+</script>
