@@ -49,3 +49,5 @@ public/content-generator/
 # CV pipeline — entire directory kept local: master.yaml holds personal contact
 # data (this repo is public) and the rest is generated artifacts
 cv/
+.gstack/
+.dev-comments.json
