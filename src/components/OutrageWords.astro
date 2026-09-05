@@ -1,0 +1,134 @@
+---
+// "The price list" — interactive for the narcissism post.
+// Brady et al.'s meta-analysis found each additional moral-emotional word in a
+// post is worth roughly 12% more engagement. Toggle words into a sentence and
+// watch the multiplier compound. The 12% is real; the base number is a round
+// 100 so the arithmetic stays legible.
+// Styles are is:global and namespaced under .ow-root.
+---
+
+<div class="ow-root" id="owRoot">
+  <div class="ow-head">
+    <h3 class="ow-h3">What one angry word is worth</h3>
+    <p class="ow-cap">Every moral or emotional word you add is worth about <b>12% more engagement</b>. That figure comes from a meta-analysis, not a guess. Tap words into the sentence.</p>
+  </div>
+
+  <div class="ow-post">
+    <div class="ow-avatar" aria-hidden="true">🙂</div>
+    <div class="ow-body">
+      <div class="ow-handle">you</div>
+      <div class="ow-text" id="owText"></div>
+    </div>
+  </div>
+
+  <div class="ow-chips" id="owChips" role="group" aria-label="Add charged words"></div>
+
+  <div class="ow-out">
+    <div class="ow-block">
+      <div class="ow-lbl">Predicted reach</div>
+      <div class="ow-big" id="owReach">100</div>
+      <div class="ow-sub" id="owSub">Plain version. Nobody shares this.</div>
+    </div>
+    <div class="ow-bar"><div class="ow-fill" id="owFill"></div></div>
+  </div>
+
+  <p class="ow-note">Compounding 12% per word is the simplest reading of the finding, and real feeds are messier than that. What isn't in doubt is the direction and that it's paid on delivery — Brady, Crockett and Van Bavel then showed the reward makes people post angrier next time.</p>
+</div>
+
+<style is:global>
+  .ow-root {
+    --ow-bg: var(--color-bg-primary, #fff);
+    --ow-bg2: var(--color-bg-secondary, #f1f5f9);
+    --ow-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --ow-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --ow-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --ow-line: var(--color-border-default, rgba(0,0,0,.12));
+    --ow-hot: #D95F4E;
+    --ow-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--ow-sans); color:var(--ow-ink);
+    border:1px solid var(--ow-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--ow-bg); container-type:inline-size;
+  }
+  .ow-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .ow-cap { font-size:.8rem; color:var(--ow-mut); margin:0; max-width:54ch; line-height:1.45; }
+  .ow-cap b { color:var(--ow-ink); }
+
+  .ow-post { display:flex; gap:.6rem; margin:1rem 0 .9rem; padding:.75rem .8rem; border:1px solid var(--ow-line); border-radius:12px; background:var(--ow-bg2); }
+  .ow-avatar { width:32px; height:32px; border-radius:50%; background:var(--ow-bg); display:grid; place-items:center; flex:0 0 auto; font-size:1rem; }
+  .ow-handle { font-size:.75rem; font-weight:700; margin-bottom:.15rem; }
+  .ow-text { font-size:.9rem; line-height:1.5; }
+  .ow-text .hot { color:var(--ow-hot); font-weight:700; }
+
+  .ow-chips { display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:1rem; }
+  .ow-chip {
+    font:inherit; font-size:.75rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--ow-line); background:var(--ow-bg2); color:var(--ow-ink);
+    border-radius:999px; padding:.35rem .7rem; transition:background .18s ease, border-color .18s ease;
+  }
+  .ow-chip[aria-pressed="true"] { background:color-mix(in srgb, var(--ow-hot) 16%, transparent); border-color:color-mix(in srgb, var(--ow-hot) 55%, transparent); }
+
+  .ow-out { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+  .ow-block { flex:0 0 auto; }
+  .ow-lbl { font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ow-sub); }
+  .ow-big { font-size:2.2rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-.03em; line-height:1.05; }
+  .ow-sub { font-size:.75rem; color:var(--ow-mut); margin-top:.15rem; max-width:34ch; line-height:1.4; }
+  .ow-bar { flex:1 1 140px; height:12px; border-radius:999px; background:var(--ow-bg2); overflow:hidden; min-width:120px; }
+  .ow-fill { height:100%; width:20%; background:var(--ow-hot); border-radius:999px; transition:width .4s cubic-bezier(.4,0,.2,1); }
+  .ow-note { font-size:.72rem; color:var(--ow-sub); margin:.9rem 0 0; line-height:1.5; }
+  @media (prefers-reduced-motion: reduce) { .ow-fill { transition:none; } }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('owRoot');
+    if (!root) return;
+
+    const BASE = ['They', '{0}', 'changed', 'the', 'policy', '{1}', 'again', '{2}', '.'];
+    const WORDS = [
+      { id: 'w1', slot: 0, chip: '+ shamelessly', word: 'shamelessly' },
+      { id: 'w2', slot: 1, chip: '+ and it’s disgraceful', word: 'and it’s disgraceful' },
+      { id: 'w3', slot: 2, chip: '+ they should be ashamed', word: 'they should be ashamed' },
+      { id: 'w4', slot: 3, chip: '+ outrageous', word: 'outrageous' },
+      { id: 'w5', slot: 4, chip: '+ evil', word: 'evil' },
+      { id: 'w6', slot: 5, chip: '+ betrayal', word: 'betrayal' },
+    ];
+
+    const textEl  = document.getElementById('owText');
+    const chipWrap= document.getElementById('owChips');
+    const elReach = document.getElementById('owReach');
+    const elSub   = document.getElementById('owSub');
+    const elFill  = document.getElementById('owFill');
+    const on = new Set();
+
+    function render() {
+      const extra = WORDS.filter(w => on.has(w.id)).map(w => '<span class="hot">' + w.word + '</span>');
+      const base = 'They changed the policy again';
+      textEl.innerHTML = extra.length
+        ? base + ' — ' + extra.join(', ') + '.'
+        : base + '.';
+
+      const n = on.size;
+      const reach = Math.round(100 * Math.pow(1.12, n));
+      elReach.textContent = reach.toLocaleString();
+      elFill.style.width = Math.min(100, 20 + n * 13.5) + '%';
+
+      if (n === 0) elSub.textContent = 'Plain version. Nobody shares this.';
+      else if (n < 3) elSub.textContent = n + (n === 1 ? ' charged word' : ' charged words') + ' — ' + (reach - 100) + '% more reach for saying the same thing.';
+      else elSub.textContent = 'Same fact, ' + (reach - 100) + '% more reach. You did not change what you knew. You changed how angry you sounded.';
+    }
+
+    WORDS.forEach((w) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'ow-chip'; b.textContent = w.chip;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => {
+        if (on.has(w.id)) on.delete(w.id); else on.add(w.id);
+        b.setAttribute('aria-pressed', String(on.has(w.id)));
+        render();
+      });
+      chipWrap.appendChild(b);
+    });
+
+    render();
+  })();
+</script>

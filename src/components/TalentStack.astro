@@ -1,0 +1,148 @@
+---
+// "Stack vs peak" — interactive for the generalist/specialist post.
+// Being top 1% at one thing is brutal. Being top 25% at three things that
+// combine is both achievable and rarer. Pick skills, watch the rarity.
+// Styles are is:global and namespaced under .ts-root because the JS builds
+// elements at runtime, which Astro's scoped styles would not reach.
+---
+
+<div class="ts-root" id="tsRoot">
+
+  <div class="ts-head">
+    <h3 class="ts-h3">Peak, or combination</h3>
+    <p class="ts-cap">Pick things you could plausibly be <em>good but not world-class</em> at — say top 25%. Then see how many people share your exact combination.</p>
+  </div>
+
+  <div class="ts-chips" id="tsChips" role="group" aria-label="Pick your skills"></div>
+
+  <div class="ts-out">
+    <div class="ts-block">
+      <div class="ts-lbl">Your stack</div>
+      <div class="ts-big" id="tsRare">—</div>
+      <div class="ts-sub" id="tsRareSub">Pick two or three.</div>
+    </div>
+    <div class="ts-vs">vs</div>
+    <div class="ts-block">
+      <div class="ts-lbl">Being top 1% at one thing</div>
+      <div class="ts-big ts-dim">1 in 100</div>
+      <div class="ts-sub">And you'd need to beat 99 people who've done nothing else.</div>
+    </div>
+  </div>
+
+  <p class="ts-verdict" id="tsVerdict"></p>
+  <p class="ts-note">Rough maths, and it assumes the skills are independent, which they aren't quite — people who write well are likelier to also speak well. Treat it as the shape of the argument, not a measurement. The real point is that peaks are borrowed from other people and combinations are yours.</p>
+</div>
+
+<style is:global>
+  .ts-root {
+    --ts-bg: var(--color-bg-primary, #fff);
+    --ts-bg2: var(--color-bg-secondary, #f1f5f9);
+    --ts-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --ts-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --ts-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --ts-line: var(--color-border-default, rgba(0,0,0,.12));
+    --ts-on: #2E9E6B;
+    --ts-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--ts-sans); color: var(--ts-ink);
+    border:1px solid var(--ts-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--ts-bg);
+    container-type: inline-size;
+  }
+  .ts-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .ts-cap { font-size:.8rem; color:var(--ts-mut); margin:0; max-width:54ch; line-height:1.45; }
+
+  .ts-chips { display:flex; flex-wrap:wrap; gap:.4rem; margin:.95rem 0 1.1rem; }
+  .ts-chip {
+    font:inherit; font-size:.76rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--ts-line); background:var(--ts-bg2); color:var(--ts-ink);
+    border-radius:999px; padding:.4rem .8rem; transition:background .18s ease, border-color .18s ease, transform .12s ease;
+  }
+  .ts-chip:hover { transform:translateY(-1px); }
+  .ts-chip[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--ts-on) 16%, transparent);
+    border-color: color-mix(in srgb, var(--ts-on) 55%, transparent);
+  }
+
+  .ts-out { display:grid; grid-template-columns:1fr auto 1fr; gap:.9rem; align-items:center; }
+  @container (max-width: 460px) { .ts-out { grid-template-columns:1fr; } .ts-vs { text-align:center; } }
+  .ts-block { background:var(--ts-bg2); border-radius:10px; padding:.75rem .8rem; }
+  .ts-lbl { font-size:.66rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ts-sub); }
+  .ts-big { font-size:1.75rem; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums; margin-top:.15rem; }
+  .ts-big.ts-dim { color:var(--ts-mut); }
+  .ts-sub { font-size:.74rem; color:var(--ts-mut); line-height:1.45; margin-top:.3rem; }
+  .ts-vs { font-size:.72rem; color:var(--ts-sub); text-transform:uppercase; letter-spacing:.08em; }
+
+  .ts-verdict { margin:1rem 0 0; font-size:.85rem; line-height:1.55; }
+  .ts-note { font-size:.72rem; color:var(--ts-sub); margin:.8rem 0 0; line-height:1.5; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('tsRoot');
+    if (!root) return;
+
+    // p = rough share of people who are "top 25%-ish" at this. All 0.25 by
+    // definition; kept as data so the shape is obvious in the code.
+    const SKILLS = [
+      { id: 'write',  label: '✍️ Writes clearly',        p: 0.25 },
+      { id: 'code',   label: '💻 Technically competent', p: 0.25 },
+      { id: 'talk',   label: '🎤 Speaks well to a room', p: 0.25 },
+      { id: 'design', label: '🎨 Has visual taste',      p: 0.25 },
+      { id: 'sell',   label: '🤝 Can sell',              p: 0.25 },
+      { id: 'data',   label: '📊 Reads numbers properly',p: 0.25 },
+    ];
+
+    const chipWrap = document.getElementById('tsChips');
+    const elRare   = document.getElementById('tsRare');
+    const elSub    = document.getElementById('tsRareSub');
+    const verdict  = document.getElementById('tsVerdict');
+
+    const picked = new Set();
+
+    function fmt(n) {
+      if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + ' million';
+      if (n >= 1e3) return Math.round(n / 1e3) + ',000';
+      return String(Math.round(n));
+    }
+
+    function render() {
+      if (picked.size === 0) {
+        elRare.textContent = '—';
+        elSub.textContent = 'Pick two or three.';
+        verdict.textContent = '';
+        return;
+      }
+      let p = 1;
+      picked.forEach(id => { p *= SKILLS.find(s => s.id === id).p; });
+      const oneIn = Math.round(1 / p);
+      elRare.textContent = '1 in ' + fmt(oneIn);
+      elSub.textContent = picked.size + (picked.size === 1 ? ' skill' : ' skills') +
+        ', none of them world-class.';
+
+      if (picked.size === 1) {
+        verdict.innerHTML = 'One skill at top 25% is <b>1 in 4</b>. That is not a career, that is a Tuesday. Add another.';
+      } else if (picked.size === 2) {
+        verdict.innerHTML = 'Two of them puts you at <b>1 in ' + fmt(oneIn) + '</b> — already rarer than being top 5% at either one alone.';
+      } else {
+        verdict.innerHTML = 'Three or more and you are <b>1 in ' + fmt(oneIn) + '</b>, without ever being the best in the room at anything. ' +
+          'That is the trade nobody tells you about: peaks are hard and borrowed, combinations are cheap and yours.';
+      }
+    }
+
+    SKILLS.forEach((s) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'ts-chip';
+      b.textContent = s.label;
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => {
+        if (picked.has(s.id)) picked.delete(s.id); else picked.add(s.id);
+        b.setAttribute('aria-pressed', String(picked.has(s.id)));
+        render();
+      });
+      chipWrap.appendChild(b);
+    });
+
+    render();
+  })();
+</script>

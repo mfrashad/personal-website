@@ -1,0 +1,228 @@
+---
+// "The Filter" — interactive for the social media / narcissism post.
+// You post a normal mix of things. Press play, watch the feed delete everything
+// that didn't get a reaction, and see what's left.
+// Styles are is:global and namespaced under .ff-root because the JS builds
+// elements at runtime, which Astro's scoped styles would not reach.
+---
+
+<div class="ff-root" id="ffRoot">
+
+  <div class="ff-head">
+    <div>
+      <h3 class="ff-h3">A month of your posting</h3>
+      <p class="ff-cap">24 posts. A realistic mix — some wins, mostly ordinary days, a few honest ones about things going badly.</p>
+    </div>
+    <div class="ff-ctrl">
+      <button type="button" class="ff-btn ff-play" id="ffPlay">▶ Run the feed</button>
+      <button type="button" class="ff-btn ff-reset" id="ffReset" hidden>↺ Again</button>
+    </div>
+  </div>
+
+  <div class="ff-legend">
+    <span class="ff-key"><i class="ff-dot ff-win"></i>Win</span>
+    <span class="ff-key"><i class="ff-dot ff-ord"></i>Ordinary day</span>
+    <span class="ff-key"><i class="ff-dot ff-fail"></i>Failure / honest</span>
+  </div>
+
+  <div class="ff-grid" id="ffGrid" aria-live="polite"></div>
+
+  <div class="ff-tally" id="ffTally">
+    <div class="ff-stat"><span class="ff-lbl">Posted</span><span class="ff-v" id="ffPosted">24</span></div>
+    <div class="ff-stat"><span class="ff-lbl">Still visible</span><span class="ff-v" id="ffAlive">24</span></div>
+    <div class="ff-stat"><span class="ff-lbl">Of those, wins</span><span class="ff-v" id="ffShare">25%</span></div>
+  </div>
+
+  <p class="ff-verdict" id="ffVerdict" hidden></p>
+</div>
+
+<style is:global>
+  .ff-root {
+    --ff-bg: var(--color-bg-primary, #fff);
+    --ff-bg2: var(--color-bg-secondary, #f1f5f9);
+    --ff-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --ff-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --ff-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --ff-line: var(--color-border-default, rgba(0,0,0,.12));
+    --ff-win: #2E9E6B;
+    --ff-ord: #7C8698;
+    --ff-fail: #D95F4E;
+    --ff-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--ff-sans);
+    color: var(--ff-ink);
+    border: 1px solid var(--ff-line);
+    border-radius: 14px;
+    padding: 1.1rem 1.1rem 1.25rem;
+    margin: 2rem 0;
+    background: var(--ff-bg);
+    container-type: inline-size;
+  }
+  .ff-head { display:flex; gap:1rem; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
+  .ff-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .ff-cap { font-size:.8rem; color:var(--ff-mut); margin:0; max-width:46ch; line-height:1.45; }
+  .ff-ctrl { display:flex; gap:.4rem; }
+  .ff-btn {
+    font:inherit; font-size:.8rem; font-weight:600; cursor:pointer;
+    border:1px solid var(--ff-line); background:var(--ff-bg2); color:var(--ff-ink);
+    border-radius:999px; padding:.42rem .85rem; white-space:nowrap;
+    transition: transform .12s ease, opacity .12s ease;
+  }
+  .ff-btn:hover { transform: translateY(-1px); }
+  .ff-btn:disabled { opacity:.45; cursor:default; transform:none; }
+
+  .ff-legend { display:flex; gap:1rem; flex-wrap:wrap; margin:.9rem 0 .7rem; font-size:.72rem; color:var(--ff-mut); }
+  .ff-key { display:inline-flex; align-items:center; gap:.35rem; }
+  .ff-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .ff-dot.ff-win { background:var(--ff-win); }
+  .ff-dot.ff-ord { background:var(--ff-ord); }
+  .ff-dot.ff-fail { background:var(--ff-fail); }
+
+  .ff-grid { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:.45rem; }
+  @container (max-width: 520px) { .ff-grid { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+
+  .ff-card {
+    border:1px solid var(--ff-line); border-left-width:3px; border-radius:9px;
+    background:var(--ff-bg2); padding:.5rem .55rem; min-height:66px;
+    display:flex; flex-direction:column; justify-content:space-between; gap:.35rem;
+    transition: opacity .45s ease, transform .45s ease, filter .45s ease;
+  }
+  .ff-card.win  { border-left-color:var(--ff-win); }
+  .ff-card.ord  { border-left-color:var(--ff-ord); }
+  .ff-card.fail { border-left-color:var(--ff-fail); }
+  .ff-txt { font-size:.7rem; line-height:1.3; color:var(--ff-ink); }
+  .ff-eng { font-size:.66rem; color:var(--ff-sub); font-variant-numeric:tabular-nums; }
+  .ff-card.dying { opacity:0; transform:scale(.82); filter:grayscale(1); }
+  .ff-card.dead { display:none; }
+  .ff-card.kept { box-shadow:0 0 0 2px color-mix(in srgb, var(--ff-win) 35%, transparent); }
+
+  .ff-tally { display:flex; gap:1.4rem; flex-wrap:wrap; margin-top:1rem; padding-top:.85rem; border-top:1px solid var(--ff-line); }
+  .ff-stat { display:flex; flex-direction:column; gap:.1rem; }
+  .ff-lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ff-sub); }
+  .ff-v { font-size:1.25rem; font-weight:700; font-variant-numeric:tabular-nums; }
+
+  .ff-verdict {
+    margin:.9rem 0 0; font-size:.85rem; line-height:1.5; color:var(--ff-ink);
+    background:var(--ff-bg2); border-radius:9px; padding:.7rem .8rem;
+  }
+  .ff-verdict b { font-weight:700; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ff-card { transition:none; }
+  }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('ffRoot');
+    if (!root) return;
+
+    // A deliberately ordinary month. Engagement numbers are illustrative, but the
+    // shape is the point: wins get a reaction, everything else doesn't.
+    const POSTS = [
+      { t: 'Got the offer',                 k: 'win',  e: 1840 },
+      { t: 'Made lunch',                    k: 'ord',  e: 12   },
+      { t: 'Rejected again, 6th one',       k: 'fail', e: 31   },
+      { t: 'Spoke at the conference',       k: 'win',  e: 2210 },
+      { t: 'Walked around the lake',        k: 'ord',  e: 24   },
+      { t: 'Still stuck on this bug',       k: 'fail', e: 18   },
+      { t: 'Book I finished',               k: 'ord',  e: 46   },
+      { t: 'Launched the thing 🚀',          k: 'win',  e: 3420 },
+      { t: 'Tired today',                   k: 'fail', e: 9    },
+      { t: 'Coffee at the usual place',     k: 'ord',  e: 15   },
+      { t: 'Project got cancelled',         k: 'fail', e: 52   },
+      { t: 'Featured in the news',          k: 'win',  e: 4100 },
+      { t: 'Cleaned the flat',              k: 'ord',  e: 7    },
+      { t: 'Missed the deadline',           k: 'fail', e: 22   },
+      { t: 'Random thought about work',     k: 'ord',  e: 38   },
+      { t: 'Hit 100k followers',            k: 'win',  e: 5600 },
+      { t: 'Sat in traffic for an hour',    k: 'ord',  e: 6    },
+      { t: 'Didn’t get the grant',     k: 'fail', e: 27   },
+      { t: 'Nothing much happened',         k: 'ord',  e: 11   },
+      { t: 'Won the award 🏆',               k: 'win',  e: 6900 },
+      { t: 'Rewatched a film',              k: 'ord',  e: 19   },
+      { t: 'Gave up on the side project',   k: 'fail', e: 44   },
+      { t: 'Slept badly again',             k: 'fail', e: 8    },
+      { t: 'Trip to Japan ✈️',               k: 'win',  e: 3050 },
+    ];
+
+    const THRESHOLD = 200; // what the feed decides is worth showing anyone
+
+    const grid    = document.getElementById('ffGrid');
+    const playBtn = document.getElementById('ffPlay');
+    const resetBtn= document.getElementById('ffReset');
+    const elAlive = document.getElementById('ffAlive');
+    const elShare = document.getElementById('ffShare');
+    const verdict = document.getElementById('ffVerdict');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let cards = [];
+    let running = false;
+
+    function build() {
+      grid.innerHTML = '';
+      cards = POSTS.map((p) => {
+        const el = document.createElement('div');
+        el.className = 'ff-card ' + p.k;
+        const txt = document.createElement('span');
+        txt.className = 'ff-txt';
+        txt.textContent = p.t;
+        const eng = document.createElement('span');
+        eng.className = 'ff-eng';
+        eng.textContent = p.e.toLocaleString() + ' reactions';
+        el.append(txt, eng);
+        grid.appendChild(el);
+        return { el, ...p };
+      });
+      tally(POSTS.length, POSTS.filter(p => p.k === 'win').length);
+      verdict.hidden = true;
+      playBtn.hidden = false;
+      playBtn.disabled = false;
+      resetBtn.hidden = true;
+    }
+
+    function tally(alive, wins) {
+      elAlive.textContent = String(alive);
+      elShare.textContent = alive ? Math.round((wins / alive) * 100) + '%' : '—';
+    }
+
+    const wait = (ms) => new Promise(r => setTimeout(r, reduced ? 0 : ms));
+
+    async function run() {
+      if (running) return;
+      running = true;
+      playBtn.disabled = true;
+
+      const doomed = cards.filter(c => c.e < THRESHOLD);
+      let alive = cards.length;
+
+      for (const c of doomed) {
+        c.el.classList.add('dying');
+        await wait(90);
+        alive -= 1;
+        tally(alive, cards.filter(x => x.k === 'win').length);
+      }
+
+      await wait(reduced ? 0 : 450);
+      doomed.forEach(c => c.el.classList.add('dead'));
+      cards.filter(c => c.e >= THRESHOLD).forEach(c => c.el.classList.add('kept'));
+
+      const survivors = cards.filter(c => c.e >= THRESHOLD);
+      const allWins = survivors.every(c => c.k === 'win');
+      verdict.innerHTML =
+        'You posted <b>' + cards.length + '</b> things. <b>' + survivors.length +
+        '</b> of them got seen by anyone' + (allWins ? ', and every single one was a win.' : '.') +
+        ' Nothing was censored and nobody was punished — the other ' +
+        (cards.length - survivors.length) +
+        ' just quietly got nothing, so next month you make fewer of them.';
+      verdict.hidden = false;
+
+      playBtn.hidden = true;
+      resetBtn.hidden = false;
+      running = false;
+    }
+
+    playBtn.addEventListener('click', run);
+    resetBtn.addEventListener('click', build);
+    build();
+  })();
+</script>

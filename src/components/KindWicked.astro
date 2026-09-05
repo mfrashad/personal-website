@@ -1,0 +1,102 @@
+---
+// "Kind or wicked" — interactive for the generalist/specialist post.
+// Epstein's distinction, applied. Guess whether a field has clear rules and
+// fast feedback, then see which strategy actually wins in it.
+// Styles are is:global and namespaced under .kw-root.
+---
+
+<div class="kw-root" id="kwRoot">
+  <div class="kw-head">
+    <h3 class="kw-h3">Is your field kind or wicked?</h3>
+    <p class="kw-cap">Epstein's distinction. <b>Kind</b> means clear rules, repeating patterns, immediate feedback — specialise early and win. <b>Wicked</b> means fuzzy rules, delayed or misleading feedback, situations that never repeat — breadth wins. Guess each one.</p>
+  </div>
+
+  <div class="kw-list" id="kwList"></div>
+
+  <div class="kw-score" id="kwScore"></div>
+  <p class="kw-note">The uncomfortable bit: nearly everything a person actually builds a life around is on the wicked side. Most of us then respond by specialising anyway, because that is what the last two hundred years told everyone to do.</p>
+</div>
+
+<style is:global>
+  .kw-root {
+    --kw-bg: var(--color-bg-primary, #fff);
+    --kw-bg2: var(--color-bg-secondary, #f1f5f9);
+    --kw-ink: var(--color-text-body, rgba(0,0,0,.9));
+    --kw-mut: var(--color-text-muted, rgba(0,0,0,.6));
+    --kw-sub: var(--color-text-subtle, rgba(0,0,0,.4));
+    --kw-line: var(--color-border-default, rgba(0,0,0,.12));
+    --kw-kind: #2E9E6B;
+    --kw-wick: #D95F4E;
+    --kw-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family:var(--kw-sans); color:var(--kw-ink);
+    border:1px solid var(--kw-line); border-radius:14px;
+    padding:1.1rem; margin:2rem 0; background:var(--kw-bg); container-type:inline-size;
+  }
+  .kw-h3 { font-size:1rem; font-weight:700; margin:0 0 .2rem; letter-spacing:-.01em; }
+  .kw-cap { font-size:.8rem; color:var(--kw-mut); margin:0 0 1rem; max-width:60ch; line-height:1.5; }
+  .kw-cap b { color:var(--kw-ink); }
+
+  .kw-row { border-top:1px solid var(--kw-line); padding:.65rem 0; }
+  .kw-row:first-child { border-top:none; }
+  .kw-top { display:flex; gap:.6rem; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  .kw-field { font-size:.88rem; font-weight:600; }
+  .kw-btns { display:flex; gap:.35rem; }
+  .kw-b {
+    font:inherit; font-size:.72rem; font-weight:700; cursor:pointer;
+    border:1px solid var(--kw-line); background:var(--kw-bg2); color:var(--kw-ink);
+    border-radius:999px; padding:.28rem .7rem;
+  }
+  .kw-b:hover { transform:translateY(-1px); }
+  .kw-b.right { background:color-mix(in srgb, var(--kw-kind) 22%, transparent); border-color:var(--kw-kind); }
+  .kw-b.wrong { background:color-mix(in srgb, var(--kw-wick) 18%, transparent); border-color:var(--kw-wick); }
+  .kw-ans { font-size:.78rem; line-height:1.5; color:var(--kw-mut); margin-top:.4rem; }
+  .kw-ans b { color:var(--kw-ink); }
+  .kw-score { font-size:.85rem; font-weight:700; margin-top:.9rem; min-height:1.2em; }
+  .kw-note { font-size:.75rem; color:var(--kw-sub); margin:.5rem 0 0; line-height:1.55; }
+</style>
+
+<script>
+  (() => {
+    const root = document.getElementById('kwRoot');
+    if (!root) return;
+
+    const ITEMS = [
+      { f:'Chess', kind:true,  a:'<b>Kind.</b> Fixed rules, instant feedback, patterns that recur forever. Start at four years old and grind. This is where the 10,000 hours story comes from.' },
+      { f:'Golf',  kind:true,  a:'<b>Kind.</b> The ball does the same thing every time. Repetition is the whole sport.' },
+      { f:'Reading X-rays', kind:true, a:'<b>Mostly kind.</b> Defined inputs, a correct answer, feedback you can check. Which is also why it is one of the first things machines got good at.' },
+      { f:'Starting a company', kind:false, a:'<b>Wicked.</b> Rules change mid-game, feedback arrives years late and often lies to you, and the situation never repeats. Range beats depth here.' },
+      { f:'Research at the frontier', kind:false, a:'<b>Wicked.</b> The useful move is usually analogical — stealing a solution from a field that looks nothing like yours.' },
+      { f:'Your career', kind:false, a:'<b>Wicked.</b> No rules, no repeats, feedback delayed by a decade. And yet almost everyone is advised to treat it like chess.' },
+      { f:'Raising a kid', kind:false, a:'<b>Wicked.</b> Roughly twenty years of delayed feedback and a sample size of one.' },
+    ];
+
+    const list  = document.getElementById('kwList');
+    const score = document.getElementById('kwScore');
+    let answered = 0, right = 0;
+
+    ITEMS.forEach((it) => {
+      const row = document.createElement('div');
+      row.className = 'kw-row';
+      row.innerHTML =
+        '<div class="kw-top"><span class="kw-field">' + it.f + '</span>' +
+        '<span class="kw-btns"><button type="button" class="kw-b" data-v="kind">Kind</button>' +
+        '<button type="button" class="kw-b" data-v="wicked">Wicked</button></span></div>' +
+        '<div class="kw-ans" hidden></div>';
+      const ans = row.querySelector('.kw-ans');
+      row.querySelectorAll('.kw-b').forEach((b) => {
+        b.addEventListener('click', () => {
+          if (!ans.hidden) return;
+          const picked = b.dataset.v === 'kind';
+          const correct = picked === it.kind;
+          b.classList.add(correct ? 'right' : 'wrong');
+          ans.innerHTML = it.a;
+          ans.hidden = false;
+          answered++; if (correct) right++;
+          score.textContent = right + ' / ' + answered + ' so far' +
+            (answered === ITEMS.length ? ' — and five of the seven were wicked.' : '');
+        });
+      });
+      list.appendChild(row);
+    });
+  })();
+</script>
