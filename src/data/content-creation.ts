@@ -97,7 +97,21 @@ export const brandLogos = [
         name: 'Soundcore',
         src: '/content-images/brandlogos/soundcore.png',
     },
+    { name: 'Wahed', src: '/content-images/brandlogos/wahed.png' },
+    { name: 'Kita Bina', src: '/content-images/brandlogos/kitabina.png' },
+    { name: 'Kärcher', src: '/content-images/brandlogos/karcher.png' },
+    { name: 'UNHCR', src: '/content-images/brandlogos/unhcr.png' },
 ];
+
+// Current audience size across platforms. Kept as a hand-maintained figure
+// because it is a live follower count, not the sum of newFollowers per piece
+// (which only covers the pieces tracked below).
+export const followerCounts = {
+    tiktok: 16500,
+    instagram: 3500,
+};
+
+export const totalFollowers = followerCounts.tiktok + followerCounts.instagram;
 
 export const contentPieces: ContentPiece[] = [
     // === Personal Brand ===
@@ -655,7 +669,7 @@ export function getContentByType(): Record<ContentType, ContentPiece[]> {
 }
 
 export function getTotalMetrics() {
-    return contentPieces.reduce(
+    const totals = contentPieces.reduce(
         (acc, piece) => ({
             views: acc.views + piece.metrics.views,
             likes: acc.likes + piece.metrics.likes,
@@ -663,4 +677,6 @@ export function getTotalMetrics() {
         }),
         { views: 0, likes: 0, followers: 0 }
     );
+
+    return { ...totals, followers: totalFollowers };
 }
