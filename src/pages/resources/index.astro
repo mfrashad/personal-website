@@ -22,6 +22,7 @@ import { malaysiaGovGrants } from '@data/lists/malaysia-gov-grants';
 import { globalStudentCompetitions } from '@data/lists/global-student-competitions';
 import { malaysiaStudentCompetitions } from '@data/lists/malaysia-student-competitions';
 import { malaysiaOpenCompetitions } from '@data/lists/malaysia-open-competitions';
+import { hackathonResources } from '@data/lists/hackathon-resources';
 import { startupLearningResources } from '@data/lists/startup-learning-resources';
 import { startupIdeation } from '@data/lists/startup-ideation';
 import { startupBuildingMvp } from '@data/lists/startup-building-mvp';
@@ -39,6 +40,7 @@ import { aiAvatarTools } from '@data/lists/ai-avatar-tools';
 import { learnProgramming } from '@data/lists/learn-programming';
 import { paidOpenSourcePrograms } from '@data/lists/paid-open-source-programs';
 import resourceImagesData from '@data/resource-images.json';
+import { listFileMap } from '@lib/resource-admin';
 
 const lists = [
     { title: 'Best Purchases', items: favoriteProducts, href: '/resources/products', icon: 'ph:shopping-bag', tags: ['tools', 'favorites'] },
@@ -57,6 +59,7 @@ const lists = [
     { title: 'Best Startup Accelerators', items: startupAccelerators, href: '/resources/startup-accelerators', icon: 'ph:rocket-launch', tags: ['startup', 'funding', 'opportunities'] },
     { title: 'Malaysia Government Grants', items: malaysiaGovGrants, href: '/resources/malaysia-gov-grants', icon: 'ph:bank', tags: ['startup', 'grants', 'funding', 'malaysia', 'opportunities'] },
     { title: 'Global Student Competitions', items: globalStudentCompetitions, href: '/resources/global-student-competitions', icon: 'ph:trophy', tags: ['student', 'competitions', 'opportunities'] },
+    { title: 'Hackathon Resources', items: hackathonResources, href: '/resources/hackathon-resources', icon: 'ph:lightning', tags: ['student', 'competitions', 'learning'] },
     { title: 'Malaysia Student Competitions', items: malaysiaStudentCompetitions, href: '/resources/malaysia-student-competitions', icon: 'ph:medal', tags: ['student', 'competitions', 'malaysia', 'opportunities'] },
     { title: 'Malaysia Open Competitions', items: malaysiaOpenCompetitions, href: '/resources/malaysia-open-competitions', icon: 'ph:flag-banner', tags: ['competitions', 'malaysia', 'opportunities'] },
     { title: 'Startup Learning Resources', items: startupLearningResources, href: '/resources/startup-learning-resources', icon: 'ph:graduation-cap', tags: ['startup', 'learning'] },
@@ -75,7 +78,10 @@ const lists = [
     { title: 'AI Avatar Tools', items: aiAvatarTools, href: '/resources/ai-avatar-tools', icon: 'ph:user-circle', tags: ['ai', 'tools'] },
     { title: 'Learn Programming', items: learnProgramming, href: '/resources/learn-programming', icon: 'ph:code-block', tags: ['learning', 'tools'] },
     { title: 'Paid Open Source Programs', items: paidOpenSourcePrograms, href: '/resources/paid-open-source-programs', icon: 'ph:currency-dollar', tags: ['open source', 'opportunities', 'student'] },
-].filter(list => list.items.length > 0);
+]
+    .filter(list => list.items.length > 0)
+    // Sidebar grouping mirrors the content generator (src/lib/list-groups.ts)
+    .map(list => ({ ...list, group: listFileMap[list.href.replace('/resources/', '')]?.group }));
 
 // Extract all unique tags and sort them
 const allTags = [...new Set(lists.flatMap(list => list.tags))].sort();

@@ -1399,6 +1399,121 @@
     "mf2-dev": {
       "favicon": "/resource-images/favicons/mf2-dev.png",
       "screenshot": "/resource-images/screenshots/mf2-dev.png"
+    },
+    "devpost-com-hackathons": {
+      "favicon": "/resource-images/favicons/devpost-com-hackathons.ico",
+      "ogImage": "/resource-images/og/devpost-com-hackathons.jpg"
+    },
+    "mlh-com-seasons-2027-events": {
+      "favicon": "/resource-images/favicons/mlh-com-seasons-2027-events.ico"
+    },
+    "devfolio-co-hackathons": {
+      "favicon": "/resource-images/favicons/devfolio-co-hackathons.png",
+      "ogImage": "/resource-images/og/devfolio-co-hackathons.png"
+    },
+    "unstop-com-hackathons": {
+      "favicon": "/resource-images/favicons/unstop-com-hackathons.png"
+    },
+    "luma-com-discover": {
+      "favicon": "/resource-images/favicons/luma-com-discover.png",
+      "ogImage": "/resource-images/og/luma-com-discover.webp"
+    },
+    "hackathon-com": {
+      "favicon": "/resource-images/favicons/hackathon-com.png",
+      "ogImage": "/resource-images/og/hackathon-com.png",
+      "screenshot": "/resource-images/screenshots/hackathon-com.png"
+    },
+    "guide-mlh-com": {
+      "favicon": "/resource-images/favicons/guide-mlh-com.webp",
+      "ogImage": "/resource-images/og/guide-mlh-com.png",
+      "screenshot": "/resource-images/screenshots/guide-mlh-com.png"
+    },
+    "github-com-udaysharmadev-Hackathon-Starter-Pack-Complete-Guide-Roadmap": {
+      "favicon": "/resource-images/favicons/github-com-udaysharmadev-Hackathon-Starter-Pack-Complete-Guide-Roadmap.svg",
+      "ogImage": "/resource-images/og/github-com-udaysharmadev-Hackathon-Starter-Pack-Complete-Guide-Roadmap.png"
+    },
+    "medium-com-codetodeploy-the-hackathon-insider-playbook-from-a-8x-winner-de83d138bab5": {
+      "favicon": "/resource-images/favicons/medium-com-codetodeploy-the-hackathon-insider-playbook-from-a-8x-winner-de83d138bab5.png"
+    },
+    "devpost-com-software": {
+      "favicon": "/resource-images/favicons/devpost-com-software.ico",
+      "ogImage": "/resource-images/og/devpost-com-software.jpg"
+    },
+    "github-com-codecrafters-io-build-your-own-x": {
+      "favicon": "/resource-images/favicons/github-com-codecrafters-io-build-your-own-x.svg",
+      "ogImage": "/resource-images/og/github-com-codecrafters-io-build-your-own-x.png"
+    },
+    "trends-google-com": {
+      "favicon": "/resource-images/favicons/trends-google-com.ico",
+      "screenshot": "/resource-images/screenshots/trends-google-com.png"
+    },
+    "explodingtopics-com": {
+      "favicon": "/resource-images/favicons/explodingtopics-com.png",
+      "screenshot": "/resource-images/screenshots/explodingtopics-com.png"
+    },
+    "crunchbase-com": {
+      "favicon": "/resource-images/favicons/crunchbase-com.ico",
+      "screenshot": "/resource-images/screenshots/crunchbase-com.png"
+    },
+    "v0-app": {
+      "favicon": "/resource-images/favicons/v0-app.png",
+      "ogImage": "/resource-images/og/v0-app.png",
+      "screenshot": "/resource-images/screenshots/v0-app.png"
+    },
+    "huggingface-co": {
+      "favicon": "/resource-images/favicons/huggingface-co.ico",
+      "ogImage": "/resource-images/og/huggingface-co.png",
+      "screenshot": "/resource-images/screenshots/huggingface-co.png"
+    },
+    "github-com-public-apis-public-apis": {
+      "favicon": "/resource-images/favicons/github-com-public-apis-public-apis.svg",
+      "ogImage": "/resource-images/og/github-com-public-apis-public-apis.png"
+    },
+    "aistudio-google-com": {
+      "favicon": "/resource-images/favicons/aistudio-google-com.png",
+      "ogImage": "/resource-images/og/aistudio-google-com.png",
+      "screenshot": "/resource-images/screenshots/aistudio-google-com.png"
+    },
+    "figma-com-education": {
+      "favicon": "/resource-images/favicons/figma-com-education.png",
+      "ogImage": "/resource-images/og/figma-com-education.webp"
+    },
+    "skills-github-com": {
+      "screenshot": "/resource-images/screenshots/skills-github-com.png"
+    },
+    "makeareadme-com": {
+      "favicon": "/resource-images/favicons/makeareadme-com.ico",
+      "ogImage": "/resource-images/og/makeareadme-com.png",
+      "screenshot": "/resource-images/screenshots/makeareadme-com.png"
+    },
+    "ycombinator-com-library-4b-how-to-pitch-your-company": {
+      "favicon": "/resource-images/favicons/ycombinator-com-library-4b-how-to-pitch-your-company.ico",
+      "ogImage": "/resource-images/og/ycombinator-com-library-4b-how-to-pitch-your-company.png"
+    },
+    "screen-studio": {
+      "favicon": "/resource-images/favicons/screen-studio.png",
+      "ogImage": "/resource-images/og/screen-studio.png",
+      "screenshot": "/resource-images/screenshots/screen-studio.png"
+    },
+    "loom-com": {
+      "favicon": "/resource-images/favicons/loom-com.png",
+      "ogImage": "/resource-images/og/loom-com.jpg",
+      "screenshot": "/resource-images/screenshots/loom-com.png"
+    },
+    "slidesgo-com": {
+      "favicon": "/resource-images/favicons/slidesgo-com.webp",
+      "ogImage": "/resource-images/og/slidesgo-com.webp",
+      "screenshot": "/resource-images/screenshots/slidesgo-com.png"
+    },
+    "pitch-com-templates": {
+      "favicon": "/resource-images/favicons/pitch-com-templates.png",
+      "ogImage": "/resource-images/og/pitch-com-templates.jpg"
+    },
+    "gamma-app": {
+      "screenshot": "/resource-images/screenshots/gamma-app.png"
+    },
+    "producthunt-com": {
+      "screenshot": "/resource-images/screenshots/producthunt-com.png"
     }
   }
 }

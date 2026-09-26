@@ -42,8 +42,12 @@ import {
     Monitor,
     ArrowLeft,
     List,
+    Lightning,
+    CaretDown,
+    CaretRight,
 } from '@phosphor-icons/react';
 import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
+import { listGroups } from '@lib/list-groups';
 
 export interface ResourceList {
     title: string;
@@ -51,6 +55,8 @@ export interface ResourceList {
     href: string;
     icon: string;
     tags: string[];
+    /** Sidebar group id from src/lib/list-groups.ts. */
+    group?: string;
 }
 
 interface ResourcesFilterProps {
@@ -98,7 +104,11 @@ const iconMap: Record<string, PhosphorIcon> = {
     'ph:user-circle': UserCircle,
     'ph:code-block': CodeBlock,
     'ph:currency-dollar': CurrencyDollar,
+    'ph:lightning': Lightning,
 };
+
+const COLLAPSED_KEY = 'resources-sidebar-collapsed';
+const UNGROUPED = { id: 'other', title: 'Other' };
 
 function getImageKey(url?: string): string | null {
     if (!url) return null;
@@ -127,6 +137,28 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
     const [sidebarSearch, setSidebarSearch] = useState('');
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [lightbox, setLightbox] = useState<{ src: string; name: string } | null>(null);
+    const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem(COLLAPSED_KEY);
+            if (saved) setCollapsed(JSON.parse(saved));
+        } catch {
+            /* first visit, or storage blocked — everything starts expanded */
+        }
+    }, []);
+
+    const toggleGroup = (groupId: string) => {
+        setCollapsed((prev) => {
+            const next = { ...prev, [groupId]: !prev[groupId] };
+            try {
+                localStorage.setItem(COLLAPSED_KEY, JSON.stringify(next));
+            } catch {
+                /* not worth failing the click over */
+            }
+            return next;
+        });
+    };
 
     // Read hash on mount
     useEffect(() => {
@@ -195,6 +227,16 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
         }
         return filtered;
     }, [lists, sidebarSearch, selectedTags]);
+
+    // Bucket the sidebar lists into the same groups the content generator uses
+    const sidebarGroups = useMemo(() => {
+        return [...listGroups, UNGROUPED]
+            .map((group) => ({
+                ...group,
+                lists: sidebarLists.filter((l) => (l.group || UNGROUPED.id) === group.id),
+            }))
+            .filter((group) => group.lists.length > 0);
+    }, [sidebarLists]);
 
     const toggleTag = (tag: string) => {
         setSelectedTags((prev) =>
@@ -283,26 +325,48 @@ export default function ResourcesFilter({ lists, allTags, resourceImages = {} }:
                         </span>
                     </button>
 
-                    {sidebarLists.map((list) => {
-                        const slug = getCategorySlug(list.href);
-                        const isActive = selectedCategory === slug;
-                        const IconComp = iconMap[list.icon];
+                    {sidebarGroups.map((group) => {
+                        // A search always shows its hits, and the open list's group stays open.
+                        const isOpen =
+                            sidebarSearch !== '' ||
+                            !collapsed[group.id] ||
+                            group.lists.some((l) => getCategorySlug(l.href) === selectedCategory);
+                        const Caret = isOpen ? CaretDown : CaretRight;
                         return (
-                            <button
-                                key={list.href}
-                                onClick={() => selectCategory(slug)}
-                                className={`w-full flex items-center gap-2 px-2 py-1.5 text-left text-xs rounded-md transition-colors ${
-                                    isActive
-                                        ? 'bg-surface-tertiary text-content-headings font-semibold'
-                                        : 'text-content-body hover:bg-surface-tertiary'
-                                }`}
-                            >
-                                {IconComp && <IconComp size={14} className="shrink-0 opacity-60" />}
-                                <span className="truncate">{list.title}</span>
-                                <span className="ml-auto font-mono text-[10px] text-content-subtle shrink-0">
-                                    {list.items.length}
-                                </span>
-                            </button>
+                            <div key={group.id} className="mt-3">
+                                <button
+                                    onClick={() => toggleGroup(group.id)}
+                                    className="w-full flex items-center gap-1.5 px-2 py-1 text-left font-mono text-[10px] font-semibold uppercase tracking-wider text-content-subtle hover:text-content-body transition-colors"
+                                >
+                                    <Caret size={10} className="shrink-0" />
+                                    <span className="truncate">{group.title}</span>
+                                    <span className="ml-auto shrink-0">{group.lists.length}</span>
+                                </button>
+
+                                {isOpen &&
+                                    group.lists.map((list) => {
+                                        const slug = getCategorySlug(list.href);
+                                        const isActive = selectedCategory === slug;
+                                        const IconComp = iconMap[list.icon];
+                                        return (
+                                            <button
+                                                key={list.href}
+                                                onClick={() => selectCategory(slug)}
+                                                className={`w-full flex items-center gap-2 px-2 py-1.5 text-left text-xs rounded-md transition-colors ${
+                                                    isActive
+                                                        ? 'bg-surface-tertiary text-content-headings font-semibold'
+                                                        : 'text-content-body hover:bg-surface-tertiary'
+                                                }`}
+                                            >
+                                                {IconComp && <IconComp size={14} className="shrink-0 opacity-60" />}
+                                                <span className="truncate">{list.title}</span>
+                                                <span className="ml-auto font-mono text-[10px] text-content-subtle shrink-0">
+                                                    {list.items.length}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                            </div>
                         );
                     })}
                 </nav>
