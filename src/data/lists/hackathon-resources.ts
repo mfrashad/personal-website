@@ -44,8 +44,20 @@ export const hackathonResources: ResourceItem[] = [
         url: 'https://www.hackathon.com/',
         tags: ['Find hackathons', 'Global', 'Corporate'],
     },
+    {
+        name: 'Hackathon Kaki',
+        description: 'The OG Malaysian hackathon community on Facebook, running since 2017. Organisers post local hackathons here and members share team calls, tips, and results.',
+        url: 'https://www.facebook.com/groups/173090713240326/',
+        tags: ['Find hackathons', 'Malaysia', 'Community'],
+    },
 
     // TEAM BUILDING & MINDSET
+    {
+        name: "Hong Bing's Hackathon Crash Course",
+        description: 'Free field guide for first-time builders from Hong Bing, a serial hackathon winner and co-founder of AI Hackerdorm: the judging rubric, a Q&A for common questions, a playbook, a recommended tech stack and a resource list.',
+        url: 'https://hackathon.polytera.dev/',
+        tags: ['Beginner', 'Guide', 'Free'],
+    },
     {
         name: 'MLH Hackathon Guide',
         description: 'Short, free guide from MLH on what to expect at your first hackathon: what to bring, how teams form, how judging works, and how to ship something in 24–48 hours.',
