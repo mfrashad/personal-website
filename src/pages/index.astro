@@ -173,19 +173,29 @@ const allBookmarks: Bookmark[] = await fetchBookmarks(0);
 const latestBookmarks = allBookmarks.slice(0, 6);
 
 // Content creation data
-import { contentPieces, contentCategories, brandLogos } from '@data/content-creation';
+import { contentCategories, brandLogos, getContentByType, getTotalMetrics } from '@data/content-creation';
 import contentImageManifest from '@data/content-images.json';
 
+// Same ordering as /create: best-performing first (views summed across platforms).
+// Fields picked explicitly: island props are published in the HTML.
 const contentByCategory: Record<string, any[]> = {};
-for (const piece of contentPieces) {
-    if (!contentByCategory[piece.type]) contentByCategory[piece.type] = [];
-    contentByCategory[piece.type].push({
+for (const [type, pieces] of Object.entries(getContentByType())) {
+    contentByCategory[type] = pieces.map((piece) => ({
         id: piece.id,
         title: piece.title,
         type: piece.type,
-        metrics: piece.metrics,
-    });
+        metrics: { views: piece.metrics.views, likes: piece.metrics.likes },
+    }));
 }
+
+// Headline numbers for the content blurbs, from the same data as /create
+const contentTotals = getTotalMetrics();
+const roundDown = (n: number) =>
+    n >= 1_000_000 ? `${Math.floor(n / 1_000_000)}M+` : n >= 1_000 ? `${Math.floor(n / 1_000)}K+` : `${n}+`;
+const contentViewsLabel = roundDown(contentTotals.views);
+// Followers are a live count, so round to the nearest thousand (26,965 → 27K) rather than down
+const contentFollowersLabel = `${Math.round(contentTotals.followers / 1_000)}K`;
+const brandCountLabel = `${Math.floor(brandLogos.length / 5) * 5}+`;
 const categoryLabels = Object.fromEntries(
     Object.entries(contentCategories).map(([k, v]) => [k, v.label])
 );
@@ -322,7 +332,7 @@ import BookSection from '@components/books/BookSection.astro';
                         </div>
                         <div class="p-4">
                             <h3 class="font-bold text-sm sm:text-base text-neutral-900 group-hover:text-blue-600 transition-colors">Content Creation</h3>
-                            <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">5M+ views, 17K followers. Worked with multiple brands on cafe, tech, and lifestyle content.</p>
+                            <p class="text-xs sm:text-sm text-neutral-500 mt-1.5 leading-relaxed">{contentViewsLabel} views, {contentFollowersLabel} followers. Worked with {brandCountLabel} brands and organisations on advocacy, tech, and lifestyle content.</p>
                             <span class="inline-block text-xs text-blue-600 mt-2 group-hover:underline">See my work &rarr;</span>
                         </div>
                     </a>
@@ -402,7 +412,7 @@ import BookSection from '@components/books/BookSection.astro';
         <section>
             <SectionContent title="Content Creation" classes="!mb-3 sm:!mb-4 lg:!mb-6">
                 <SpriteCharacter config={SPRITES.content_creating} scale={0.35} slot="icon" client:visible />
-                5M+ views and 17K followers across TikTok and Instagram. Here's a preview of my content.
+                {contentViewsLabel} views and {contentFollowersLabel} followers across TikTok and Instagram. Here's a preview of my content.
             </SectionContent>
             <Grid>
                 <GridBox desktopFull>

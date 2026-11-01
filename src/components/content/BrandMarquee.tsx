@@ -3,6 +3,8 @@ import { useState } from 'react';
 interface BrandLogo {
     name: string;
     src: string;
+    /** Multiplies the logo's max width, for very wide lockups. */
+    scale?: number;
 }
 
 interface BrandMarqueeProps {
@@ -10,9 +12,8 @@ interface BrandMarqueeProps {
 }
 
 export default function BrandMarquee({ logos }: BrandMarqueeProps) {
-    // Scrolling by default; click to lay every logo out at once so nobody has to
-    // wait for a brand to come around on the belt.
-    const [expanded, setExpanded] = useState(false);
+    // Every logo laid out at once by default; collapse to a scrolling belt to save space.
+    const [expanded, setExpanded] = useState(true);
     const duplicated = [...logos, ...logos];
 
     return (
@@ -49,7 +50,8 @@ export default function BrandMarquee({ logos }: BrandMarqueeProps) {
                                         alt={logo.name}
                                         title={logo.name}
                                         loading="lazy"
-                                        className="h-full w-auto max-w-[100px] object-contain"
+                                        className="h-full w-auto object-contain"
+                                        style={{ maxWidth: `min(${100 * (logo.scale ?? 1)}px, 100%)` }}
                                     />
                                 </div>
                                 <span className="text-[10px] sm:text-xs text-neutral-400 text-center leading-tight">
@@ -79,7 +81,8 @@ export default function BrandMarquee({ logos }: BrandMarqueeProps) {
                                     alt={logo.name}
                                     title={logo.name}
                                     loading="lazy"
-                                    className="h-8 md:h-10 w-auto max-w-[100px] object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
+                                    style={{ maxWidth: 100 * (logo.scale ?? 1) }}
+                                    className="h-8 md:h-10 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                                 />
                             </div>
                         ))}

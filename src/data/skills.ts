@@ -1023,7 +1023,7 @@ export const skills: Skill[] = [
         xp: 'hobbyist',
         amount: 100,
         image: '/skill-images/content-creation.webp',
-        description: 'Est. 100 posts, 300 hours. 20K+ followers, 5M+ views.',
+        description: 'Est. 200+ posts, 300+ hours. 27K followers, 9M+ views.',
     },
 
     {

@@ -5,7 +5,7 @@ interface SerializedContentPiece {
     id: string;
     title: string;
     type: string;
-    metrics: { views: number; likes: number; comments: number };
+    metrics: { views: number; likes: number };
 }
 
 interface BrandLogo {
@@ -27,9 +27,10 @@ function formatNumber(n: number): string {
 }
 
 export default function ContentPreview({ piecesByCategory, categoryLabels, imageManifest, brandLogos }: ContentPreviewProps) {
-    const categoryOrder = ['personal-brand', 'cafe-hopping', 'experience', 'educational', 'products'];
+    // Same section order as /create
+    const categoryOrder = ['advocacy', 'educational', 'personal-brand', 'experience', 'cafe-hopping', 'products'];
     const availableCategories = categoryOrder.filter(c => piecesByCategory[c]?.length > 0);
-    const [activeTab, setActiveTab] = useState('personal-brand');
+    const [activeTab, setActiveTab] = useState(availableCategories[0] ?? 'advocacy');
     const [isUserInteracting, setIsUserInteracting] = useState(false);
     const [showAnalytics, setShowAnalytics] = useState<string | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -183,8 +184,16 @@ export default function ContentPreview({ piecesByCategory, categoryLabels, image
                                 <div className="mt-2 px-0.5">
                                     <h3 className="font-semibold text-xs text-neutral-900 truncate">{piece.title}</h3>
                                     <div className="flex items-center gap-2 mt-0.5 text-[11px] text-neutral-500">
-                                        <span>{formatNumber(piece.metrics.views)} views</span>
-                                        <span>{formatNumber(piece.metrics.likes)} likes</span>
+                                        <span className="inline-flex items-center gap-1" title={`${piece.metrics.views.toLocaleString()} views`}>
+                                            <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4a1 1 0 001.5.86l11.6-7.2a1 1 0 000-1.72L8.5 3.94A1 1 0 007 4.8z" /></svg>
+                                            {formatNumber(piece.metrics.views)}
+                                            <span className="sr-only"> views</span>
+                                        </span>
+                                        <span className="inline-flex items-center gap-1" title={`${piece.metrics.likes.toLocaleString()} likes`}>
+                                            <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 5.3 3 1.7-1.8 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" /></svg>
+                                            {formatNumber(piece.metrics.likes)}
+                                            <span className="sr-only"> likes</span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>

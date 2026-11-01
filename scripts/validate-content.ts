@@ -89,6 +89,10 @@ for (const m of mediaMentions) {
 for (const p of contentPieces) {
     if (!PLATFORMS.has(p.platform)) fail(`content-creation.ts: ${p.id} has unknown platform ${JSON.stringify(p.platform)}`);
     if (!CONTENT_TYPES.has(p.type)) fail(`content-creation.ts: ${p.id} has unknown type ${JSON.stringify(p.type)}`);
+    for (const c of p.crossPosts ?? []) {
+        if (!PLATFORMS.has(c.platform)) fail(`content-creation.ts: ${p.id} cross-post has unknown platform ${JSON.stringify(c.platform)}`);
+        if (c.platform === p.platform) fail(`content-creation.ts: ${p.id} cross-post repeats its primary platform ${c.platform}`);
+    }
 }
 
 // --- images referenced actually exist -------------------------------------
@@ -111,8 +115,13 @@ for (const [id, paths] of Object.entries(speakingImages)) {
 }
 
 const pieceIds = new Set(contentPieces.map((p) => p.id));
-for (const [id, slots] of Object.entries(contentImages)) {
-    if (!pieceIds.has(id)) fail(`content-images.json: "${id}" has images but no matching entry in contentPieces`);
+for (const [key, slots] of Object.entries(contentImages)) {
+    // "<id>" holds the primary post's images, "<id>@<platform>" a cross-post's.
+    const [id, platform] = key.split('@');
+    if (!pieceIds.has(id)) fail(`content-images.json: "${key}" has images but no matching entry in contentPieces`);
+    if (platform && !contentPieces.find((p) => p.id === id)?.crossPosts?.some((c) => c.platform === platform)) {
+        fail(`content-images.json: "${key}" has images but ${id} has no ${platform} cross-post`);
+    }
     for (const [slot, p] of Object.entries(slots)) {
         if (p && !assetExists(p)) fail(`content-images.json: ${id}.${slot} references missing file ${p}`);
     }

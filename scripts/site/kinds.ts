@@ -114,12 +114,13 @@ export const KINDS: Record<KindName, KindSpec> = {
         images: 'content',
         notes:
             'Videos on the /create portfolio. Array order is irrelevant — getContentByType() ' +
-            're-sorts each category by views at build time.',
+            're-sorts each category by views (summed across crossPosts) at build time. ' +
+            'crossPosts (same piece on another platform) is not settable here; edit the file.',
         fields: [
             { name: 'id', required: true, help: "Slug, e.g. 'hulu-cafe'. Must be unique. Used as the image directory name." },
             { name: 'title', required: true, help: 'Video title.' },
             { name: 'date', required: true, type: 'date', help: "YYYY-MM-DD. Written as new Date('…')." },
-            { name: 'type', required: true, enum: ['cafe-hopping', 'educational', 'products', 'experience', 'personal-brand'], help: 'Category section.' },
+            { name: 'type', required: true, enum: ['cafe-hopping', 'educational', 'advocacy', 'products', 'experience', 'personal-brand'], help: 'Category section.' },
             { name: 'platform', required: true, enum: ['tiktok', 'instagram', 'youtube'], help: 'Where it was posted.' },
             { name: 'metrics', required: true, type: 'object', help: 'views and likes required; comments, saves, shares, newFollowers optional.' },
             { name: 'location', help: 'Optional.' },
@@ -136,7 +137,7 @@ export const KINDS: Record<KindName, KindSpec> = {
         dividers: false,
         fieldOrder: ['name', 'src'],
         images: 'logo',
-        notes: 'Logos in the /create marquee. Filename slug is lowercase with all separators stripped.',
+        notes: 'Logos in the /create brand grid. Filename slug is lowercase with all separators stripped.',
         fields: [
             { name: 'name', required: true, help: "Display name, e.g. 'Touch \\'n Go'. This is the identity." },
             { name: 'src', required: true, help: 'Set automatically from the uploaded image; do not pass by hand.' },

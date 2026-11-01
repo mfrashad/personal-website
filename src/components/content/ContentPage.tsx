@@ -1,17 +1,9 @@
 import BrandMarquee from './BrandMarquee';
-import ContentSection from './ContentSection';
+import ContentSection, { type SerializedContentPiece } from './ContentSection';
 
-// Deliberately narrow: these props are serialized into the delivered HTML as
-// island props, so this interface is the allowlist of what /create makes public.
-// Widen it only with fields that are safe to publish.
-interface SerializedContentPiece {
-    id: string;
-    title: string;
-    metrics: {
-        views: number;
-        likes: number;
-    };
-}
+// Deliberately narrow: pieces are serialized into the delivered HTML as island
+// props, so SerializedContentPiece (in ContentSection.tsx) is the allowlist of
+// what /create makes public. Widen it only with fields that are safe to publish.
 
 interface CategoryConfig {
     label: string;
@@ -23,38 +15,16 @@ interface ContentPageProps {
     contentByType: Record<string, SerializedContentPiece[]>;
     categories: Record<string, CategoryConfig>;
     imageManifest: Record<string, { content: string; analytics: string }>;
-    totalMetrics: { views: number; likes: number; followers: number };
 }
 
-function formatNumber(n: number): string {
-    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-    if (n >= 1_000) return (n / 1_000).toFixed(n >= 10_000 ? 0 : 1) + 'K';
-    return n.toLocaleString();
-}
 
-// Sections to render (personal-brand shown first as social proof, then the 4 services)
-const SECTION_ORDER = ['personal-brand', 'educational', 'experience', 'cafe-hopping', 'products'];
+// Sections to render: advocacy and education lead, then personal brand, then the services
+const SECTION_ORDER = ['advocacy', 'educational', 'personal-brand', 'experience', 'cafe-hopping', 'products'];
 
-export default function ContentPage({ brandLogos, contentByType, categories, imageManifest, totalMetrics }: ContentPageProps) {
+export default function ContentPage({ brandLogos, contentByType, categories, imageManifest }: ContentPageProps) {
     return (
         <div>
-            {/* Stats summary */}
-            <div className="flex items-center gap-5 sm:gap-8 mb-6 sm:mb-8 text-center">
-                <div>
-                    <div className="text-lg sm:text-2xl font-bold text-neutral-900">{formatNumber(totalMetrics.views)}</div>
-                    <div className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-wide">Total Views</div>
-                </div>
-                <div>
-                    <div className="text-lg sm:text-2xl font-bold text-neutral-900">{formatNumber(totalMetrics.likes)}</div>
-                    <div className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-wide">Total Likes</div>
-                </div>
-                <div>
-                    <div className="text-lg sm:text-2xl font-bold text-neutral-900">{formatNumber(totalMetrics.followers)}</div>
-                    <div className="text-[10px] sm:text-xs text-neutral-500 uppercase tracking-wide">Followers</div>
-                </div>
-            </div>
-
-            {/* Brand logo marquee */}
+            {/* Brand logos (grid by default, collapsible to a marquee) */}
             <BrandMarquee logos={brandLogos} />
 
             {/* Contact CTA (inline) */}
