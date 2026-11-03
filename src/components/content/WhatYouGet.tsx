@@ -140,6 +140,23 @@ export default function WhatYouGet() {
                 </p>
             </div>
 
+            {/* Features */}
+            <ul className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
+                {FEATURES.map((f) => (
+                    <li key={f.title} className="flex gap-3">
+                        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-neutral-900 text-white">
+                            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                {f.icon}
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 className="text-sm font-bold text-neutral-800">{f.title}</h3>
+                            <p className="text-xs sm:text-sm text-neutral-500 leading-snug mt-0.5">{f.body}</p>
+                        </div>
+                    </li>
+                ))}
+            </ul>
+
             {/* Highlight loops: swipe sideways, no auto-scroll */}
             <div className="relative">
             <div className="absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
@@ -172,22 +189,6 @@ export default function WhatYouGet() {
             </div>
             </div>
 
-            {/* Features */}
-            <ul className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-5">
-                {FEATURES.map((f) => (
-                    <li key={f.title} className="flex gap-3">
-                        <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-neutral-900 text-white">
-                            <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                                {f.icon}
-                            </svg>
-                        </span>
-                        <div>
-                            <h3 className="text-sm font-bold text-neutral-800">{f.title}</h3>
-                            <p className="text-xs sm:text-sm text-neutral-500 leading-snug mt-0.5">{f.body}</p>
-                        </div>
-                    </li>
-                ))}
-            </ul>
         </section>
     );
 }
