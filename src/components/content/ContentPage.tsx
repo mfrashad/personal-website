@@ -1,4 +1,5 @@
 import BrandMarquee from './BrandMarquee';
+import WhatYouGet from './WhatYouGet';
 import ContentSection, { type SerializedContentPiece } from './ContentSection';
 
 // Deliberately narrow: pieces are serialized into the delivered HTML as island
@@ -26,6 +27,9 @@ export default function ContentPage({ brandLogos, contentByType, categories, ima
         <div>
             {/* Brand logos (grid by default, collapsible to a marquee) */}
             <BrandMarquee logos={brandLogos} />
+
+            {/* What brands get: motion graphics, 3D, mock UI */}
+            <WhatYouGet />
 
             {/* Contact CTA (inline) */}
             <ContactCTA />
