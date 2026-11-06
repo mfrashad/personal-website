@@ -591,6 +591,24 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 .igreal .pin { position:absolute; right:7%; top:4%; width:24%; color:#fff; transform:rotate(45deg); filter:drop-shadow(0 1px 3px rgba(0,0,0,.6)); }
 .igreal .pin .ico { width:100%; height:auto; fill:#fff; stroke:#fff; stroke-width:1.2; }
 
+/* phone remote pairing overlay (outside the stage) */
+.remote-overlay { position:fixed; inset:0; z-index:8000; background:rgba(5,5,9,.86); display:none; align-items:center; justify-content:center; backdrop-filter:blur(8px); }
+.remote-overlay.on { display:flex; }
+.rc-card { background:#11111a; border:1px solid rgba(255,107,44,.5); border-radius:22px; padding:26px 30px; color:#f5f6f8; font-family:'Switzer',-apple-system,sans-serif; width:min(640px, 92vw); display:flex; flex-direction:column; gap:16px; box-shadow:0 30px 90px rgba(0,0,0,.6); }
+.rc-k { font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.25em; text-transform:uppercase; color:#FF6B2C; }
+.rc-row { display:flex; gap:22px; align-items:center; }
+.rc-qr { width:170px; height:170px; background:#fff; padding:8px; border-radius:12px; image-rendering:pixelated; flex:none; }
+.rc-side { display:flex; flex-direction:column; gap:8px; min-width:0; }
+.rc-t { font-size:15px; color:#9ba1ad; }
+.rc-url { font-family:'JetBrains Mono',monospace; font-size:14px; color:#5DE6EC; word-break:break-all; }
+.rc-code { font-family:'JetBrains Mono',monospace; font-size:46px; font-weight:700; letter-spacing:.22em; }
+.rc-hint { font-size:13px; color:#5a606c; }
+.rc-btns { display:flex; gap:10px; justify-content:flex-end; }
+.rc-btns button { background:none; border:1px solid rgba(255,255,255,.2); color:#f5f6f8; border-radius:9px; padding:8px 14px; font-size:14px; cursor:pointer; }
+.remote-dot { position:fixed; left:14px; top:12px; width:8px; height:8px; border-radius:50%; background:#3ddc84; z-index:902; opacity:0; transition:opacity .3s; pointer-events:none; }
+.remote-dot.on { opacity:.7; }
+@media print { .remote-overlay, .remote-dot { display:none !important; } }
+
 </style>
 </head>
 <body>
@@ -624,6 +642,25 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 </div>
 <div class="edit-hotzone" id="editHotzone"></div>
 <button class="edit-toggle" id="editToggle" title="Edit mode (E)">✏️</button>
+
+<!-- Phone remote: press R to pair (relay: ntfy.sh) -->
+<div class="remote-overlay" id="remoteOverlay">
+  <div class="rc-card">
+    <div class="rc-k">Phone remote</div>
+    <div class="rc-row">
+      <img class="rc-qr" src="assets/hackathon/qr/remote.png" alt="QR to the remote page">
+      <div class="rc-side">
+        <div class="rc-t">1. On your phone, open</div>
+        <div class="rc-url">mfrashad.com/speaking-slides/remote.html</div>
+        <div class="rc-t">2. Enter this code</div>
+        <div class="rc-code">·····</div>
+      </div>
+    </div>
+    <div class="rc-hint">Pair before you mirror to the projector. Press R to close.</div>
+    <div class="rc-btns"><button data-act="new">New code</button><button data-act="close">Close</button></div>
+  </div>
+</div>
+<div class="remote-dot" id="remoteDot" title="Phone remote connected"></div>
 
 <div class="deck-viewport">
 <main class="deck-stage" id="deckStage">
@@ -1763,7 +1800,7 @@ class SlidePresentation {
   pendingSteps() { return this.slides[this.current].querySelectorAll('.step:not(.on)'); }
   next() {
     const steps = this.pendingSteps();
-    if (steps.length) { steps[0].classList.add('on'); return; }
+    if (steps.length) { steps[0].classList.add('on'); window.remoteSync && window.remoteSync(); return; }
     this.show(this.current + 1);
   }
   prev() { this.show(this.current - 1); }
@@ -1796,6 +1833,7 @@ class SlidePresentation {
     const note = this.slides[this.current].querySelector('template.note');
     document.getElementById('notesText').textContent = note ? note.content.textContent.trim() : '';
     history.replaceState(null, '', '#' + (this.current + 1));
+    window.remoteSync && window.remoteSync();
   }
   setupNav() {
     document.addEventListener('keydown', (e) => {
@@ -2010,6 +2048,61 @@ document.querySelectorAll('img').forEach(img => {
 });
 
 const deck = new SlidePresentation();
+
+/* ===========================================
+   PHONE REMOTE — press R to pair. Phone opens
+   speaking-slides/remote.html and enters the code.
+   Relay: ntfy.sh (public pub/sub, CORS-enabled).
+   =========================================== */
+(function remoteControl() {
+  const DECK = (location.pathname.split('/').pop() || '').replace(/\.html$/, '') || 'hackathon-ai-age';
+  const STORE = 'deck-remote-code:' + DECK;
+  const overlay = document.getElementById('remoteOverlay');
+  const dot = document.getElementById('remoteDot');
+  let code = null, es = null, timer = null;
+  const topic = () => 'mfr-deck-' + DECK + '-' + code;
+  const newCode = () => { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; return Array.from(crypto.getRandomValues(new Uint8Array(5)), b => A[b % A.length]).join(''); };
+  const send = (obj) => { if (!code) return; fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'deck' }, obj)) }).catch(() => {}); };
+  window.remoteSync = () => {
+    if (!code) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const s = deck.slides[deck.current];
+      send({ s: deck.current, n: deck.slides.length, steps: s.querySelectorAll('.step.on').length, total: s.querySelectorAll('.step').length });
+    }, 120);
+  };
+  function connect() {
+    if (es) es.close();
+    es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
+    es.onopen = () => { dot.classList.add('on'); window.remoteSync(); };
+    es.onerror = () => dot.classList.remove('on');
+    es.onmessage = (e) => {
+      let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
+      if (!d || d.from !== 'remote') return;
+      if (d.a === 'next') deck.next();
+      else if (d.a === 'prev') deck.prev();
+      else if (d.a === 'go' && Number.isFinite(d.i)) deck.show(d.i);
+      else if (d.a === 'hello') { overlay.classList.remove('on'); window.remoteSync(); }
+    };
+  }
+  function setCode(c) { code = c; localStorage.setItem(STORE, c); overlay.querySelector('.rc-code').textContent = c; connect(); }
+  function open() { if (!code) setCode(localStorage.getItem(STORE) || newCode()); overlay.querySelector('.rc-code').textContent = code; overlay.classList.add('on'); }
+  document.addEventListener('keydown', (e) => {
+    if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') return;
+    if (e.key === 'r' || e.key === 'R') overlay.classList.contains('on') ? overlay.classList.remove('on') : open();
+  });
+  overlay.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const act = e.target.dataset && e.target.dataset.act;
+    if (act === 'new') setCode(newCode());
+    if (act === 'close' || e.target === overlay) overlay.classList.remove('on');
+  });
+  /* ?remote=CODE in the link (e.g. sent to the organiser): connect silently, nothing shown on screen.
+     Otherwise, if already paired in this browser, reconnect quietly. */
+  const fromUrl = (new URLSearchParams(location.search).get('remote') || '').toUpperCase();
+  if (/^[A-Z0-9]{4,8}$/.test(fromUrl)) setCode(fromUrl);
+  else { const saved = localStorage.getItem(STORE); if (saved && !navigator.webdriver) { code = saved; connect(); } }
+})();
 </script>
 </body>
 </html>

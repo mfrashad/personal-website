@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#07070b">
+<title>Slide remote · Fathy Rashad</title>
+<style>
+:root { --bg:#07070b; --soft:#14141d; --ink:#f5f6f8; --ink2:#9ba1ad; --ink3:#5a606c; --accent:#FF6B2C; --cyan:#5DE6EC;
+  --grad:linear-gradient(92deg,#FF3B1F 0%,#FF7A1A 52%,#FFC23D 100%); }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; background:var(--bg); color:var(--ink); font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+body { display:flex; flex-direction:column; padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 12px); gap:10px; overflow:hidden; }
+.top { display:flex; justify-content:space-between; align-items:center; font-family:ui-monospace, Menlo, monospace; font-size:13px; color:var(--ink2); }
+.status { display:flex; gap:8px; align-items:center; }
+.status i { width:9px; height:9px; border-radius:50%; background:#ff4a3d; display:block; }
+.status.ok i { background:#3ddc84; box-shadow:0 0 8px #3ddc84; }
+.timer { font-size:15px; color:var(--ink); padding:4px 10px; border:1px solid rgba(255,255,255,.15); border-radius:20px; }
+.now { background:var(--soft); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:14px 16px; flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; }
+.meta { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+.count { font-family:ui-monospace, Menlo, monospace; font-size:14px; color:var(--cyan); white-space:nowrap; }
+.act { font-family:ui-monospace, Menlo, monospace; font-size:12px; color:var(--ink3); text-transform:uppercase; letter-spacing:.1em; text-align:right; }
+.title { font-size:19px; font-weight:700; line-height:1.25; }
+.steps { font-family:ui-monospace, Menlo, monospace; font-size:12px; color:var(--accent); }
+.notes { overflow-y:auto; -webkit-overflow-scrolling:touch; font-size:19px; line-height:1.5; color:#e8eaef; padding-right:4px; flex:1; }
+.notes p { margin-bottom:10px; }
+.notes em { color:var(--accent); font-style:normal; }
+.next { font-size:14px; color:var(--ink2); padding:2px 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.next b { color:var(--ink3); font-weight:600; margin-right:6px; }
+.btns { display:grid; grid-template-columns:1fr 2.2fr; gap:10px; height:30vh; min-height:150px; }
+button { border:none; border-radius:22px; font-size:22px; font-weight:800; color:var(--ink); background:var(--soft); border:1px solid rgba(255,255,255,.1); }
+button.nextb { background:var(--grad); color:#0a0a12; font-size:30px; }
+button:active { transform:scale(.97); filter:brightness(1.15); }
+.pair { position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; justify-content:center; padding:28px; gap:18px; z-index:10; }
+.pair.hide { display:none; }
+.pair h1 { font-size:28px; }
+.pair p { color:var(--ink2); font-size:16px; line-height:1.5; }
+.pair input { font-family:ui-monospace, Menlo, monospace; font-size:34px; letter-spacing:.3em; text-transform:uppercase; text-align:center; padding:14px; border-radius:16px; border:1px solid rgba(255,255,255,.2); background:var(--soft); color:var(--ink); }
+.pair button { height:64px; }
+.small { font-size:13px; color:var(--ink3); text-align:center; }
+.small a { color:var(--ink2); }
+</style>
+</head>
+<body>
+
+<div class="pair" id="pair">
+  <h1>Slide remote</h1>
+  <p><b>Slides on someone else's laptop?</b> Make a code, then send them the link. Their screen connects to this phone. Nothing shows on the projector.</p>
+  <button class="nextb" id="makeBtn">Make a code</button>
+  <div id="linkBox" style="display:none; flex-direction:column; gap:10px">
+    <p>Open this link on the laptop running the slides:</p>
+    <div id="deckLink" style="font-family:ui-monospace,Menlo,monospace; font-size:15px; color:#5DE6EC; word-break:break-all; background:#14141d; padding:12px; border-radius:12px"></div>
+    <button id="shareBtn">Share / copy link</button>
+    <button class="nextb" id="startBtn">Start the remote</button>
+  </div>
+  <p style="margin-top:8px">Or, if the slides show a code (press <b>R</b> on them), type it here:</p>
+  <input id="codeIn" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODE">
+  <button id="pairBtn">Connect</button>
+  <p class="small">Needs internet on both devices. Arrow keys on the laptop always work too.</p>
+</div>
+
+<div class="top">
+  <div class="status" id="status"><i></i><span id="statusText">connecting…</span></div>
+  <div class="timer" id="timer">00:00</div>
+</div>
+
+<div class="now">
+  <div class="meta"><span class="count" id="count">– / –</span><span class="act" id="act"></span></div>
+  <div class="title" id="title">Waiting for the slides…</div>
+  <div class="steps" id="steps"></div>
+  <div class="notes" id="notes"><p>Press <b>R</b> on the laptop to show the code, then connect.</p></div>
+</div>
+<div class="next" id="next"></div>
+
+<div class="btns">
+  <button id="prev">‹ Back</button>
+  <button class="nextb" id="nextBtn">Next ›</button>
+</div>
+<p class="small"><a href="#" id="unpair">change code</a></p>
+
+<script>
+const params = new URLSearchParams(location.search);
+const DECK = (params.get('deck') || 'hackathon-ai-age').replace(/[^a-z0-9-]/gi, '');
+const STORE = 'deck-remote-code:' + DECK;
+let code = (params.get('k') || localStorage.getItem(STORE) || '').toUpperCase();
+let slides = [], es = null, lastState = null, startedAt = null, wake = null;
+const $ = id => document.getElementById(id);
+const topic = () => 'mfr-deck-' + DECK + '-' + code;
+
+/* read titles + speaker notes straight from the deck file */
+fetch(DECK + '.html').then(r => r.text()).then(html => {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  slides = Array.from(doc.querySelectorAll('section.slide')).map(s => ({
+    act: s.dataset.act || '',
+    title: titleOf(s),
+    note: (s.querySelector('template.note') || { innerHTML: '' }).innerHTML.trim(),
+  }));
+  render();
+}).catch(() => {});
+
+function titleOf(s) {
+  const h = s.querySelector('h1, h2') || s.querySelector('.caption, .kicker');
+  if (!h) return '';
+  const c = h.cloneNode(true); c.querySelectorAll('br').forEach(b => b.replaceWith(' '));
+  return c.textContent.replace(/\s+/g, ' ').trim();
+}
+function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+function render() {
+  if (!lastState) return;
+  const i = lastState.s, s = slides[i];
+  $('count').textContent = (i + 1) + ' / ' + (lastState.n || slides.length || '–');
+  if (!s) return;
+  $('act').textContent = s.act;
+  $('title').textContent = s.title || '(no title)';
+  $('steps').textContent = lastState.total ? 'Reveals: ' + lastState.steps + ' of ' + lastState.total + (lastState.steps < lastState.total ? ' · next tap reveals more' : '') : '';
+  const tmp = document.createElement('textarea'); tmp.innerHTML = s.note;
+  $('notes').innerHTML = tmp.value.split('\n').filter(l => l.trim()).map(l => '<p>' + esc(l.trim()).replace(/(\[[^\]]*\])/g, '<em>$1</em>') + '</p>').join('');
+  $('notes').scrollTop = 0;
+  const n = slides[i + 1];
+  $('next').innerHTML = n ? '<b>NEXT</b>' + esc(n.title || n.act) : '<b>NEXT</b>end of deck';
+}
+
+function setStatus(ok, text) { $('status').classList.toggle('ok', ok); $('statusText').textContent = text; }
+function send(obj) {
+  if (!code) return;
+  fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'remote' }, obj)) })
+    .catch(() => setStatus(false, 'send failed, check internet'));
+}
+function connect() {
+  if (es) es.close();
+  setStatus(false, 'connecting…');
+  es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
+  es.onopen = () => { setStatus(true, 'connected · ' + code); send({ a: 'hello' }); };
+  es.onerror = () => setStatus(false, 'reconnecting…');
+  es.onmessage = (e) => {
+    let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
+    if (!d || d.from !== 'deck') return;
+    lastState = d; setStatus(true, 'connected · ' + code); render();
+  };
+}
+function pair(c) {
+  code = (c || '').trim().toUpperCase();
+  if (code.length < 4) return;
+  localStorage.setItem(STORE, code);
+  $('pair').classList.add('hide');
+  connect();
+}
+async function keepAwake() {
+  try { if ('wakeLock' in navigator && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => wake = null); } } catch (_) {}
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { keepAwake(); if (code) connect(); } });
+
+$('pairBtn').onclick = () => { pair($('codeIn').value); keepAwake(); };
+const deckUrl = (c) => location.origin + location.pathname.replace(/remote\.html$/, DECK + '.html') + '?remote=' + c;
+let made = null;
+$('makeBtn').onclick = () => {
+  const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  made = Array.from(crypto.getRandomValues(new Uint8Array(5)), b => A[b % A.length]).join('');
+  $('deckLink').textContent = deckUrl(made);
+  $('linkBox').style.display = 'flex';
+};
+$('shareBtn').onclick = async () => {
+  const url = $('deckLink').textContent;
+  try { if (navigator.share) await navigator.share({ title: 'Slides', url }); else { await navigator.clipboard.writeText(url); $('shareBtn').textContent = 'Copied!'; } }
+  catch (_) { try { await navigator.clipboard.writeText(url); $('shareBtn').textContent = 'Copied!'; } catch (__) {} }
+};
+$('startBtn').onclick = () => { pair(made); keepAwake(); };
+$('codeIn').addEventListener('keydown', e => { if (e.key === 'Enter') { pair($('codeIn').value); keepAwake(); } });
+$('nextBtn').onclick = () => { if (!startedAt) startedAt = Date.now(); send({ a: 'next' }); keepAwake(); };
+$('prev').onclick = () => { send({ a: 'prev' }); keepAwake(); };
+$('timer').onclick = () => { startedAt = startedAt ? null : Date.now(); };
+$('unpair').onclick = (e) => { e.preventDefault(); localStorage.removeItem(STORE); if (es) es.close(); code = ''; $('codeIn').value = ''; $('pair').classList.remove('hide'); };
+setInterval(() => {
+  if (!startedAt) { $('timer').textContent = '00:00'; return; }
+  const t = Math.floor((Date.now() - startedAt) / 1000);
+  $('timer').textContent = String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
+}, 500);
+
+if (code) pair(code); else $('pair').classList.remove('hide');
+</script>
+</body>
+</html>
