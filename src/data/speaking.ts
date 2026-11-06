@@ -19,6 +19,19 @@ export interface SpeakingEngagement {
 export const speakingEngagements: SpeakingEngagement[] = [
     // 2026
     {
+        id: 'sibu-hackathon-urban-edu-2026',
+        date: new Date('2026-11-07'),
+        title: 'How to Win a Hackathon in the AI Age',
+        event: 'My Kampung, My Pride · Sibu Hackathon 2026',
+        organizer: 'Urban Edu',
+        description: 'What judges look for, and how to build a working demo for free with AI.',
+        location: 'Sibu, Sarawak',
+        audience: 'Hackathon participants, mostly first-timers',
+        type: 'talk',
+        topics: ['Hackathon', 'AI', 'Pitching'],
+        slidesUrl: '/speaking-slides/hackathon-ai-age.html',
+    },
+    {
         id: 'yayasan-peneraju-future-ready-2026',
         date: new Date('2026-07-30'),
         title: 'Future-Ready Careers: How AI is Changing the Workplace',
