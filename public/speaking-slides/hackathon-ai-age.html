@@ -399,12 +399,29 @@ body.static .fill { width:var(--w) !important; transition:none !important; }
 .hud.count { right:28px; bottom:20px; }
 .hud.mark { right:28px; top:16px; opacity:.75; }
 .progress { position:fixed; top:0; left:0; height:3px; background:var(--grad); width:0%; z-index:901; transition:width .3s ease; }
-.overview { position:fixed; inset:0; z-index:6000; background:rgba(8,8,14,.97); display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.overview { position:fixed; inset:0; z-index:6000; background:#08080e; display:none; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 .overview.on { display:block; }
-.overview .ov-head { position:sticky; top:0; background:rgba(8,8,14,.97); padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); z-index:1; }
+.overview .ov-head { position:sticky; top:0; background:#08080e; padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.08); z-index:1; }
 .overview .ov-head .t { font-family:var(--font-mono); font-size:14px; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); }
 .overview .ov-head button { background:none; border:1px solid rgba(255,255,255,.2); color:var(--ink); border-radius:8px; padding:8px 14px; font-size:14px; cursor:pointer; }
 .overview .ov-list { max-width:900px; margin:0 auto; padding:10px 20px 60px; }
+.overview .ov-btns { display:flex; gap:8px; }
+.overview .ov-head button.sel { background:var(--accent); color:#0a0a12; border-color:var(--accent); font-weight:700; }
+.ov-grid { display:grid; grid-template-columns:repeat(auto-fill, 340px); gap:22px 18px; justify-content:center; padding:22px 20px 70px; }
+.ov-cell { cursor:pointer; }
+.ov-cell .ov-thumb { position:relative; width:340px; height:191px; overflow:hidden; border-radius:10px; border:2px solid rgba(255,255,255,.1); background:#07070b; }
+.ov-cell:hover .ov-thumb { border-color:rgba(255,255,255,.4); }
+.ov-cell.current .ov-thumb { border-color:var(--accent); box-shadow:0 0 0 3px rgba(255,107,44,.35); }
+.ov-cell .ov-scale { position:absolute; left:0; top:0; width:1920px; height:1080px; transform-origin:0 0; pointer-events:none; }
+.ov-cell .ov-scale .slide { visibility:visible !important; opacity:1 !important; position:absolute; inset:0; }
+.ov-cell .ov-scale * { transition:none !important; }
+.ov-cell .ov-cap { display:flex; align-items:center; gap:8px; margin-top:7px; font-family:var(--font-display); }
+.ov-cell .ov-cap .n { font-family:var(--font-mono); font-size:12px; color:var(--cyan,#5DE6EC); flex:none; }
+.ov-cell .ov-cap .tt { font-size:13px; color:var(--ink-2); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ov-cell .ov-cap button { flex:none; font-size:12px; font-weight:700; padding:4px 10px; border-radius:7px; border:1px solid rgba(255,255,255,.2); background:none; color:var(--ink); cursor:pointer; }
+.ov-cell.off .ov-thumb { opacity:.28; }
+.ov-cell.off .ov-cap .tt { text-decoration:line-through; color:var(--ink-3); }
+.ov-cell.off .ov-cap button { background:var(--accent); color:#0a0a12; border-color:var(--accent); }
 .ov-row { padding:16px 14px; border-bottom:1px solid rgba(255,255,255,.06); cursor:pointer; border-radius:10px; }
 .ov-row:hover { background:rgba(255,255,255,.04); }
 .ov-row.current { background:rgba(255,107,44,.1); border-left:3px solid var(--accent); }
@@ -657,8 +674,9 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 <div id="blackout"></div>
 
 <div class="overview" id="overview">
-  <div class="ov-head"><span class="t">Overview · tap a slide to jump</span><button id="ovClose">Close ✕</button></div>
-  <div class="ov-list" id="ovList"></div>
+  <div class="ov-head"><span class="t">All slides · click to jump · Hide = skipped by Next</span><div class="ov-btns"><button id="ovGridBtn" class="sel">Grid</button><button id="ovScriptBtn">Script</button><button id="ovShowAll">Show all</button><button id="ovClose">Close ✕</button></div></div>
+  <div class="ov-grid" id="ovGrid"></div>
+  <div class="ov-list" id="ovList" style="display:none"></div>
 </div>
 
 <nav class="mtoolbar" id="mtoolbar" aria-label="deck controls">
@@ -1460,7 +1478,7 @@ One person, no film crew. [Let it play for about 15 seconds.]</template>
       <div class="pills reveal"><span class="pill"><img class="emo" src="assets/hackathon/emoji/user.webp" alt=""> AI avatar</span><span class="pill"><img class="emo" src="assets/hackathon/emoji/mic-vocal.webp" alt=""> AI voice</span><span class="pill"><img class="emo" src="assets/hackathon/emoji/sparkles.webp" alt=""> AI-animated scenes</span></div>
       <div class="qr-row reveal" style="gap:30px"><div class="qr-card sm"><img src="assets/hackathon/qr/reel.png" alt="QR to the reel"></div><div><span class="link-chip">How human trafficking actually happens</span><p class="sub" style="font-size:26px; margin-top:12px">#UncoverTheOffer · UNODC × Project Liber8</p></div></div>
     </div>
-    <div class="vis reveal"><div class="phone"><video data-play src="assets/hackathon/reels/uncover-ep1.mp4" muted loop playsinline preload="metadata"></video></div></div>
+    <div class="vis reveal"><div class="phone"><video data-play src="assets/hackathon/reels/uncover-ep1.mp4" poster="assets/hackathon/reels/uncover-ep1-poster.jpg" muted loop playsinline preload="metadata"></video></div></div>
   </div>
 </section>
 
@@ -1959,6 +1977,58 @@ document.addEventListener('keydown', (e) => {
 /* ===========================================
    OVERVIEW / COMBINED SCRIPT — O key or ⊞ button
    =========================================== */
+/* hidden slides: set here (grid) or from the phone remote; kept per browser */
+const HIDDEN_KEY = 'deck-hidden:' + ((location.pathname.split('/').pop() || '').replace(/\.html$/, '') || 'deck');
+function setHidden(list, fromRemote) {
+  deck.hidden = new Set(list.filter(Number.isFinite));
+  try { localStorage.setItem(HIDDEN_KEY, JSON.stringify([...deck.hidden])); } catch (_) {}
+  if (!fromRemote && window.remoteHidden) window.remoteHidden([...deck.hidden]);
+  if (document.getElementById('overview').classList.contains('on')) markHidden();
+}
+function markHidden() {
+  document.querySelectorAll('#ovGrid .ov-cell').forEach(c => {
+    const off = (deck.hidden || new Set()).has(+c.dataset.i);
+    c.classList.toggle('off', off);
+    c.querySelector('button').textContent = off ? 'Hidden' : 'Hide';
+  });
+}
+let ovMode = 'grid';
+function buildGrid() {
+  const grid = document.getElementById('ovGrid');
+  grid.innerHTML = '';
+  deck.slides.forEach((s, i) => {
+    const title = (s.querySelector('h1, h2, .caption, .kicker')?.innerText || '').trim().replace(/\s+/g, ' ').slice(0, 90);
+    const cell = document.createElement('div');
+    cell.className = 'ov-cell' + (i === deck.current ? ' current' : '');
+    cell.dataset.i = i;
+    cell.innerHTML = '<div class="ov-thumb"><div class="ov-scale"></div></div><div class="ov-cap"><span class="n">' + (i + 1) + '</span><span class="tt"></span><button type="button">Hide</button></div>';
+    cell.querySelector('.tt').textContent = title || (s.dataset.act || '');
+    /* a live, scaled copy of the slide (always current, no image files) */
+    const clone = s.cloneNode(true);
+    clone.classList.add('active', 'visible');
+    clone.removeAttribute('id');
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    clone.querySelectorAll('template').forEach(el => el.remove());
+    clone.querySelectorAll('.step').forEach(el => el.classList.add('on'));
+    clone.querySelectorAll('video').forEach(v => {
+      const img = document.createElement('img');
+      if (v.getAttribute('poster')) img.src = v.getAttribute('poster');
+      img.className = v.className; img.setAttribute('style', (v.getAttribute('style') || '') + ';object-fit:cover;background:#111');
+      v.replaceWith(img);
+    });
+    cell.querySelector('.ov-scale').appendChild(clone);
+    cell.querySelector('.ov-scale').style.transform = 'scale(' + (340 / 1920) + ')';
+    cell.querySelector('button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const h = new Set(deck.hidden || []);
+      h.has(i) ? h.delete(i) : h.add(i);
+      setHidden([...h]);
+    });
+    cell.addEventListener('click', () => { deck.show(i); toggleOverview(false); });
+    grid.appendChild(cell);
+  });
+  markHidden();
+}
 function buildOverview() {
   const list = document.getElementById('ovList');
   list.innerHTML = '';
@@ -1975,12 +2045,25 @@ function buildOverview() {
     list.appendChild(row);
   });
 }
+function setOvMode(m) {
+  ovMode = m;
+  document.getElementById('ovGrid').style.display = m === 'grid' ? '' : 'none';
+  document.getElementById('ovList').style.display = m === 'script' ? '' : 'none';
+  document.getElementById('ovGridBtn').classList.toggle('sel', m === 'grid');
+  document.getElementById('ovScriptBtn').classList.toggle('sel', m === 'script');
+  const ov = document.getElementById('overview');
+  if (m === 'grid') { buildGrid(); ov.querySelector('.ov-cell.current')?.scrollIntoView({ block: 'center' }); }
+  else { buildOverview(); ov.querySelector('.ov-row.current')?.scrollIntoView({ block: 'center' }); }
+}
 function toggleOverview(force) {
   const ov = document.getElementById('overview');
   const on = force !== undefined ? force : !ov.classList.contains('on');
-  if (on) { buildOverview(); ov.classList.add('on'); ov.querySelector('.ov-row.current')?.scrollIntoView({ block: 'center' }); }
-  else ov.classList.remove('on');
+  if (on) { ov.classList.add('on'); setOvMode(ovMode); }
+  else { ov.classList.remove('on'); document.getElementById('ovGrid').innerHTML = ''; }
 }
+document.getElementById('ovGridBtn').addEventListener('click', () => setOvMode('grid'));
+document.getElementById('ovScriptBtn').addEventListener('click', () => setOvMode('script'));
+document.getElementById('ovShowAll').addEventListener('click', () => setHidden([]));
 document.getElementById('ovClose').addEventListener('click', () => toggleOverview(false));
 document.getElementById('overview').addEventListener('click', (e) => e.stopPropagation());
 
@@ -2061,6 +2144,7 @@ document.querySelectorAll('img').forEach(img => {
 });
 
 const deck = new SlidePresentation();
+try { deck.hidden = new Set(JSON.parse(localStorage.getItem(HIDDEN_KEY) || '[]')); } catch (_) { deck.hidden = new Set(); }
 
 /* ===========================================
    PHONE REMOTE — press R to pair, or open the deck with ?remote=CODE.
@@ -2092,6 +2176,7 @@ const deck = new SlidePresentation();
     if (mq && mq.connected) try { mq.publish(topic(), msg); } catch (_) {}
   };
   const state = (w) => send({ i: deck.current, n: deck.slides.length, why: w, age: lastNavAt ? Date.now() - lastNavAt : 1e12 });
+  window.remoteHidden = (list) => send({ why: 'hidden', list });
   /* show() calls this on every slide change */
   window.remoteSync = () => {
     lastNavAt = Date.now();
@@ -2118,7 +2203,7 @@ const deck = new SlidePresentation();
       if (i !== deck.current) { why = 'go'; deck.show(i); }
     }
     else if (d.a === 'hello') { overlay.classList.remove('on'); state('hello'); }
-    else if (d.a === 'hidden' && Array.isArray(d.list)) deck.hidden = new Set(d.list.filter(Number.isFinite));
+    else if (d.a === 'hidden' && Array.isArray(d.list)) setHidden(d.list, true);
     else if (d.a === 'next') deck.next();   /* phone hasn't heard from this screen yet */
     else if (d.a === 'prev') deck.prev();
   }

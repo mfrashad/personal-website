@@ -211,6 +211,7 @@ function syncSoon() {
 }
 function onDeck(d) {
   if (d.why === 'bye') { screens.delete(d.id); screenInfo(); return; }
+  if (d.why === 'hidden' && Array.isArray(d.list)) { hidden = new Set(d.list.filter(Number.isFinite)); localStorage.setItem(HID, JSON.stringify([...hidden])); render(); renderList(); return; }
   const i = Number.isFinite(d.i) ? d.i : d.s;      /* d.s = older deck version */
   if (!Number.isFinite(i)) return;
   const id = d.id || 'old';
