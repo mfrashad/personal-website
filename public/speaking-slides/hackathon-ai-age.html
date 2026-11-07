@@ -2092,9 +2092,20 @@ const deck = new SlidePresentation();
   const dot = document.getElementById('remoteDot');
   let code = null, es = null, timer = null, retry = null, why = 'nav', lastNavAt = 0, backoff = 2000;
   const lastQ = {};
+  /* two relays: ntfy.sh, plus a public MQTT broker in case ntfy refuses (it caps messages per network per day) */
+  const BROKER = 'wss://broker.emqx.io:8084/mqtt';
+  let mq = null;
+  const seen = new Set();
+  const fresh = (m) => { if (!m) return true; if (seen.has(m)) return false; seen.add(m); if (seen.size > 400) seen.clear(); return true; };
+  const mid = () => Math.random().toString(36).slice(2, 10);
   const topic = () => 'mfr-deck-' + DECK + '-' + code;
   const newCode = () => { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; return Array.from(crypto.getRandomValues(new Uint8Array(5)), b => A[b % A.length]).join(''); };
-  const send = (obj) => { if (!code) return; fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'deck', id: ID }, obj)) }).catch(() => {}); };
+  const send = (obj) => {
+    if (!code) return;
+    const msg = JSON.stringify(Object.assign({ from: 'deck', id: ID, m: mid() }, obj));
+    fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: msg }).catch(() => {});
+    if (mq && mq.connected) try { mq.publish(topic(), msg); } catch (_) {}
+  };
   const state = (w) => send({ i: deck.current, n: deck.slides.length, why: w, age: lastNavAt ? Date.now() - lastNavAt : 1e12 });
   /* show() calls this on every slide change */
   window.remoteSync = () => {
@@ -2110,22 +2121,37 @@ const deck = new SlidePresentation();
     es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
     es.onopen = () => { backoff = 2000; dot.classList.add('on'); state('join'); };
     es.onerror = () => { dot.classList.remove('on'); es.close(); clearTimeout(retry); retry = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 20000); };
-    es.onmessage = (e) => {
-      let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
-      if (!d || d.from !== 'remote') return;
-      if (d.a === 'go' && Number.isFinite(d.i)) {
-        const k = d.r || '_';
-        if (d.q) { if (d.q <= (lastQ[k] || 0)) return; lastQ[k] = d.q; }
-        const i = Math.max(0, Math.min(d.i, deck.slides.length - 1));
-        if (i !== deck.current) { why = 'go'; deck.show(i); }
-      }
-      else if (d.a === 'hello') { overlay.classList.remove('on'); state('hello'); }
-      else if (d.a === 'hidden' && Array.isArray(d.list)) deck.hidden = new Set(d.list.filter(Number.isFinite));
-      else if (d.a === 'next') deck.next();   /* older remote page */
-      else if (d.a === 'prev') deck.prev();
-    };
+    es.onmessage = (e) => { try { handle(JSON.parse(e.data).message); } catch (_) {} };
   }
-  function setCode(c) { code = c; localStorage.setItem(STORE, c); overlay.querySelector('.rc-code').textContent = c; connect(); }
+  function handle(text) {
+    let d; try { d = JSON.parse(text); } catch (_) { return; }
+    if (!d || d.from !== 'remote' || !fresh(d.m)) return;
+    if (d.a === 'go' && Number.isFinite(d.i)) {
+      const k = d.r || '_';
+      if (d.q) { if (d.q <= (lastQ[k] || 0)) return; lastQ[k] = d.q; }
+      const i = Math.max(0, Math.min(d.i, deck.slides.length - 1));
+      if (i !== deck.current) { why = 'go'; deck.show(i); }
+    }
+    else if (d.a === 'hello') { overlay.classList.remove('on'); state('hello'); }
+    else if (d.a === 'hidden' && Array.isArray(d.list)) deck.hidden = new Set(d.list.filter(Number.isFinite));
+    else if (d.a === 'next') deck.next();   /* phone hasn't heard from this screen yet */
+    else if (d.a === 'prev') deck.prev();
+  }
+  function mqConnect() {
+    if (!code) return;
+    if (!window.mqtt) {
+      if (document.getElementById('mqttLib')) return;
+      const sc = document.createElement('script'); sc.id = 'mqttLib'; sc.src = 'vendor/mqtt-5.10.1.min.js'; sc.async = true;
+      sc.onload = mqConnect; document.head.appendChild(sc); return;
+    }
+    if (mq) try { mq.end(true); } catch (_) {}
+    try {
+      mq = mqtt.connect(BROKER, { reconnectPeriod: 3000, connectTimeout: 10000, clean: true });
+      mq.on('connect', () => { dot.classList.add('on'); mq.subscribe(topic(), () => state('join')); });
+      mq.on('message', (t, payload) => { if (t === topic()) handle(payload.toString()); });
+    } catch (_) {}
+  }
+  function setCode(c) { code = c; localStorage.setItem(STORE, c); overlay.querySelector('.rc-code').textContent = c; connect(); mqConnect(); }
   function open() { if (!code) setCode(localStorage.getItem(STORE) || newCode()); overlay.querySelector('.rc-code').textContent = code; overlay.classList.add('on'); }
   document.addEventListener('keydown', (e) => {
     if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') return;
@@ -2138,14 +2164,14 @@ const deck = new SlidePresentation();
     if (act === 'close' || e.target === overlay) overlay.classList.remove('on');
   });
   /* tab closing or reloading: tell the phone so it stops counting this screen */
-  window.addEventListener('pagehide', () => { if (code) try { fetch('https://ntfy.sh/' + topic(), { method: 'POST', keepalive: true, body: JSON.stringify({ from: 'deck', id: ID, why: 'bye' }) }); } catch (_) {} });
+  window.addEventListener('pagehide', () => { if (code) try { const b = JSON.stringify({ from: 'deck', id: ID, why: 'bye', m: mid() }); fetch('https://ntfy.sh/' + topic(), { method: 'POST', keepalive: true, body: b }); if (mq && mq.connected) mq.publish(topic(), b); } catch (_) {} });
   /* laptop woke up or tab came back: reconnect so the phone sees this screen again */
   document.addEventListener('visibilitychange', () => { if (code && document.visibilityState === 'visible' && (!es || es.readyState !== 1)) connect(); });
   /* ?remote=CODE in the link (e.g. sent to the organiser): connect silently, nothing shown on screen.
      Otherwise, if already paired in this browser, reconnect quietly. */
   const fromUrl = (new URLSearchParams(location.search).get('remote') || '').toUpperCase();
   if (/^[A-Z0-9]{4,8}$/.test(fromUrl)) setCode(fromUrl);
-  else { const saved = localStorage.getItem(STORE); if (saved && !navigator.webdriver) { code = saved; connect(); } }
+  else { const saved = localStorage.getItem(STORE); if (saved && !navigator.webdriver) { code = saved; connect(); mqConnect(); } }
 })();
 </script>
 </body>

@@ -119,6 +119,12 @@ const HID = 'deck-remote-hidden:' + DECK;
 let hidden = new Set(JSON.parse(localStorage.getItem(HID) || '[]'));
 const $ = id => document.getElementById(id);
 const topic = () => 'mfr-deck-' + DECK + '-' + code;
+/* two relays: ntfy.sh, plus a public MQTT broker in case ntfy refuses (it caps messages per network per day) */
+const BROKER = 'wss://broker.emqx.io:8084/mqtt';
+let mq = null, mqOk = false, ntfyOk = false, mqTopic = '';
+const seen = new Set();
+const fresh = (m) => { if (!m) return true; if (seen.has(m)) return false; seen.add(m); if (seen.size > 400) seen.clear(); return true; };
+const mid = () => Math.random().toString(36).slice(2, 10);
 
 /* read titles + speaker notes straight from the deck file (always the latest version) */
 fetch(DECK + '.html', { cache: 'no-store' }).then(r => r.text()).then(html => {
@@ -171,8 +177,9 @@ function screenInfo() {
 function setStatus(ok, text) { $('status').classList.toggle('ok', ok); $('status').classList.remove('warn'); $('statusText').textContent = text; }
 function send(obj) {
   if (!code) return;
-  fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'remote', r: RID }, obj)) })
-    .catch(() => setStatus(false, 'send failed, check internet'));
+  const msg = JSON.stringify(Object.assign({ from: 'remote', r: RID, m: mid() }, obj));
+  fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: msg }).catch(() => {});
+  if (mq && mq.connected) try { mq.publish(topic(), msg); } catch (_) {}
 }
 /* the next visible slide in direction dir (hidden slides are skipped) */
 function step(i, dir) {
@@ -191,7 +198,7 @@ function renderList() {
     '<button class="hb" data-hide="' + i + '">' + (hidden.has(i) ? 'Hidden' : 'Hide') + '</button></div>').join('');
 }
 function go(i) {
-  if (cur === null) { flash('No slides connected yet'); send({ a: 'hello' }); return; }
+  if (cur === null) { send({ a: i > 0 ? 'next' : 'prev' }); send({ a: 'hello' }); flash('Sent. Waiting for the slides to reply…'); return; }
   const n = total();
   i = Math.max(0, Math.min(i, n ? n - 1 : i));
   cur = i; curAt = Date.now(); savePos(); render(); screenInfo();
@@ -226,12 +233,30 @@ function connect() {
   setStatus(false, 'connecting…');
   screens.clear();
   es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
-  es.onopen = () => { backoff = 2000; setStatus(true, 'connected · ' + code + ' · looking for the slides…'); send({ a: 'hello' }); if (hidden.size) sendHidden(); };
-  es.onerror = () => { setStatus(false, 'reconnecting…'); es.close(); clearTimeout(retry); retry = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 20000); };
-  es.onmessage = (e) => {
-    let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
-    if (d && d.from === 'deck') onDeck(d);
-  };
+  es.onopen = () => { backoff = 2000; ntfyOk = true; if (!screens.size) setStatus(true, 'connected · ' + code + ' · looking for the slides…'); send({ a: 'hello' }); if (hidden.size) sendHidden(); };
+  es.onerror = () => { ntfyOk = false; if (!mqOk) setStatus(false, 'reconnecting…'); es.close(); clearTimeout(retry); retry = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 20000); };
+  es.onmessage = (e) => { try { handle(JSON.parse(e.data).message); } catch (_) {} };
+  if (!mq || mqTopic !== topic()) mqConnect();
+}
+function handle(text) {
+  let d; try { d = JSON.parse(text); } catch (_) { return; }
+  if (d && d.from === 'deck' && fresh(d.m)) onDeck(d);
+}
+function mqConnect() {
+  if (!code) return;
+  if (!window.mqtt) {
+    if (document.getElementById('mqttLib')) return;
+    const sc = document.createElement('script'); sc.id = 'mqttLib'; sc.src = 'vendor/mqtt-5.10.1.min.js'; sc.async = true;
+    sc.onload = mqConnect; document.head.appendChild(sc); return;
+  }
+  if (mq) try { mq.end(true); } catch (_) {}
+  try {
+    const t = topic(); mqTopic = t;
+    mq = mqtt.connect(BROKER, { reconnectPeriod: 3000, connectTimeout: 10000, clean: true });
+    mq.on('connect', () => { mqOk = true; mq.subscribe(t, () => { if (!screens.size) setStatus(true, 'connected · ' + code + ' · looking for the slides…'); send({ a: 'hello' }); if (hidden.size) sendHidden(); }); });
+    mq.on('close', () => { mqOk = false; });
+    mq.on('message', (tp, payload) => { if (tp === t) handle(payload.toString()); });
+  } catch (_) {}
 }
 function pair(c) {
   const next = (c || '').trim().toUpperCase();
@@ -285,6 +310,8 @@ setInterval(() => {
   $('timer').textContent = String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0');
 }, 500);
 
+/* until a screen answers, keep asking (a reply can get lost on bad wifi) */
+setInterval(() => { if (code && (ntfyOk || mqOk) && screens.size === 0 && document.visibilityState === 'visible') send({ a: 'hello' }); }, 4000);
 if (code) pair(code); else $('pair').classList.remove('hide');
 </script>
 </body>
