@@ -634,6 +634,17 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 .jury .p .bio { font-size:25px; line-height:1.35; color:var(--ink); padding-top:16px; border-top:1px solid rgba(255,255,255,.08); }
 .vs .team { position:relative; }
 
+/* v4: free tiers list (Lovable on top) */
+.tiers { display:flex; flex-direction:column; gap:22px; width:1480px; }
+.tiers .tier { display:flex; align-items:center; gap:32px; padding:26px 36px; border-radius:26px; background:var(--bg-soft); border:1px solid rgba(255,255,255,.08); text-align:left; }
+.tiers .tier.top { border-color:rgba(255,107,44,.6); background:linear-gradient(180deg, rgba(255,107,44,.14), rgba(255,107,44,.03)); }
+.tiers .logo-tile { width:92px; height:92px; border-radius:24px; flex:none; }
+.tiers .logo-tile img { width:58px; height:58px; }
+.tiers .nm { font-size:42px; font-weight:800; width:230px; flex:none; }
+.tiers .d { font-size:29px; color:var(--ink-2); line-height:1.35; flex:1; }
+.tiers .d b { color:var(--ink); }
+.tiers .pill, .tiers .link-chip { flex:none; }
+
 </style>
 </head>
 <body>
@@ -1140,7 +1151,7 @@ For coding, GitHub has a student deal too.</template>
 <section class="slide" data-act="03 · Build" data-chapter="3">
 <template class="note">The GitHub Student Developer Pack gives you GitHub Copilot for free, plus GitHub Pro and a free .me domain for a year.
 Verify with your student email or proof of enrolment. Approval can take a few days, so apply today.
-And I have one more gift for you.</template>
+There are a few more free tiers worth trying.</template>
   <div class="split">
     <div class="txt">
       <div class="logo-tile reveal"><img src="assets/hackathon/logos/github.svg" alt="GitHub"></div>
@@ -1153,24 +1164,20 @@ And I have one more gift for you.</template>
   </div>
 </section>
 
-<!-- Kiro -->
+<!-- Free tiers -->
 <section class="slide glow-warm" data-act="03 · Build" data-chapter="3">
-<template class="note">Kiro is an AI coding app from AWS, and there are free Kiro credits for this community. First come, first served, one per person.
-Phones out, scan now. [Pause 15 seconds.]
-Two tips: redeem with the same login you use in the Kiro app, and use your mobile data instead of the venue wifi. The claim page limits how many people can claim from one network, so on the shared wifi most of you will get blocked.
-And if you burn through your credits tonight...</template>
+<template class="note">People always ask me about Lovable. It's good. I mentored and judged at Lovable's own hackathon in KL this year. But the free plan is very limited, 5 credits a day, so use it for a first draft. Students get 50% off Pro.
+Kiro, the AI coding app from AWS, and Freebuff, a free coding agent, also have free tiers.
+I haven't tested all of these free tiers myself, so check the limits before you rely on one.
+And if you run out of credits tonight...</template>
   <div class="wrap" style="gap:40px">
-    <div class="interact-tag warm reveal"><img class="emo" src="assets/hackathon/emoji/gift.webp" alt=""> Phones out · first come, first served</div>
-    <h2 class="h-med reveal">Claim <span class="accent">free Kiro credits</span> now.</h2>
-    <div class="qr-row reveal">
-      <div class="qr-card"><img src="assets/hackathon/qr/kiro.png" alt="QR to s12d.com/mykiro"></div>
-      <div style="display:flex; flex-direction:column; gap:24px">
-        <div class="logo-row"><div class="logo-tile dark"><img src="assets/hackathon/logos/kiro.svg" alt="Kiro"></div><div class="kicker">Code</div></div>
-        <div class="code-big">KL2026</div>
-        <span class="link-chip">s12d.com/mykiro</span>
-        <p class="sub" style="font-size:28px; max-width:780px">Use the same login as the Kiro app. Use mobile data, not the venue wifi.</p>
-      </div>
+    <h2 class="h-med reveal">More free tiers worth trying</h2>
+    <div class="tiers reveal">
+      <div class="tier top"><div class="logo-tile"><img src="assets/hackathon/logos/lovable.svg" alt="Lovable"></div><div class="nm">Lovable</div><div class="d">Great for a first draft, but the free plan is very limited: <b>5 credits a day</b>.</div><span class="pill">Students: 50% off Pro</span></div>
+      <div class="tier"><div class="logo-tile dark"><img src="assets/hackathon/logos/kiro.svg" alt="Kiro"></div><div class="nm">Kiro</div><div class="d">AI coding app from AWS, with a free tier.</div><span class="link-chip">kiro.dev</span></div>
+      <div class="tier"><div class="logo-tile dark"><img src="assets/hackathon/logos/freebuff.svg" alt="Freebuff"></div><div class="nm">Freebuff</div><div class="d">A free coding agent in your browser, desktop or terminal.</div><span class="link-chip">freebuff.com</span></div>
     </div>
+    <p class="sub reveal" style="font-size:28px">I haven't tested all of these. <strong>Check the free limits first.</strong></p>
   </div>
 </section>
 
@@ -1179,7 +1186,7 @@ And if you burn through your credits tonight...</template>
 <template class="note">...there are free models.
 OpenCode is a free, open-source coding agent with free models built in. OpenRouter has free versions of many models, around 50 requests a day without paying.
 Just don't paste personal data into the free ones.
-People also always ask me about Lovable.</template>
+So here's the full free stack.</template>
   <div class="split">
     <div class="txt">
       <div class="logo-row reveal"><div class="logo-tile dark"><img src="assets/hackathon/logos/opencode.png" alt="OpenCode"></div><div class="logo-tile"><img src="assets/hackathon/logos/openrouter.png" alt="OpenRouter"></div></div>
@@ -1192,17 +1199,7 @@ People also always ask me about Lovable.</template>
 </section>
 
 <!-- Lovable -->
-<section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">Is Lovable good? Yes. I mentored and judged at Lovable's own hackathon in KL this year.
-But the free plan gives you 5 credits a day. That's enough for a first draft. Start there if you like it, then continue in AI Studio, Kiro or Copilot. Students get 50% off Pro if you want to pay.
-So here's the full free stack.</template>
-  <div class="wrap">
-    <div class="logo-tile reveal" style="width:150px; height:150px; border-radius:38px"><img src="assets/hackathon/logos/lovable.svg" alt="Lovable" style="width:96px; height:96px"></div>
-    <h2 class="h-big reveal">"Is Lovable good?"</h2>
-    <p class="sub reveal">Yes, for a first draft. But the free plan only gives you <strong>5 credits a day</strong>.<br>Start there, then keep building in AI Studio, Kiro or Copilot.</p>
-    <div class="pills reveal" style="justify-content:center"><span class="pill">Free: 5 credits/day</span><span class="pill">Students: 50% off Pro</span></div>
-  </div>
-</section>
+
 
 <!-- Free stack -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
@@ -1706,7 +1703,7 @@ Before you go, here's everything from today in one place.</template>
 
 
 <section class="slide" data-act="Close">
-<template class="note">Every link from today is on one page: all the free tools, the Kiro code, the steps, and the pitch and LinkedIn templates.
+<template class="note">Every link from today is on one page: all the free tools, the steps, and the pitch and LinkedIn templates.
 Scan it now. [Pause 5 seconds.]
 Fun fact, that page is a Cleve note. That's what we build: you write a note, hit publish, and it becomes a page like this.</template>
   <div class="wrap" style="gap:40px">
@@ -1715,7 +1712,7 @@ Fun fact, that page is a Cleve note. That's what we build: you write a note, hit
       <div class="qr-card"><img src="assets/hackathon/qr/toolkit.png" alt="QR to the hackathon toolkit"></div>
       <div style="display:flex; flex-direction:column; gap:22px; max-width:780px">
         <div class="ichecks" style="gap:18px">
-          <div class="c" style="font-size:34px"><div class="ibadge sm"><img class="emo" src="assets/hackathon/emoji/gift.webp" alt=""></div>All the free tools and the Kiro code</div>
+          <div class="c" style="font-size:34px"><div class="ibadge sm"><img class="emo" src="assets/hackathon/emoji/gift.webp" alt=""></div>All the free tools</div>
           <div class="c" style="font-size:34px"><div class="ibadge sm"><img class="emo" src="assets/hackathon/emoji/rocket.webp" alt=""></div>Idea to live link, step by step</div>
           <div class="c" style="font-size:34px"><div class="ibadge sm"><img class="emo" src="assets/hackathon/emoji/file-text.webp" alt=""></div>Pitch and LinkedIn templates</div>
         </div>
@@ -1764,18 +1761,6 @@ The tools are free, and you have the whole night. Go build something for Sibu. T
   </div>
 </section>
 
-<section class="slide" data-act="Appendix">
-<template class="note">[Backup: Kiro redeem steps if people get stuck.]</template>
-  <div class="wrap" style="gap:40px">
-    <h2 class="h-small reveal">Kiro credits: if you're stuck</h2>
-    <div class="checks reveal" style="grid-template-columns:1fr; gap:22px; width:1450px">
-      <div class="c"><span>Claim at s12d.com/mykiro with code KL2026<small>first come, first served · one per person</small></span></div>
-      <div class="c"><span>Install Kiro (kiro.dev/downloads) and sign in<small>Google, GitHub and Builder ID count as separate accounts</small></span></div>
-      <div class="c"><span>Open the redeem link while signed in at app.kiro.dev with the same login<small>don't open it twice: the second try shows "Already Redeemed"</small></span></div>
-      <div class="c"><span>Check "Bonus credits" on the Usage page<small>"Kiro failed to load"? Switch to mobile data · guide: kuettai.github.io/kirocredit</small></span></div>
-    </div>
-  </div>
-</section>
 
 <section class="slide" data-act="Appendix">
 <template class="note">[Backup: the full list of free tools if someone asks during Q&amp;A.]</template>
@@ -1785,7 +1770,7 @@ The tools are free, and you have the whole night. Go build something for Sibu. T
       <div class="c"><span>Google AI Studio<small>aistudio.google.com · Build tab</small></span></div>
       <div class="c"><span>Google AI Plus, students 18+<small>gemini.google/my/students · claim by 31 Dec</small></span></div>
       <div class="c"><span>GitHub Student Pack<small>education.github.com/pack · Copilot</small></span></div>
-      <div class="c"><span>Kiro credits<small>s12d.com/mykiro · code KL2026</small></span></div>
+      <div class="c"><span>Lovable, Kiro, Freebuff<small>free tiers · Lovable students: 50% off Pro</small></span></div>
       <div class="c"><span>OpenCode, OpenRouter<small>free models · 50 requests/day on OpenRouter</small></span></div>
       <div class="c"><span>Supabase, Convex, Vercel<small>database · live updates · hosting</small></span></div>
       <div class="c"><span>21st.dev, binmob<small>components · design references</small></span></div>
