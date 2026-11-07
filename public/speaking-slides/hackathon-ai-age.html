@@ -1824,8 +1824,14 @@ class SlidePresentation {
     window.addEventListener('resize', scale);
   }
   /* one tap = one slide: everything on a slide shows when it opens */
-  next() { this.show(this.current + 1); }
-  prev() { this.show(this.current - 1); }
+  /* slides hidden from the phone remote are skipped by the laptop keys too */
+  stepFrom(dir) {
+    const h = this.hidden || new Set(); let j = this.current + dir;
+    while (j >= 0 && j < this.slides.length && h.has(j)) j += dir;
+    return (j < 0 || j >= this.slides.length) ? this.current : j;
+  }
+  next() { this.show(this.stepFrom(1)); }
+  prev() { this.show(this.stepFrom(-1)); }
   show(i) {
     this.current = Math.max(0, Math.min(i, this.slides.length - 1));
     this.slides.forEach((s, idx) => {
@@ -2114,6 +2120,7 @@ const deck = new SlidePresentation();
         if (i !== deck.current) { why = 'go'; deck.show(i); }
       }
       else if (d.a === 'hello') { overlay.classList.remove('on'); state('hello'); }
+      else if (d.a === 'hidden' && Array.isArray(d.list)) deck.hidden = new Set(d.list.filter(Number.isFinite));
       else if (d.a === 'next') deck.next();   /* older remote page */
       else if (d.a === 'prev') deck.prev();
     };
