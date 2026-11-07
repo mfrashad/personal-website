@@ -630,6 +630,10 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 .xform .arrow .arw { font-size:96px; }
 .pipe .arrow .arw { font-size:60px; }
 
+/* v4: judge cards show official bios only */
+.jury .p .bio { font-size:25px; line-height:1.35; color:var(--ink); padding-top:16px; border-top:1px solid rgba(255,255,255,.08); }
+.vs .team { position:relative; }
+
 </style>
 </head>
 <body>
@@ -700,7 +704,7 @@ body.editing [contenteditable="true"] { outline:1px dashed rgba(255,107,44,.6); 
 <!-- 1 · Title -->
 <section class="slide glow-event active" data-act="Open">
 <template class="note">[Walk on, wait for the room to settle.]
-Hi everyone! Thank you Urban Edu for having me, and thank you Chuo for the dabai story. I'll be borrowing from it later.
+Hi everyone! Thank you Urban Edu for having me, and thank you Chuo for the sharing.
 I'm Rashad, and I'm your lead mentor for these two days. In the next 25 minutes, I'll show you how a hackathon actually works, how to build something real with AI for free, and how to pitch it so the judges remember you.
 But first, I want to know who's in the room.</template>
   <div class="brandbar"></div>
@@ -717,13 +721,13 @@ But first, I want to know who's in the room.</template>
 <section class="slide glow-cool" data-act="Open">
 <template class="note">Raise your hand if this is your first hackathon.
 [Look around.] That's most of you.
-[Click] Good. My first one was at 17, and I'll tell you how that went in a minute.
+Good. My first one was at 17, and I'll tell you how that went in a minute.
 Keep your hand ready, because I have two more questions.</template>
   <div class="wrap">
     <div class="ibadge lg cool reveal"><img class="emo" src="assets/hackathon/emoji/hand.webp" alt=""></div>
     <div class="interact-tag reveal">Raise your hand</div>
     <h2 class="h-big reveal">Is this your first<br><span class="cool">hackathon</span>?</h2>
-    <p class="sub step">Good. My first one was at 17.</p>
+    <p class="sub reveal">Good. My first one was at 17.</p>
   </div>
 </section>
 
@@ -731,15 +735,15 @@ Keep your hand ready, because I have two more questions.</template>
 <section class="slide glow-cool" data-act="Open">
 <template class="note">Who has used ChatGPT or Gemini before?
 [Most hands.] Okay, almost everyone.
-[Click] Now, who has built an app before?
+Now, who has built an app before?
 [A few hands.] That's normal.
-[Click] By 9:30 tomorrow morning, I want every hand in this room to have built one, and I'll show you how.
+By 9:30 tomorrow morning, I want every hand in this room to have built one, and I'll show you how.
 But first, a bit about me, so you know where this advice comes from.</template>
   <div class="wrap">
     <div class="interact-tag reveal">Keep your hand up</div>
     <h2 class="h-med reveal">Who has used ChatGPT or Gemini?</h2>
-    <h2 class="h-med step">Who has <span class="cool">built an app</span> before?</h2>
-    <p class="sub step" style="font-size:46px">By <strong>9:30 AM tomorrow</strong>, everyone here will have built one.</p>
+    <h2 class="h-med reveal">Who has <span class="cool">built an app</span> before?</h2>
+    <p class="sub reveal" style="font-size:46px">By <strong>9:30 AM tomorrow</strong>, everyone here will have built one.</p>
   </div>
 </section>
 
@@ -750,7 +754,7 @@ But first, a bit about me, so you know where this advice comes from.</template>
 <!-- 5 · Intro -->
 <section class="slide" data-act="Who">
 <template class="note">I've been on both sides of the judging table.
-I joined 12 hackathons as a participant and placed in 6. I've judged 15. At 19 I did AI research with MIT, and today I'm the co-founder and CTO of Cleve, an AI writing app.
+I joined 12 hackathons as a participant and placed in 6. I've judged 15. At 19 I did AI research with MIT, and today I'm the co-founder and CTO of Cleve, an AI workspace for writing and thinking.
 And this weekend I'm your mentor, so if you're stuck, come find me.
 But my hackathon record didn't start well.</template>
   <div class="intro-grid">
@@ -759,7 +763,7 @@ But my hackathon record didn't start well.</template>
       <div class="kicker reveal">About me</div>
       <h2 class="h-big reveal">I've sat on both<br>sides of the <span class="accent">table</span>.</h2>
       <div class="intro-creds reveal">
-        <div class="row"><b>12 hackathons</b> joined, <b>6</b> podiums</div>
+        <div class="row"><b>12 hackathons</b> joined, <b>6</b> prizes</div>
         <div class="row"><b>15 hackathons</b> judged</div>
         <div class="row"><b>AI research with MIT</b> at 19</div>
         <div class="row"><b>Co-founder &amp; CTO</b>, Cleve.ai</div>
@@ -772,8 +776,8 @@ But my hackathon record didn't start well.</template>
 <section class="slide" data-act="Who">
 <template class="note">My first hackathon, I was 17. I went alone, got put in a team with strangers, and we won nothing.
 Then I lost five more. Six in a row.
-[Click] Then I placed in the next six, in a row.
-My coding didn't suddenly get better. What changed was how I picked the problem and how I pitched it. That's what I'll share today.
+Then I placed in the next six, in a row.
+My code barely changed in between. What changed was what I was building for, and how I pitched it. That's what I'll share today.
 And now I see it from the other side.</template>
   <div class="wrap" style="gap:40px">
     <h2 class="h-med reveal">I lost my first 6 hackathons.</h2>
@@ -785,7 +789,7 @@ And now I see it from the other side.</template>
       <div class="htile lost"><img src="assets/hackathon/photos/reboot-the-earth-2019-01.webp" alt=""><span class="res">finalist</span><span class="yr">2019</span></div>
       <div class="htile lost"><img src="assets/hackathon/photos/apu-battle-of-hackers-2019-01.webp" alt=""><span class="res">rank 9</span><span class="yr">2019</span></div>
     </div>
-    <div class="hstrip step">
+    <div class="hstrip reveal">
       <div class="htile won"><img src="assets/hackathon/photos/sedex-42-2019-01.webp" alt=""><span class="res">🏆 award</span><span class="yr">2019</span></div>
       <div class="htile won"><img src="assets/hackathon/photos/ium-disrupt-hackathon-2020-01.webp" alt=""><span class="res">🥈 2nd</span><span class="yr">2020</span></div>
       <div class="htile won"><img src="assets/hackathon/photos/dsc-kitahack-2020-01.webp" alt=""><span class="res">🏆 1st</span><span class="yr">2020</span></div>
@@ -793,7 +797,7 @@ And now I see it from the other side.</template>
       <div class="htile won"><div class="txt-tile">UTM Open Virtual Hackathon</div><span class="res">🏆 winner</span><span class="yr">2020</span></div>
       <div class="htile won"><img src="assets/hackathon/photos/saai-factory-hackathon-2021-01.webp" alt=""><span class="res">🏆 $2,000</span><span class="yr">2021</span></div>
     </div>
-    <p class="sub step" style="font-size:40px">Then I placed in the <strong>next 6 in a row</strong>.</p>
+    <p class="sub reveal" style="font-size:40px">Then I placed in the <strong>next 6 in a row</strong>.</p>
   </div>
 </section>
 
@@ -867,13 +871,13 @@ Now look at the pitch.</template>
 <!-- 11 · Pitch twist -->
 <section class="slide" data-act="The game">
 <template class="note">The pitch is only 15 points, the smallest. So a lot of teams think it doesn't matter, and they code until the last minute.
-[Click] But think about how we score everything else. How do we know your problem is real? From your pitch. How do we see your prototype? In the demo, inside your pitch.
+But think about how we score everything else. How do we know your problem is real? From your pitch. How do we see your prototype? In the demo, inside your pitch.
 Every one of the 100 points reaches us through those 5 minutes. So you need to build it, and then you need to sell it.
 And you don't have much time for both.</template>
   <div class="bgimg side" style="left:880px; background-image:url(assets/hackathon/photos/ignite-2026-icube-02.webp); background-position:center 30%"></div>
   <div class="wrap left" style="gap:36px; padding-right:700px">
     <h2 class="h-med reveal">The pitch is only<br>15 points on paper.</h2>
-    <p class="sub step" style="font-size:50px; max-width:1050px">But judges see <strong>all 100 points</strong> through your <span class="accent" style="font-weight:800; white-space:nowrap">5-minute pitch.</span></p>
+    <p class="sub reveal" style="font-size:50px; max-width:1050px">But judges see <strong>all 100 points</strong> through your <span class="accent" style="font-weight:800; white-space:nowrap">5-minute pitch.</span></p>
   </div>
 </section>
 
@@ -936,7 +940,7 @@ First, roles.</template>
 </section>
 
 <section class="slide" data-act="01 · Roles" data-chapter="1">
-<template class="note">The most common mistake I see: four people, all coding until 3 a.m. Then at 9:25 someone opens Canva for the first time.
+<template class="note">A common mistake: four people, all coding until 3 a.m. Then at 9:25 someone opens Canva for the first time.
 With AI, one or two builders is enough. You also need one person who owns the pitch, and one who owns the design.
 Decide that before lunch.</template>
   <div class="wrap">
@@ -987,18 +991,23 @@ Now, what are you actually going to build?</template>
 <section class="slide glow-cool" data-act="02 · Idea" data-chapter="2">
 <template class="note">Let's try something. Shout out a tourism app idea. Anything.
 [Take 3 or 4 answers and repeat them back.]
-Okay. [Click] Here's what AI suggests when you ask it for tourism hackathon ideas: an AI trip planner, a chatbot tour guide, an AR heritage app, a hidden gems map, a booking website.
-[Click] Sound familiar? I promise at least five teams will build one of these this weekend, and they'll all blend together.</template>
+Okay. Now let's see what AI suggests when you ask it for tourism hackathon ideas.</template>
   <div class="wrap">
-    <div class="interact-tag reveal"><img class="emo" src="assets/hackathon/emoji/megaphone.webp" alt=""> Shout it out</div>
-    <h2 class="h-med reveal">Give me a tourism app idea.</h2>
-    <div class="step" style="display:flex; flex-direction:column; gap:30px; align-items:center">
-      <div class="kicker warm"><img class="emo" src="assets/hackathon/emoji/bot.webp" alt=""> The first ideas AI gives you</div>
-      <div class="ideas">
-        <span class="idea">AI trip planner</span><span class="idea">Chatbot tour guide</span><span class="idea">AR heritage app</span><span class="idea">"Hidden gems" map</span><span class="idea">Booking website</span>
-      </div>
+    <div class="ibadge lg cool reveal"><img class="emo" src="assets/hackathon/emoji/megaphone.webp" alt=""></div>
+    <div class="interact-tag reveal">Shout it out</div>
+    <h2 class="h-big reveal">Give me a<br><span class="cool">tourism app</span> idea.</h2>
+  </div>
+</section>
+
+<section class="slide" data-act="02 · Idea" data-chapter="2">
+<template class="note">An AI trip planner, a chatbot tour guide, an AR heritage app, a hidden gems map, a booking website.
+Sound familiar? If AI gave you the idea, it gave the same idea to the team next to you. And they'll all blend together.</template>
+  <div class="wrap" style="gap:40px">
+    <div class="kicker warm reveal"><img class="emo" src="assets/hackathon/emoji/bot.webp" alt=""> The first ideas AI gives you</div>
+    <div class="ideas reveal">
+      <span class="idea">AI trip planner</span><span class="idea">Chatbot tour guide</span><span class="idea">AR heritage app</span><span class="idea">"Hidden gems" map</span><span class="idea">Booking website</span>
     </div>
-    <p class="sub step">Expect <strong>at least 5 teams</strong> to build one of these.</p>
+    <p class="sub reveal">If AI gave you the idea, <strong>it gave other teams the same one.</strong></p>
   </div>
 </section>
 
@@ -1021,7 +1030,7 @@ Here's a quick test for your own idea.</template>
 <section class="slide" data-act="02 · Idea" data-chapter="2">
 <template class="note">If you can't explain your problem in 10 seconds, pick a simpler problem.
 By the time you pitch, we've seen a lot of teams, and we won't work hard to understand you.
-And one of your judges already told you what he's looking for.</template>
+It also helps to know who you're explaining it to.</template>
   <div class="wrap">
     <div class="ibadge lg reveal"><img class="emo" src="assets/hackathon/emoji/timer.webp" alt=""></div>
     <h2 class="h-big reveal">Explain your problem<br>in <span class="accent">10 seconds</span>.</h2>
@@ -1029,20 +1038,6 @@ And one of your judges already told you what he's looking for.</template>
   </div>
 </section>
 
-<section class="slide" data-act="02 · Idea" data-chapter="2">
-<template class="note">Chuo said it this morning: most kampung sellers live on WhatsApp and a phone. And a small prototype that runs beats a big idea on slides.
-That's the person scoring you, telling you what he wants. So use it.
-That brings me to the judges.</template>
-  <div class="quote-grid">
-    <img class="portrait reveal" src="assets/hackathon/event/jury-12.jpg" alt="Chuo Nang Ling">
-    <div class="q">
-      <div class="kicker reveal">One of your judges already told you</div>
-      <blockquote class="reveal">"Most kampung sellers live on <span class="accent">WhatsApp and a phone.</span>"</blockquote>
-      <blockquote class="reveal" style="font-size:48px; color:var(--ink-2)">"A small prototype that runs beats a big idea on slides."</blockquote>
-      <div class="who reveal">Chuo Nang Ling, Founder, Sarawak Fruit Enterprise · this morning</div>
-    </div>
-  </div>
-</section>
 
 <section class="slide" data-act="02 · Idea" data-chapter="2">
 <template class="note">Research your judges' backgrounds. You get the same rubric, but each judge reads it through their own experience.
@@ -1050,7 +1045,7 @@ A technical judge will be stricter on whether it actually works.
 An entrepreneur will ask who pays, and whether people will really use it.
 Someone from industry asks whether it fits how a real business runs.
 An academic wants evidence that the problem is real, and how you'd measure the impact.
-I score differently from my co-judges almost every time.
+That's why the same team can get very different scores from different judges.
 So who's judging you this weekend?</template>
   <div class="wrap" style="gap:46px">
     <h2 class="h-med reveal">Research your judges' backgrounds.</h2>
@@ -1066,20 +1061,21 @@ So who's judging you this weekend?</template>
 </section>
 
 <section class="slide" data-act="02 · Idea" data-chapter="2">
-<template class="note">Chuo, founder of Sarawak Fruit Enterprise. He works with over 150 farmers.
-Ting Dao King, third-generation manager of Poh Guan Hong, modernising a traditional family business.
-And Dr. Rahmat, Dean of Business at UTS, and a specialist in AI and digital transformation.
-Judges, correct me if I'm wrong, but my guess is: will sellers actually use it and who pays; does it fit how a traditional business runs; and is the AI doing something real that SMEs can adopt.
-And show them your idea early today, while you can still change it.
+<template class="note">Here's who's judging you this weekend.
+Chuo Nang Ling, founder of Sarawak Fruit Enterprise in Sibu. They work with over 150 local farmers.
+Ting Dao King, third-generation manager at Poh Guan Hong. He spent 20 years in Australia across engineering, media and healthcare before coming home to Sibu.
+And Dr. Rahmat Aidil Djubair, Dean of the School of Business and Management at UTS, and a specialist in AI and digital transformation.
+Three different backgrounds, so think about what each of them will look for.
+And show your idea to the mentors early today, while you can still change it.
 Once you have the idea, it's time to build.</template>
   <div class="wrap" style="gap:44px">
     <h2 class="h-small reveal">Your judges this weekend</h2>
     <div class="jury reveal">
-      <div class="p"><img src="assets/hackathon/event/jury-12.jpg" alt="Chuo Nang Ling"><div class="nm">Chuo Nang Ling</div><div class="rl">Founder, Sarawak Fruit Enterprise · 150+ farmers</div><div class="asks"><span>Might ask</span>Will sellers actually use it? Who pays?</div></div>
-      <div class="p"><img src="assets/hackathon/event/jury-13.jpg" alt="Ting Dao King"><div class="nm">Ting Dao King</div><div class="rl">3rd-generation manager, Poh Guan Hong</div><div class="asks"><span>Might ask</span>Does it fit how a traditional business runs?</div></div>
-      <div class="p"><img src="assets/hackathon/event/jury-14.jpg" alt="Dr. Rahmat Aidil Djubair"><div class="nm">Dr. Rahmat Aidil Djubair</div><div class="rl">Dean of Business, UTS · AI &amp; digital transformation</div><div class="asks"><span>Might ask</span>Is the AI real? Can SMEs adopt it?</div></div>
+      <div class="p"><img src="assets/hackathon/event/jury-12.jpg" alt="Chuo Nang Ling"><div class="nm">Chuo Nang Ling</div><div class="rl">Founder, Sarawak Fruit Enterprise</div><div class="bio">Works with 150+ local farmers in Sarawak</div></div>
+      <div class="p"><img src="assets/hackathon/event/jury-13.jpg" alt="Ting Dao King"><div class="nm">Ting Dao King</div><div class="rl">Third-generation manager, Poh Guan Hong</div><div class="bio">20 years in Australia in engineering, media and healthcare</div></div>
+      <div class="p"><img src="assets/hackathon/event/jury-14.jpg" alt="Dr. Rahmat Aidil Djubair"><div class="nm">Dr. Rahmat Aidil Djubair</div><div class="rl">Dean, School of Business and Management, UTS</div><div class="bio">AI and digital transformation specialist</div></div>
     </div>
-    <p class="sub reveal" style="font-size:32px">Show mentors and judges your idea <strong>early</strong>, while you can still change it.</p>
+    <p class="sub reveal" style="font-size:32px">Show your idea to the mentors <strong>early</strong>, while you can still change it.</p>
   </div>
 </section>
 
@@ -1096,14 +1092,14 @@ Once you have the idea, it's time to build.</template>
 </section>
 
 <section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">Some teams walk in with 200 US dollar a month AI plans. That's almost 900 ringgit. Better AI does give them an edge.
+<template class="note">Some teams walk in with 200 US dollar a month AI plans. That's over 800 ringgit. Better AI does give them an edge.
 But you can get close for zero ringgit.
-[Click] Quick show of hands: who has a student email?
+Quick show of hands: who has a student email?
 [Hands.] Good, because most of what I'm about to show you is free with a student email.</template>
   <div class="wrap">
     <p class="sub reveal">Some teams pay <strong>US$200 a month</strong> for AI.</p>
     <h2 class="h-big reveal">You can do this for <span class="accent">RM0</span>.</h2>
-    <div class="interact-tag step"><img class="emo" src="assets/hackathon/emoji/hand.webp" alt=""> Who has a student email?</div>
+    <div class="interact-tag reveal"><img class="emo" src="assets/hackathon/emoji/hand.webp" alt=""> Who has a student email?</div>
   </div>
 </section>
 
@@ -1143,14 +1139,14 @@ For coding, GitHub has a student deal too.</template>
 <!-- GitHub pack -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
 <template class="note">The GitHub Student Developer Pack gives you GitHub Copilot for free, plus GitHub Pro and a free .me domain for a year.
-Verify with your student email or proof of enrolment. It can take a day or two, so apply today.
+Verify with your student email or proof of enrolment. Approval can take a few days, so apply today.
 And I have one more gift for you.</template>
   <div class="split">
     <div class="txt">
       <div class="logo-tile reveal"><img src="assets/hackathon/logos/github.svg" alt="GitHub"></div>
       <h2 class="h-med reveal">Students get GitHub Copilot <span class="accent">free</span>.</h2>
       <div class="pills reveal"><span class="pill">Copilot (AI coding)</span><span class="pill">GitHub Pro</span><span class="pill">Free .me domain</span></div>
-      <p class="sub reveal" style="font-size:30px">Verify with your student email. <strong>Apply today</strong>, it can take a day or two.</p>
+      <p class="sub reveal" style="font-size:30px">Verify with your student email. <strong>Apply today</strong>. Approval can take a few days.</p>
       <span class="link-chip reveal">education.github.com/pack</span>
     </div>
     <div class="vis reveal"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>education.github.com/pack</span></div><img src="assets/hackathon/web/githubpack.webp" alt="GitHub Student Pack"></div></div>
@@ -1159,13 +1155,13 @@ And I have one more gift for you.</template>
 
 <!-- Kiro -->
 <section class="slide glow-warm" data-act="03 · Build" data-chapter="3">
-<template class="note">Kiro is an AI coding app from AWS, and we have 1,000 free credits for this community. First come, first served, one per person.
+<template class="note">Kiro is an AI coding app from AWS, and there are free Kiro credits for this community. First come, first served, one per person.
 Phones out, scan now. [Pause 15 seconds.]
-Two tips: redeem with the same login you use in the Kiro app, and use your mobile data instead of the venue wifi, because lots of sign-ups from one wifi can get flagged.
+Two tips: redeem with the same login you use in the Kiro app, and use your mobile data instead of the venue wifi. The claim page limits how many people can claim from one network, so on the shared wifi most of you will get blocked.
 And if you burn through your credits tonight...</template>
   <div class="wrap" style="gap:40px">
     <div class="interact-tag warm reveal"><img class="emo" src="assets/hackathon/emoji/gift.webp" alt=""> Phones out · first come, first served</div>
-    <h2 class="h-med reveal">Claim <span class="accent">1,000 free Kiro credits</span> now.</h2>
+    <h2 class="h-med reveal">Claim <span class="accent">free Kiro credits</span> now.</h2>
     <div class="qr-row reveal">
       <div class="qr-card"><img src="assets/hackathon/qr/kiro.png" alt="QR to s12d.com/mykiro"></div>
       <div style="display:flex; flex-direction:column; gap:24px">
@@ -1197,7 +1193,7 @@ People also always ask me about Lovable.</template>
 
 <!-- Lovable -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">Is Lovable good? Yes. I've mentored and judged at Lovable's own hackathons.
+<template class="note">Is Lovable good? Yes. I mentored and judged at Lovable's own hackathon in KL this year.
 But the free plan gives you 5 credits a day. That's enough for a first draft. Start there if you like it, then continue in AI Studio, Kiro or Copilot. Students get 50% off Pro if you want to pay.
 So here's the full free stack.</template>
   <div class="wrap">
@@ -1292,7 +1288,7 @@ Here's how to fix it.</template>
 
 <!-- Unslop -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">21st.dev has thousands of real components made by designers. Click "Copy prompt" and paste it into your AI tool.
+<template class="note">21st.dev has over 12,000 components and templates made by real design engineers. Click "Copy prompt" and paste it into your AI tool.
 Binmob has over a thousand real website designs to borrow layout and colour from.
 And my favourite trick: screenshot a site you like, give it to the AI, and say "make it look like this."
 Pick one font and one accent colour, and use real photos.
@@ -1309,13 +1305,13 @@ If you want to go deeper...</template>
 
 <!-- Hong Bing -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">...my friend Hong Bing has won 19 hackathons, and he wrote a free field manual for first-timers. It's in the link at the end.
+<template class="note">...my friend Hong Bing has placed in 20 hackathons, and he wrote a free field manual: the rules, a pitch playbook and the stack to use. It's in the link at the end.
 So what can you actually build in 24 hours?</template>
   <div class="split">
     <div class="txt">
       <div class="ibadge reveal"><img class="emo" src="assets/hackathon/emoji/file-text.webp" alt=""></div>
-      <h2 class="h-med reveal">Free crash course from a 19x hackathon winner</h2>
-      <p class="sub reveal">My friend Hong Bing's Hackathon Field Manual, written for first-timers.</p>
+      <h2 class="h-med reveal">A free guide from a friend who placed in 20 hackathons</h2>
+      <p class="sub reveal">Hong Bing's hackathon field manual: the rules, a pitch playbook and the stack to use.</p>
       <span class="link-chip reveal">hong.build/hack</span>
     </div>
     <div class="vis reveal"><div class="browser"><div class="bar"><i></i><i></i><i></i><span>hong.build/hack</span></div><img src="assets/hackathon/web/hong.webp" alt="Hackathon field manual"></div></div>
@@ -1338,7 +1334,7 @@ So what can you actually build in 24 hours?</template>
 <section class="slide" data-act="03 · Build" data-chapter="3">
 <template class="note">This is a job scam simulator I built for UNODC and Project Liber8.
 You see a fake job ad: up to 9,000 ringgit a month in Bangkok, free flight. You apply, and a recruiter called Kak Mira messages you on WhatsApp. She's an AI. She reacts to what you say, and she pressures you.
-The moment you send your passport photo: stop, it was a simulation. Then it shows you every red flag you missed.
+The moment you send your passport or say yes, it stops and tells you it was a simulation. Then it shows you every red flag you missed.
 Want to try it?</template>
   <div class="wrap" style="gap:26px; padding-top:70px">
     <h2 class="h-small reveal">Example 1: a job scam simulator on WhatsApp</h2>
@@ -1355,7 +1351,7 @@ Want to try it?</template>
 <!-- Example 1: try it -->
 <section class="slide glow-warm" data-act="03 · Build" data-chapter="3">
 <template class="note">Scan this. Can you spot the scam before you send your passport?
-Play it now or tonight. It only takes a few minutes. [If you're under 18, it gives you a safe version. That's on purpose.]
+Play it now or tonight. It only takes a few minutes. [If you're under 18, it skips the chat and goes straight to the lesson. That's on purpose.]
 And notice how this idea could work for your theme.</template>
   <div class="wrap" style="gap:40px">
     <div class="interact-tag warm reveal"><img class="emo" src="assets/hackathon/emoji/scan-line.webp" alt=""> Try it now</div>
@@ -1372,7 +1368,7 @@ And notice how this idea could work for your theme.</template>
 
 <!-- Adapt the idea -->
 <section class="slide" data-act="03 · Build" data-chapter="3">
-<template class="note">Same idea, your theme. A chatbot on WhatsApp works because people already live on WhatsApp, like Chuo said.
+<template class="note">Same idea, your theme. A chatbot on WhatsApp works because people already use WhatsApp every day.
 So imagine a WhatsApp bot for homestay hosts. The host sends one voice note in Malay, and gets back a page tourists can book, in English and Malay.
 You could build a first version of this in AI Studio this afternoon.
 Here's a different kind of example.</template>
@@ -1425,9 +1421,8 @@ Okay, you've built something. Now you have to show it.</template>
 </section>
 
 <section class="slide" data-act="04 · Demo" data-chapter="4">
-<template class="note">I've seen great teams lose on stage because the wifi dropped or the app crashed. Judges don't care that it worked five minutes ago.
+<template class="note">Live demos break all the time: the wifi drops, the app crashes. And judges can only score what they see.
 So record a backup video tonight. If the live demo works, great. If it doesn't, play the video and talk over it. You can also cut out the loading time.
-The organisers even put this on tomorrow's checklist.
 And you can use AI to make that video look good.</template>
   <div class="split" style="grid-template-columns: 1fr 600px">
     <div class="txt">
@@ -1459,7 +1454,7 @@ I make my own content this way too.</template>
 </section>
 
 <section class="slide glow-warm" data-act="04 · Demo" data-chapter="4">
-<template class="note">This is a reel from the same UNODC project. The face is my AI avatar, the voice is my cloned voice, and AI wrote the code that animates every scene. The pixel art is from LimeZu.
+<template class="note">This is a reel from the same UNODC project. The face is my AI avatar, the voice is my cloned voice, and AI wrote the code that animates every scene. Most of the pixel art is from LimeZu.
 One person, no film crew. [Let it play for about 15 seconds.]</template>
   <div class="split" style="grid-template-columns: 820px 1fr">
     <div class="txt">
@@ -1537,9 +1532,9 @@ Let's talk about those first 10 seconds.</template>
 </section>
 
 <section class="slide" data-act="05 · Pitch" data-chapter="5">
-<template class="note">The first 10 seconds decide if we lean in or zone out. The winning projects I remember all had a moment where the judges felt something.
+<template class="note">The first 10 seconds decide if we lean in or zone out. So give the judges a moment they'll remember.
 Role-play a tourist who's lost in Sibu. Put a real prop on the table, bring a dabai! Or open with the app already working.
-One hackathon winner I follow, Matthew Chan, built a Snorlax figure that physically locks your phone.
+A builder I follow, Matthew Chan, says every project of his that won had that moment in the first 10 seconds. One of his projects is a Snorlax that physically locks your phone away. You get it in one second.
 Then keep your slides simple.</template>
   <div class="wrap" style="gap:44px">
     <h2 class="h-med reveal">Grab the judges' attention<br>in the first <span class="accent">10 seconds</span>.</h2>
@@ -1564,15 +1559,15 @@ And get ready for the questions.</template>
 </section>
 
 <section class="slide" data-act="05 · Pitch" data-chapter="5">
-<template class="note">You'll get at least two of these four.
-Who pays? Will a kampung seller actually use this? What if the AI is wrong? What happens after this weekend?
+<template class="note">Judges ask these a lot.
+Who pays? Will people actually use it? What if the AI is wrong? What happens after this weekend?
 Prepare a one-line answer for each.
 If you want to see what good looks like...</template>
   <div class="wrap" style="gap:46px">
     <h2 class="h-med reveal">Prepare answers to these questions.</h2>
     <div class="qa4 reveal">
       <div class="c"><div class="ibadge sm cool"><img class="emo" src="assets/hackathon/emoji/coins.webp" alt=""></div>Who pays for it?</div>
-      <div class="c"><div class="ibadge sm cool"><img class="emo" src="assets/hackathon/emoji/store.webp" alt=""></div>Will sellers actually use it?</div>
+      <div class="c"><div class="ibadge sm cool"><img class="emo" src="assets/hackathon/emoji/user.webp" alt=""></div>Will people actually use it?</div>
       <div class="c"><div class="ibadge sm cool"><img class="emo" src="assets/hackathon/emoji/bot.webp" alt=""></div>What if the AI is wrong?</div>
       <div class="c"><div class="ibadge sm cool"><img class="emo" src="assets/hackathon/emoji/rocket.webp" alt=""></div>What happens after this weekend?</div>
     </div>
@@ -1580,14 +1575,14 @@ If you want to see what good looks like...</template>
 </section>
 
 <section class="slide" data-act="05 · Pitch" data-chapter="5">
-<template class="note">...go to Devpost, where most hackathon projects get posted, and look at the winners. Watch their two-minute videos and copy the structure, not the idea.
-This is my own winning project from a global MLH hackathon in 2020.
+<template class="note">...go to Devpost, where most hackathon projects get posted, and look at the winners. Watch their demo videos and copy the structure, not the idea.
+This is my project PhotoSketch. It won Best Open Source at a global MLH hackathon in 2020.
 Okay, quick vote.</template>
   <div class="split">
     <div class="txt">
       <div class="logo-tile reveal"><img src="assets/hackathon/logos/devpost.svg" alt="Devpost"></div>
       <h2 class="h-med reveal">Watch how past winners pitched.</h2>
-      <p class="sub reveal">Watch their 2-minute demo videos on Devpost. <strong>Copy the structure, not the idea.</strong></p>
+      <p class="sub reveal">Watch their demo videos on Devpost. <strong>Copy the structure, not the idea.</strong></p>
       <span class="link-chip reveal">devpost.com/software</span>
     </div>
     <div class="vis reveal" style="flex-direction:column; gap:18px"><img src="assets/hackathon/photos/mlh-local-hack-day-2020-01.webp" alt="My winning Devpost page" style="border-radius:18px; border:1px solid rgba(255,255,255,.1); box-shadow:0 30px 90px rgba(0,0,0,.6); max-height:640px"><div class="caption" style="font-size:26px; font-family:var(--font-mono); font-weight:400; color:var(--ink-2)">my winning project · MLH 2020</div></div>
@@ -1597,15 +1592,26 @@ Okay, quick vote.</template>
 <section class="slide glow-cool" data-act="05 · Pitch" data-chapter="5">
 <template class="note">Team A has ten features, slides full of text, and their demo crashed on stage.
 Team B has one feature, one clear story, and when the wifi died they played their backup video.
-Hands up for Team A? [Hands.] Team B? [Hands.]
-[Click] Team B, almost every time, even if Team A's code was better.
-And whoever wins, the next part matters for everyone.</template>
+Hands up for Team A? [Hands.] Team B? [Hands.]</template>
   <div class="wrap" style="gap:50px">
     <div class="interact-tag reveal"><img class="emo" src="assets/hackathon/emoji/hand.webp" alt=""> Vote</div>
     <h2 class="h-med reveal">Which team wins?</h2>
     <div class="vs reveal">
       <div class="team"><div class="nm">TEAM A</div><div class="li">10 features</div><div class="li">Slides full of text</div><div class="li">Demo crashes on stage</div></div>
-      <div class="team"><div class="nm">TEAM B</div><div class="li">1 feature</div><div class="li">One clear story</div><div class="li">Plays the backup video</div><div class="badge step"><img class="emo" src="assets/hackathon/emoji/trophy.webp" alt=""> Almost every time</div></div>
+      <div class="team"><div class="nm">TEAM B</div><div class="li">1 feature</div><div class="li">One clear story</div><div class="li">Plays the backup video</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide glow-cool" data-act="05 · Pitch" data-chapter="5">
+<template class="note">Team B, almost every time, even if Team A's code was better.
+And whoever wins, the next part matters for everyone.</template>
+  <div class="wrap" style="gap:50px">
+    <div class="interact-tag reveal"><img class="emo" src="assets/hackathon/emoji/trophy.webp" alt=""> The answer</div>
+    <h2 class="h-med reveal">Team B wins, <span class="accent">almost every time.</span></h2>
+    <div class="vs reveal">
+      <div class="team" style="opacity:.4"><div class="nm">TEAM A</div><div class="li">10 features</div><div class="li">Slides full of text</div><div class="li">Demo crashes on stage</div></div>
+      <div class="team win"><div class="nm">TEAM B</div><div class="li">1 feature</div><div class="li">One clear story</div><div class="li">Plays the backup video</div><div class="badge"><img class="emo" src="assets/hackathon/emoji/trophy.webp" alt=""> Winner</div></div>
     </div>
   </div>
 </section>
@@ -1682,7 +1688,7 @@ You might think nobody will see it. But it worked for me.</template>
 </section>
 
 <section class="slide glow-warm" data-act="06 · After" data-chapter="6">
-<template class="note">At 19 I was writing AI tutorials on a blog, mostly for myself. A professor at MIT found them and emailed me. That became a published research paper.
+<template class="note">I was writing AI tutorials on a blog, mostly for myself. A professor at MIT found them and emailed me, and at 19 I co-authored a research paper with MIT.
 People can only find you through what you put online, and one good post about this weekend could be the one.
 Before you go, here's everything from today in one place.</template>
   <div class="wrap">
@@ -1817,20 +1823,15 @@ class SlidePresentation {
     scale();
     window.addEventListener('resize', scale);
   }
-  /* steps: reveal .step elements inside the active slide before advancing */
-  pendingSteps() { return this.slides[this.current].querySelectorAll('.step:not(.on)'); }
-  next() {
-    const steps = this.pendingSteps();
-    if (steps.length) { steps[0].classList.add('on'); window.remoteSync && window.remoteSync(); return; }
-    this.show(this.current + 1);
-  }
+  /* one tap = one slide: everything on a slide shows when it opens */
+  next() { this.show(this.current + 1); }
   prev() { this.show(this.current - 1); }
   show(i) {
     this.current = Math.max(0, Math.min(i, this.slides.length - 1));
     this.slides.forEach((s, idx) => {
       s.classList.toggle('active', idx === this.current);
       s.classList.toggle('visible', idx === this.current);
-      if (idx !== this.current) s.querySelectorAll('.step.on').forEach(el => el.classList.remove('on'));
+      s.querySelectorAll('.step').forEach(el => el.classList.toggle('on', idx === this.current));
     });
     /* HUD */
     document.getElementById('hudAct').textContent = this.slides[this.current].dataset.act || '';
@@ -2071,39 +2072,50 @@ document.querySelectorAll('img').forEach(img => {
 const deck = new SlidePresentation();
 
 /* ===========================================
-   PHONE REMOTE — press R to pair. Phone opens
-   speaking-slides/remote.html and enters the code.
-   Relay: ntfy.sh (public pub/sub, CORS-enabled).
+   PHONE REMOTE — press R to pair, or open the deck with ?remote=CODE.
+   Phone: speaking-slides/remote.html. Relay: ntfy.sh (public pub/sub).
+   The phone sends absolute slide numbers ("go to slide 12"), never
+   "next", so every screen showing this deck ends up on the same slide,
+   even if the deck is open in several tabs or a tab reconnects late.
    =========================================== */
 (function remoteControl() {
   const DECK = (location.pathname.split('/').pop() || '').replace(/\.html$/, '') || 'hackathon-ai-age';
   const STORE = 'deck-remote-code:' + DECK;
+  const ID = Math.random().toString(36).slice(2, 8);
   const overlay = document.getElementById('remoteOverlay');
   const dot = document.getElementById('remoteDot');
-  let code = null, es = null, timer = null;
+  let code = null, es = null, timer = null, retry = null, why = 'nav', lastNavAt = 0, backoff = 2000;
+  const lastQ = {};
   const topic = () => 'mfr-deck-' + DECK + '-' + code;
   const newCode = () => { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; return Array.from(crypto.getRandomValues(new Uint8Array(5)), b => A[b % A.length]).join(''); };
-  const send = (obj) => { if (!code) return; fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'deck' }, obj)) }).catch(() => {}); };
+  const send = (obj) => { if (!code) return; fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'deck', id: ID }, obj)) }).catch(() => {}); };
+  const state = (w) => send({ i: deck.current, n: deck.slides.length, why: w, age: lastNavAt ? Date.now() - lastNavAt : 1e12 });
+  /* show() calls this on every slide change */
   window.remoteSync = () => {
+    lastNavAt = Date.now();
+    const w = why; why = 'nav';
     if (!code) return;
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      const s = deck.slides[deck.current];
-      send({ s: deck.current, n: deck.slides.length, steps: s.querySelectorAll('.step.on').length, total: s.querySelectorAll('.step').length });
-    }, 120);
+    timer = setTimeout(() => state(w), 60);
   };
   function connect() {
     if (es) es.close();
+    clearTimeout(retry);
     es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
-    es.onopen = () => { dot.classList.add('on'); window.remoteSync(); };
-    es.onerror = () => dot.classList.remove('on');
+    es.onopen = () => { backoff = 2000; dot.classList.add('on'); state('join'); };
+    es.onerror = () => { dot.classList.remove('on'); es.close(); clearTimeout(retry); retry = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 20000); };
     es.onmessage = (e) => {
       let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
       if (!d || d.from !== 'remote') return;
-      if (d.a === 'next') deck.next();
+      if (d.a === 'go' && Number.isFinite(d.i)) {
+        const k = d.r || '_';
+        if (d.q) { if (d.q <= (lastQ[k] || 0)) return; lastQ[k] = d.q; }
+        const i = Math.max(0, Math.min(d.i, deck.slides.length - 1));
+        if (i !== deck.current) { why = 'go'; deck.show(i); }
+      }
+      else if (d.a === 'hello') { overlay.classList.remove('on'); state('hello'); }
+      else if (d.a === 'next') deck.next();   /* older remote page */
       else if (d.a === 'prev') deck.prev();
-      else if (d.a === 'go' && Number.isFinite(d.i)) deck.show(d.i);
-      else if (d.a === 'hello') { overlay.classList.remove('on'); window.remoteSync(); }
     };
   }
   function setCode(c) { code = c; localStorage.setItem(STORE, c); overlay.querySelector('.rc-code').textContent = c; connect(); }
@@ -2118,6 +2130,10 @@ const deck = new SlidePresentation();
     if (act === 'new') setCode(newCode());
     if (act === 'close' || e.target === overlay) overlay.classList.remove('on');
   });
+  /* tab closing or reloading: tell the phone so it stops counting this screen */
+  window.addEventListener('pagehide', () => { if (code) try { fetch('https://ntfy.sh/' + topic(), { method: 'POST', keepalive: true, body: JSON.stringify({ from: 'deck', id: ID, why: 'bye' }) }); } catch (_) {} });
+  /* laptop woke up or tab came back: reconnect so the phone sees this screen again */
+  document.addEventListener('visibilitychange', () => { if (code && document.visibilityState === 'visible' && (!es || es.readyState !== 1)) connect(); });
   /* ?remote=CODE in the link (e.g. sent to the organiser): connect silently, nothing shown on screen.
      Otherwise, if already paired in this browser, reconnect quietly. */
   const fromUrl = (new URLSearchParams(location.search).get('remote') || '').toUpperCase();

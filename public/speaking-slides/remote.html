@@ -16,13 +16,14 @@ body { display:flex; flex-direction:column; padding:calc(env(safe-area-inset-top
 .status { display:flex; gap:8px; align-items:center; }
 .status i { width:9px; height:9px; border-radius:50%; background:#ff4a3d; display:block; }
 .status.ok i { background:#3ddc84; box-shadow:0 0 8px #3ddc84; }
+.status.ok.warn i { background:#ffb020; box-shadow:0 0 8px #ffb020; }
+.status span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:68vw; }
 .timer { font-size:15px; color:var(--ink); padding:4px 10px; border:1px solid rgba(255,255,255,.15); border-radius:20px; }
 .now { background:var(--soft); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:14px 16px; flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; }
 .meta { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
 .count { font-family:ui-monospace, Menlo, monospace; font-size:14px; color:var(--cyan); white-space:nowrap; }
 .act { font-family:ui-monospace, Menlo, monospace; font-size:12px; color:var(--ink3); text-transform:uppercase; letter-spacing:.1em; text-align:right; }
 .title { font-size:19px; font-weight:700; line-height:1.25; }
-.steps { font-family:ui-monospace, Menlo, monospace; font-size:12px; color:var(--accent); }
 .notes { overflow-y:auto; -webkit-overflow-scrolling:touch; font-size:19px; line-height:1.5; color:#e8eaef; padding-right:4px; flex:1; }
 .notes p { margin-bottom:10px; }
 .notes em { color:var(--accent); font-style:normal; }
@@ -68,8 +69,7 @@ button:active { transform:scale(.97); filter:brightness(1.15); }
 <div class="now">
   <div class="meta"><span class="count" id="count">– / –</span><span class="act" id="act"></span></div>
   <div class="title" id="title">Waiting for the slides…</div>
-  <div class="steps" id="steps"></div>
-  <div class="notes" id="notes"><p>Press <b>R</b> on the laptop to show the code, then connect.</p></div>
+    <div class="notes" id="notes"><p>Press <b>R</b> on the laptop to show the code, then connect.</p></div>
 </div>
 <div class="next" id="next"></div>
 
@@ -80,16 +80,23 @@ button:active { transform:scale(.97); filter:brightness(1.15); }
 <p class="small"><a href="#" id="unpair">change code</a></p>
 
 <script>
+/* One tap = one slide. The phone decides which slide every screen should show and sends
+   the absolute number ("go to slide 12"). Screens never step on their own, so two tabs,
+   a reloaded laptop or a late reconnect can't drift apart or jump ahead. */
 const params = new URLSearchParams(location.search);
 const DECK = (params.get('deck') || 'hackathon-ai-age').replace(/[^a-z0-9-]/gi, '');
 const STORE = 'deck-remote-code:' + DECK;
+const POS = 'deck-remote-pos:' + DECK;
+const RID = Math.random().toString(36).slice(2, 8);
 let code = (params.get('k') || localStorage.getItem(STORE) || '').toUpperCase();
-let slides = [], es = null, lastState = null, startedAt = null, wake = null;
+let slides = [], es = null, retry = null, startedAt = null, wake = null, syncT = null;
+let cur = null, curAt = 0, deckN = 0, backoff = 2000;
+const screens = new Map();
 const $ = id => document.getElementById(id);
 const topic = () => 'mfr-deck-' + DECK + '-' + code;
 
-/* read titles + speaker notes straight from the deck file */
-fetch(DECK + '.html').then(r => r.text()).then(html => {
+/* read titles + speaker notes straight from the deck file (always the latest version) */
+fetch(DECK + '.html', { cache: 'no-store' }).then(r => r.text()).then(html => {
   const doc = new DOMParser().parseFromString(html, 'text/html');
   slides = Array.from(doc.querySelectorAll('section.slide')).map(s => ({
     act: s.dataset.act || '',
@@ -106,46 +113,97 @@ function titleOf(s) {
   return c.textContent.replace(/\s+/g, ' ').trim();
 }
 function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+const total = () => slides.length || deckN || 0;
+function savePos() { if (cur !== null) localStorage.setItem(POS, JSON.stringify({ code, i: cur, at: curAt })); }
+function loadPos() {
+  try { const p = JSON.parse(localStorage.getItem(POS) || 'null');
+    /* only trust a position from the last 30 minutes, so yesterday's practice can't move today's screen */
+    if (p && p.code === code && Date.now() - p.at < 30 * 60 * 1000) { cur = p.i; curAt = p.at; } } catch (_) {}
+}
 function render() {
-  if (!lastState) return;
-  const i = lastState.s, s = slides[i];
-  $('count').textContent = (i + 1) + ' / ' + (lastState.n || slides.length || '–');
+  if (cur === null) return;
+  const i = cur, s = slides[i];
+  $('count').textContent = (i + 1) + ' / ' + (total() || '–');
   if (!s) return;
   $('act').textContent = s.act;
   $('title').textContent = s.title || '(no title)';
-  $('steps').textContent = lastState.total ? 'Reveals: ' + lastState.steps + ' of ' + lastState.total + (lastState.steps < lastState.total ? ' · next tap reveals more' : '') : '';
   const tmp = document.createElement('textarea'); tmp.innerHTML = s.note;
   $('notes').innerHTML = tmp.value.split('\n').filter(l => l.trim()).map(l => '<p>' + esc(l.trim()).replace(/(\[[^\]]*\])/g, '<em>$1</em>') + '</p>').join('');
   $('notes').scrollTop = 0;
   const n = slides[i + 1];
   $('next').innerHTML = n ? '<b>NEXT</b>' + esc(n.title || n.act) : '<b>NEXT</b>end of deck';
 }
+function screenInfo() {
+  const list = [...screens.values()];
+  const old = list.some(x => x.old || (slides.length && x.n && x.n !== slides.length));
+  let t = 'connected · ' + code + ' · ' + (list.length === 1 ? '1 screen' : list.length + ' screens');
+  if (old) t += ' · reload the slides tab';
+  $('statusText').textContent = t;
+  $('status').classList.toggle('ok', list.length > 0);
+  $('status').classList.toggle('warn', old || list.length > 1);
+}
 
-function setStatus(ok, text) { $('status').classList.toggle('ok', ok); $('statusText').textContent = text; }
+function setStatus(ok, text) { $('status').classList.toggle('ok', ok); $('status').classList.remove('warn'); $('statusText').textContent = text; }
 function send(obj) {
   if (!code) return;
-  fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'remote' }, obj)) })
+  fetch('https://ntfy.sh/' + topic(), { method: 'POST', body: JSON.stringify(Object.assign({ from: 'remote', r: RID }, obj)) })
     .catch(() => setStatus(false, 'send failed, check internet'));
+}
+function go(i) {
+  if (cur === null) { flash('No slides connected yet'); send({ a: 'hello' }); return; }
+  const n = total();
+  i = Math.max(0, Math.min(i, n ? n - 1 : i));
+  cur = i; curAt = Date.now(); savePos(); render(); screenInfo();
+  send({ a: 'go', i, q: Date.now() });
+}
+/* bring every screen onto the phone's slide (after a tab joins or someone used the laptop keys) */
+function syncSoon() {
+  clearTimeout(syncT);
+  syncT = setTimeout(() => { if (cur !== null && [...screens.values()].some(x => x.i !== cur)) send({ a: 'go', i: cur, q: Date.now() }); }, 400);
+}
+function onDeck(d) {
+  if (d.why === 'bye') { screens.delete(d.id); screenInfo(); return; }
+  const i = Number.isFinite(d.i) ? d.i : d.s;      /* d.s = older deck version */
+  if (!Number.isFinite(i)) return;
+  const id = d.id || 'old';
+  screens.set(id, { i, n: d.n, old: !d.id });
+  if (d.n) deckN = d.n;
+  const why = d.why || 'ack';
+  if (why === 'nav') {                              /* someone pressed a key on a laptop: follow it */
+    cur = i; curAt = Date.now(); savePos(); render(); syncSoon();
+  } else if (why === 'join' || why === 'hello') {
+    const deckAt = Date.now() - (Number.isFinite(d.age) ? d.age : 1e12);
+    if (cur === null || deckAt > curAt + 1500) { cur = i; curAt = deckAt; savePos(); render(); }
+    syncSoon();
+  } else if (cur === null) { cur = i; curAt = 0; render(); }
+  screenInfo();
 }
 function connect() {
   if (es) es.close();
+  clearTimeout(retry);
   setStatus(false, 'connecting…');
+  screens.clear();
   es = new EventSource('https://ntfy.sh/' + topic() + '/sse');
-  es.onopen = () => { setStatus(true, 'connected · ' + code); send({ a: 'hello' }); };
-  es.onerror = () => setStatus(false, 'reconnecting…');
+  es.onopen = () => { backoff = 2000; setStatus(true, 'connected · ' + code + ' · looking for the slides…'); send({ a: 'hello' }); };
+  es.onerror = () => { setStatus(false, 'reconnecting…'); es.close(); clearTimeout(retry); retry = setTimeout(connect, backoff); backoff = Math.min(backoff * 2, 20000); };
   es.onmessage = (e) => {
     let d; try { d = JSON.parse(JSON.parse(e.data).message); } catch (_) { return; }
-    if (!d || d.from !== 'deck') return;
-    lastState = d; setStatus(true, 'connected · ' + code); render();
+    if (d && d.from === 'deck') onDeck(d);
   };
 }
 function pair(c) {
-  code = (c || '').trim().toUpperCase();
-  if (code.length < 4) return;
+  const next = (c || '').trim().toUpperCase();
+  if (next.length < 4) return;
+  if (next !== code) { cur = null; curAt = 0; }
+  code = next;
   localStorage.setItem(STORE, code);
+  if (cur === null) loadPos();
   $('pair').classList.add('hide');
+  render();
   connect();
 }
+let flashT = null;
+function flash(t) { $('statusText').textContent = t; clearTimeout(flashT); flashT = setTimeout(screenInfo, 1800); }
 async function keepAwake() {
   try { if ('wakeLock' in navigator && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => wake = null); } } catch (_) {}
 }
@@ -167,10 +225,10 @@ $('shareBtn').onclick = async () => {
 };
 $('startBtn').onclick = () => { pair(made); keepAwake(); };
 $('codeIn').addEventListener('keydown', e => { if (e.key === 'Enter') { pair($('codeIn').value); keepAwake(); } });
-$('nextBtn').onclick = () => { if (!startedAt) startedAt = Date.now(); send({ a: 'next' }); keepAwake(); };
-$('prev').onclick = () => { send({ a: 'prev' }); keepAwake(); };
+$('nextBtn').onclick = () => { if (!startedAt) startedAt = Date.now(); go((cur ?? 0) + 1); keepAwake(); };
+$('prev').onclick = () => { go((cur ?? 0) - 1); keepAwake(); };
 $('timer').onclick = () => { startedAt = startedAt ? null : Date.now(); };
-$('unpair').onclick = (e) => { e.preventDefault(); localStorage.removeItem(STORE); if (es) es.close(); code = ''; $('codeIn').value = ''; $('pair').classList.remove('hide'); };
+$('unpair').onclick = (e) => { e.preventDefault(); localStorage.removeItem(STORE); if (es) es.close(); code = ''; cur = null; $('codeIn').value = ''; $('pair').classList.remove('hide'); };
 setInterval(() => {
   if (!startedAt) { $('timer').textContent = '00:00'; return; }
   const t = Math.floor((Date.now() - startedAt) / 1000);
