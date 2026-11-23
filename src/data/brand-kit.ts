@@ -1,13 +1,13 @@
 // Bio statistics - update these values to reflect across all bio variations
 const STATS = {
     role: 'AI engineer',
-    users: '100K+',
-    usersLong: '100,000+',
-    talks: '20+',
-    followers: '16K+',
-    followersLong: '16,000+',
-    views: '5M+',
-    viewsLong: '5 million+'
+    users: '40K+',
+    usersLong: '40,000+',
+    talks: '30+',
+    followers: '40K+',
+    followersLong: '40,000+',
+    views: '10M+',
+    viewsLong: '10 million+'
 };
 
 export interface BrandAsset {

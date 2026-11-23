@@ -132,7 +132,7 @@ export const achievements: Achievement[] = [
     {
         id: 'speaker',
         title: 'Public Speaker',
-        description: 'Gave 20+ talks on AI, tech, and career',
+        description: 'Gave 30+ talks on AI, tech, and career, including an AI briefing for diplomats',
         icon: '🎤',
         category: 'community',
         tags: ['speaking', 'education'],
@@ -152,7 +152,7 @@ export const achievements: Achievement[] = [
     {
         id: 'content-creator',
         title: 'Content Creator',
-        description: 'Built audience of 20K+ followers',
+        description: 'Built an audience of 40K followers across TikTok, Instagram, LinkedIn and X',
         icon: '📱',
         category: 'community',
         tags: ['content', 'social-media'],
@@ -1147,14 +1147,14 @@ export const metrics: Metric[] = [
     {
         id: 'social-followers',
         label: 'Social Media Followers',
-        value: 16000,
+        value: 40000,
         unit: 'followers',
         tags: ['content', 'social-media']
     },
     {
         id: 'content-views',
         label: 'Content Views',
-        value: 5000000,
+        value: 10000000,
         unit: 'views',
         tags: ['content', 'social-media']
     }

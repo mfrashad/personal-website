@@ -22,22 +22,22 @@ export const personalStats: PersonalStats = {
         {
             name: 'Cleve',
             role: 'Co-founder & CTO',
-            period: '2023-present',
+            period: '2024-present',
             logo: '/logos/cleve.svg'
         },
         {
-            name: 'AI Consulting Company',
-            role: 'Founder',
-            period: '2021-2023',
+            name: 'Rashad Labs',
+            role: 'Freelance ML Engineer',
+            period: '2022-2024',
             logo: '/logos/ai-consulting.svg'
         }
     ],
     usersImpacted: 100000,
-    talksGiven: 20,
+    talksGiven: 30,
     hackathonsWon: 5,
     hackathonsJudged: 15,
     socialMedia: {
-        followers: 16000,
-        totalViews: 5000000
+        followers: 40000,
+        totalViews: 10000000
     }
 };

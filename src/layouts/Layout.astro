@@ -20,7 +20,7 @@ interface Props {
 
 const { title, description, ogimageName, showLoader = false } = Astro.props;
 const adjustedTitle = title ? 'Rashad' + ' – ' + title : 'Rashad';
-const adjustedDescription = description ? description : 'Fathy Rashad (Rashadventure) — AI engineer, entrepreneur, and speaker. Co-founder & CTO at Cleve, building AI-powered tools for 100K+ users. Delivered 20+ talks on AI, technology, and career development.';
+const adjustedDescription = description ? description : 'Fathy Rashad (Rashadventure) — AI engineer, entrepreneur, and speaker. Co-founder & CTO at Cleve (Antler-backed, 40K+ users), AI researcher, founder of Build for Public, and creator with 40K followers. Delivered 30+ talks on AI, technology, and career development.';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 const imageFileName = ogimageName ? `/opengraph/${ogimageName}` : '/opengraph.png';

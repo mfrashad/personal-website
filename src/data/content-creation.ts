@@ -144,7 +144,7 @@ export const brandLogos: { name: string; src: string; scale?: number }[] = [
 // (which only covers the pieces tracked below).
 export const followerCounts = {
     tiktok: 18100,
-    instagram: 8865,
+    instagram: 12393,
 };
 
 export const totalFollowers = followerCounts.tiktok + followerCounts.instagram;
